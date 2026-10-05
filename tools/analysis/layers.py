@@ -9,11 +9,16 @@ def read_idx(path):
     count,cols,rows=struct.unpack_from('<HHH',b,6)
     return count,cols,rows,struct.unpack_from('<%dH'%count,b,12)
 G=os.path.expanduser("~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native/")
+OFFLINE=os.path.expanduser('~/Documents/gen1recomp-modwork/offline_atlas/')
 def load(pair):
     d=G+pair; out={}
+    # the engine builds atlases only for visited maps: fall back to the
+    # offline bake (tools/analysis/bake_atlases.py), identical tile for tile
+    if not glob.glob(d+'/atlas_u_*.rgba') and os.path.exists(OFFLINE+pair+'/atlas_u.rgba'):
+        d=OFFLINE+pair
     for t,idx in (('u','mids.idx'),('m','mids_mid.idx'),('o','mids_over.idx')):
         count,cols,rows,ids=read_idx(d+'/'+idx)
-        f=glob.glob(d+'/atlas_%s_*.rgba'%t)
+        f=glob.glob(d+'/atlas_%s_*.rgba'%t) or glob.glob(d+'/atlas_%s.rgba'%t)
         if not f or not os.path.exists(d+'/'+idx): continue
         f=f[0]
         a=np.frombuffer(_raw(f),np.uint8).reshape(rows*16,cols*16,4)
