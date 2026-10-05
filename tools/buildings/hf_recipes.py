@@ -234,4 +234,153 @@ def _mart():
 
 MART2 = _mart()
 
-RECIPES = {'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}
+
+# Professor Birch's lab, Littleroot (112x80, inventory #82, cells x3..9,
+# y12..16). A long low building: facade (24 rows), dark eave fascia, a flat
+# tiled roof seen from above, a white rail band along the back; the grey
+# round vent on its square base stands up off the roof.
+BIRCH_LAB = dict(
+    inv=82, crop=(0, -1, 0, 0),
+    pieces=[dict(x=(0, 112), B=79, d0=0,
+                 segs=[('wall', 24), ('wall', 5), ('gable', 36, 14)],
+                 side=(88, 100), back='front', fill=(88, 100))],
+    keys=GRASS,
+    relief=[
+        dict(x=(16, 47), rows=(8, 31), k=-3),     # the vent's square base, astride the ridge
+        dict(x=(20, 44), rows=(2, 27), k=-5),     # the round vent on top of it
+        dict(x=(27, 37), rows=(9, 18), k=-2),     # its dark opening sits lower than the rim
+        dict(x=(12, 42), rows=(60, 70), k=2),     # windows set in
+        dict(x=(64, 82), rows=(58, 79), k=3),     # door recess
+        dict(x=(0, 112), rows=(51, 55), k=-2),    # eave overhang
+    ],
+)
+
+
+def _shift(rec, dx, src):
+    """The same recipe on a tighter source box (dx pixels removed on the left)."""
+    m = dict(rec); m.pop('inv', None); m.pop('crop', None); m['src'] = src
+    def sx(r): return (r[0] - dx, r[1] - dx)
+    m['pieces'] = [dict(pc, x=sx(pc['x']), **({'side': sx(pc['side'])} if pc.get('side') else {}))
+                   for pc in rec['pieces']]
+    m['relief'] = [dict(r, x=sx(r['x'])) for r in rec['relief']]
+    return m
+
+
+# Devon Corp on its own cells only (x7..16, y6..15): the trees and lamp posts
+# around it keep their own models.
+DEVON2 = _shift(DEVON, 32, ('general__rustboro', 'EM_RUSTBORO_CITY', 7, 6, 16, 15))
+# Lilycove Museum on its own cells (x7..16, y0..6): the hill, the trees, the
+# flowers and the front staircase keep their own shapes.
+MUSEUM2 = _shift(MUSEUM, 32, ('general__lilycove', 'EM_LILYCOVE_CITY', 7, 0, 16, 6))
+
+
+# Route 119 Weather Institute (cells x1..11, y26..33 of the map). A flat
+# tan roof seen from above (rows 8..54) with two radar domes and their small
+# satellite balls at the back corners, over a two-storey front of pilasters
+# and window bands (rows 55..119); the ends curve back as glass drums.
+def _weather():
+    ground = [(99, 66, 82), (132, 90, 90), (156, 115, 115), (189, 148, 140), (222, 181, 165),
+              (66, 181, 132), (115, 197, 165), (165, 214, 197)] + [c for c in [(58, 82, 0), (58, 140, 49), (115, 197, 165), (132, 197, 99), (181, 255, 132)] if c[1] > c[0] + 30]
+    def end(x0, x1, left):
+        return lambda x: int(round(((x1 - x) if left else (x - x0)) * 0.9))
+    segs = [('wall', 57), ('flat', 47)]
+    return dict(
+        src=('general__fortree', 'EM_ROUTE119', 1, 26, 11, 32), trim=True, flood=True,
+        keys=ground,
+        pieces=[
+            dict(x=(0, 20), B=111, d0=end(0, 20, True), segs=segs, side=(26, 34), fill=(26, 34)),
+            dict(x=(20, 156), B=111, d0=0, segs=segs, side=(26, 34), fill=(26, 34)),
+            dict(x=(156, 176), B=111, d0=end(156, 176, False), segs=segs, side=(26, 34), fill=(26, 34)),
+        ],
+        relief=[
+            dict(x=(19, 57), rows=(8, 38), k=-7),     # left radar dome
+            dict(x=(121, 158), rows=(8, 38), k=-7),   # right radar dome
+            dict(x=(14, 30), rows=(30, 46), k=-3),    # satellite balls
+            dict(x=(30, 44), rows=(36, 48), k=-3),
+            dict(x=(132, 146), rows=(36, 48), k=-3),
+            dict(x=(146, 162), rows=(30, 46), k=-3),
+            dict(x=(70, 106), rows=(96, 111), k=3),   # doorway set in
+            dict(x=(36, 140), rows=(66, 74), k=2),    # window bands set in
+            dict(x=(36, 140), rows=(88, 96), k=2),
+        ],
+    )
+
+
+WEATHER = _weather()
+
+
+# Fortree tree house (House1: cells x8..12, y1..3). The hut stands on the
+# plank deck (the deck row below is walkable ground the elevation already
+# raises): log walls with the doorway, flanked by stacked logs, under a
+# leafy mound roof; the canopy around is cut away.
+CANOPY = [(58, 82, 0), (58, 140, 49), (66, 58, 49), (107, 90, 90), (115, 197, 165), (132, 197, 99), (181, 255, 132)]
+def _treehouse(x0):
+    hut = [('wall', 26), ('slope', 10, 1.5), ('slope', 11, 0.3), ('mirror', 21)]
+    logs = [('wall', 27)]
+    return dict(
+        src=('general__fortree', 'EM_FORTREE_CITY', x0, 1, x0 + 4, 3), trim=True, bgtiles=[0x0C6, 0x0C7, 0x017], keys=[],
+        pieces=[dict(x=(4, 18), B=47, d0=2, segs=logs, side=(8, 12), fill=(8, 12), depth=12),
+                dict(x=(18, 62), B=47, d0=0, segs=hut, side=(28, 32), fill=(28, 32)),
+                dict(x=(62, 76), B=47, d0=2, segs=logs, side=(66, 70), fill=(66, 70), depth=12)],
+        relief=[dict(x=(30, 52), rows=(26, 46), k=4)],   # the dark doorway goes in
+        anchor_skip_cells=[(0, 0), (4, 0)],   # corner canopy differs between houses
+    )
+
+
+TREEHOUSE = _treehouse(8)
+
+
+# Sootopolis houses (3x4 cells each). Ground = the crater rock tiles around.
+SOOT_BG = [0x2D9, 0x2E1, 0x2D4, 0x2D8, 0x2E0, 0x2E2, 0x254, 0x255, 0x25E, 0x25F, 0x242, 0x241, 0x2D3, 0x2DA]
+def _soot_cone(x0, y0):
+    """White octagonal drum under a stepped dark pyramid (House1 kind)."""
+    segs = [('wall', 30), ('flat', 42)]
+    return dict(
+        src=('general__sootopolis', 'EM_SOOTOPOLIS_CITY', x0, y0, x0 + 2, y0 + 4), trim=True, bgtiles=SOOT_BG, keys=[],
+        pieces=[dict(x=(0, 8), B=79, d0=lambda x: 8 - x, segs=segs, side=(4, 7), fill=(4, 7)),
+                dict(x=(8, 40), B=79, d0=0, segs=segs, side=(4, 7), fill=(4, 7)),
+                dict(x=(40, 48), B=79, d0=lambda x: x - 39, segs=segs, side=(4, 7), fill=(4, 7))],
+        relief=[dict(x=(3, 45), rows=(22, 50), k=-6),      # pyramid: outer tier
+                dict(x=(8, 40), rows=(16, 44), k=-12),     # middle tier
+                dict(x=(14, 34), rows=(10, 36), k=-18),    # top tier
+                dict(x=(20, 28), rows=(6, 26), k=-23),     # apex
+                dict(x=(16, 34), rows=(58, 79), k=2)],     # door set in
+    )
+
+
+def _soot_box(x0, y0):
+    """Flat-roofed box with a skylight grid and a stepped porch (House2 kind)."""
+    return dict(
+        src=('general__sootopolis', 'EM_SOOTOPOLIS_CITY', x0, y0, x0 + 2, y0 + 4), trim=True, bgtiles=SOOT_BG, keys=[],
+        pieces=[dict(x=(0, 48), B=79, d0=0, segs=[('wall', 30), ('flat', 34)], side=(4, 8), fill=(4, 8))],
+        relief=[dict(x=(8, 40), rows=(22, 40), k=1),        # skylight panes set in
+                dict(x=(14, 34), rows=(50, 79), k=-2),      # stepped porch stands out
+                dict(x=(16, 32), rows=(60, 79), k=1)],      # door
+        anchor_skip_cells=[(0, 2)],                          # left corner tile varies between houses
+    )
+
+
+SOOT_CONE = _soot_cone(8, 2)
+SOOT_BOX = _soot_box(44, 2)
+# the same box with a diamond front and no door (no warp; the town's extra buildings)
+SOOT_BOX2 = dict(_soot_box(2, 5), relief=[dict(x=(8, 40), rows=(22, 40), k=1)], anchor_skip_cells=[])
+
+
+# Pacifidlog hut (every hut is the same drawing; cells x15..17, y10..13 of the
+# first): a round woven drum (rows 37..63) under a turtle-shell dome
+# (rows 11..36), on the raft. Raft planks and sea are the ground.
+def _hut():
+    segs = [('wall', 27), ('slope', 12, 1.5), ('slope', 14, 0.4), ('mirror', 26)]
+    return dict(
+        src=('general__pacifidlog', 'EM_PACIFIDLOG_TOWN', 15, 10, 17, 13), trim=True, flood=True,
+        keys=[(239, 197, 99), (239, 230, 165), (206, 156, 58), (165, 123, 25)] + [(82, 107, 214), (107, 132, 214)],
+        pieces=[dict(x=(3, 11), B=63, d0=lambda x: 11 - x, segs=segs, side=(12, 16), fill=(12, 16)),
+                dict(x=(11, 37), B=63, d0=0, segs=segs, side=(12, 16), fill=(12, 16)),
+                dict(x=(37, 45), B=63, d0=lambda x: x - 36, segs=segs, side=(12, 16), fill=(12, 16))],
+        relief=[dict(x=(18, 30), rows=(44, 63), k=2)],      # door set in
+    )
+
+
+HUT = _hut()
+
+RECIPES = {'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}

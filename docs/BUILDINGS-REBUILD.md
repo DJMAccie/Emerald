@@ -123,3 +123,72 @@ These come from catalogue sheets 1–2; finish the list from sheets 3–5.
 | #132 | Route 119 | Weather Institute (unique) | todo |
 
 (Numbers here are inventory.py numbers.)
+
+
+## User's notes, 2026-10-05 evening (do these)
+- **Roofs are symmetric gables.** The horizontal line across a house roof is the RIDGE: below it the
+  front slope, above it the back slope seen foreshortened. Chimneys and vents sit on the ridge.
+  - Use `('gable', nf, nb)` in `hf.py`; the pitch is `(nf-nb)/(nf+nb)`, with equal depths both sides.
+  - Birch's lab is redone this way: `('gable', 36, 14)`, with the vent low on the ridge. It's exported but NOT yet
+    QA-checked in game. The Littleroot houses' style (the user likes them, "Japanese roof") stays.
+  - The Center and Mart are domes, not gables.
+- **Route 101/103 screenshot issues**, for a terrain/props pass:
+  1. **Signs take the grass colour.** The sign slab is cut against the ground and loses its own
+     pixels, or is painted from the wrong tile.
+  2. **Sea boulders (banks) lift the water drawn in their tiles:** a blue mound around each rock.
+     A bank must only raise pixels that are rock, and keep water pixels at water level
+     (cut against the water tile, like Gen3Objects cuts against ground).
+  3. **Shoreline duplicated** in the far top-right corner, and a raised grass square sticks out at a
+     shore corner (Route 103 near the player).
+  4. **Tree canopies:** the flat ground tile under a 3D tree still shows the drawn tree top, which is
+     confusing under the voxel tree. Replace it with that tile's plain ground.
+- **Mods** (2026-10-05):
+  - The Stadium importer was OFF for Emerald (`modsByVersion.emerald`), which is why there were no 3D
+    battle models. Set to true.
+  - `better_buildings` (runs on every game) is now off for Emerald.
+  - Ground spawns are set to Low.
+  - Wild Skies has a new VERY LOW level (cap 1, cooldown 20 s; patched in both identities, backups in
+    `gen1recomp-modwork/backups/2026-10-05-wildskies/`), selected for the user.
+
+
+## Status 2026-10-05 late: 81 of ~130 recognised buildings are pixel-voxel models (installed)
+- **Hand-built:** both Littleroot houses, Birch's lab (gable), the Pokémon Center family, the Poké Mart family.
+- **Automatic: 74 buildings** from `tools/buildings/autorecipe.py`.
+  - Pipeline: `groups_engine.lua` gives the engine's own building boxes and facade line
+    (`luajit groups_engine.lua > egroups.json`, run from ~/Documents/gen1recomp).
+  - Ground is cut positionally against the walkable tiles around each building, flooded from outside.
+  - The ridge is the topmost dark full-width roof row → symmetric `gable`; no ridge → flat roof.
+  - Output goes to `data/buildings/bNNN_*.lua` plus `index.lua`.
+- **Still old renderer, need hand recipes** (`SKIP` in autorecipe.py):
+  - Mauville House1 (#21, merged with a neighbour).
+  - Sootopolis drums and dome houses (#69-77).
+  - Lavaridge red houses (#92, #96: the roof is cut away).
+  - Verdanturf Battle Tent (#103).
+  - Pacifidlog huts (#110-114).
+  - Cycling Road gates (#119-123).
+  - Battle Frontier Dome, Factory, Tower and Arena (#141, 142, 150, 151).
+  - Every building without an engine footprint (~30: the Fortree tree houses, Devon Corp, the museums,
+    the Weather Institute, the harbors, the Battle Pyramid and Palace...).
+  - Also redo the Mossdeep balcony houses (#56, 59, 61-63), which read as striped cages in game.
+
+
+## Beyond buildings: every asset in voxels (user, 2026-10-05)
+The goal covers ALL assets, not just buildings. Work order after the remaining buildings:
+1. **Signs** (route signs, town signs, house mailboxes): currently grass-coloured (`Gen3Objects` cuts
+   their pixels away). Make one hand model per sign drawing: post + board, with the board's art on its
+   front face. These are few, repeated everywhere, and high visibility.
+2. **Overworld items and small props:** Poké Ball items, berry trees, rocks you can smash or push
+   (Strength boulders), cut trees, flower pots, mailboxes, lamp posts, benches, boats.
+   - The ones that are object-event sprites go through `LandmarkModels`/`SpriteVoxel` (like the truck),
+     by graphics id from pokeemerald's `include/constants/event_objects.h`.
+   - Tile props go through `Gen3Objects`.
+3. **Terrain issues from the user's screenshots:**
+   - Sea-rock banks lift the water around them.
+   - A duplicated shoreline.
+   - Flat treetop tiles under the 3D trees.
+4. **Interiors:** never reviewed. Do it the same way: catalogue every interior type (houses, Center, Mart,
+   gyms, lab, Devon, museum…), check each at the player's camera, and model furniture as voxels
+   (`Gen3Furniture`, `Gen3EmeraldInteriors`).
+5. **Note:** github.com/GazPrash/2d-to-3d-voxelizer (MIT) was considered and is not useful here. It
+   extrudes one sprite or combines 4–6 side views; Gen 3 only has one oblique view, which our pipeline
+   already reads.

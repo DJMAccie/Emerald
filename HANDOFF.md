@@ -4,6 +4,11 @@ Pokémon Emerald in gen1recomp (LÖVE2D/Lua) with a 2.5D/3D voxel overworld, ori
 and 3D Pokémon models in battle. This file is everything a new session needs.
 
 ## Goal and taste
+**The goal (user, 2026-10-05):** a 3D vibe for Emerald with four pillars:
+1. A voxel world true to the original art.
+2. Overworld Pokémon: battle only those you walk into or talk to; no grass encounters.
+3. A Pokémon following you. Not built yet.
+4. Stadium/Colosseum-style 3D battles.
 - "2D/3D cartoony, slick, **no artifacts**." Original Emerald art on real 3D boxes.
 - Stock Emerald battle UI, classic flat water, few flying birds, 3D ledges/grass with a breeze.
 - Buildings must be well-formed, checked **one by one**. Reference look: warm evening light,

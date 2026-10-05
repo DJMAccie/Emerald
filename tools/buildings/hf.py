@@ -30,7 +30,7 @@ ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 
 SHADE = {'top': 1.0, 'south': 0.92, 'north': 0.70, 'east': 0.84, 'west': 0.78}
 PAD = 12            # voxel rows of room in front of depth 0 (protruding relief)
-HPAD = 8
+HPAD = 16
 
 
 def pack(c):
@@ -84,6 +84,25 @@ def walk(pc, x):
             for i in range(n):
                 out.append((row - i, hv, int(math.floor(d + i + 1e-6)), 'flat'))
             d += n
+        elif kind == 'gable':
+            # A symmetric pitched roof as Gen 3 draws it: nf rows of front
+            # slope up to the ridge line, then nb rows of the back slope seen
+            # foreshortened above it (a point's screen row is height + depth,
+            # so a slope falling away shows (1-s) rows per unit of depth).
+            # Equal depths both sides give the pitch: s = (nf-nb)/(nf+nb).
+            nf, nb = int(seg[1]), int(seg[2])
+            sl = (nf - nb) / float(nf + nb)
+            dd, dh = 1.0 / (1.0 + sl), sl / (1.0 + sl)
+            for i in range(nf):
+                dm, hm = d + (i + 0.5) * dd, h + (i + 0.5) * dh
+                out.append((row - i, max(0, int(math.ceil(hm - 1e-6)) - 1), int(math.floor(dm + 1e-6)), 'slope'))
+            d += nf * dd; h += nf * dh; row -= nf
+            bd, bh = 1.0 / (1.0 - sl), -sl / (1.0 - sl)
+            for i in range(nb):
+                dm, hm = d + (i + 0.5) * bd, h + (i + 0.5) * bh
+                out.append((row - i, max(0, int(math.ceil(hm - 1e-6)) - 1), int(math.floor(dm + 1e-6)), 'flat'))
+            d += nb * bd; h += nb * bh; row -= nb
+            continue
         elif kind == 'mirror':
             # done in build(), after the column is trimmed at the outline
             out.append((None, n, None, 'mirror'))
@@ -132,12 +151,43 @@ def build(img, recipe):
     # key colours (the ground around the building) are not building
     keys0 = {tuple(k) for k in recipe.get('keys', [])}
     trim = recipe.get('trim', False)
+    if recipe.get('bgmask') is not None:          # precomputed ground (autorecipe)
+        img = img.copy(); img[recipe['bgmask'], 3] = 0
+    if recipe.get('bgtiles'):
+        # ground = pixels identical to one of these tiles AT THE SAME POSITION,
+        # reached from outside the drawing (leaves that share the canopy's
+        # colours but not its pattern stay)
+        sys.path.insert(0, os.path.join(HERE, '..', 'voxel_proto'))
+        import voxproto, layers
+        L_ = layers.load(recipe['src'][0])
+        pos = np.zeros((H, W), bool)
+        im3 = img[..., :3].astype(int)
+        for t in recipe['bgtiles']:
+            tt = np.tile(voxproto.art(L_, t).astype(int), (H // 16, W // 16, 1))
+            pos |= (np.abs(im3 - tt).sum(2) == 0)
+        seen = np.zeros((H, W), bool)
+        st = [(yy, xx) for yy in range(H) for xx in (0, W - 1)] + [(yy, xx) for xx in range(W) for yy in (0, H - 1)]
+        while st:
+            yy, xx = st.pop()
+            if yy < 0 or xx < 0 or yy >= H or xx >= W or seen[yy, xx] or not pos[yy, xx]: continue
+            seen[yy, xx] = True
+            st += [(yy + 1, xx), (yy - 1, xx), (yy, xx + 1), (yy, xx - 1)]
+        img = img.copy(); img[seen, 3] = 0
     if keys0 and trim:
+        # ground is what can be reached from outside the drawing through key
+        # colours: a wall painted the path's colour inside its outline stays
         img = img.copy()
-        for yy in range(H):
-            for xx in range(W):
-                if tuple(int(v) for v in img[yy, xx, :3]) in keys0:
-                    img[yy, xx, 3] = 0
+        isk = np.array([[tuple(int(v) for v in img[yy, xx, :3]) in keys0 for xx in range(W)] for yy in range(H)])
+        if recipe.get('flood', False):
+            seen = np.zeros((H, W), bool)
+            st = [(yy, xx) for yy in range(H) for xx in (0, W - 1)] + [(yy, xx) for xx in range(W) for yy in (0, H - 1)]
+            while st:
+                yy, xx = st.pop()
+                if yy < 0 or xx < 0 or yy >= H or xx >= W or seen[yy, xx] or not isk[yy, xx]: continue
+                seen[yy, xx] = True
+                st += [(yy + 1, xx), (yy - 1, xx), (yy, xx + 1), (yy, xx - 1)]
+            isk = seen
+        img[isk, 3] = 0
     cols = {}
     dmax = hmax = 0
     for pc in recipe['pieces']:
@@ -159,7 +209,8 @@ def build(img, recipe):
             tail = pc.get('tail', 0)
             dmax = max(dmax, int(de) + tl + 2, max((s[2] for s in smp), default=0) + tl + 2)
             hmax = max(hmax, int(he) + 2, max((s[1] for s in smp), default=0) + 2)
-    DD, HH = dmax + PAD + 4, hmax + HPAD
+    lift = max([-r['k'] for r in recipe.get('relief', [])] + [0])
+    DD, HH = dmax + PAD + 4, hmax + HPAD + lift
     occ = np.zeros((W, HH, DD), bool)
     colS = np.full((W, HH, DD), -1, np.int32)
     colT = np.full((W, HH, DD), -1, np.int32)
@@ -229,8 +280,8 @@ def build(img, recipe):
             dl = max(top_d) - tail
             for t in range(1, tail + 1):
                 di = dl + t + PAD
-                if c >= 0:
-                    colT[x, hv if kind != 'wall' else top_d[dl], di] = c
+                if c >= 0 and kind != 'wall':      # a wall's top row is not a roof: leave material
+                    colT[x, hv, di] = c
     apply_relief(img, recipe.get('relief', []), pix, occ, colS, colT, solid)
     return dict(occ=occ, colS=colS, colT=colT, colE=colE, colN=colN, solid=solid, W=W, HH=HH, DD=DD)
 
@@ -431,6 +482,8 @@ def crop_to_content(im, bg=(26, 28, 34), pad=8):
 
 def load_art(recipe):
     import bldmodel as M
+    if 'src' in recipe:                      # explicit (pair, map, x0, y0, x1, y1)
+        return M.compose(*recipe['src'])
     cat = {e['n']: e for e in json.load(open(os.path.join(ROOT, 'shots_inv/catalogue.json')))}
     e = cat[recipe['inv']]
     x0, y0, x1, y1 = e['box']
@@ -446,11 +499,15 @@ def export(name, rec, img, quads, v, path):
     game paints it from the player's own tiles. Nothing ROM-derived is
     written. Faces: 1 south, 2 north, 3 top, 4 east, 5 west; x and h in art
     pixels, z = -(depth) from the facade line at the building's front edge."""
-    cat = {e['n']: e for e in json.load(open(os.path.join(ROOT, 'shots_inv/catalogue.json')))}
-    e = cat[rec['inv']]
-    x0, y0, x1, y1 = e['box']
-    dx0, dy0, dx1, dy1 = rec.get('crop', (0, 0, 0, 0))
-    x0, y0, x1, y1 = x0 + dx0, y0 + dy0, x1 + dx1, y1 + dy1
+    if 'src' in rec:
+        pair_, map_, x0, y0, x1, y1 = rec['src']
+        e = {'map': map_, 'pair': pair_}
+    else:
+        cat = {e['n']: e for e in json.load(open(os.path.join(ROOT, 'shots_inv/catalogue.json')))}
+        e = cat[rec['inv']]
+        x0, y0, x1, y1 = e['box']
+        dx0, dy0, dx1, dy1 = rec.get('crop', (0, 0, 0, 0))
+        x0, y0, x1, y1 = x0 + dx0, y0 + dy0, x1 + dx1, y1 + dy1
     H, W = img.shape[:2]
     where = {}
     for yy in range(H):
@@ -481,7 +538,9 @@ def export(name, rec, img, quads, v, path):
     # anchor on the two rows above the facade's bottom row: towns redraw a
     # building's ground-level corners over their own paving (Rustboro's
     # Center), never its roof band
-    anchor = [(x, y, mc[y * MW + x] & 0x3ff) for y in (y1 - 2, y1 - 1) for x in range(x0, x1 + 1)]
+    skip = set(rec.get('bgtiles', [])) | set(rec.get('anchor_skip', []))
+    anchor = [(x, y, mc[y * MW + x] & 0x3ff) for y in (y1 - 2, y1 - 1) for x in range(x0, x1 + 1)
+              if (mc[y * MW + x] & 0x3ff) not in skip and (x - x0, y - y0) not in rec.get('anchor_skip_cells', [])]
     with open(path, 'w') as f:
         f.write('-- generated by tools/buildings/hf.py --export %s (geometry only)\n' % name)
         f.write('return {name=%r,map=%r,pair=%r,x0=%d,y0=%d,x1=%d,y1=%d,\n' % (name, e['map'], e['pair'], x0, y0, x1, y1))
