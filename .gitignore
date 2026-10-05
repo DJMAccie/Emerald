@@ -1,0 +1,18 @@
+# scratch staging areas for QA captures: mod source copies, never repo content
+.qa-stage/
+.DS_Store
+
+# never commit game-derived data
+*.gba
+*.z64
+*.iso
+*.rvz
+*.love
+*.dsm
+*.png
+*.jpg
+world.json
+world.lua
+atlases/
+shots*/
+sheets*/
