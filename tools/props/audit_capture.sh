@@ -1,14 +1,28 @@
 #!/bin/bash
-# Capture every case in OUTDIR/cases.lua at the player's camera (QA identity), indexed bNNN.png.
-# Waits for any running game first (one instance only).
+# Capture every case in OUTDIR/cases.lua on the QA identity, indexed bNNN.png (several cases may share a map).
+#   EM_LEVEL=4|6|7  EM_YAW=<radians>  EM_WAIT=<frames per case>  tools/props/audit_capture.sh OUTDIR
+# level 4 = the player's camera, 7 = orbit (yaw only works here), 6 = low near-ground camera.
+#
+# Takes the same atomic lock as tools/qa_run.sh (/tmp/emerald-qa.lock): two game instances started at
+# the same moment deadlock. Differences from qa_run.sh: indexed file names, a watchdog that scales with
+# the number of cases (QA_LIMIT overrides), and the QA engine payload is restored after taking the lock
+# (the engine clears the QA identity's updates/ after every run, which makes the next run draw nothing).
 set -u
 OUT=$1
+LOCK=/tmp/emerald-qa.lock
 QI="$HOME/Library/Application Support/pokemon-love2d-rseqa"
+WAIT=${EM_WAIT:-40}
+N=$(grep -o "{'" "$OUT/cases.lua" | wc -l | tr -d ' ')
+LIMIT=${QA_LIMIT:-$(( 60 + N * (WAIT / 8 + 12) ))}
 rm -f "$OUT"/b*.png
-printf "return {%s}\n" "${EM_LEVEL:-4}" > "$OUT/levels.lua"   # EM_LEVEL=6 = low near-ground camera; EM_YAW turns it
-# [M] keeps this pgrep from matching shells whose command line quotes the pattern
-while pgrep -f "[M]acOS/love \\." >/dev/null; do sleep 5; done; sleep 3
-# the engine clears the QA identity's payload after a run: restore it from the real identity
+printf "return {%s}\n" "${EM_LEVEL:-4}" > "$OUT/levels.lua"
+until mkdir "$LOCK" 2>/dev/null; do
+  if [ -n "$(find "$LOCK" -maxdepth 0 -mmin +10 2>/dev/null)" ]; then rm -rf "$LOCK"; continue; fi
+  sleep 3
+done
+echo "$$ $OUT" > "$LOCK/owner"
+trap 'rm -rf "$LOCK"' EXIT
+while pgrep -x love >/dev/null; do sleep 3; done
 mkdir -p "$QI/updates"; cp -n "$HOME"/Library/Application\ Support/pokemon-love2d/updates/*.love "$QI/updates/" 2>/dev/null
 python3 - <<PY
 import re
@@ -17,8 +31,13 @@ s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = 0,",s,count=1)
 s=re.sub(rb"fireredCamera = \d+,",b"fireredCamera = 4,",s,count=1)
 open(p,'wb').write(s)
 PY
-cd ~/Documents/gen1recomp && EM_INDEXED=1 EM_LEVELS="$OUT/levels.lua" \
+cd ~/Documents/gen1recomp || exit 1
+EM_INDEXED=1 EM_YAW=${EM_YAW:-0} EM_LEVELS="$OUT/levels.lua" \
   POKEPORT_DRIVER=$HOME/Documents/gen1recomp-modwork/tools/em_views_driver.lua \
   POKEPORT_IDENTITY=pokemon-love2d-rseqa POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
-  EM_CASES="$OUT/cases.lua" EM_WAIT=${EM_WAIT:-40} /Applications/gen1recomp.app/Contents/MacOS/love . > "$OUT/run.log" 2>&1
-echo "shots $(ls "$OUT"/b*.png 2>/dev/null | wc -l) fallback $(grep -c fallback "$OUT/run.log")"
+  EM_CASES="$OUT/cases.lua" EM_WAIT=$WAIT /Applications/gen1recomp.app/Contents/MacOS/love . > "$OUT/run.log" 2>&1 &
+G=$!
+for _ in $(seq 1 $LIMIT); do kill -0 $G 2>/dev/null || break; sleep 1; done
+if kill -0 $G 2>/dev/null; then kill $G; sleep 2; kill -9 $G 2>/dev/null; echo "WATCHDOG: stopped after ${LIMIT}s" >> "$OUT/run.log"; fi
+wait $G 2>/dev/null
+echo "shots $(ls "$OUT"/b*.png 2>/dev/null | wc -l | tr -d ' ') fallback $(grep -c fallback "$OUT/run.log") $(grep -q WATCHDOG "$OUT/run.log" && echo WATCHDOG)"

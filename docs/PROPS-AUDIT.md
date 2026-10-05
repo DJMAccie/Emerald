@@ -13,8 +13,9 @@ python3 tools/props/audit.py sheet OUT           # OUT/sheet_NN.png: source art 
 - `catalogue_props.lua` lists every (tileset pair, metatile) that the mod turns into a prop kind, with
   counts and an example cell. `OBJECT` = blocked, unclassified: input of the generic cutter (`Gen3Objects`).
 - Long maps (Route 119) need `EM_WAIT=100+` or the shot is blank sky.
-- `pgrep -f "MacOS/love"` matches any shell whose command line contains the text, so two waiting
-  scripts can block each other forever. Use `pgrep -f "[M]acOS/love \."`.
+- `pgrep -f "MacOS/love"` matches any shell whose command line contains the text, so waiting
+  scripts hang or race. Use the exact process name: `pgrep -x love`. A run that logs "update: payload
+  handoff failed, reverting to bundled" overlapped another instance: rerun it.
 
 ## Fixed and installed (real game, backups in gen1recomp-modwork/backups/2026-10-05-*)
 | Defect | Cause | Fix |
@@ -46,7 +47,12 @@ Notes from this pass: heights come from the art (stack of tiles) and the cartrid
 | Route 119 bridge piers: tall posts under the planks | terrace skirt stretched the pier tile over the whole deck-to-water step | `Gen3Scene` skirt: a deck (walkway on elevation 15, or the Fortree deck tiles 0x210..0x21D) is a 6-voxel plate of logs with an open underside and the ground or water it crosses drawn below; any other terrace face is its own tile repeated course by course (16 voxels per course, 1:1), never stretched. `M` inside `build` is the cache table, not the module: helpers must be file-level locals |
 | Wading in shallow water flipped the whole view to the flat renderer (Mossdeep beach, Routes 109/125/132/133 ...) | `nativeEffects` treated any field effect but dust as native-only | ambient effects (dust, feet_water, ripple, splash, tracks, hot_springs) no longer force 2D; found by Opus |
 
+| Route 119 river: stair-stepped hole to the sky | the river's water cells sit at three levels (b48/b16/b0, from Gen3Elevation) and nothing closed the steps | `Gen3Scene` closes each water-to-water step with a face in the water tile's own drawing. The river now reads as stepped water blocks: real rivers are flat, so the proper fix (one level per water body) belongs in Gen3Elevation |
+
+| Signs: board front squashed (10 art rows over 7.5 units), posts stretched, 1.6 thick | boxes with hand-picked dimensions | `Gen3Outdoor` sign: stacked 1:1 bands cut from the tile (foot, post, board), post rows repeated `SIGN_POST_REPEAT`=3 for height, boards 4 voxels thick with the art on both faces, town panel (0x003) a 16x15 slab. Checked at player, level 7 and level 6 cameras |
+
 ## Open, in priority order
+- Low camera (level 6) at Route 119 14,38 shows a large flat sky-coloured plane at floor level. Identical with the water skirt off, so it predates this work; a floor or ground plane missing under raised terraces.
 0. (done, see table) Sheer rock walls.
 1. Cave walls are 1:1 now but still a dome profile (horizontal run 8). Outdoor cliffs are done (Gen3Mass). Tall sheer walls (stacked pure-face tiles, e.g. Mt. Chimney's inner walls) are
    built only 16 high; extending them through stacked sheer tiles made spikes at hill shoulders
