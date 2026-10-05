@@ -1,7 +1,7 @@
 # Elevation from the cartridge nibble — session notes (2026-10-05)
 
-Status: **QA only. Not installed to the real game. Not committed.** The last installed build is
-the verified thin-band cap (`6c511c2` in the Emerald repo).
+Status: **installed in the real game and committed** (`c01dd81`, `991d89d`). Earlier interim state was
+QA-only; that is no longer true.
 
 ## What was changed (`battle-art-notquiteog/lib/Gen3Elevation.lua`)
 
@@ -34,6 +34,8 @@ Three edits, all in `M.field`:
 
 ## Open problems before this can ship
 
+Shipped anyway (2026-10-05 (c)) with these knowingly open; they are the next work, not blockers:
+
 1. **Camera height follows the player's cell**, so raising floors moves the camera and changes
    framing between before/after captures (`R.camera` uses `M.groundAt`, `Gen3Scene.lua` ~line 908).
    Comparisons must account for it.
@@ -52,8 +54,11 @@ Three edits, all in `M.field`:
      atlas**, so U/V must stay inside that tile. Wrapping past the tile edge samples the
      neighbouring tile, and the atlas clamps rather than repeats. Per-quad V wrap is therefore not
      available; a fix has to stay within the tile's own texel range.
-4. **Stairs.** Emerald staircases carry no stair behaviour, so `f.flights` is empty; levels change
-   as steps in the floor mesh rather than believable flights.
+4. ~~**Stairs.** Emerald staircases carry no stair behaviour, so `f.flights` is empty.~~
+   **DONE (`991d89d`).** A walkable elev-0 cell whose walkable neighbours disagree about their
+   elevation is claimed as a step. 19 cells claimed (Route 114 8, Mossdeep 7, Lilycove 4), one flight
+   each, bridging the drawn levels; Fortree/Sootopolis/Route 111 claim none. Note the flights are only
+   1-2 cells deep because that is the strip the cartridge draws, so the rise is 6 units per cell.
 
 ## How to reproduce
 

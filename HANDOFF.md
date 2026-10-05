@@ -133,10 +133,35 @@ plane behind the gable, floating overhang); shorelines stretch the cliff-face ar
 and stair-step the sand rim; the Littleroot truck is a leaning card; interiors are "completely broken".
 Biggest structural fix: **elevation from the cartridge's per-cell elevation nibble** (grid bits 12-15).
 `TerrainLevels.build` only lifts across behaviour `0x2A`/`0x1D0` stairs and ledges, and Emerald's
-staircases carry neither, so Mossdeep/Lilycove/Sootopolis solve flat and every cliff stands as a
-free-standing wall on one floor. Pin `(elev-3)*COURSE` on walkable cells with elev >= 3, treat elev 0 as
-flights between levels; a 1-tile band between two real floors then becomes a genuine retaining wall,
-which is exactly what the thin-band cap above approximates while the floors are still flat.
+staircases carry neither, so Mossdeep/Lilycove/Sootopolis solved flat and every cliff stood as a
+free-standing wall on one floor.
+
+**DONE and installed (2026-10-05 (c), commit `c01dd81`).** `Gen3Elevation` now pins the floor height
+from the nibble: a walkable non-water cell with `elev>=3` gets `min(elev-3, M.MAX_STEP) * M.COURSE`
+(`COURSE=16`, `MAX_STEP=3`). Two things are load-bearing and easy to get wrong:
+- **Grouping must be exact** (`a.layer==b.layer`). `TerrainLevels` gives a group the *median pin* of
+  its cells, so the old `a.layer==0 or b.layer==0 or a.layer==15 or b.layer==15` relaxation merges a
+  whole town into one group. Measured: Mossdeep flattened to 1959 cells at a single height.
+- **The e4 `seed` must be 0.** It was a stand-in for the one-step floors the nibble states outright;
+  on top of a pin it lifted every e4 floor twice, and a stair flight added +80 more (Fortree's
+  walkway read 96 instead of 16).
+Solved heights now land on the drawn terraces: Mossdeep 0/16/32/64/96, Lilycove 0/32,
+Fortree 0/16/48, Route 114 0/16/32/64. Flat maps are untouched (Rustboro, Mauville, Slateport,
+Petalburg, Oldale solve to one height either way). Evidence: 65 captures (terraced set at 4 yaw
+angles x levels 4 and 7, plus the 25-view set), zero `fallback`, zero errors. Notes:
+`docs/ELEVATION-NOTES.md`.
+
+Stair flights are now implemented too (commit `991d89d`): a walkable elevation-0 cell whose walkable
+neighbours disagree about their elevation is claimed as a step, and `TerrainLevels` builds a flight
+from it. Measured offline: 19 cells claimed (Route 114 8, Mossdeep 7, Lilycove 4), each run yielding
+one flight bridging the drawn levels (Route 114 16→0, 32→16, 48→32). Fortree, Sootopolis and
+Route 111 claim none, which matches their maps. The in-game change is confined to the stair cells
+(0.2–0.6% of the frame).
+
+Still open: Fortree's `e15` is a "very high" sentinel that `MAX_STEP` clamps rather than describes, and
+the new retaining faces still show the stretched-texture defect below. NPC/player grounding on
+terraces has not been checked by a human playing.
+
 
 ## Recommended approach for the tile problem (new philosophy)
 Stop guessing shapes per tile. Use what the cartridge states and one generic fallback:
