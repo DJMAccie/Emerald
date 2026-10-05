@@ -7,7 +7,7 @@
 set -euo pipefail
 B=~/Documents/battle-art-notquiteog
 E=~/Documents/Emerald
-OWN_LIB="lib/BuildingModels.lua lib/BuildingVoxels.lua lib/Gen3Civic.lua lib/LandmarkModels.lua"
+OWN_LIB="lib/BuildingModels.lua lib/BuildingVoxels.lua lib/Gen3Civic.lua lib/LandmarkModels.lua lib/Gen3EmeraldInteriors.lua lib/Gen3Furniture.lua lib/InteriorDiorama.lua lib/Gen3PixelFurniture.lua lib/Gen3PixelFurnitureB.lua"
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 # base tree + the last committed patch
