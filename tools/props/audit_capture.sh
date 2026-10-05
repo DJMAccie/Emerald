@@ -8,6 +8,8 @@ rm -f "$OUT"/b*.png
 printf "return {4}\n" > "$OUT/levels.lua"
 # [M] keeps this pgrep from matching shells whose command line quotes the pattern
 while pgrep -f "[M]acOS/love \\." >/dev/null; do sleep 5; done; sleep 3
+# the engine clears the QA identity's payload after a run: restore it from the real identity
+mkdir -p "$QI/updates"; cp -n "$HOME"/Library/Application\ Support/pokemon-love2d/updates/*.love "$QI/updates/" 2>/dev/null
 python3 - <<PY
 import re
 p="$QI/options.lua";s=open(p,'rb').read()

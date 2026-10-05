@@ -30,7 +30,17 @@ python3 tools/props/audit.py sheet OUT           # OUT/sheet_NN.png: source art 
 | Cave walls 28 units tall from 16-row art | `caveWall` height 28 | `Gen3Terrain.CAVE_FACE=16`: 1:1. A mass rebuild of cave interiors was tried (`Gen3Mass.caves`) and gave stripes: caves do not use the outdoor oblique layout |
 | Route 119 bridge: water walls beside the deck | water-art banks | gone with the mass rebuild |
 
+| Slateport market stalls were flat tan slabs | awning = one 12-unit lid per cell | `Gen3Outdoor.groupAwnings`: a stall's cells form one hip roof, the drawing laid over it in plan (planar mapping, no stretch), ridge along the middle, valance on the long edges |
+| Lamp posts: fat blobby heads and shafts | one-cell-wide tall objects got a round hull 12.8 deep | depth 4 (`Gen3Objects.append`). Still foreshortened by the 50 deg camera like any upright thing |
+| Low things on land (benches, planters, boulders) | old round hull + half height | `Gen3Mass.appendObject` (wall = lower half of the column) for every object without a walk-behind row |
+| Sea boulders next to a real cliff (Lilycove lagoon) rendered as tall blue pillars | `joinRock` swallowed them into the cliff mass, and the water-ringed tiles then counted as a sheer wall | sea boulders are never joined; sea boulder masses skip the sheer-wall test and are low stones |
+
+| Trees: random-palette blobs (ORIGINAL MODEL) or melon stripes (old ROUND MODEL wrap) | hull colours picked at random / each texture column pinned to a vertical line | `NativeTreeArt.lathe` rebuilt: each sprite pixel is placed on a round crown *along the camera's view direction* (depth from the row's half-disc profile, height raised by the depth so the pixel keeps its own screen row), rear shell lowered so it hides behind the front. From the player's camera it is the sprite pixel for pixel; from the side a bulging shell. ROUND MODEL is now the default (`TreePresentation.art`, index 4); the other three options are unchanged. Assumes the original's 45 deg oblique, the game camera is 50 deg: small distortion |
+
+Checked and fine, no change needed: ledges (grass, cave, Meteor Falls), tall grass, ladders, flower beds (14 tilesets, ground and colours match), berry-tree soil plots (flat, correct). Berry *trees* are map objects that only exist once planted, so a fresh game shows just soil; they were not verifiable.
+
 ## Open, in priority order
+0. **Sheer rock walls with a mixed neighbourhood still use the old dome with unrelated FireRed cliff art** (`Gen3Mass.wally` fallback): Route 119 at x0..9,y69..87 and x24..39,y75..94 (rock wall + waterfall + ledge tops), Mt. Chimney inner walls. They render as brown vertical posts. Tried: whole contiguous run as wall (tall slanted pillars); sheer-tile run stacked from the bottom (same). The column rule cannot separate wall, ledge top and river terrace there; needs the terrace heights from `Gen3Elevation` (wall height = north floor - south floor) and the waterfall column treated as its own object. Experiment kept in /tmp only.
 1. Cave walls are 1:1 now but still a dome profile (horizontal run 8). Outdoor cliffs are done (Gen3Mass). Tall sheer walls (stacked pure-face tiles, e.g. Mt. Chimney's inner walls) are
    built only 16 high; extending them through stacked sheer tiles made spikes at hill shoulders
    (see git history of this file / `M.WALLY`, `M.SHEER` in Gen3Mass). `Gen3Mass.enabled=false` restores the dome.
@@ -38,7 +48,6 @@ python3 tools/props/audit.py sheet OUT           # OUT/sheet_NN.png: source art 
 2. **Route 119 (14,34 area): a diagonal hole in the river** (sky shows through water cells beside the rock
    column). Present with Gen3Mass disabled too, so it predates this work.
 3. Land boulders/planters/benches (`Gen3Objects.append` scale .5) are still the old hull; only objects in water use Gen3Mass.appendObject.
-4. **Slateport market stalls (awning 205, 20D ...):** hip awning drawn as a flat tan board.
 5. **Round 'bush'/'rock'/'tree' hulls in `VoxelHull.build(... organic ...)` colour blobs with random palette
    picks.** Not pixel-true; rocks and bushes should use the row-hull path (front = the drawing).
 6. Unchecked: ledges (69 kinds), tall grass (22), trees (150), ladders, steps, the rest of the OBJECT list
