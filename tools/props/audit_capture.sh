@@ -5,7 +5,7 @@ set -u
 OUT=$1
 QI="$HOME/Library/Application Support/pokemon-love2d-rseqa"
 rm -f "$OUT"/b*.png
-printf "return {4}\n" > "$OUT/levels.lua"
+printf "return {%s}\n" "${EM_LEVEL:-4}" > "$OUT/levels.lua"   # EM_LEVEL=6 = low near-ground camera; EM_YAW turns it
 # [M] keeps this pgrep from matching shells whose command line quotes the pattern
 while pgrep -f "[M]acOS/love \\." >/dev/null; do sleep 5; done; sleep 3
 # the engine clears the QA identity's payload after a run: restore it from the real identity

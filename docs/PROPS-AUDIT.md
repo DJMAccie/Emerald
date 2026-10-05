@@ -39,8 +39,15 @@ python3 tools/props/audit.py sheet OUT           # OUT/sheet_NN.png: source art 
 
 Checked and fine, no change needed: ledges (grass, cave, Meteor Falls), tall grass, ladders, flower beds (14 tilesets, ground and colours match), berry-tree soil plots (flat, correct). Berry *trees* are map objects that only exist once planted, so a fresh game shows just soil; they were not verifiable.
 
+| Sheer rock walls (Route 119 x24..32,y79..81; Lilycove, Ever Grande, Battle Frontier A9 walls) rendered as brown posts via the dome + unrelated cliff art | wall-dominated masses fell back to the dome | `Gen3Mass`: a stack of General primary face tiles (id < 0x100, at least 3 tiles wide, running to the very top of its rock) is a tall wall: as tall as its drawing (3 tiles = 48 voxels, 1:1), 12 voxels thick, flat top and back face from its own pixels. One-course faces and hills are unchanged; wall-dominated masses with no tall wall keep the dome (`M.MINTALL`). Verified at the player's camera, level 7 turned views and 50 mountain maps |
+
+Notes from this pass: heights come from the art (stack of tiles) and the cartridge floors (per-column foot); the 3D build is meant to add depth the flat original lacks, always from the drawing's own pixels. Low/turned checks: `EM_LEVEL=6` (low camera) or `EM_LEVEL=7 EM_YAW=<rad>` (free orbit; yaw only works at 7) with `audit_capture.sh`. Level 6 stands inside geometry when the player is next to a pier. 
+
+| Route 119 bridge piers: tall posts under the planks | terrace skirt stretched the pier tile over the whole deck-to-water step | `Gen3Scene` skirt: a deck (walkway on elevation 15, or the Fortree deck tiles 0x210..0x21D) is a 6-voxel plate of logs with an open underside and the ground or water it crosses drawn below; any other terrace face is its own tile repeated course by course (16 voxels per course, 1:1), never stretched. `M` inside `build` is the cache table, not the module: helpers must be file-level locals |
+| Wading in shallow water flipped the whole view to the flat renderer (Mossdeep beach, Routes 109/125/132/133 ...) | `nativeEffects` treated any field effect but dust as native-only | ambient effects (dust, feet_water, ripple, splash, tracks, hot_springs) no longer force 2D; found by Opus |
+
 ## Open, in priority order
-0. **Sheer rock walls with a mixed neighbourhood still use the old dome with unrelated FireRed cliff art** (`Gen3Mass.wally` fallback): Route 119 at x0..9,y69..87 and x24..39,y75..94 (rock wall + waterfall + ledge tops), Mt. Chimney inner walls. They render as brown vertical posts. Tried: whole contiguous run as wall (tall slanted pillars); sheer-tile run stacked from the bottom (same). The column rule cannot separate wall, ledge top and river terrace there; needs the terrace heights from `Gen3Elevation` (wall height = north floor - south floor) and the waterfall column treated as its own object. Experiment kept in /tmp only.
+0. (done, see table) Sheer rock walls.
 1. Cave walls are 1:1 now but still a dome profile (horizontal run 8). Outdoor cliffs are done (Gen3Mass). Tall sheer walls (stacked pure-face tiles, e.g. Mt. Chimney's inner walls) are
    built only 16 high; extending them through stacked sheer tiles made spikes at hill shoulders
    (see git history of this file / `M.WALLY`, `M.SHEER` in Gen3Mass). `Gen3Mass.enabled=false` restores the dome.

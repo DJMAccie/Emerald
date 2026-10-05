@@ -22,7 +22,7 @@ and 3D Pokémon models in battle. This file is everything a new session needs.
 | Test copy ("QA") | `~/Library/Application Support/pokemon-love2d-rseqa` |
 | Voxel mod source (fork of notquiteog/DramaticShapeVoxelMod) | `~/Documents/battle-art-notquiteog` |
 | Stadium 2 importer fork (+ Colosseum packs loader) | `~/Documents/stadium2-importer` |
-| Engine checkout (reference only) | `~/Documents/gen1recomp` |
+| Engine checkout (reference only) | `~/Documents/gen1recomp` at tag **v0.3.52** (updated 2026-10-05 at the user's request; the old v0.3.38 local edits are in `git stash` there and in `~/Documents/gen1recomp-modwork/engine-local-edits-v0.3.38.patch`, not re-applied: not needed so far) |
 | Tools, capture drivers, map data, screenshots | `~/Documents/gen1recomp-modwork` |
 | Colosseum model pipeline | `~/Documents/colosseum-work` |
 | MIT Hoenn reference mod | `~/Documents/gen1recomp-modwork/refs/Gen2Recomped-DramaticShapes` |
