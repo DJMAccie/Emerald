@@ -164,3 +164,85 @@ Next attempt must respect the sandbox:
   Bake `Voxel3D.FACE_SHADE` per face.
 - Hook point: `Gen3Scene.lua:782-789`, the `Objects.forDraw()` loop - route a landmark gid to a model
   instead of `actor(gid, ...)`.
+
+## DONE — the tool exists, and the truck is a model (2026-10-05, fourth pass)
+
+Steps 1-4 of "Next steps" are complete. Step 5 is now one recipe per landmark.
+Installed in the mod source and in QA; no engine change.
+
+**The truck is gid 94** (confirmed, not inferred): the only 48x48 inanimate
+sprite in Littleroot, drawn twice — (2,10) and (11,10). Its art came out of the
+sandbox by printing hex rows to stdout (`tools/dump_gid_art.lua` →
+`tools/art_from_log.py` → `shots_art/gid94.png`): a moving van, cab west, box
+east, 48x40 px of drawing. gid 240 still resolves to nothing at all.
+
+**How a sprite becomes a solid.** Gen 3 draws objects in the same oblique
+projection as its map tiles, so an object drawing already carries a front
+elevation *and* a plan view. Measured off gid 94 (sprite rows; ground at 47):
+
+| band | rows | what it is | model meaning |
+|---|---|---|---|
+| 8..23 | box roof, blue with ribs | the box's top, 1:1 | depth 16 (one tile) |
+| 24..41 | box wall, purple with the logo | the box's south wall, 1:1 | height 18 |
+| 12..27 | cab roof, light grey | the cab's top, 1:1 | 4 px lower than the box |
+| 28..41 | cab wall with the window | the cab's south wall, 1:1 | height 14 |
+| 42..47 | wheels | wheel discs | 6 px under the body |
+
+So the truck is **48 long x 16 deep x 24 tall** — three tiles by one, not the
+48x48 card. Every face samples those bands, so the roof ribs, the logo, the cab
+window and the wheel hubs all land on the plane they were drawn for, with
+`Voxel3D.FACE_SHADE` baked per face.
+
+**Files** (mod source `~/Documents/battle-art-notquiteog/lib/`):
+
+- `SpriteVoxel.lua` — the tool and its recipe format. A recipe is a list of
+  axis-aligned boxes in sprite pixels; each face is painted by a rect of the
+  drawing (a 1x1 rect paints one flat colour — the swatch trick, off the
+  sprite). Boxes rasterise into a voxel volume, only boundary faces are
+  emitted, coplanar faces of one paint merge: the truck is **46 quads**.
+- `LandmarkModels.lua` — gid → recipe; gid 94 is the only entry so far.
+- `Gen3Scene.lua` — the hook. `actor()` asks for a modelled solid first; when
+  there is one it is drawn world-aligned (no camera yaw, no card lean, no
+  camera-ward pull, which would lift it off its own footprint) through the same
+  draw and shadow calls the card used, and `release()` frees its meshes.
+
+**Evidence.** 16 views before (card) and 16 after (model) at two player
+positions x levels 4/7 x four yaws, plus 16 close views. Zero `scene fallback`,
+zero render errors (only the sandbox's `options.lua` write refusal, which the QA
+identity always logs). The before/after pixel diff is confined to the two vans:
+2141 changed pixels, bounding box x 558..812, y 183..412, both clusters on the
+trucks. Before, the card stands the roof band on end and leans it across the
+house; after, the van sits on the ground with its cab, box, wheels and logo
+reading from every angle.
+Captures, for whoever picks this up next: `shots_truck_before/` (card),
+`shots_truck_after/` (model, staged overlay; `landmark_before_after.png` is the
+side-by-side at 6x), `shots_truck_near/` (close views), `shots_truck_installed3/`
+(the installed path, logged `[LANDMARK] gid=94 quads=46`),
+`shots_art/gid94.png` (the drawing itself), `shots_model/` (offline previews).
+The offline audit is unchanged by this round: 19,641 blocked cells flat, 9,011
+outdoor, 469 objects.
+
+**Tooling added this round** (all in `tools/`):
+
+- `dump_gid_art.lua` + `art_from_log.py` — sprite pixels out of the sandboxed
+  game as hex rows, rebuilt as PNGs.
+- `model_preview.py` — builds a recipe with the mod's own Lua under luajit
+  (stubbing only `newMesh`/`Budget`) and rasterises it offline, so geometry and
+  face registration are judged in seconds instead of capture round trips. It
+  extracts `FACE_CORNERS`/`FACE_SHADE` from the installed `Voxel3D.lua`, so it
+  cannot disagree with the engine about winding or shading.
+- `em_truck_driver.lua` — capture sweep (cases x levels x yaws). `EM_STAGED=<dir>`
+  overlays worktree modules onto the live mod, so a change can be captured
+  *before* anything is installed anywhere.
+- `stage_landmark.py`, `install_landmark.sh`, `landmark_patch.py`.
+
+**Next landmark**: write one recipe. Boats, the Space Center rocket and Mt. Pyre
+are the same shape of problem; each needs its gid (`dump_gid_art.lua`), its
+bands read off the drawing, and a box list. The tile half of the plan ("voxel up
+most tiles") is untouched by this round and remains the larger job.
+
+**Concurrency note.** `patches/battle-art-voxel-fork.landmark.patch` holds this
+round's three files only. Another session was editing the same mod working tree
+(`lib/Gen3VoxelBuildings.lua`, "pixel-voxel buildings") while this landed, so
+the wholesale `patches/battle-art-voxel-fork.patch` was deliberately *not*
+regenerated — it would have snapshotted that session's unfinished work.

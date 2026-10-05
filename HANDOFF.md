@@ -83,6 +83,26 @@ far edge, props no longer sit on a square of sea.
 Options: T-SHIFT (tilt-shift, `tiltshift` 0–3) and DAYTIME (`daytime` sync/day/dusk/night/cycle)
 already exist in the mod's options. QA is set to dusk + tilt 1; the real game is on defaults.
 
+2026-10-05 (d) (**installed in the mod source + QA, NOT yet in the real game**): the
+sprite-to-voxel landmark tool exists and the Littleroot truck is a real model. `lib/SpriteVoxel.lua`
+reads a landmark's own drawing back into a solid — a recipe is a list of boxes in sprite pixels,
+each face painted by a rect of the sprite (1x1 = a flat colour), rasterised to a voxel volume with
+only boundary faces emitted and coplanar faces merged. `lib/LandmarkModels.lua` maps gid 94 to the
+moving van's recipe (46 quads, 48x16x24: three tiles long, one deep, 1.5 tiles tall — the card was
+48x48, which is why it read as a block). `lib/Gen3Scene.lua` `actor()` draws a modelled solid
+world-aligned when one exists, skipping the card's camera yaw, lean and camera-ward pull. Evidence:
+16 before + 16 after views (two positions x levels 4/7 x four yaws) with zero fallbacks, and a
+before/after pixel diff confined to the two vans. New tools: `dump_gid_art.lua` + `art_from_log.py`
+(sprite pixels out of the sandbox as hex rows), `model_preview.py` (offline luajit preview, seconds
+per iteration), `em_truck_driver.lua` (capture sweep; `EM_STAGED=<dir>` overlays worktree modules so
+a change is captured *before* it is installed anywhere), `stage_landmark.py`,
+`install_landmark.sh`, `landmark_patch.py`. Recipe format and the full write-up:
+[docs/SPRITE-TO-VOXEL-PLAN.md](docs/SPRITE-TO-VOXEL-PLAN.md).
+**Careful:** a parallel session was editing the same mod tree (`Gen3VoxelBuildings.lua`) at the same
+time, so `patches/battle-art-voxel-fork.patch` was deliberately left alone and this round ships as
+`patches/battle-art-voxel-fork.landmark.patch` (three files, verified by applying it to a
+pre-change tree). Regenerate the wholesale patch once that session lands.
+
 2026-10-05 (b) (installed in real + QA, committed `6c511c2`): two QA-only follow-ups from (a) are
 now verified and shipped. `Gen3Terrain.thickness()` caps a rock band 1-2 cells thick at
 `NARROW*thickness`, measured from the lower floor and never below the upper one (`cap()`), so a

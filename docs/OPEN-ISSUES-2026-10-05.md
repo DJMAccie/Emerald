@@ -1,6 +1,18 @@
 # Open issues raised by the user (2026-10-05, after the elevation work)
 
-## 1. The Littleroot truck is a huge block — NOT FIXED
+## 1. The Littleroot truck is a huge block — **RESOLVED** (2026-10-05, later the same day)
+
+The truck is **gid 94**, a 48x48 inanimate sprite drawn at (2,10) and (11,10);
+it is now a real voxel model built out of its own artwork, not a card. The
+whole story — how the sprite's oblique projection was read back into a solid,
+the tool, and the before/after evidence — is in
+[SPRITE-TO-VOXEL-PLAN.md](SPRITE-TO-VOXEL-PLAN.md), "DONE — the tool exists".
+Installed in the mod source and in QA; **not yet installed in the real game**.
+
+The original diagnosis below is kept because the *correction* in it is the
+useful part: the truck was never map tiles, and the pillar was never gid 240.
+
+## 1b. The original report (kept for the record)
 
 **Symptom (from the user):** the truck reads as a big block. Visible in
 `shots_truck2/strip.png` and `shots_truck2/zoom_truck.png`: a dark box with a blue

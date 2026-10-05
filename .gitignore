@@ -2,6 +2,10 @@
 .qa-stage/
 .DS_Store
 
+# capture and driver logs, and python bytecode from the tools
+logs/
+__pycache__/
+
 # never commit game-derived data
 *.gba
 *.z64
