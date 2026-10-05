@@ -172,6 +172,29 @@ These come from catalogue sheets 1–2; finish the list from sheets 3–5.
   - Also redo the Mossdeep balcony houses (#56, 59, 61-63), which read as striped cages in game.
 
 
+## Status 2026-10-05 night: explicit boxes (`tools/buildings/explicit.py`, exported as `x_*`)
+Buildings with no engine footprint, or whose door sits apart, are now boxes picked from a cell grid
+(`grid.py out.png MAP PAIR x0 y0 x1 y1`).
+- **Installed, QA-checked at the player's camera:**
+  - Slateport: Stern's Shipyard, Fan Club (gable override), Oceanic Museum.
+  - Mauville House1, Lilycove House4, Verdanturf Battle Tent (gable override), Mr. Briney's cottage.
+  - Cycling Road north and south gates, Winstrate house (forced flat: parapet roofs).
+  - Trainer Hill tower (`standOn` the plateau cell) and entrance booth.
+  - Battle Frontier: Pike, Dome (gable), Factory, Tower (block), Arena, Pyramid (gable).
+- **Per-building overrides** in `explicit.py`:
+  - `GABLE`: number of back-slope rows.
+  - `FLAT`: force a flat roof.
+  - `STAND`: map cell to stand on, exported as `standOn`; `BuildingModels.mesh` honours it.
+  - `KEYS`.
+- **Ground cut:** each walkable ground tile is now flooded on its own (scipy label). Before this, outline
+  pixels shared by several tiles added up and ate the Shipyard's door.
+- **Open:**
+  - Trainer Hill's notch cliffs still hide most of the tower facade (a terrain issue).
+  - Lounge9's "door" is a flowerbed, so it is not a building.
+  - Birch's lab: waiting on the user to say which part is wrong.
+  - Recheck the Mossdeep balcony houses.
+
+
 ## Beyond buildings: every asset in voxels (user, 2026-10-05)
 The goal covers ALL assets, not just buildings. Work order after the remaining buildings:
 1. **Signs** (route signs, town signs, house mailboxes): currently grass-coloured (`Gen3Objects` cuts

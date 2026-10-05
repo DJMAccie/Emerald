@@ -246,12 +246,15 @@ BIRCH_LAB = dict(
                  side=(88, 100), back='front', fill=(88, 100))],
     keys=GRASS,
     relief=[
-        dict(x=(16, 47), rows=(8, 31), k=-3),     # the vent's square base, astride the ridge
-        dict(x=(20, 44), rows=(2, 27), k=-5),     # the round vent on top of it
-        dict(x=(27, 37), rows=(9, 18), k=-2),     # its dark opening sits lower than the rim
         dict(x=(12, 42), rows=(60, 70), k=2),     # windows set in
         dict(x=(64, 82), rows=(58, 79), k=3),     # door recess
         dict(x=(0, 112), rows=(51, 55), k=-2),    # eave overhang
+    ],
+    # the vent: a square base standing astride the ridge (ridge at depth 25),
+    # its lit front face art rows 23-31, and the round vent on top of it
+    prisms=[
+        dict(x=(16, 48), d=(13, 38), h=(28, 44), B=79, rows=(14, 32), mat=(30, 27), grey=40),
+        dict(x=(19, 45), d=(14, 31), h=(44, 49), B=79, rows=(0, 24), mat=(22, 18), grey=40, round=True),
     ],
 )
 

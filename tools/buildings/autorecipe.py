@@ -43,19 +43,23 @@ def derive(g, it):
     inside = {mc[yy * MW + xx] & 0x3ff for yy in range(top, y1 + 1) for xx in range(x0, x1 + 1)}
     cand -= inside          # the building's own tiles are never its ground
     tiles = [voxproto.art(L_, t).astype(int) for t in cand if t in L_['u'][2]]
+    # nor a walkable tile drawn exactly like one of them (a door the same art
+    # as a doorway elsewhere)
+    own = [voxproto.art(L_, t).astype(int) for t in inside if t in L_['u'][2]]
+    tiles = [t for t in tiles if not any(np.array_equal(t, o) for o in own)]
     H, W = img.shape[:2]
-    pos = np.zeros((H, W), bool)
+    # flood each ground tile on its own: ground is a run of ONE tile's pixels
+    # reaching the edge, so outline pixels several tiles share one each (a
+    # door's dark frame) never add up to a hole
+    from scipy import ndimage
     im3 = img[..., :3].astype(int)
+    seen = np.zeros((H, W), bool)
     for t in tiles:
         tt = np.tile(t, (H // 16, W // 16, 1))
-        pos |= (np.abs(im3 - tt).sum(2) == 0)
-    seen = np.zeros((H, W), bool)
-    st = [(yy, xx) for yy in range(H) for xx in (0, W - 1)] + [(yy, xx) for xx in range(W) for yy in (0, H - 1)]
-    while st:
-        yy, xx = st.pop()
-        if yy < 0 or xx < 0 or yy >= H or xx >= W or seen[yy, xx] or not pos[yy, xx]: continue
-        seen[yy, xx] = True
-        st += [(yy + 1, xx), (yy - 1, xx), (yy, xx + 1), (yy, xx - 1)]
+        lab, n = ndimage.label(np.abs(im3 - tt).sum(2) == 0)
+        edge = set(lab[0]) | set(lab[-1]) | set(lab[:, 0]) | set(lab[:, -1])
+        edge.discard(0)
+        if edge: seen |= np.isin(lab, list(edge))
     mask = ~seen
     keys = []
     wall = (y1 - g['wallTop'] + 1) * 16

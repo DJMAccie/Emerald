@@ -198,6 +198,9 @@ def build(img, recipe):
             smp = [s if s[3] == 'mirror' else s + (x,) for s in smp]
             smp = trim_and_mirror(img, [s for s in smp if s[3] == 'mirror' or 0 <= s[0] < H], trim)
             smp = [s[:4] for s in smp]
+            # a column whose whole facade is ground (cut away) is not building
+            if trim and smp and all(img[s_[0], x, 3] < 128 for s_ in smp if s_[3] == 'wall' and 0 <= s_[0] < H):
+                continue
             if smp:
                 de = max(s[2] for s in smp) + 1
             tl = tail
@@ -283,6 +286,7 @@ def build(img, recipe):
                 if c >= 0 and kind != 'wall':      # a wall's top row is not a roof: leave material
                     colT[x, hv, di] = c
     apply_relief(img, recipe.get('relief', []), pix, occ, colS, colT, solid)
+    apply_prisms(img, recipe.get('prisms', []), occ, colS, colT, solid)
     return dict(occ=occ, colS=colS, colT=colT, colE=colE, colN=colN, solid=solid, W=W, HH=HH, DD=DD)
 
 
@@ -334,6 +338,53 @@ def apply_relief(img, rects, pix, occ, colS, colT, solid):
                 colT[x, hv, di] = -1
                 if c >= 0:
                     colT[x, hv + m, di] = c
+
+
+def apply_prisms(img, prisms, occ, colS, colT, solid):
+    """Solid boxes standing on the model (a vent on the ridge, a chimney).
+    Each face is painted by projecting it back onto the drawing: a voxel at
+    height h and depth d shows art row B - h - d (Gen 3's oblique view), so the
+    box looks exactly like the drawing head-on and has real depth turned.
+    Pixels outside the prism's own art (roof showing round a round vent) and
+    hidden faces take its material colour `mat`.
+    p: x=(a,b), d=(d0,d1), h=(h0,h1), B=bottom art row, mat=(x,row),
+       rows=(r0,r1) its art rows, round=True for an elliptic footprint."""
+    H = img.shape[0]
+    for p in prisms:
+        xa, xb = p['x']; d0, d1 = p['d']; h0, h1 = p['h']; B = p['B']
+        r0, r1 = p.get('rows', (0, H))
+        mat = pack(img[p['mat'][1], p['mat'][0], :3])
+        grey = p.get('grey')
+
+        def art(x, row):
+            if not (r0 <= row < r1) or not (0 <= row < H):
+                return mat
+            q = img[row, x]
+            if q[3] < 128:
+                return mat
+            if grey is not None:
+                r, g, b = (int(v) for v in q[:3])
+                if max(r, g, b) - min(r, g, b) > grey:   # roof colour, not the vent
+                    return mat
+            return pack(q[:3])
+        cx, cd = (xa + xb - 1) / 2.0, (d0 + d1 - 1) / 2.0
+        rx, rd = (xb - xa) / 2.0, (d1 - d0) / 2.0
+        for x in range(xa, xb):
+            for d in range(d0, d1):
+                if p.get('round') and ((x - cx) / rx) ** 2 + ((d - cd) / rd) ** 2 > 1.0:
+                    continue
+                di = d + PAD
+                for h in range(h0, h1):
+                    occ[x, h, di] = True
+                    solid[x, h, di] = mat
+                    colS[x, h, di] = -1
+                    colT[x, h, di] = -1
+                # front face: the first voxel of this column toward the viewer
+                front = d == d0 or (p.get('round') and ((x - cx) / rx) ** 2 + ((d - 1 - cd) / rd) ** 2 > 1.0)
+                if front:
+                    for h in range(h0, h1):
+                        colS[x, h, di] = art(x, B - h - d)
+                colT[x, h1 - 1, di] = art(x, B - (h1 - 1) - d)
 
 
 # ---------------------------------------------------------------- meshing
@@ -549,6 +600,10 @@ def export(name, rec, img, quads, v, path):
         # (shared primary tiles) wherever it stands, not from local redraws
         tiles = [(x - x0, y - y0, mc[y * MW + x] & 0x3ff) for y in range(y0, y1 + 1) for x in range(x0, x1 + 1)]
         f.write(' tiles={%s},\n' % ','.join('{%d,%d,%d}' % t for t in tiles))
+        if rec.get('standOn'):
+            # the map cell whose floor the building stands on (a tower on a
+            # plateau behind a cliff, whose own cells read the canyon floor)
+            f.write(' standOn={%d,%d},\n' % tuple(rec['standOn']))
         f.write(' quads={\n')
         for i in range(0, len(out), 6):
             f.write('  ' + ','.join(out[i:i + 6]) + ',\n')
