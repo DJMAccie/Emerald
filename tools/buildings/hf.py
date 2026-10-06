@@ -295,10 +295,15 @@ def build(img, recipe):
         if last and tail:
             row, hv, dv, kind = last
             c = pixcol(x, row)
+            # roofRow: the roof behind takes this drawing row's colour (a red
+            # roof deck behind a railing), the column's own pixel
+            rr = pc.get('roofRow')
+            if rr is not None:
+                c = pixcol(x, rr)
             dl = max(top_d) - tail
             for t in range(1, tail + 1):
                 di = dl + t + PAD
-                if c >= 0 and kind != 'wall':      # a wall's top row is not a roof: leave material
+                if c >= 0 and (kind != 'wall' or rr is not None):   # a wall's top row is not a roof: leave material
                     colT[x, hv, di] = c
     apply_relief(img, recipe.get('relief', []), pix, occ, colS, colT, solid)
     apply_prisms(img, recipe.get('prisms', []), occ, colS, colT, solid)

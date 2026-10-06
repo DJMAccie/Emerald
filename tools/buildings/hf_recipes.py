@@ -362,6 +362,26 @@ def _space_center():
 SPACE_CENTER = _space_center()
 
 
+# Mossdeep's red two-storey houses (b056/b059/b061/b062/b063, one drawing,
+# 4x4 cells). Read as: ground storey with door and window (rows 36..63, 28
+# tall), the balcony ledge (rows 32..35, 4 deep), the red upper storey with
+# its white posts and the roof railing standing on top (rows 0..31, 32 tall),
+# then the house runs back 40 px more in its own material (the automatic read
+# was a 1-cell-deep box; user: make them deeper).
+MOSSDEEP_HOUSE_BOXES = {'b056_mossdeepcity_house1': (27, 6), 'b059_mossdeepcity_house2': (66, 22),
+                        'b061_mossdeepcity_house3': (48, 3), 'b062_mossdeepcity_stevenshouse': (18, 7),
+                        'b063_mossdeepcity_house4': (17, 13)}
+def _mossdeep_house(x0, y0):
+    return dict(
+        src=('general__mossdeep', 'EM_MOSSDEEP_CITY', x0, y0, x0 + 3, y0 + 3), trim=True,
+        bgtiles=[0x001, 0x002, 0x00A, 0x00B], keys=[],
+        pieces=[dict(x=(0, 64), B=63, d0=0, segs=[('wall', 28), ('flat', 4), ('wall', 32)], tail=40, roofRow=34,
+                     side=(12, 16), fill=(12, 16), back='front')],
+        relief=[dict(x=(16, 31), rows=(42, 63), k=2),     # the door set in
+                dict(x=(40, 56), rows=(41, 52), k=2)],    # the window set in
+    )
+
+
 # Sootopolis houses (3x4 cells each). Ground = the crater rock tiles around.
 SOOT_BG = [0x2D9, 0x2E1, 0x2D4, 0x2D8, 0x2E0, 0x2E2, 0x254, 0x255, 0x25E, 0x25F, 0x242, 0x241, 0x2D3, 0x2DA]
 def _soot_cone(x0, y0):
@@ -415,4 +435,5 @@ def _hut():
 
 HUT = _hut()
 
-RECIPES = {'b064_mossdeepcity_spacecenter': SPACE_CENTER, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}
+RECIPES = {'b064_mossdeepcity_spacecenter': SPACE_CENTER,
+           **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}

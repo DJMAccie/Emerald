@@ -16,21 +16,47 @@ RISE = 12
 # maps whose stairs are drawn on ordinary cells: their stair metatile ids
 STAIR_MIDS = {'EM_SOOTOPOLIS_CITY': {0x244, 0x245},
               # the paving round the big planters (0x5D-0x5F) is not a staircase (user)
-              'EM_BATTLE_FRONTIER_OUTSIDE_EAST': {0xAF, 0xCF}}
+              'EM_BATTLE_FRONTIER_OUTSIDE_EAST': {0xAF, 0xCF},
+              # the wooden steps up the cliff bands (the mountain is all one
+              # nibble level: its terraces are only drawn)
+              'EM_MT_CHIMNEY': {0x2AF}, 'EM_JAGGED_PASS': {0x2AF}}
+# one-way ledges join terraces too: the side you jump down from (north) is a
+# level above the side you land on (Jagged Pass's ridges)
+LEDGE_MIDS = {'EM_JAGGED_PASS': {0x2EA, 0x2F0, 0x2F1, 0x2FC, 0x2FD}}
+
+def ledge_edges(mp, W, H, cells, comp):
+    mids = LEDGE_MIDS.get(mp)
+    if not mids: return []
+    led = {(x, y) for y in range(H) for x in range(W) if cells[y * W + x] & 0x3ff in mids}
+    seen = set(); out = []
+    for s in sorted(led, key=lambda p: (p[1], p[0])):
+        if s in seen: continue
+        strip = []; st = [s]; seen.add(s)
+        while st:
+            q = st.pop(); strip.append(q)
+            for d in ((1, 0), (-1, 0)):
+                n = (q[0] + d[0], q[1]); 
+                if n in led and n not in seen: seen.add(n); st.append(n)
+        north = {comp[(x, y - 1)] for x, y in strip if (x, y - 1) in comp}
+        south = {comp[(x, y + 1)] for x, y in strip if (x, y + 1) in comp}
+        if len(north) == 1 and len(south) == 1 and north != south:
+            out.append((north.pop(), south.pop(), 1, []))
+    return out
 
 def build(mp):
     W, H, cells, comps, comp, edges, level, lo, rows = sp.analyse(mp, STAIR_MIDS.get(mp))
     nib = lambda k: cells[comps[k][0][1] * W + comps[k][0][0]] >> 12
     same = [e for e in edges if nib(e[0]) == nib(e[1])]
+    links = same + [e for e in ledge_edges(mp, W, H, cells, comp) if nib(e[0]) == nib(e[1])]
     # each stair network on its own, its lowest terrace at 0 (a crater city
     # has several networks, each going down to the water)
     lv = {}
-    for start in sorted({k for e in same for k in e[:2]}):
+    for start in sorted({k for e in links for k in e[:2]}):
         if start in lv: continue
         net = {start: 0}; ch = True
         while ch:
             ch = False
-            for up, down, n, _ in same:
+            for up, down, n, _ in links:
                 if down in net and up not in net: net[up] = net[down] + n; ch = True
                 elif up in net and down not in net: net[down] = net[up] - n; ch = True
         m = min(net.values())
