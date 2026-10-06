@@ -333,6 +333,35 @@ def _treehouse(x0):
 TREEHOUSE = _treehouse(8)
 
 
+# Mossdeep Space Center (cells x60..68, y2..15; drawing 144x224). The drawing
+# reads as: an 80-row front wall (rows 144..223) under a 48-row flat roof
+# (rows 96..143) carrying a dome, a big dish, a small dish and the stair up
+# the middle to the launch deck at its back edge, where the rocket (86 rows),
+# two 96-row gantry towers with arms reaching for it and a small 32-row tower
+# stand (h0: on the roof, 80 up; the same drawing as standing on the ground
+# behind, but it towers over the building from every side as the art does). Those stand as 16-thick cards of their own pixels, the
+# sea and grass round them cut away; the rows over the sea (y2..7) stay their
+# own cells (claimFrom), so the water is still water.
+def _space_center():
+    return dict(
+        src=('general__mossdeep', 'EM_MOSSDEEP_CITY', 60, 2, 68, 15), trim=True,
+        # sea and grass colours are ground everywhere (also seen through the
+        # gantries' lattice); the building never uses them
+        keys=[(82, 107, 214), (107, 132, 214), (66, 181, 132), (115, 197, 165), (165, 214, 197),
+              (156, 115, 115), (132, 90, 90), (189, 148, 140)], claimFrom=6,   # + the shoreline
+        pieces=[dict(x=(14, 114), B=223, d0=48, h0=80, segs=[('wall', 96)], tail=16, back='front', cutout=True),
+                dict(x=(0, 144), B=223, d0=0, segs=[('wall', 80), ('flat', 48)], back='front')],
+        relief=[dict(x=(64, 80), rows=(144, 200), k=-4),    # the glass tower stands out
+                dict(x=(56, 88), rows=(201, 223), k=2),     # the entrance goes in
+                dict(x=(16, 56), rows=(97, 131), k=-8),     # dome on the roof
+                dict(x=(86, 122), rows=(97, 124), k=-6),    # big dish
+                dict(x=(128, 141), rows=(128, 142), k=-4)], # small dish
+    )
+
+
+SPACE_CENTER = _space_center()
+
+
 # Sootopolis houses (3x4 cells each). Ground = the crater rock tiles around.
 SOOT_BG = [0x2D9, 0x2E1, 0x2D4, 0x2D8, 0x2E0, 0x2E2, 0x254, 0x255, 0x25E, 0x25F, 0x242, 0x241, 0x2D3, 0x2DA]
 def _soot_cone(x0, y0):
@@ -386,4 +415,4 @@ def _hut():
 
 HUT = _hut()
 
-RECIPES = {'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}
+RECIPES = {'b064_mossdeepcity_spacecenter': SPACE_CENTER, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}

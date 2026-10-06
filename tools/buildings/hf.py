@@ -64,8 +64,10 @@ def walk(pc, x):
     """Path samples for one column: (row, hv, dv, kind), plus end (d, h)."""
     d0 = pc.get('d0', 0)
     d = float(d0(x) if callable(d0) else d0)
-    h = 0.0
-    row = pc['B'] - int(round(d))
+    # h0: the piece stands on something h0 px up (a rocket on a roof deck);
+    # its first row is h0 rows above its ground row
+    h = float(pc.get('h0', 0))
+    row = pc['B'] - int(round(d)) - int(round(h))
     out = []
     for seg in pc['segs']:
         kind = seg[0]
@@ -208,7 +210,9 @@ def build(img, recipe):
                 smp = [s for s in smp if s[2] < pc['depth']]
                 de = (max(s[2] for s in smp) + 1) if smp else pc['depth']
                 tl = max(0, pc['depth'] - int(de))
-            cols[x] = (pc, smp, de, he, tl)
+            # a column may carry several pieces (a rocket standing behind a
+            # building on the same columns): later pieces add, never replace
+            cols.setdefault(x, []).append((pc, smp, de, he, tl))
             tail = pc.get('tail', 0)
             dmax = max(dmax, int(de) + tl + 2, max((s[2] for s in smp), default=0) + tl + 2)
             hmax = max(hmax, int(he) + 2, max((s[1] for s in smp), default=0) + 2)
@@ -230,7 +234,7 @@ def build(img, recipe):
         c = pack(p[:3])
         return -1 if c in keys else c
 
-    for x, (pc, smp, de, he, tail) in cols.items():
+    for x, pc, smp, de, he, tail in [(x,) + e for x, es in cols.items() for e in es]:
         xs = range(*pc.get('fill', pc['x']))   # where the body's material is read
         bands = {}
         wallrow = {}
@@ -251,9 +255,14 @@ def build(img, recipe):
         d_back = max(top_d) if top_d else 0
         side = pc.get('side')
         # solid fill under the path
+        cut = pc.get('cutout')
         for dv, hv in top_d.items():
             di = dv + PAD
             for hh in range(hv + 1):
+                # cutout: a card of its own pixels (gantry lattice, a rocket):
+                # only the heights whose wall pixel is drawn are solid
+                if cut and (wallrow.get(hh) is None or img[wallrow[hh], x, 3] < 128):
+                    continue
                 occ[x, hh, di] = True
                 solid[x, hh, di] = bands.get(hh, bands.get(max(bands) if bands else 0, pack((128, 128, 128))))
                 r = wallrow.get(hh)
@@ -600,6 +609,10 @@ def export(name, rec, img, quads, v, path):
         # (shared primary tiles) wherever it stands, not from local redraws
         tiles = [(x - x0, y - y0, mc[y * MW + x] & 0x3ff) for y in range(y0, y1 + 1) for x in range(x0, x1 + 1)]
         f.write(' tiles={%s},\n' % ','.join('{%d,%d,%d}' % t for t in tiles))
+        if rec.get('claimFrom'):
+            # rows above this one (relative) are drawn by the model but stay
+            # their own cells (the sea and grass under the Space Center rocket)
+            f.write(' claimFrom=%d,\n' % rec['claimFrom'])
         if rec.get('standOn'):
             # the map cell whose floor the building stands on (a tower on a
             # plateau behind a cliff, whose own cells read the canyon floor)

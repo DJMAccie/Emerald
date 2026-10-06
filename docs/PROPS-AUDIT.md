@@ -85,5 +85,13 @@ Tree tops (canopy art painted under 3D trees): sampled 8 maps with walkable cano
 - Walk-under canopies (Fallarbor, Lavaridge) are raised slabs (`lib/Gen3Canopy.lua`), aligned to the OG at the player camera.
 - Tight tree clusters (Mossdeep) are built as one drawing (`Gen3Objects.CLUSTER_CELLS/SPAN`) instead of one cell per object, so each 2-wide tree stays whole.
 - Crowns are inflated by distance to the drawing's edge (`VoxelHull.build(...,inflate)`): domed top and sides, flat foot, no flat lid. Cluster trees keep each tree's own crown row (`Gen3Objects` tops rise from every member cell), so Mossdeep's trees are four round trees, not one merged crown and floating canopy slabs.
-- Open: Mossdeep's rocky grove (34,34) is still walk-under canopy slabs on stalks (flat plates). Fortree canopy stays with Opus.
+- Stacked groves (Mossdeep's rocky grove, 34,34): `Gen3Objects.segmentTrees` finds each crown by its lightest highlight (lattice-snapped to the cell grid), lets trees claim pixels front (lowest) first inside their own rounded outline, and builds one round tree per crown (33+13 trees). Falls back to the old per-cell/bank path when the highlights are not on a lattice. Inflated crowns are only 55% as deep behind the middle (`VoxelHull.BACK_RATIO`), stacked trees at most 16 deep (`Gen3Objects.STACK_DEPTH`).
+- Inflated crowns keep the drawing's own pixels only on the shell the camera sees (front face, front half of the top); the body behind and beside is the leaf colour of its row (`VoxelHull`, `dominant`), so low and turned views show tiers of leaf, not streaks of outline. Back half 90% as deep, trees up to 28 deep (egg-shaped, not discs).
+- Open: nothing known for trees; Fortree canopy stays with Opus.
 - Tools: `fourcam.sh` (player / orbit / low / top-down), `foliage_audit.py`, `tree_recipe_check.py`.
+
+## Bushes and flowers pass (2026-10-06)
+- Checked 24 foliage groups (all tiles the mod classifies shrub / grass / flowers, 2 uses each) against the drawing at the player and orbit cameras. Flowers (Battle Frontier, Petalburg, Rustboro...), bushes and tall grass were right except two:
+- **Petalburg hedges** (0x23C-0x266): the light top strips live on the over-player layer and were raised as walk-under canopy planks or painted flat, leaving only the little front-face blocks. They are now bars: `Gen3Canopy` raises each hedge cell's over-layer strip as a slab from the ground to 13 voxels (the height of the face art), side faces from the strip's own rim pixels, neighbour-aware across cells (`shape.hedge`).
+- **Ash grass** (Route 113, behaviour ASHGRASS): its tile is ash all through; the ground under it was plain green grass (green squares in a tan lattice). `ownGround` makes the tile its own ground and tuft.
+- Open: Jagged Pass pink grass (0x207) draws nothing visible at its cell (flat); not verified against the original.
