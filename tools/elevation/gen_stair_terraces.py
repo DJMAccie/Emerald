@@ -25,7 +25,10 @@ STAIR_MIDS = {'EM_SOOTOPOLIS_CITY': {0x244, 0x245},
 # per-map rise per stair row where the default is too steep: Mt. Pyre's
 # exterior climbs 14 stair rows through narrow cliff corridors; at 12 px a
 # row the player camera is buried in rock
-RISE_BY_MAP = {'EM_MT_PYRE_EXTERIOR': 6, 'EM_MT_PYRE_SUMMIT': 6}
+RISE_BY_MAP = {'EM_MT_PYRE_EXTERIOR': 16, 'EM_MT_PYRE_SUMMIT': 16}
+# maps where each flight climbs one drawn cliff tier, however many rows it
+# has (Mt. Pyre: a tier is drawn one cliff tile tall); rise is then per tier
+PER_FLIGHT = {'EM_MT_PYRE_EXTERIOR', 'EM_MT_PYRE_SUMMIT'}
 ISOLATED_NEAR = {'EM_MT_PYRE_EXTERIOR', 'EM_MT_PYRE_SUMMIT'}
 # one-way ledges join terraces too: the side you jump down from (north) is a
 # level above the side you land on (Jagged Pass's ridges)
@@ -55,6 +58,8 @@ def build(mp):
     nib = lambda k: cells[comps[k][0][1] * W + comps[k][0][0]] >> 12
     same = [e for e in edges if nib(e[0]) == nib(e[1])]
     links = same + [e for e in ledge_edges(mp, W, H, cells, comp) if nib(e[0]) == nib(e[1])]
+    if mp in PER_FLIGHT:
+        links = [(u, d, 1, st) for u, d, n, st in links]
     # each stair network on its own, its lowest terrace at 0 (a crater city
     # has several networks, each going down to the water)
     lv = {}
