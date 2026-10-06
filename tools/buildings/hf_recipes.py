@@ -368,6 +368,27 @@ SPACE_CENTER = _space_center()
 # its white posts and the roof railing standing on top (rows 0..31, 32 tall),
 # then the house runs back 40 px more in its own material (the automatic read
 # was a 1-cell-deep box; user: make them deeper).
+# The Abandoned Ship's wreck on Route 108 (cells x27..33, y3..5; drawing
+# 112x48): a hull whose waterline side is the dark green band (rows 38..46, 9
+# tall) under its deck (rows 16..37, running back from the pointed bow), and
+# the cabin block standing on the deck (front wall rows 28..36 with its
+# windows, striped roof rows 10..27). The sea and shoal colours round it are
+# ground; only the wreck's blocked cells are claimed (claimBlocked), so the
+# sea under and round it stays water. The gangway (row y6) stays drawn.
+WRECK_SEA = [(156, 165, 189), (173, 197, 230), (82, 107, 214), (189, 206, 230)]
+def _wreck():
+    return dict(
+        src=('general__slateport', 'EM_ROUTE108', 27, 3, 33, 5), trim=True,
+        keys=WRECK_SEA, claimBlocked=True,
+        pieces=[dict(x=(0, 90), B=46, d0=0, segs=[('wall', 9), ('flat', 'top')], side=(30, 34), fill=(30, 34)),
+                dict(x=(24, 76), B=46, d0=1, h0=9, segs=[('wall', 9), ('flat', 'top')], side=(30, 34), fill=(30, 34))],
+        relief=[],
+    )
+
+
+WRECK = _wreck()
+
+
 MOSSDEEP_HOUSE_BOXES = {'b056_mossdeepcity_house1': (27, 6), 'b059_mossdeepcity_house2': (66, 22),
                         'b061_mossdeepcity_house3': (48, 3), 'b062_mossdeepcity_stevenshouse': (18, 7),
                         'b063_mossdeepcity_house4': (17, 13)}
@@ -435,5 +456,5 @@ def _hut():
 
 HUT = _hut()
 
-RECIPES = {'b064_mossdeepcity_spacecenter': SPACE_CENTER,
+RECIPES = {'abandoned_ship_wreck': WRECK, 'b064_mossdeepcity_spacecenter': SPACE_CENTER,
            **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}

@@ -620,6 +620,8 @@ def export(name, rec, img, quads, v, path):
         # (shared primary tiles) wherever it stands, not from local redraws
         tiles = [(x - x0, y - y0, mc[y * MW + x] & 0x3ff) for y in range(y0, y1 + 1) for x in range(x0, x1 + 1)]
         f.write(' tiles={%s},\n' % ','.join('{%d,%d,%d}' % t for t in tiles))
+        if rec.get('claimBlocked'):
+            f.write(' claimBlocked=true,\n')
         if rec.get('claimFrom'):
             # rows above this one (relative) are drawn by the model but stay
             # their own cells (the sea and grass under the Space Center rocket)
