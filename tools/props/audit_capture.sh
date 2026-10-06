@@ -5,8 +5,7 @@
 #
 # Takes the same atomic lock as tools/qa_run.sh (/tmp/emerald-qa.lock): two game instances started at
 # the same moment deadlock. Differences from qa_run.sh: indexed file names, a watchdog that scales with
-# the number of cases (QA_LIMIT overrides), and the QA engine payload is restored after taking the lock
-# (the engine clears the QA identity's updates/ after every run, which makes the next run draw nothing).
+# the number of cases (QA_LIMIT overrides), and the display is woken with caffeinate -u before the run.
 set -u
 OUT=$1
 LOCK=/tmp/emerald-qa.lock
@@ -23,7 +22,7 @@ done
 echo "$$ $OUT" > "$LOCK/owner"
 trap 'rm -rf "$LOCK"' EXIT
 while pgrep -x love >/dev/null; do sleep 3; done
-mkdir -p "$QI/updates"; cp -n "$HOME"/Library/Application\ Support/pokemon-love2d/updates/*.love "$QI/updates/" 2>/dev/null
+caffeinate -u -t 60 >/dev/null 2>&1 &   # wake a sleeping display: a window that cannot present stalls the game
 python3 - <<PY
 import re
 p="$QI/options.lua";s=open(p,'rb').read()

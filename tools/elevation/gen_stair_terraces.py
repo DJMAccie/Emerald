@@ -13,19 +13,31 @@ import stair_platforms as sp
 OUT = os.path.expanduser('~/Documents/battle-art-notquiteog/lib/Gen3StairTerraces.lua')
 RISE = 12
 
+# maps whose stairs are drawn on ordinary cells: their stair metatile ids
+STAIR_MIDS = {'EM_SOOTOPOLIS_CITY': {0x244, 0x245},
+              # the paving round the big planters (0x5D-0x5F) is not a staircase (user)
+              'EM_BATTLE_FRONTIER_OUTSIDE_EAST': {0xAF, 0xCF}}
+
 def build(mp):
-    W, H, cells, comps, comp, edges, level, lo, rows = sp.analyse(mp)
+    W, H, cells, comps, comp, edges, level, lo, rows = sp.analyse(mp, STAIR_MIDS.get(mp))
     nib = lambda k: cells[comps[k][0][1] * W + comps[k][0][0]] >> 12
     same = [e for e in edges if nib(e[0]) == nib(e[1])]
-    base = max(range(len(comps)), key=lambda k: len(comps[k]))
-    lv = {base: 0}; ch = True
-    while ch:
-        ch = False
-        for up, down, n, _ in same:
-            if down in lv and up not in lv: lv[up] = lv[down] + n; ch = True
-            elif up in lv and down not in lv: lv[down] = lv[up] - n; ch = True
-    m = min(lv.values())
-    pins = [(comps[k][0][0], comps[k][0][1], lv[k] - m if k in lv else 0) for k in range(len(comps))]
+    # each stair network on its own, its lowest terrace at 0 (a crater city
+    # has several networks, each going down to the water)
+    lv = {}
+    for start in sorted({k for e in same for k in e[:2]}):
+        if start in lv: continue
+        net = {start: 0}; ch = True
+        while ch:
+            ch = False
+            for up, down, n, _ in same:
+                if down in net and up not in net: net[up] = net[down] + n; ch = True
+                elif up in net and down not in net: net[down] = net[up] - n; ch = True
+        m = min(net.values())
+        for k, v in net.items(): lv[k] = v - m
+    if not lv:
+        base = max(range(len(comps)), key=lambda k: len(comps[k])); lv = {base: 0}
+    pins = [(comps[k][0][0], comps[k][0][1], lv.get(k, 0)) for k in range(len(comps))]
     stairs = {p for e in same for p in e[3]}
     # twin flights: same rows, same floors above and below -> fill the gap
     spans = []

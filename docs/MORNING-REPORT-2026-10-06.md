@@ -90,6 +90,12 @@
   with no second shore band). In your game.
 - **Slateport bush 0x243:** VERIFIED (a round shrub beside the Pokémon Center). In your game.
 
+## Morning check results (furniture)
+All furniture groups passed and are installed (backup in
+`gen1recomp-modwork/backups/real-before-furnB-20261006-0915`), together with the furniture builder they use.
+The one failure, potted-plant leaves striped by the extra height, was fixed with lift=0 and rechecked. Every one
+of my mod files in your game now matches the checked source.
+
 ## Still open
 - Run `tools/morning_check.sh` and review the sheets; install what's right, revert what isn't.
 - Fortree's authored terraces fail the offline check (27 wall-climbs), so they stay off.

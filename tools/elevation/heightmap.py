@@ -52,7 +52,7 @@ local pins,stairs
 if terr~='' then
  local env={V=nil}
  local T=dofile(lib..'/Gen3EmeraldTerraces.lua')
- local rows=T.maps[mapid]
+ local rows=terr=='1' and T.maps[mapid] or nil
  if rows then pins={};for _,r in ipairs(rows)do pins[r[1]..':'..r[2]]=r[3]*T.COURSE end end
  local ok,G=pcall(dofile,lib..'/Gen3StairTerraces.lua')
  local g=ok and G[mapid]
@@ -96,7 +96,7 @@ def solve(mp, lib, terraces):
         t.write('return {W=%d,H=%d,c={%s}}' % (W, H, ','.join(rows))); data = t.name
     with tempfile.NamedTemporaryFile('w', suffix='.lua', delete=False) as t:
         t.write(LUA % (MAX_STEP, COURSE)); prog = t.name
-    out = subprocess.run(['luajit', prog, lib, data, '1' if terraces else '', mp], capture_output=True, text=True)
+    out = subprocess.run(['luajit', prog, lib, data, ('1' if terraces==True else ('gen' if terraces=='gen' else '')), mp], capture_output=True, text=True)
     if out.returncode: raise SystemExit(out.stderr)
     hts = [[int(v) for v in line.split()] for line in out.stdout.strip().split('\n')]
     return W, H, cells, hts

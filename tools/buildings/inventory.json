@@ -1,0 +1,1966 @@
+[
+ {
+  "name": "PetalburgCity_House1",
+  "map": "EM_PETALBURG_CITY",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    10,
+    19
+   ]
+  ],
+  "n": 1
+ },
+ {
+  "name": "PetalburgCity_WallysHouse",
+  "map": "EM_PETALBURG_CITY",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    7,
+    5
+   ]
+  ],
+  "n": 2
+ },
+ {
+  "name": "PetalburgCity_Gym",
+  "map": "EM_PETALBURG_CITY",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    15,
+    8
+   ]
+  ],
+  "n": 3
+ },
+ {
+  "name": "PetalburgCity_PokemonCenter_1F",
+  "map": "EM_PETALBURG_CITY",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    20,
+    16
+   ]
+  ],
+  "n": 4
+ },
+ {
+  "name": "PetalburgCity_House2",
+  "map": "EM_PETALBURG_CITY",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    20,
+    24
+   ]
+  ],
+  "n": 5
+ },
+ {
+  "name": "PetalburgCity_Mart",
+  "map": "EM_PETALBURG_CITY",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    25,
+    12
+   ]
+  ],
+  "n": 6
+ },
+ {
+  "name": "SlateportCity_PokemonCenter_1F",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    19,
+    19
+   ]
+  ],
+  "n": 7
+ },
+ {
+  "name": "SlateportCity_Mart",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    13,
+    26
+   ]
+  ],
+  "n": 8
+ },
+ {
+  "name": "SlateportCity_SternsShipyard_1F",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    26,
+    38
+   ]
+  ],
+  "n": 9
+ },
+ {
+  "name": "SlateportCity_BattleTentLobby",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    10,
+    12
+   ]
+  ],
+  "n": 10
+ },
+ {
+  "name": "SlateportCity_PokemonFanClub",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    4,
+    26
+   ]
+  ],
+  "n": 11
+ },
+ {
+  "name": "SlateportCity_OceanicMuseum_1F",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    30,
+    26
+   ],
+   [
+    31,
+    26
+   ]
+  ],
+  "n": 12
+ },
+ {
+  "name": "SlateportCity_NameRatersHouse",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    5,
+    19
+   ]
+  ],
+  "n": 13
+ },
+ {
+  "name": "SlateportCity_Harbor",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    28,
+    12
+   ]
+  ],
+  "n": 14
+ },
+ {
+  "name": "SlateportCity_Harbor",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    40,
+    7
+   ]
+  ],
+  "n": 15
+ },
+ {
+  "name": "SlateportCity_House",
+  "map": "EM_SLATEPORT_CITY",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    21,
+    44
+   ]
+  ],
+  "n": 16
+ },
+ {
+  "name": "MauvilleCity_Gym",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    8,
+    5
+   ]
+  ],
+  "n": 17
+ },
+ {
+  "name": "MauvilleCity_PokemonCenter_1F",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    22,
+    5
+   ]
+  ],
+  "n": 18
+ },
+ {
+  "name": "MauvilleCity_BikeShop",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    35,
+    5
+   ]
+  ],
+  "n": 19
+ },
+ {
+  "name": "MauvilleCity_Mart",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    23,
+    14
+   ]
+  ],
+  "n": 20
+ },
+ {
+  "name": "MauvilleCity_House1",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    32,
+    14
+   ]
+  ],
+  "n": 21
+ },
+ {
+  "name": "MauvilleCity_GameCorner",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    8,
+    13
+   ]
+  ],
+  "n": 22
+ },
+ {
+  "name": "MauvilleCity_House2",
+  "map": "EM_MAUVILLE_CITY",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    19,
+    14
+   ]
+  ],
+  "n": 23
+ },
+ {
+  "name": "RustboroCity_Gym",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    27,
+    19
+   ]
+  ],
+  "n": 24
+ },
+ {
+  "name": "RustboroCity_Flat1_1F",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    13,
+    30
+   ]
+  ],
+  "n": 25
+ },
+ {
+  "name": "RustboroCity_Mart",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    16,
+    45
+   ]
+  ],
+  "n": 26
+ },
+ {
+  "name": "RustboroCity_PokemonCenter_1F",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    16,
+    38
+   ]
+  ],
+  "n": 27
+ },
+ {
+  "name": "RustboroCity_PokemonSchool",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    27,
+    34
+   ]
+  ],
+  "n": 28
+ },
+ {
+  "name": "RustboroCity_DevonCorp_1F",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    11,
+    15
+   ],
+   [
+    12,
+    15
+   ]
+  ],
+  "n": 29
+ },
+ {
+  "name": "RustboroCity_House1",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    33,
+    19
+   ]
+  ],
+  "n": 30
+ },
+ {
+  "name": "RustboroCity_CuttersHouse",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    9,
+    38
+   ]
+  ],
+  "n": 31
+ },
+ {
+  "name": "RustboroCity_House2",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    30,
+    28
+   ]
+  ],
+  "n": 32
+ },
+ {
+  "name": "RustboroCity_Flat2_1F",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    5,
+    51
+   ]
+  ],
+  "n": 33
+ },
+ {
+  "name": "RustboroCity_House3",
+  "map": "EM_RUSTBORO_CITY",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    26,
+    46
+   ]
+  ],
+  "n": 34
+ },
+ {
+  "name": "FortreeCity_PokemonCenter_1F",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    5,
+    6
+   ]
+  ],
+  "n": 35
+ },
+ {
+  "name": "FortreeCity_House1",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    10,
+    3
+   ]
+  ],
+  "n": 36
+ },
+ {
+  "name": "FortreeCity_Gym",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    22,
+    11
+   ]
+  ],
+  "n": 37
+ },
+ {
+  "name": "FortreeCity_Mart",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    4,
+    14
+   ]
+  ],
+  "n": 38
+ },
+ {
+  "name": "FortreeCity_House2",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    17,
+    3
+   ]
+  ],
+  "n": 39
+ },
+ {
+  "name": "FortreeCity_House3",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    25,
+    3
+   ]
+  ],
+  "n": 40
+ },
+ {
+  "name": "FortreeCity_House4",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    32,
+    2
+   ]
+  ],
+  "n": 41
+ },
+ {
+  "name": "FortreeCity_House5",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    12,
+    13
+   ]
+  ],
+  "n": 42
+ },
+ {
+  "name": "FortreeCity_DecorationShop",
+  "map": "EM_FORTREE_CITY",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    37,
+    13
+   ]
+  ],
+  "n": 43
+ },
+ {
+  "name": "LilycoveCity_DepartmentStore_1F",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    27,
+    6
+   ]
+  ],
+  "n": 44
+ },
+ {
+  "name": "LilycoveCity_CoveLilyMotel_1F",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    37,
+    24
+   ]
+  ],
+  "n": 45
+ },
+ {
+  "name": "LilycoveCity_PokemonCenter_1F",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    24,
+    14
+   ]
+  ],
+  "n": 46
+ },
+ {
+  "name": "LilycoveCity_LilycoveMuseum_1F",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    11,
+    5
+   ],
+   [
+    12,
+    5
+   ]
+  ],
+  "n": 47
+ },
+ {
+  "name": "LilycoveCity_ContestLobby",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    23,
+    24
+   ]
+  ],
+  "n": 48
+ },
+ {
+  "name": "LilycoveCity_PokemonTrainerFanClub",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    39,
+    14
+   ]
+  ],
+  "n": 49
+ },
+ {
+  "name": "LilycoveCity_MoveDeletersHouse",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    36,
+    6
+   ]
+  ],
+  "n": 50
+ },
+ {
+  "name": "LilycoveCity_House1",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    42,
+    6
+   ]
+  ],
+  "n": 51
+ },
+ {
+  "name": "LilycoveCity_House2",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    55,
+    15
+   ]
+  ],
+  "n": 52
+ },
+ {
+  "name": "LilycoveCity_House3",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    11,
+    22
+   ]
+  ],
+  "n": 53
+ },
+ {
+  "name": "LilycoveCity_House4",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    12,
+    14
+   ]
+  ],
+  "n": 54
+ },
+ {
+  "name": "LilycoveCity_Harbor",
+  "map": "EM_LILYCOVE_CITY",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    12,
+    32
+   ]
+  ],
+  "n": 55
+ },
+ {
+  "name": "MossdeepCity_House1",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    28,
+    9
+   ]
+  ],
+  "n": 56
+ },
+ {
+  "name": "MossdeepCity_Gym",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    38,
+    9
+   ]
+  ],
+  "n": 57
+ },
+ {
+  "name": "MossdeepCity_PokemonCenter_1F",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    28,
+    16
+   ]
+  ],
+  "n": 58
+ },
+ {
+  "name": "MossdeepCity_House2",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    67,
+    25
+   ]
+  ],
+  "n": 59
+ },
+ {
+  "name": "MossdeepCity_Mart",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    37,
+    18
+   ]
+  ],
+  "n": 60
+ },
+ {
+  "name": "MossdeepCity_House3",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    49,
+    6
+   ]
+  ],
+  "n": 61
+ },
+ {
+  "name": "MossdeepCity_StevensHouse",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    19,
+    10
+   ]
+  ],
+  "n": 62
+ },
+ {
+  "name": "MossdeepCity_House4",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    18,
+    16
+   ]
+  ],
+  "n": 63
+ },
+ {
+  "name": "MossdeepCity_SpaceCenter_1F",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    64,
+    15
+   ]
+  ],
+  "n": 64
+ },
+ {
+  "name": "MossdeepCity_GameCorner_1F",
+  "map": "EM_MOSSDEEP_CITY",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    36,
+    24
+   ]
+  ],
+  "n": 65
+ },
+ {
+  "name": "SootopolisCity_PokemonCenter_1F",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    43,
+    31
+   ]
+  ],
+  "n": 66
+ },
+ {
+  "name": "SootopolisCity_Mart",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    17,
+    29
+   ]
+  ],
+  "n": 67
+ },
+ {
+  "name": "SootopolisCity_Gym_1F",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    31,
+    32
+   ]
+  ],
+  "n": 68
+ },
+ {
+  "name": "SootopolisCity_House1",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    9,
+    6
+   ]
+  ],
+  "n": 69
+ },
+ {
+  "name": "SootopolisCity_House2",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    45,
+    6
+   ]
+  ],
+  "n": 70
+ },
+ {
+  "name": "SootopolisCity_House3",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    9,
+    17
+   ]
+  ],
+  "n": 71
+ },
+ {
+  "name": "SootopolisCity_House4",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    44,
+    17
+   ]
+  ],
+  "n": 72
+ },
+ {
+  "name": "SootopolisCity_House5",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    9,
+    26
+   ]
+  ],
+  "n": 73
+ },
+ {
+  "name": "SootopolisCity_House6",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    53,
+    28
+   ]
+  ],
+  "n": 74
+ },
+ {
+  "name": "SootopolisCity_House7",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    8,
+    35
+   ]
+  ],
+  "n": 75
+ },
+ {
+  "name": "SootopolisCity_LotadAndSeedotHouse",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    48,
+    25
+   ]
+  ],
+  "n": 76
+ },
+ {
+  "name": "SootopolisCity_MysteryEventsHouse_1F",
+  "map": "EM_SOOTOPOLIS_CITY",
+  "pair": "general__sootopolis",
+  "doors": [
+   [
+    51,
+    36
+   ]
+  ],
+  "n": 77
+ },
+ {
+  "name": "EverGrandeCity_PokemonLeague_1F",
+  "map": "EM_EVER_GRANDE_CITY",
+  "pair": "general__ever_grande",
+  "doors": [
+   [
+    18,
+    5
+   ]
+  ],
+  "n": 78
+ },
+ {
+  "name": "EverGrandeCity_PokemonCenter_1F",
+  "map": "EM_EVER_GRANDE_CITY",
+  "pair": "general__ever_grande",
+  "doors": [
+   [
+    27,
+    48
+   ]
+  ],
+  "n": 79
+ },
+ {
+  "name": "LittlerootTown_MaysHouse_1F",
+  "map": "EM_LITTLEROOT_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    14,
+    8
+   ]
+  ],
+  "n": 80
+ },
+ {
+  "name": "LittlerootTown_BrendansHouse_1F",
+  "map": "EM_LITTLEROOT_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    5,
+    8
+   ]
+  ],
+  "n": 81
+ },
+ {
+  "name": "LittlerootTown_ProfessorBirchsLab",
+  "map": "EM_LITTLEROOT_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    7,
+    16
+   ]
+  ],
+  "n": 82
+ },
+ {
+  "name": "OldaleTown_House1",
+  "map": "EM_OLDALE_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    5,
+    7
+   ]
+  ],
+  "n": 83
+ },
+ {
+  "name": "OldaleTown_House2",
+  "map": "EM_OLDALE_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    15,
+    16
+   ]
+  ],
+  "n": 84
+ },
+ {
+  "name": "OldaleTown_PokemonCenter_1F",
+  "map": "EM_OLDALE_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    6,
+    16
+   ]
+  ],
+  "n": 85
+ },
+ {
+  "name": "OldaleTown_Mart",
+  "map": "EM_OLDALE_TOWN",
+  "pair": "general__petalburg",
+  "doors": [
+   [
+    14,
+    6
+   ]
+  ],
+  "n": 86
+ },
+ {
+  "name": "DewfordTown_Hall",
+  "map": "EM_DEWFORD_TOWN",
+  "pair": "general__dewford",
+  "doors": [
+   [
+    3,
+    3
+   ]
+  ],
+  "n": 87
+ },
+ {
+  "name": "DewfordTown_PokemonCenter_1F",
+  "map": "EM_DEWFORD_TOWN",
+  "pair": "general__dewford",
+  "doors": [
+   [
+    2,
+    10
+   ]
+  ],
+  "n": 88
+ },
+ {
+  "name": "DewfordTown_Gym",
+  "map": "EM_DEWFORD_TOWN",
+  "pair": "general__dewford",
+  "doors": [
+   [
+    8,
+    17
+   ]
+  ],
+  "n": 89
+ },
+ {
+  "name": "DewfordTown_House1",
+  "map": "EM_DEWFORD_TOWN",
+  "pair": "general__dewford",
+  "doors": [
+   [
+    17,
+    14
+   ]
+  ],
+  "n": 90
+ },
+ {
+  "name": "DewfordTown_House2",
+  "map": "EM_DEWFORD_TOWN",
+  "pair": "general__dewford",
+  "doors": [
+   [
+    8,
+    8
+   ]
+  ],
+  "n": 91
+ },
+ {
+  "name": "LavaridgeTown_HerbShop",
+  "map": "EM_LAVARIDGE_TOWN",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    12,
+    15
+   ]
+  ],
+  "n": 92
+ },
+ {
+  "name": "LavaridgeTown_Gym_1F",
+  "map": "EM_LAVARIDGE_TOWN",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    5,
+    15
+   ]
+  ],
+  "n": 93
+ },
+ {
+  "name": "LavaridgeTown_Mart",
+  "map": "EM_LAVARIDGE_TOWN",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    15,
+    5
+   ]
+  ],
+  "n": 94
+ },
+ {
+  "name": "LavaridgeTown_PokemonCenter_1F",
+  "map": "EM_LAVARIDGE_TOWN",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    9,
+    6
+   ]
+  ],
+  "n": 95
+ },
+ {
+  "name": "LavaridgeTown_House",
+  "map": "EM_LAVARIDGE_TOWN",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    16,
+    15
+   ]
+  ],
+  "n": 96
+ },
+ {
+  "name": "LavaridgeTown_PokemonCenter_1F",
+  "map": "EM_LAVARIDGE_TOWN",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    9,
+    2
+   ]
+  ],
+  "n": 97
+ },
+ {
+  "name": "FallarborTown_Mart",
+  "map": "EM_FALLARBOR_TOWN",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    15,
+    15
+   ]
+  ],
+  "n": 98
+ },
+ {
+  "name": "FallarborTown_BattleTentLobby",
+  "map": "EM_FALLARBOR_TOWN",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    8,
+    7
+   ]
+  ],
+  "n": 99
+ },
+ {
+  "name": "FallarborTown_PokemonCenter_1F",
+  "map": "EM_FALLARBOR_TOWN",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    14,
+    7
+   ]
+  ],
+  "n": 100
+ },
+ {
+  "name": "FallarborTown_CozmosHouse",
+  "map": "EM_FALLARBOR_TOWN",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    6,
+    17
+   ]
+  ],
+  "n": 101
+ },
+ {
+  "name": "FallarborTown_MoveRelearnersHouse",
+  "map": "EM_FALLARBOR_TOWN",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    1,
+    6
+   ]
+  ],
+  "n": 102
+ },
+ {
+  "name": "VerdanturfTown_BattleTentLobby",
+  "map": "EM_VERDANTURF_TOWN",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    3,
+    7
+   ]
+  ],
+  "n": 103
+ },
+ {
+  "name": "VerdanturfTown_Mart",
+  "map": "EM_VERDANTURF_TOWN",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    12,
+    3
+   ]
+  ],
+  "n": 104
+ },
+ {
+  "name": "VerdanturfTown_PokemonCenter_1F",
+  "map": "EM_VERDANTURF_TOWN",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    16,
+    3
+   ]
+  ],
+  "n": 105
+ },
+ {
+  "name": "VerdanturfTown_WandasHouse",
+  "map": "EM_VERDANTURF_TOWN",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    10,
+    14
+   ]
+  ],
+  "n": 106
+ },
+ {
+  "name": "VerdanturfTown_FriendshipRatersHouse",
+  "map": "EM_VERDANTURF_TOWN",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    1,
+    14
+   ]
+  ],
+  "n": 107
+ },
+ {
+  "name": "VerdanturfTown_House",
+  "map": "EM_VERDANTURF_TOWN",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    17,
+    15
+   ]
+  ],
+  "n": 108
+ },
+ {
+  "name": "PacifidlogTown_PokemonCenter_1F",
+  "map": "EM_PACIFIDLOG_TOWN",
+  "pair": "general__pacifidlog",
+  "doors": [
+   [
+    8,
+    15
+   ]
+  ],
+  "n": 109
+ },
+ {
+  "name": "PacifidlogTown_House1",
+  "map": "EM_PACIFIDLOG_TOWN",
+  "pair": "general__pacifidlog",
+  "doors": [
+   [
+    16,
+    13
+   ]
+  ],
+  "n": 110
+ },
+ {
+  "name": "PacifidlogTown_House2",
+  "map": "EM_PACIFIDLOG_TOWN",
+  "pair": "general__pacifidlog",
+  "doors": [
+   [
+    3,
+    22
+   ]
+  ],
+  "n": 111
+ },
+ {
+  "name": "PacifidlogTown_House3",
+  "map": "EM_PACIFIDLOG_TOWN",
+  "pair": "general__pacifidlog",
+  "doors": [
+   [
+    12,
+    24
+   ]
+  ],
+  "n": 112
+ },
+ {
+  "name": "PacifidlogTown_House4",
+  "map": "EM_PACIFIDLOG_TOWN",
+  "pair": "general__pacifidlog",
+  "doors": [
+   [
+    2,
+    12
+   ]
+  ],
+  "n": 113
+ },
+ {
+  "name": "PacifidlogTown_House5",
+  "map": "EM_PACIFIDLOG_TOWN",
+  "pair": "general__pacifidlog",
+  "doors": [
+   [
+    17,
+    21
+   ]
+  ],
+  "n": 114
+ },
+ {
+  "name": "Route104_MrBrineysHouse",
+  "map": "EM_ROUTE104",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    17,
+    50
+   ]
+  ],
+  "n": 115
+ },
+ {
+  "name": "Route104_PrettyPetalFlowerShop",
+  "map": "EM_ROUTE104",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    5,
+    18
+   ]
+  ],
+  "n": 116
+ },
+ {
+  "name": "Route109_SeashoreHouse",
+  "map": "EM_ROUTE109",
+  "pair": "general__slateport",
+  "doors": [
+   [
+    12,
+    5
+   ]
+  ],
+  "n": 117
+ },
+ {
+  "name": "Route110_TrickHouseEntrance",
+  "map": "EM_ROUTE110",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    11,
+    66
+   ]
+  ],
+  "n": 118
+ },
+ {
+  "name": "Route110_SeasideCyclingRoadNorthEntrance",
+  "map": "EM_ROUTE110",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    15,
+    16
+   ]
+  ],
+  "n": 119
+ },
+ {
+  "name": "Route110_SeasideCyclingRoadNorthEntrance",
+  "map": "EM_ROUTE110",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    18,
+    16
+   ]
+  ],
+  "n": 120
+ },
+ {
+  "name": "Route110_SeasideCyclingRoadSouthEntrance",
+  "map": "EM_ROUTE110",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    16,
+    88
+   ]
+  ],
+  "n": 121
+ },
+ {
+  "name": "Route110_SeasideCyclingRoadSouthEntrance",
+  "map": "EM_ROUTE110",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    19,
+    88
+   ]
+  ],
+  "n": 122
+ },
+ {
+  "name": "Route111_WinstrateFamilysHouse",
+  "map": "EM_ROUTE111",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    13,
+    113
+   ]
+  ],
+  "n": 123
+ },
+ {
+  "name": "Route111_OldLadysRestStop",
+  "map": "EM_ROUTE111",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    26,
+    18
+   ]
+  ],
+  "n": 124
+ },
+ {
+  "name": "TrainerHill_Entrance",
+  "map": "EM_ROUTE111",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    31,
+    113
+   ]
+  ],
+  "n": 125
+ },
+ {
+  "name": "Route112_CableCarStation",
+  "map": "EM_ROUTE112",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    28,
+    27
+   ],
+   [
+    29,
+    27
+   ]
+  ],
+  "n": 126
+ },
+ {
+  "name": "Route113_GlassWorkshop",
+  "map": "EM_ROUTE113",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    33,
+    5
+   ]
+  ],
+  "n": 127
+ },
+ {
+  "name": "Route114_FossilManiacsHouse",
+  "map": "EM_ROUTE114",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    29,
+    5
+   ]
+  ],
+  "n": 128
+ },
+ {
+  "name": "Route114_LanettesHouse",
+  "map": "EM_ROUTE114",
+  "pair": "general__fallarbor",
+  "doors": [
+   [
+    27,
+    36
+   ]
+  ],
+  "n": 129
+ },
+ {
+  "name": "Route116_TunnelersRestHouse",
+  "map": "EM_ROUTE116",
+  "pair": "general__rustboro",
+  "doors": [
+   [
+    38,
+    8
+   ]
+  ],
+  "n": 130
+ },
+ {
+  "name": "Route117_PokemonDayCare",
+  "map": "EM_ROUTE117",
+  "pair": "general__mauville",
+  "doors": [
+   [
+    51,
+    5
+   ]
+  ],
+  "n": 131
+ },
+ {
+  "name": "Route119_WeatherInstitute_1F",
+  "map": "EM_ROUTE119",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    6,
+    32
+   ]
+  ],
+  "n": 132
+ },
+ {
+  "name": "Route119_House",
+  "map": "EM_ROUTE119",
+  "pair": "general__fortree",
+  "doors": [
+   [
+    33,
+    109
+   ]
+  ],
+  "n": 133
+ },
+ {
+  "name": "Route121_SafariZoneEntrance",
+  "map": "EM_ROUTE121",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    37,
+    5
+   ]
+  ],
+  "n": 134
+ },
+ {
+  "name": "Route123_BerryMastersHouse",
+  "map": "EM_ROUTE123",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    22,
+    6
+   ]
+  ],
+  "n": 135
+ },
+ {
+  "name": "Route124_DivingTreasureHuntersHouse",
+  "map": "EM_ROUTE124",
+  "pair": "general__mossdeep",
+  "doors": [
+   [
+    70,
+    48
+   ]
+  ],
+  "n": 136
+ },
+ {
+  "name": "MtChimney_CableCarStation",
+  "map": "EM_MT_CHIMNEY",
+  "pair": "general__lavaridge",
+  "doors": [
+   [
+    17,
+    36
+   ],
+   [
+    18,
+    36
+   ]
+  ],
+  "n": 137
+ },
+ {
+  "name": "SafariZone_RestHouse",
+  "map": "EM_SAFARI_ZONE_SOUTHWEST",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    29,
+    7
+   ]
+  ],
+  "n": 138
+ },
+ {
+  "name": "Route121_SafariZoneEntrance",
+  "map": "EM_SAFARI_ZONE_SOUTH",
+  "pair": "general__lilycove",
+  "doors": [
+   [
+    32,
+    33
+   ]
+  ],
+  "n": 139
+ },
+ {
+  "name": "BattleFrontier_BattlePikeLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    42,
+    27
+   ]
+  ],
+  "n": 140
+ },
+ {
+  "name": "BattleFrontier_BattleDomeLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    19,
+    17
+   ]
+  ],
+  "n": 141
+ },
+ {
+  "name": "BattleFrontier_BattleFactoryLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    11,
+    38
+   ]
+  ],
+  "n": 142
+ },
+ {
+  "name": "BattleFrontier_Lounge2",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    45,
+    44
+   ]
+  ],
+  "n": 143
+ },
+ {
+  "name": "BattleFrontier_Mart",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    51,
+    51
+   ]
+  ],
+  "n": 144
+ },
+ {
+  "name": "BattleFrontier_ScottsHouse",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    44,
+    5
+   ]
+  ],
+  "n": 145
+ },
+ {
+  "name": "BattleFrontier_Lounge4",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    53,
+    44
+   ]
+  ],
+  "n": 146
+ },
+ {
+  "name": "BattleFrontier_Lounge7",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    5,
+    20
+   ]
+  ],
+  "n": 147
+ },
+ {
+  "name": "BattleFrontier_ReceptionGate",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    26,
+    65
+   ]
+  ],
+  "n": 148
+ },
+ {
+  "name": "BattleFrontier_ReceptionGate",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+  "pair": "general__battle_frontier_outside_west",
+  "doors": [
+   [
+    26,
+    61
+   ]
+  ],
+  "n": 149
+ },
+ {
+  "name": "BattleFrontier_BattleTowerLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    16,
+    14
+   ]
+  ],
+  "n": 150
+ },
+ {
+  "name": "BattleFrontier_BattleArenaLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    39,
+    29
+   ]
+  ],
+  "n": 151
+ },
+ {
+  "name": "BattleFrontier_BattlePalaceLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    45,
+    56
+   ]
+  ],
+  "n": 152
+ },
+ {
+  "name": "BattleFrontier_BattlePyramidLobby",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    58,
+    14
+   ]
+  ],
+  "n": 153
+ },
+ {
+  "name": "BattleFrontier_RankingHall",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    35,
+    12
+   ]
+  ],
+  "n": 154
+ },
+ {
+  "name": "BattleFrontier_Lounge1",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    4,
+    44
+   ]
+  ],
+  "n": 155
+ },
+ {
+  "name": "BattleFrontier_ExchangeServiceCorner",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    10,
+    28
+   ]
+  ],
+  "n": 156
+ },
+ {
+  "name": "BattleFrontier_Lounge5",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    22,
+    51
+   ]
+  ],
+  "n": 157
+ },
+ {
+  "name": "BattleFrontier_Lounge6",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    5,
+    8
+   ]
+  ],
+  "n": 158
+ },
+ {
+  "name": "BattleFrontier_Lounge3",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    65,
+    31
+   ]
+  ],
+  "n": 159
+ },
+ {
+  "name": "BattleFrontier_Lounge8",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    14,
+    51
+   ]
+  ],
+  "n": 160
+ },
+ {
+  "name": "BattleFrontier_Lounge9",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    21,
+    45
+   ]
+  ],
+  "n": 161
+ },
+ {
+  "name": "BattleFrontier_PokemonCenter_1F",
+  "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+  "pair": "general__battle_frontier_outside_east",
+  "doors": [
+   [
+    3,
+    51
+   ]
+  ],
+  "n": 162
+ }
+]

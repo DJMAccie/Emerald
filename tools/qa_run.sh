@@ -46,6 +46,9 @@ s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = 0,",s,count=1)
 s=re.sub(rb"fireredCamera = \d+,",b"fireredCamera = 4,",s,count=1)
 open(p,'wb').write(s)
 PY
+# a sleeping display stalls every frame (no LÖVE window can present):
+# declare user activity, which wakes it, for the length of the run
+caffeinate -u -t $((LIMIT+30)) >/dev/null 2>&1 &
 cd ~/Documents/gen1recomp || exit 1
 EM_YAW=$YAW EM_LEVELS="$OUT/levels.lua" \
   POKEPORT_DRIVER=$HOME/Documents/gen1recomp-modwork/tools/em_views_driver.lua \

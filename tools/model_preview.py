@@ -21,6 +21,7 @@ import tempfile
 from pathlib import Path
 
 from PIL import Image
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 MOD_LIB = Path.home() / "Documents/battle-art-notquiteog/lib"
@@ -47,7 +48,8 @@ V.require=function(name)
 end
 local raw=assert(io.open(dir..'/sprite.rgba','rb'))
 local bytes=raw:read('*a');raw:close()
-local w,h=48,48
+local w=tonumber(os.getenv('SPRITE_W') or '48')
+local h=tonumber(os.getenv('SPRITE_H') or '48')
 local imageData={}
 function imageData:getDimensions() return w,h end
 function imageData:getPixel(x,y)
@@ -171,11 +173,41 @@ def main() -> int:
     work = Path(tempfile.mkdtemp(prefix="landmark-"))
     (work / "stub_voxel.lua").write_text(extract_tables((MOD_LIB / "Voxel3D.lua").read_text()))
     for name in ("SpriteVoxel.lua", "LandmarkModels.lua"):
-        (work / name).write_text((STAGED / name).read_text())
-    tex = Image.open(args.sprite).convert("RGBA")
+        src_path = (MOD_LIB / name) if (MOD_LIB / name).exists() else (STAGED / name)
+        (work / name).write_text(src_path.read_text())
+    
+    sprite_path = Path(args.sprite)
+    if not sprite_path.exists() or sprite_path == ROOT / "shots_art/gid94.png" and args.gid != 94:
+        cand = [
+            Path(f"/tmp/emerald_sprites/gid_{args.gid}_f0.png"),
+            ROOT / f"shots_art/gid{args.gid}.png",
+        ]
+        found = False
+        for c in cand:
+            if c.exists():
+                sprite_path = c
+                found = True
+                break
+        if not found:
+            ow_rgba = Path.home() / f"Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/ow/{args.gid}.rgba"
+            if ow_rgba.exists():
+                # Read first frame using manifest
+                raw = ow_rgba.read_bytes()
+                # If 1024 bytes -> 16x16
+                if len(raw) == 1024 or len(raw) == 4096:
+                    arr = np.frombuffer(raw[:1024], dtype=np.uint8).reshape((16, 16, 4))
+                    Image.fromarray(arr).save(f"/tmp/emerald_sprites/gid_{args.gid}_f0.png")
+                    sprite_path = Path(f"/tmp/emerald_sprites/gid_{args.gid}_f0.png")
+    
+    tex = Image.open(sprite_path).convert("RGBA")
     (work / "sprite.rgba").write_bytes(tex.tobytes())
     (work / "dump.lua").write_text(DUMP_LUA)
-    env = {"MODEL_GID": str(args.gid), "PATH": "/usr/bin:/bin:/opt/homebrew/bin"}
+    env = {
+        "MODEL_GID": str(args.gid),
+        "SPRITE_W": str(tex.width),
+        "SPRITE_H": str(tex.height),
+        "PATH": "/usr/bin:/bin:/opt/homebrew/bin"
+    }
     proc = subprocess.run(
         ["luajit", str(work / "dump.lua"), str(work)],
         capture_output=True, text=True, env=env,
