@@ -268,7 +268,9 @@ def build(img, recipe):
                 r = wallrow.get(hh)
                 if r is None:
                     continue
-                if side and x in (pc['x'][0], pc['x'][1] - 1):
+                # a painted chamfer is a staircase of 1-px steps: every step's
+                # side is exposed, so every column gets the side art
+                if side and (pc.get('paint') or x in (pc['x'][0], pc['x'][1] - 1)):
                     sa, sb = side
                     c = pixcol(sa + (dv - d_front) % (sb - sa), r)
                     if c >= 0:
@@ -277,9 +279,13 @@ def build(img, recipe):
                     c = pixcol(x, r)
                     if c >= 0:
                         colN[x, hh, di] = c
+        paint = pc.get('paint')
         for (row, hv, dv, kind) in smp:
             di = dv + PAD
-            c = pixcol(x, row)
+            # paint=(a,b): a chamfered corner's columns take the plain wall's
+            # columns a..b-1 (cycled) instead of their own pixels, which are
+            # the drawing's diagonal rim (vertical stripes in 3D)
+            c = pixcol(paint[0] + (x - pc['x'][0]) % (paint[1] - paint[0]), row) if paint and kind == 'wall' else pixcol(x, row)
             if c >= 0:
                 if kind in ('wall', 'slope'):
                     colS[x, hv, di] = c

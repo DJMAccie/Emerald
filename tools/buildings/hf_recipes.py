@@ -191,11 +191,11 @@ def _center():
     return dict(
         inv=4, crop=(0, -1, 0, 0), trim=True,
         pieces=[
-            dict(x=(0, 8), B=63, d0=lambda x: 8 - x, segs=shoulder(0), side=(9, 14), fill=(9, 15)),
+            dict(x=(0, 8), B=63, d0=lambda x: 8 - x, segs=shoulder(0), side=(9, 14), fill=(9, 15), paint=(9, 14)),
             dict(x=(8, 16), B=63, d0=0, segs=shoulder(0), side=(9, 14), fill=(9, 15)),
             dict(x=(16, 48), B=63, d0=0, segs=mid(0), side=(9, 14), fill=(9, 15)),
             dict(x=(48, 56), B=63, d0=0, segs=shoulder(0), side=(9, 14), fill=(9, 15)),
-            dict(x=(56, 64), B=63, d0=lambda x: x - 55, segs=shoulder(0), side=(9, 14), fill=(9, 15)),
+            dict(x=(56, 64), B=63, d0=lambda x: x - 55, segs=shoulder(0), side=(9, 14), fill=(9, 15), paint=(9, 14)),
         ],
         keys=GRASS,
         relief=[
