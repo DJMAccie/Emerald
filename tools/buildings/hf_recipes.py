@@ -314,17 +314,17 @@ WEATHER = _weather()
 
 # Fortree tree house (House1: cells x8..12, y1..3). The hut stands on the
 # plank deck (the deck row below is walkable ground the elevation already
-# raises): log walls with the doorway, flanked by stacked logs, under a
-# leafy mound roof; the canopy around is cut away.
+# raises): log walls with the doorway under a leafy mound roof. The plank
+# strips either side are the deck itself running back beside the hut (flat
+# boardwalk on the ground, not stacked logs): no voxels, the scene's ground
+# under the building shows them (a flat piece left stray pegs after the
+# trim); the canopy around is cut away.
 CANOPY = [(58, 82, 0), (58, 140, 49), (66, 58, 49), (107, 90, 90), (115, 197, 165), (132, 197, 99), (181, 255, 132)]
 def _treehouse(x0):
     hut = [('wall', 26), ('slope', 10, 1.5), ('slope', 11, 0.3), ('mirror', 21)]
-    logs = [('wall', 27)]
     return dict(
         src=('general__fortree', 'EM_FORTREE_CITY', x0, 1, x0 + 4, 3), trim=True, bgtiles=[0x0C6, 0x0C7, 0x017], keys=[],
-        pieces=[dict(x=(4, 18), B=47, d0=2, segs=logs, side=(8, 12), fill=(8, 12), depth=12),
-                dict(x=(18, 62), B=47, d0=0, segs=hut, side=(28, 32), fill=(28, 32)),
-                dict(x=(62, 76), B=47, d0=2, segs=logs, side=(66, 70), fill=(66, 70), depth=12)],
+        pieces=[dict(x=(18, 62), B=47, d0=0, segs=hut, side=(28, 32), fill=(28, 32))],
         relief=[dict(x=(30, 52), rows=(26, 46), k=4)],   # the dark doorway goes in
         anchor_skip_cells=[(0, 0), (4, 0)],   # corner canopy differs between houses
     )

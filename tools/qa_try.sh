@@ -14,6 +14,11 @@ until mkdir "$LOCK" 2>/dev/null; do
   sleep 3
 done
 echo "$$ qa_try $1" > "$LOCK/owner"
+# wait for running parallel runs to finish before swapping files under them
+while ls -d /tmp/emerald-qa.slot.* >/dev/null 2>&1; do
+  for d in /tmp/emerald-qa.slot.*; do [ -n "$(find "$d" -maxdepth 0 -mmin +10 2>/dev/null)" ] && rm -rf "$d"; done
+  sleep 2
+done
 restore(){ for f in $FILES; do cp "$BAK/$f" "$QA/lib/$f"; done; rm -rf "$BAK" "$LOCK"; }
 trap restore EXIT
 for f in $FILES; do cp "$QA/lib/$f" "$BAK/$f"; cp "$M/lib/$f" "$QA/lib/$f"; done

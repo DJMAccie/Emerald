@@ -78,3 +78,12 @@ Tree tops (canopy art painted under 3D trees): sampled 8 maps with walkable cano
 6. Unchecked: ledges (69 kinds), tall grass (22), trees (150), ladders, steps, the rest of the OBJECT list
    (lamp posts look like dark blobs in Rustboro), Route 110 cycling-road barrier colour, Lilycove sign (3 at 34,6).
 7. The warm evening grade tints whites pink in captures; compare shapes, not hues, against `grid.py`.
+
+## Trees and foliage (2026-10-06)
+- Round trees are closed voxel solids (`VoxelHull`, per-run depth, `NativeTreeArt.TREE_DEPTH=24`); every voxel keeps its sprite pixel. No holes: crowns come from the over layer's exact mask, forest shadow-row drop only in forests, ground-colour cut cannot eat crown pixels.
+- Trees on sand/ash/grass/ground (Dewford, Fallarbor, Route 113...) use the ground under them, not a blob.
+- Walk-under canopies (Fallarbor, Lavaridge) are raised slabs (`lib/Gen3Canopy.lua`), aligned to the OG at the player camera.
+- Tight tree clusters (Mossdeep) are built as one drawing (`Gen3Objects.CLUSTER_CELLS/SPAN`) instead of one cell per object, so each 2-wide tree stays whole.
+- Crowns are inflated by distance to the drawing's edge (`VoxelHull.build(...,inflate)`): domed top and sides, flat foot, no flat lid. Cluster trees keep each tree's own crown row (`Gen3Objects` tops rise from every member cell), so Mossdeep's trees are four round trees, not one merged crown and floating canopy slabs.
+- Open: Mossdeep's rocky grove (34,34) is still walk-under canopy slabs on stalks (flat plates). Fortree canopy stays with Opus.
+- Tools: `fourcam.sh` (player / orbit / low / top-down), `foliage_audit.py`, `tree_recipe_check.py`.
