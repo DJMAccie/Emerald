@@ -389,6 +389,31 @@ def _wreck():
 WRECK = _wreck()
 
 
+# Trainer Hill's rooftop penthouse (cells x7..17, y0..6 of the roof map): a
+# glass box whose front (the doors and windows, drawing rows 56..95, 40 tall)
+# stands under its faceted teal roof (rows 0..55), on the pink terrace tiles
+# (0x36B, cut away). Built as a model on this indoor map (indoor=True).
+# The Seagallop ferry moored at Birth Island and Navel Rock (Dewford tiles,
+# 7x5 cells): its white hull front (rows 64..79, 16 tall) under the orange
+# striped deck awning seen from above (rows 0..63), the crane arms either side;
+# the sea round it is ground and stays water (claimBlocked).
+FERRY_SEA = [(82, 107, 214), (107, 132, 214), (74, 99, 206), (115, 140, 222), (90, 115, 222)]
+def _ferry(mp, x0, y0):
+    return dict(
+        src=('general__dewford', mp, x0, y0, x0 + 6, y0 + 4), trim=True, bgtiles=[0x170, 0x189], keys=[],
+        claimBlocked=True,
+        pieces=[dict(x=(0, 112), B=79, d0=0, segs=[('wall', 16), ('flat', 'top')], side=(50, 54), fill=(50, 54))],
+        relief=[])
+
+
+TRAINER_HILL_PENTHOUSE = dict(
+    src=('building__trainer_hill', 'EM_TRAINER_HILL_ROOF', 7, 0, 17, 6), trim=True,
+    bgtiles=[0x36B], keys=[], indoor=True,
+    pieces=[dict(x=(0, 176), B=95, d0=0, segs=[('wall', 40), ('flat', 'top')], side=(40, 44), fill=(40, 44), back='front')],
+    relief=[dict(x=(44, 66), rows=(64, 95), k=3), dict(x=(110, 136), rows=(64, 95), k=3)],
+)
+
+
 MOSSDEEP_HOUSE_BOXES = {'b056_mossdeepcity_house1': (27, 6), 'b059_mossdeepcity_house2': (66, 22),
                         'b061_mossdeepcity_house3': (48, 3), 'b062_mossdeepcity_stevenshouse': (18, 7),
                         'b063_mossdeepcity_house4': (17, 13)}
@@ -456,5 +481,6 @@ def _hut():
 
 HUT = _hut()
 
-RECIPES = {'abandoned_ship_wreck': WRECK, 'b064_mossdeepcity_spacecenter': SPACE_CENTER,
+RECIPES = {'ferry_birth_island': _ferry('EM_BIRTH_ISLAND_EXTERIOR', 12, 24), 'ferry_navel_rock': _ferry('EM_NAVEL_ROCK_EXTERIOR', 7, 18),
+           'trainer_hill_penthouse': TRAINER_HILL_PENTHOUSE, 'abandoned_ship_wreck': WRECK, 'b064_mossdeepcity_spacecenter': SPACE_CENTER,
            **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}
