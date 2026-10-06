@@ -32,7 +32,7 @@ open(p,'wb').write(s)
 PY
 cd ~/Documents/gen1recomp || exit 1
 EM_INDEXED=1 EM_YAW=${EM_YAW:-0} EM_LEVELS="$OUT/levels.lua" \
-  POKEPORT_DRIVER=$HOME/Documents/gen1recomp-modwork/tools/em_views_driver.lua \
+  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/gen1recomp-modwork/tools/em_views_driver.lua} \
   POKEPORT_IDENTITY=pokemon-love2d-rseqa POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   EM_CASES="$OUT/cases.lua" EM_WAIT=$WAIT /Applications/gen1recomp.app/Contents/MacOS/love . > "$OUT/run.log" 2>&1 &
 G=$!
