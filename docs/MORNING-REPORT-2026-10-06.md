@@ -41,10 +41,23 @@
     and both Safari Zone areas are raised where stairs climb. Generated from the stair cells, 12 px per stair
     row (Battle Tower plaza up to 96 px), zero wall-climbs offline.
   - **Furniture builder features:** `keep`, `liftRow`, `base`, `disc` bark, height caps.
-- **Furniture agent:** Pokémon Center desk, PC, bookshelf, plants and 2F counter; Mart shelves, counters and
+- **Furniture agent** (queued in `tools/morning_check.sh`; the Frontier booth is the riskiest item):
+  - Gyms: Petalburg, Mossdeep, Sootopolis (with fountains), Dewford ring and speakers, Lavaridge, Mauville.
+  - Battle Tent lobby; Lilycove Department Store 1F/2F; Contest lobby; Oceanic Museum; Devon 1F.
+  - Battle Frontier: Tower lobby booth, lounges, Dome plants.
+  - Flower shop, Day Care, Lilycove Museum, Seashore House, Mauville Game Corner.
+  - Weather Institute / Birch's lab tables, chairs and bookshelf.
+  - Battle Factory plants and bins, Battle Pike armchairs and round table.
+  - Left untouched on purpose because the pixels alone are ambiguous; each needs one look in the running game
+    first: Arena planters, Palace panels, the Pyramid lobby, Trick House, cable car stations, Dome rope posts,
+    museum statues, the Weather Institute and Day Care machines.
+  - Also: Pokémon Center desk, PC, bookshelf, plants and 2F counter; Mart shelves, counters and
   tiered racks; house plants, TVs and sink/stove; Mauville Gym posts and stage, plus whatever else it lists in
   `docs/FURNITURE-UNVERIFIED.md`.
-- **Sonnet:** the Slateport bush and the rest in `docs/PROPS-UNVERIFIED.md`.
+- **Sonnet:** the duplicated shoreline past map edges is fixed in principle. The map-edge water now repeats
+  the open-water tile instead of the shore tile, for 30 tilesets and 419 shore tiles. Also the Slateport bush.
+  Details in `docs/PROPS-UNVERIFIED.md`. Ledge heights, canopy art under trees and more prop depth are
+  deliberately left for when the display is on, because they are judgement calls on looks.
 
 ## Tooling fixed tonight (why the night was bumpy)
 - **Game runs went through a wait loop that matched itself.** Runs hung or overlapped, and two games started
@@ -54,6 +67,28 @@
   shrinking, or doesn't apply.
 - **Atlases are baked offline for every tileset,** so pixel tools work without visiting maps.
 - **Offline heightmaps** (`tools/elevation/heightmap.py`) run the real level solver without the game.
+
+## How to review this morning
+1. Close any game window. Run `tools/morning_check.sh` (about 20 groups x 3 cameras, roughly an hour).
+2. Open `shots_morning/sheets/*.png`, zoom in on each change, and compare with the original art.
+3. Install the good pieces (back up first, outside `mods/`) and revert the bad ones in the mod source. Then run
+   `tools/buildings/make_patch.sh`, commit and push.
+
+## Morning check results (Opus items)
+- **Flat water bodies:** VERIFIED and installed (Route 119: one flat river surface at all three cameras).
+- **Door-floor rule:** VERIFIED and installed (Mossdeep, Lilycove and Littleroot buildings all sit on their
+  ground).
+- **Stair platforms:** VERIFIED and installed (Battle Frontier East grand staircase with the planter sloping
+  between the flights, the Arena island, both Safari Zone areas).
+- **Sootopolis terraces:** NOT installed, switched off. The authored table (from DramaticShapes) puts the
+  lakeside lawn on the 48 px plaza terrace, so its edge drops 48 px to the shore as a wall of repeated grass with
+  trees sunk into it. Next step: derive Sootopolis's levels from its own stairs (gen_stair_terraces.py)
+  instead of the borrowed table.
+
+## Morning check results (Sonnet items)
+- **Map-edge shoreline:** VERIFIED (Route 109, Dewford, Slateport, Route 105: open sea continues past the edges
+  with no second shore band). In your game.
+- **Slateport bush 0x243:** VERIFIED (a round shrub beside the Pokémon Center). In your game.
 
 ## Still open
 - Run `tools/morning_check.sh` and review the sheets; install what's right, revert what isn't.
