@@ -481,6 +481,28 @@ def _hut():
 
 HUT = _hut()
 
-RECIPES = {'ferry_birth_island': _ferry('EM_BIRTH_ISLAND_EXTERIOR', 12, 24), 'ferry_navel_rock': _ferry('EM_NAVEL_ROCK_EXTERIOR', 7, 18),
+# The Battle Frontier's entrance hall on the west pier (cells x23..29,
+# y61..65; drawing 112x80): two round-ended wings, each a blue glass front
+# (rows 63..79, 17 tall) under a red canopy band and a peach drum roof seen
+# from above, and between them the entrance with the Frontier crest standing
+# taller over the doors. The paving round it is ground.
+def _frontier_gate():
+    wing = [('wall', 17), ('wall', 10), ('flat', 'top')]
+    mid = [('wall', 17), ('wall', 20), ('flat', 'top')]
+    return dict(
+        src=('general__battle_frontier_outside_west', 'EM_BATTLE_FRONTIER_OUTSIDE_WEST', 23, 61, 29, 65), trim=True,
+        bgtiles=[0x05E], keys=[], claimBlocked=True,
+        pieces=[dict(x=(0, 6), B=79, d0=lambda x: 6 - x, segs=wing, side=(30, 34), fill=(30, 34)),
+                dict(x=(6, 40), B=79, d0=0, segs=wing, side=(30, 34), fill=(30, 34)),
+                dict(x=(40, 72), B=79, d0=2, segs=mid, side=(30, 34), fill=(30, 34)),
+                dict(x=(72, 106), B=79, d0=0, segs=wing, side=(30, 34), fill=(30, 34)),
+                dict(x=(106, 112), B=79, d0=lambda x: x - 105, segs=wing, side=(30, 34), fill=(30, 34))],
+        relief=[dict(x=(46, 66), rows=(62, 79), k=3)],      # the doors set in
+    )
+
+
+FRONTIER_GATE = _frontier_gate()
+
+RECIPES = {'frontier_gate': FRONTIER_GATE, 'ferry_birth_island': _ferry('EM_BIRTH_ISLAND_EXTERIOR', 12, 24), 'ferry_navel_rock': _ferry('EM_NAVEL_ROCK_EXTERIOR', 7, 18),
            'trainer_hill_penthouse': TRAINER_HILL_PENTHOUSE, 'abandoned_ship_wreck': WRECK, 'b064_mossdeepcity_spacecenter': SPACE_CENTER,
            **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM}
