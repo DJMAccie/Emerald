@@ -16,7 +16,7 @@ for g in c['groups']:
   for m in g['maps']: slot[m['id'].replace('_','').lower()]=m['slot']
 def info(mp):
   h=json.load(open(G+'/map_tree/maps/%s/header.json'%slot[mp[3:].replace('_','').lower()]))
-  sec=T.get(h['secondaryTileset'][-3:]);indoor=h['mapType'] in (8,9)
+  sec=T.get(h['secondaryTileset'][-3:]);indoor=h['mapType'] in (8,9,4)
   if not sec: return None,indoor
   for pre in (['building__','general__'] if h['primaryTileset']!='ts_083df704' else ['general__','building__']):
     if os.path.isdir(N+'/'+pre+sec): return pre+sec,indoor

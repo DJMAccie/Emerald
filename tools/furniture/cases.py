@@ -11,7 +11,9 @@ for g in c['groups']:
     h=json.load(open(G+'/map_tree/maps/%s/header.json'%m['slot']));W,H=h['width'],h['height']
     mid='EM_'+re.sub(r'(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])','_',m['id']).upper()
     if 'SECRET_BASE' in mid: continue
-    indoor=h['mapType'] in (8,9)
+    # built interiors filed under the 'underground' map type
+    built=any(k in mid for k in ('ABANDONED_SHIP','NEW_MAUVILLE','MAGMA_HIDEOUT','MIRAGE_TOWER')) and 'UNDERWATER' not in mid
+    indoor=h['mapType'] in (8,9) or (h['mapType']==4 and built)
     if indoor!=(sys.argv[1]=='indoor'): continue
     if not indoor and h['mapType'] not in (1,2,3,5,6): continue
     cells=struct.unpack('<%dH'%(W*H),open(G+'/map_tree/maps/%s/grid.bin'%m['slot'],'rb').read())
