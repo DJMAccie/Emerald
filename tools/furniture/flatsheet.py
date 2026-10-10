@@ -8,6 +8,9 @@ sys.path.insert(0,os.path.join(H,'..','buildings'));sys.path.insert(0,os.path.jo
 import bldmodel as M, voxproto
 from PIL import Image,ImageDraw
 S=sys.argv[1]
+TAG=sys.argv[2] if len(sys.argv)>2 else 'FLAT'   # 'WALK': walkable cells built as nothing, rare tiles only
+MAXN=int(sys.argv[3]) if len(sys.argv)>3 else 10**9
+ONLY=sys.argv[4] if len(sys.argv)>4 else ''   # regex on the tileset pair
 T={'c7c':'elite_four','c94':'battle_frontier','8b4':'pokemon_center','d24':'battle_pyramid','d84':'trainer_hill','d0c':'battle_arena','cf4':'battle_pike','dcc':'battle_tent','c44':'inside_ship','bfc':'trick_house_puzzle','cac':'battle_palace','9a4':'pokemon_day_care','95c':'cable_club','9bc':'facility','89c':'shop','af4':'brendans_mays_house','cdc':'battle_factory','d54':'mossdeep_game_corner','974':'seashore_house','cc4':'battle_dome','944':'oceanic_museum','d6c':'island_harbor','8fc':'pokemon_fan_club','db4':'battle_frontier_ranking_hall','adc':'lilycove_museum','de4':'mystery_events_house','a94':'inside_of_truck','dfc':'union_room','b84':'mauville_game_corner','98c':'pretty_petal_flower_shop','9d4':'bike_shop','b6c':'generic_building','b0c':'lab','bb4':'dewford_gym','b54':'sootopolis_gym','ac4':'contest','bcc':'mauville_gym','be4':'lavaridge_gym','c2c':'mossdeep_gym','c14':'fortree_gym',
 '71c':'petalburg','764':'slateport','77c':'mauville','734':'rustboro','7c4':'fortree','7dc':'lilycove','7f4':'mossdeep','83c':'sootopolis','80c':'ever_grande','74c':'dewford','794':'lavaridge','7ac':'fallarbor','824':'pacifidlog','854':'battle_frontier_outside_west','86c':'battle_frontier_outside_east'}
 G=voxproto.G;N=G+'/native'
@@ -23,7 +26,7 @@ def info(mp):
   return None,indoor
 seen=collections.OrderedDict();count=collections.Counter();cells=set()
 for l in open(S+'/run.log'):
-  m=re.match(r'\[FLAT\] (\S+) (\d+) (\d+) (\w+)',l)
+  m=re.match(r'\['+TAG+r'\] (\S+) (\d+) (\d+) (\w+)',l)
   if not m: continue
   mp,x,y,mid=m[1],int(m[2]),int(m[3]),m[4]
   if (mp,x,y) in cells: continue
@@ -37,6 +40,7 @@ for l in open(S+'/run.log'):
   if k not in seen: seen[k]=(mp,x,y)
 tiles=[];keys=[]
 for (p,mid),(mp,x,y) in seen.items():
+  if count[(p,mid)]>MAXN or (ONLY and not re.search(ONLY,p)): continue
   W,Hh,_=voxproto.map_cells(mp)
   x0,y0=max(0,x-2),max(0,y-2);x1,y1=min(W-1,x+2),min(Hh-1,y+2)
   try: im=Image.fromarray(M.compose(p,mp,x0,y0,x1,y1)).convert('RGB')
@@ -46,11 +50,11 @@ for (p,mid),(mp,x,y) in seen.items():
   d.rectangle((cx,cy,cx+47,cy+47),outline=(255,0,0),width=2)
   d.rectangle((0,0,239,12),fill=(0,0,0));d.text((2,0),'%d %s %s x%d'%(len(tiles),p.split('__')[1][:14],mid,count[(p,mid)]),fill=(255,255,0))
   tiles.append(im);keys.append('%d %s %s %s %d %d %d'%(len(tiles)-1,p,mid,mp,x,y,count[(p,mid)]))
-open(S+'/flat_keys.txt','w').write('\n'.join(keys))
+open(S+'/'+TAG.lower()+'_keys.txt','w').write('\n'.join(keys))
 cols,rows_=6,4;tw,th=240,240;per=cols*rows_
 for s in range(0,len(tiles),per):
   out=Image.new('RGB',(cols*tw,rows_*th),(30,30,30))
   for i,t in enumerate(tiles[s:s+per]):
     t.thumbnail((tw-4,th-4));out.paste(t,((i%cols)*tw,(i//cols)*th))
-  out.save(S+'/flat%02d.png'%(s//per))
+  out.save(S+'/'+TAG.lower()+'%02d.png'%(s//per))
 print(len(tiles))

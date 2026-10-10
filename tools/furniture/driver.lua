@@ -25,6 +25,8 @@ return function(game)
    for _,level in ipairs(os.getenv('EM_LEVELS') and dofile(os.getenv('EM_LEVELS')) or {4}) do
     if C then C.setLevel(level,game);C.yaw=tonumber(os.getenv('EM_YAW')) or 0 end
     U.wait(tonumber(os.getenv('EM_WAIT')) or 150)
+    -- a room's entry line ("This is the third floor.") covers the shot: tap it away
+    if os.getenv('EM_HIDE_NPCS') then for _=1,(tonumber(os.getenv('EM_TAPS')) or 3) do pcall(U.tap,game,'a');U.wait(12) end end
     print('[EM view]',case[1],'level',level,'active',C and tostring(C.active),'rendered',C and C.rendered)
     local okZ,Zoom=pcall(require,'src.render.Zoom'); local okR,Renderer=pcall(require,'src.render.Renderer')
     local scene=export and export.lib and export.lib.require('Gen3Scene')
@@ -38,6 +40,7 @@ return function(game)
      for y=0,140 do for x=0,140 do
       local d=scene.debugCell(x,y)
       if d and d.prop then print(string.format('[AUD] %s %d %d %03X %s',case[1],x,y,d.mid or 0,d.prop)) end
+      if d and not d.prop and (d.collision or 0)==0 and (d.kind==nil or d.kind=='flat') and not d.stairs and not d.gym and not d.civic and os.getenv('EM_AUDIT')=='walk' then print(string.format('[WALK] %s %d %d %03X',case[1],x,y,d.mid or 0)) end
       if d and not d.prop and (d.collision or 0)~=0 and (d.kind==nil or d.kind=='flat') and not d.stairs and not d.gym and not d.civic then print(string.format('[FLAT] %s %d %d %03X',case[1],x,y,d.mid or 0)) end
      end end
     end
