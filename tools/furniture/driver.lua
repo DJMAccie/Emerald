@@ -25,8 +25,8 @@ return function(game)
    for _,level in ipairs(os.getenv('EM_LEVELS') and dofile(os.getenv('EM_LEVELS')) or {4}) do
     if C then C.setLevel(level,game);C.yaw=tonumber(os.getenv('EM_YAW')) or 0 end
     U.wait(tonumber(os.getenv('EM_WAIT')) or 150)
-    -- a room's entry line ("This is the third floor.") covers the shot: tap it away
-    if os.getenv('EM_HIDE_NPCS') then for _=1,(tonumber(os.getenv('EM_TAPS')) or 3) do pcall(U.tap,game,'a');U.wait(12) end end
+    -- a room's entry line ("This is the third floor.") covers the shot: tap it away with B (A would talk to whoever the player faces and open a shop menu that sticks for the rest of the run)
+    if os.getenv('EM_HIDE_NPCS') then for _=1,(tonumber(os.getenv('EM_TAPS')) or 3) do pcall(U.tap,game,'b');U.wait(12) end end
     print('[EM view]',case[1],'level',level,'active',C and tostring(C.active),'rendered',C and C.rendered)
     local okZ,Zoom=pcall(require,'src.render.Zoom'); local okR,Renderer=pcall(require,'src.render.Renderer')
     local scene=export and export.lib and export.lib.require('Gen3Scene')
