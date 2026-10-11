@@ -21,7 +21,19 @@ return function(game)
   print('[EM view] load',case[1],ok,err or '')
   if ok then
    pcall(Player.reset,case[2],case[3],'down')
-   if os.getenv('EM_HIDE_NPCS') then local O=require('src.core.game3.objects'); O.forDraw=function() return {} end; local okT,T=pcall(require,'src.core.game3.trainer_sight'); if okT then T.check=function() return false end; T.checkLineOfSight=function() return false end end end
+   -- QA only: a case may carry decor={{decorId,x,y},...}: those decorations are put on the map as
+   -- the game's own decorating does (secret bases, the player's room); x,y is the bottom-left cell
+   if case.decor then
+    local okD,err=pcall(function()
+     local SB=require('src.core.game3.rse.secret_base');local D=require('src.core.game3.rse.decoration')
+     local g=SB.fieldGrid()
+     for _,d in ipairs(case.decor)do D.showOnMap(g,d[2],d[3],d[1])end
+    end)
+    print('[EM view] decor',okD,err or '')
+   end
+   -- QA only: as after using Flash, so a dark cave shows its 3D scene (EM_FLASH=1)
+   if os.getenv('EM_FLASH') and game.session then game.session.flashLevel=0 end
+   if os.getenv('EM_HIDE_NPCS') then local O=require('src.core.game3.objects'); O.forDraw=function() return {} end; local okT,T=pcall(require,'src.core.game3.trainer_sight'); if okT then T.check=function() return false end; T.checkLineOfSight=function() return false end end; local okS,Sp=pcall(require,'src.core.game3.scripting.space'); if okS and Sp then Sp.runOnFrame=function() end end end
    for _,level in ipairs(os.getenv('EM_LEVELS') and dofile(os.getenv('EM_LEVELS')) or {4}) do
     if C then C.setLevel(level,game);C.yaw=tonumber(os.getenv('EM_YAW')) or 0 end
     U.wait(tonumber(os.getenv('EM_WAIT')) or 150)

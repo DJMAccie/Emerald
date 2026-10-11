@@ -8,7 +8,7 @@
 set -euo pipefail
 B=~/Documents/battle-art-notquiteog
 E=~/Documents/Emerald
-OWN_LIB="lib/Gen3Decks.lua lib/BuildingModels.lua lib/BuildingVoxels.lua lib/Gen3Civic.lua lib/LandmarkModels.lua lib/Gen3EmeraldInteriors.lua lib/Gen3Furniture.lua lib/InteriorDiorama.lua lib/Gen3PixelFurniture.lua lib/Gen3PixelFurnitureB.lua lib/Gen3Elevation.lua lib/Gen3Stairs.lua lib/Gen3EmeraldTerraces.lua lib/Gen3Integration.lua lib/TerrainLevels.lua lib/Gen3StairTerraces.lua lib/Gen3CyclingRoad.lua data/gen3_stairs.lua lib/Gen3CableCar.lua lib/Gen3Rock.lua lib/Gen3Mass.lua lib/Gen3WallStairs.lua lib/Gen3AshPine.lua lib/Gen3LeagueGate.lua lib/Gen3Partition.lua lib/Gen3Canopy.lua lib/Gen3Fence.lua lib/Gen3Lathe.lua lib/Gen3Boat.lua lib/Gen3ObliqueWall.lua lib/Gen3Scene.lua lib/Gen3EmeraldShapes.lua lib/Gen3TileShape.lua lib/Gen3Outdoor.lua lib/Gen3Boundary.lua"
+OWN_LIB="lib/Gen3Tilesets.lua lib/Gen3Decks.lua lib/BuildingModels.lua lib/BuildingVoxels.lua lib/Gen3Civic.lua lib/LandmarkModels.lua lib/Gen3EmeraldInteriors.lua lib/Gen3Furniture.lua lib/InteriorDiorama.lua lib/Gen3PixelFurniture.lua lib/Gen3PixelFurnitureB.lua lib/Gen3Elevation.lua lib/Gen3Stairs.lua lib/Gen3EmeraldTerraces.lua lib/Gen3Integration.lua lib/TerrainLevels.lua lib/Gen3StairTerraces.lua lib/Gen3CyclingRoad.lua data/gen3_stairs.lua lib/Gen3CableCar.lua lib/Gen3Rock.lua lib/Gen3Mass.lua lib/Gen3WallStairs.lua lib/Gen3AshPine.lua lib/Gen3LeagueGate.lua lib/Gen3Partition.lua lib/Gen3Canopy.lua lib/Gen3Fence.lua lib/Gen3Lathe.lua lib/Gen3Boat.lua lib/Gen3ObliqueWall.lua lib/Gen3Scene.lua lib/Gen3EmeraldShapes.lua lib/Gen3TileShape.lua lib/Gen3Outdoor.lua lib/Gen3Boundary.lua"
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 # base tree + the last committed patch
