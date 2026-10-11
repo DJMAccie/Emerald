@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""cases.py indoor|outdoor -> a qa_run case list: one walkable spot per indoor
+"""cases.py indoor|outdoor|cave -> a qa_run case list: one walkable spot per indoor
 room, a 24-cell grid of spots per outdoor map."""
 import sys,os,json,re,struct
 sys.path.insert(0,os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','voxel_proto'))
@@ -14,7 +14,11 @@ for g in c['groups']:
     # built interiors filed under the 'underground' map type
     built=any(k in mid for k in ('ABANDONED_SHIP','NEW_MAUVILLE','MAGMA_HIDEOUT','MIRAGE_TOWER')) and 'UNDERWATER' not in mid
     indoor=h['mapType'] in (8,9) or (h['mapType']==4 and built)
-    if indoor!=(sys.argv[1]=='indoor'): continue
+    if sys.argv[1]=='cave':
+      if h['mapType']!=4 or built: continue
+      indoor=True
+    elif h['mapType']==4 and not built: continue
+    if indoor!=(sys.argv[1] in ('indoor','cave')): continue
     if not indoor and h['mapType'] not in (1,2,3,5,6): continue
     cells=struct.unpack('<%dH'%(W*H),open(G+'/map_tree/maps/%s/grid.bin'%m['slot'],'rb').read())
     def free(x,y): return 0<=x<W and 0<=y<H and (cells[y*W+x]>>10&3)==0 and (cells[y*W+x]&0x3ff) not in (0,1)

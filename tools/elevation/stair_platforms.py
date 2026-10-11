@@ -28,9 +28,11 @@ def load(mp):
     cells = struct.unpack('<%dH' % (W * H), open(G + '/map_tree/maps/%s/grid.bin' % slot, 'rb').read())
     return W, H, cells
 
-def analyse(mp, stair_mids=None):
+def analyse(mp, stair_mids=None, e0_ground=False):
     """stair_mids: metatile ids that are stairs on this map (Sootopolis draws
-    its stairs on ordinary e3 cells); default: walkable elevation-0 cells."""
+    its stairs on ordinary e3 cells); default: walkable elevation-0 cells.
+    e0_ground: walkable elevation-0 cells that are not stairs are ground too
+    (caves: whole floors are rated 0)."""
     W, H, cells = load(mp)
     def info(x, y):
         v = cells[y * W + x]; return v & 0x3ff, (v >> 10) & 3, v >> 12
@@ -40,7 +42,7 @@ def analyse(mp, stair_mids=None):
             mid, col, el = info(x, y)
             if col != 0 or el == 1: continue
             if (stair_mids and mid in stair_mids) or (not stair_mids and el == 0): stair.add((x, y))
-            elif el != 0: walk[(x, y)] = el
+            elif el != 0 or e0_ground: walk[(x, y)] = el
     D = ((1, 0), (-1, 0), (0, 1), (0, -1))
     comp = {}; comps = []
     for p in sorted(walk, key=lambda p: (p[1], p[0])):
