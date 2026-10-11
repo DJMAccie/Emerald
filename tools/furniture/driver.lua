@@ -23,6 +23,7 @@ return function(game)
    pcall(Player.reset,case[2],case[3],'down')
    -- QA only: a case may carry decor={{decorId,x,y},...}: those decorations are put on the map as
    -- the game's own decorating does (secret bases, the player's room); x,y is the bottom-left cell
+   if os.getenv('EM_NO_SCRIPTS') then local okS,Sp=pcall(require,'src.core.game3.scripting.space'); if okS and Sp then Sp.runOnFrame=function() end end end
    if case.decor then
     local okD,err=pcall(function()
      local SB=require('src.core.game3.rse.secret_base');local D=require('src.core.game3.rse.decoration')
@@ -30,6 +31,17 @@ return function(game)
      for _,d in ipairs(case.decor)do D.showOnMap(g,d[2],d[3],d[1])end
     end)
     print('[EM view] decor',okD,err or '')
+   end
+   -- QA only: dolls={{decorId,x,y},...} puts sprite decorations (dolls, cushions) into the current
+   -- base's saved slots and spawns them as the game does (they only appear on a desk or a mat)
+   if case.dolls then
+    local okD,err=pcall(function()
+     local SB=require('src.core.game3.rse.secret_base');local D=require('src.core.game3.rse.decoration')
+     local sess=game.session;local b=SB.base(sess,0)
+     for i,d in ipairs(case.dolls)do b.decorations[i]=d[1];b.decorationPositions[i]=D.encodePos(d[2],d[3])end
+     local n,sp=SB.initDecorationSprites(0,sess);print('[EM view] dolls spawned',n)
+    end)
+    print('[EM view] dolls',okD,err or '')
    end
    -- QA only: as after using Flash, so a dark cave shows its 3D scene (EM_FLASH=1)
    if os.getenv('EM_FLASH') and game.session then game.session.flashLevel=0 end
@@ -49,12 +61,27 @@ return function(game)
     local f=io.open(path) if f then f:close(); path=path:gsub('%.png$','_'..(os.time()%1000)..'.png') end
     U.shot(game,path)
     if os.getenv('EM_AUDIT') and scene and scene.debugCell then
+     -- the scene's window follows the player lazily: wait until it is centred on this
+     -- case's spot before scanning (a stale window audited the previous spot's cells again)
+     do
+      local Col=package.loaded['src.core.game3.collision'];local L=Col and Col._mapDef and Col._mapDef.midLayout
+      local W,Hh=L and L.width or 0,L and L.height or 0
+      local px,py=case[2],case[3]
+      local function has(x,y) return x<0 or y<0 or x>=W or y>=Hh or scene.debugCell(x,y)~=nil end
+      for _=1,60 do
+       if has(px-20,py) and has(px+20,py) and has(px,py-20) and has(px,py+20) then break end
+       U.wait(15)
+      end
+     end
+     local cx0,cy0,cx1,cy1,cn=999,999,-1,-1,0
      for y=0,140 do for x=0,140 do
       local d=scene.debugCell(x,y)
+      if d then cn=cn+1;cx0=math.min(cx0,x);cy0=math.min(cy0,y);cx1=math.max(cx1,x);cy1=math.max(cy1,y) end
       if d and d.prop then print(string.format('[AUD] %s %d %d %03X %s',case[1],x,y,d.mid or 0,d.prop)) end
       if d and not d.prop and (d.collision or 0)==0 and (d.kind==nil or d.kind=='flat') and not d.stairs and not d.gym and not d.civic and os.getenv('EM_AUDIT')=='walk' then print(string.format('[WALK] %s %d %d %03X',case[1],x,y,d.mid or 0)) end
       if d and not d.prop and (d.collision or 0)~=0 and (d.kind==nil or d.kind=='flat') and not d.stairs and not d.gym and not d.civic then print(string.format('[FLAT] %s %d %d %03X',case[1],x,y,d.mid or 0)) end
      end end
+     print(string.format('[COV] %s %d %d %d %d %d',case[1],cx0,cy0,cx1,cy1,cn))
     end
     if case[4] and scene and scene.debugCell then
      -- one line per map row of the building's box: kind letter, column signature

@@ -46,6 +46,7 @@ for (p,mid),(mp,x,y) in seen.items():
   x0,y0=max(0,x-2),max(0,y-2);x1,y1=min(W-1,x+2),min(Hh-1,y+2)
   try: im=Image.fromarray(M.compose(p,mp,x0,y0,x1,y1)).convert('RGB')
   except Exception: continue
+  if im.width<1 or im.height<1: continue   # a cell outside the map's art
   im=im.resize((im.width*3,im.height*3),Image.NEAREST)
   d=ImageDraw.Draw(im);cx,cy=(x-x0)*48,(y-y0)*48
   d.rectangle((cx,cy,cx+47,cy+47),outline=(255,0,0),width=2)
