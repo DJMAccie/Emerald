@@ -17,6 +17,8 @@ return function(game)
  local Map=require('src.core.game3.map');local Player=require('src.core.game3.player')
  local cases=os.getenv('EM_CASES') and dofile(os.getenv('EM_CASES')) or {{'EM_LITTLEROOT_TOWN',10,10}}
  for _,case in ipairs(cases) do
+  -- QA only: flags={'FLAG_NAME',...} on a case are set before the map loads (state-dependent scenery)
+  if case.flags then pcall(function() local R=require('src.core.game3.rse.init');for _,f in ipairs(case.flags)do R.setFlag(f,true)end end) end
   local ok,err=pcall(function() assert(Map.load(nil,game,case[1],{x=case[2],y=case[3],facing='down'})) end)
   print('[EM view] load',case[1],ok,err or '')
   if ok then

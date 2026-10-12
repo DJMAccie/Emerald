@@ -41,6 +41,11 @@ CAVES = {}
 # Navel Rock's summit is a path up an open mountainside, not a walled cave:
 # its raised top floated as a bare plane over the slope
 CAVE_SKIP = {'EM_NAVEL_ROCK_TOP'}
+# Caves whose rating alternates 3/4 from one terrace to the next whichever
+# way the stairs climb (a stair's upper floor is often rated the LOWER one):
+# their levels are read from the drawing like the unrated caves'
+CAVE_DRAWN = {'EM_ARTISAN_CAVE_B1F', 'EM_METEOR_FALLS_1F_1R', 'EM_SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM', 'EM_SHOAL_CAVE_HIGH_TIDE_INNER_ROOM',
+              'EM_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM', 'EM_SHOAL_CAVE_LOW_TIDE_INNER_ROOM'}
 CAVE_PAIRS = {'general__cave', 'general__meteor_falls', 'general__mirage_tower', 'general__navel_rock', 'general__lavaridge',
               'general__pacifidlog', 'general__rusturf_tunnel'}
 
@@ -64,7 +69,7 @@ def find_caves():
             if 'UNUSED' in mp or mp in CAVE_SKIP: continue
             W, H, cells = sp.load(mp)
             levels = {v >> 12 for v in cells if not (v >> 10) & 3} - {0, 1, 15}
-            if len(levels) > 1: continue          # the nibble carries its levels
+            if len(levels) > 1 and mp not in CAVE_DRAWN: continue          # the nibble carries its levels
             r = cave_levels.levels(mp, pair[mp], CAVE_STAIRS.get(pair[mp], set()))
             if len(set(r[5].values())) < 2: continue
             CAVES[mp] = r
@@ -94,7 +99,84 @@ def ledge_edges(mp, W, H, cells, comp):
             out.append((north.pop(), south.pop(), 1, []))
     return out
 
+# Outdoor maps whose stairs join floors the cartridge rates the same level
+# while other floors ARE rated (user: "do a pass on all the stairs ... make
+# sure that all the height levels are correct"). Only the floors a stair
+# lifts or lowers against the cartridge's rating are pinned (on=true: every
+# other cell keeps its rated height): level = rated level + offset, where a
+# stair between same-rated floors puts its north floor one level per stair row
+# above its south floor and every other link carries the offset unchanged.
+OUTDOOR = ['EM_FARAWAY_ISLAND_ENTRANCE', 'EM_LILYCOVE_CITY', 'EM_ROUTE104', 'EM_ROUTE111', 'EM_ROUTE115', 'EM_ROUTE116',
+           'EM_ROUTE119', 'EM_ROUTE120', 'EM_ROUTE121', 'EM_SAFARI_ZONE_NORTHEAST', 'EM_SAFARI_ZONE_SOUTHWEST',
+           'EM_SLATEPORT_CITY', 'EM_SOUTHERN_ISLAND_EXTERIOR', 'EM_MOSSDEEP_CITY', 'EM_ROUTE114', 'EM_EVER_GRANDE_CITY']
+OUTDOOR += ['EM_ROUTE112', 'EM_METEOR_FALLS_1F_1R', 'EM_SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM', 'EM_SHOAL_CAVE_HIGH_TIDE_INNER_ROOM',
+            'EM_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM', 'EM_SHOAL_CAVE_LOW_TIDE_INNER_ROOM', 'EM_ARTISAN_CAVE_B1F', 'EM_SOUTHERN_ISLAND_EXTERIOR']
+OUTDOOR = [m for m in dict.fromkeys(OUTDOOR) if m not in CAVE_DRAWN]
+OUTDOOR_MIDS = {'EM_METEOR_FALLS_1F_1R': {0x202}, 'EM_ARTISAN_CAVE_B1F': {0x204, 0x363}}
+for _m in ('EM_SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM', 'EM_SHOAL_CAVE_HIGH_TIDE_INNER_ROOM', 'EM_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM', 'EM_SHOAL_CAVE_LOW_TIDE_INNER_ROOM'):
+    OUTDOOR_MIDS[_m] = {0x204, 0x363}
+OUT_DONE = {}
+
+POCKETS = {}
+# lone cells in a notch of a mountainside, at no terrace's height in the drawing
+POCKET_SKIP = {('EM_ROUTE119', (32, 30)), ('EM_MOSSDEEP_CITY', (57, 16))}
+def build_outdoor(mp):
+    # (0xE8: the narrow flight between two posts; rated caves bring their own stair tiles)
+    W, H, cells, comps, comp, edges, _, _, _ = sp.analyse(mp, OUTDOOR_MIDS.get(mp, {0xAF, 0xCF, 0xE8}))
+    rawnib = lambda k: cells[comps[k][0][1] * W + comps[k][0][0]] >> 12
+    # (heights clamp at three levels: floors rated 7 and 9 stand level, and a stair between them is flat too)
+    nib = lambda k: min(rawnib(k), 6)
+    links = []                                   # (a, b, d): off[b] = off[a] + d
+    stairs = set()
+    for up, down, n, strip in edges:
+        if nib(up) == nib(down): links.append((down, up, n)); stairs.update(strip)
+        else: links.append((down, up, 0))
+    for (x, y), a in comp.items():               # floors of different rating that touch
+        for d in ((1, 0), (0, 1)):
+            b = comp.get((x + d[0], y + d[1]))
+            if b is not None and b != a: links.append((a, b, 0))
+    off = {}
+    order = sorted(range(len(comps)), key=lambda k: -len(comps[k]))
+    for start in order:
+        if start in off: continue
+        off[start] = 0; ch = True; net = {start}
+        while ch:
+            ch = False
+            for a, b, d in links:
+                if a in off and b not in off: off[b] = off[a] + d; net.add(b); ch = True
+                elif b in off and a not in off: off[a] = off[b] - d; net.add(a); ch = True
+        m = min(off[k] for k in net)
+        for k in net: off[k] -= m
+    # a small pocket of floor no stair reaches, cut off from a lifted floor of
+    # its own rating only by a rock or two in its own row, stands on that
+    # floor's terrace (Route 116: three cells left at the foot beside it)
+    linked = {k for l in links for k in l[:2]}
+    POCKETS.setdefault(mp, [])
+    for k in range(len(comps)):
+        if k in linked or len(comps[k]) > 6 or rawnib(k) in (0, 1, 15): continue
+        if (mp, comps[k][0]) in POCKET_SKIP: continue
+        found = set()
+        for x, y in comps[k]:
+            for sx in (-1, 1):
+                for n in (1, 2, 3):
+                    j = comp.get((x + sx * n, y))
+                    if j == k: break
+                    if j is not None:
+                        # (both stand on the terrace's front edge: rock under each)
+                        if j in linked and off.get(j, 0) and rawnib(j) == rawnib(k) \
+                                and (x, y + 1) not in comp and (x + sx * n, y + 1) not in comp \
+                                and (x, y + 1) not in stairs:
+                            found.add(off[j])
+                        break
+        if len(found) == 1: off[k] = found.pop(); POCKETS[mp].append((comps[k][0], len(comps[k]), off[k]))
+    pins = []
+    for k in range(len(comps)):
+        if off.get(k, 0) and rawnib(k) not in (0, 1, 15):
+            pins.append((comps[k][0][0], comps[k][0][1], min(nib(k) - 3, 3) + off[k]))
+    return pins, sorted(stairs)
+
 def build(mp):
+    if mp in OUT_DONE: return OUT_DONE[mp]
     if mp in CAVES:
         W, H, cells, comps, comp, lv, stairs = CAVES[mp]
         return [(comps[k][0][0], comps[k][0][1], lv.get(k, 0)) for k in range(len(comps))], stairs
@@ -158,6 +240,10 @@ if __name__ == '__main__':
                             'EM_MT_CHIMNEY', 'EM_JAGGED_PASS', 'EM_MT_PYRE_EXTERIOR', 'EM_MT_PYRE_SUMMIT']
     caves = find_caves()
     if not sys.argv[1:]: maps = maps + caves
+    if not sys.argv[1:]:
+        for mp in OUTDOOR:
+            r = build_outdoor(mp)
+            if r[0]: OUT_DONE[mp] = r; maps.append(mp)
     lua = ['-- GENERATED by tools/elevation/gen_stair_terraces.py: platforms where stairs',
            '-- climb between floors the cartridge rates the same level. pins = one row per',
            '-- walkable component {anchorX,anchorY,level}; stairs = flight cells (incl. a',
@@ -168,8 +254,8 @@ if __name__ == '__main__':
            'return {rise=%d,' % RISE]
     for mp in maps:
         pins, stairs = build(mp)
-        r = RISE_BY_MAP.get(mp) or (16 if mp in CAVES else None)
-        lua.append(' %s={%s%spins={%s},' % (mp, 'cave=true,' if mp in CAVES else '', ('rise=%d,' % r) if r else '', ','.join('{%d,%d,%d}' % p for p in pins)))
+        r = RISE_BY_MAP.get(mp) or (16 if mp in CAVES or mp in OUT_DONE else None)
+        lua.append(' %s={%s%spins={%s},' % (mp, 'cave=true,' if mp in CAVES else 'on=true,' if mp in OUT_DONE else '', ('rise=%d,' % r) if r else '', ','.join('{%d,%d,%d}' % p for p in pins)))
         lua.append('  stairs={%s}},' % ','.join('{%d,%d}' % s for s in stairs))
         print(mp, 'levels', sorted({p[2] for p in pins}), 'stair cells', len(stairs))
     lua.append('}')
