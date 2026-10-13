@@ -4,7 +4,7 @@
 return function(game)
  local U=dofile('tests/drivers/util.lua')
  local dir=assert(os.getenv('SHOT_DIR'))
- assert(love.filesystem.getIdentity()=='pokemon-love2d-rseqa','refusing a non-QA identity')
+ assert((love.filesystem.getIdentity()=='pokemon-love2d-rseqa' or love.filesystem.getIdentity():match('^pokemon%-love2d%-rseqa%-p%d$')),'refusing a non-QA identity')
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
  local export=game.mods and game.mods.exports and game.mods.exports.BATTLE_ART_VOXEL_FORK

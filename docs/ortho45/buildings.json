@@ -1,0 +1,5616 @@
+{
+ "entries": [
+  {
+   "file": "trainer_hill_penthouse.lua",
+   "name": "trainer_hill_penthouse",
+   "map": "EM_TRAINER_HILL_ROOF",
+   "pair": "building__trainer_hill",
+   "rect": [
+    7,
+    0,
+    17,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    12,
+    3
+   ],
+   "player": [
+    12,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_TRAINER_HILL_ROOF_12_3_ortho.png",
+   "rect_differ": 46204,
+   "rect_of": 78848,
+   "rect_percent": 58.599,
+   "above_differ": 0,
+   "above_of": 0,
+   "percent": 84.887,
+   "pixels_differ": 320532,
+   "pixels_compared": 377600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/trainer_hill_penthouse.png",
+   "clipped": false,
+   "rank": 1,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    12
+   ],
+   "residual_percent": 51.233,
+   "region_percent": 58.599
+  },
+  {
+   "file": "lilycove_museum.lua",
+   "name": "museum2",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    7,
+    0,
+    16,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    11,
+    3
+   ],
+   "player": [
+    11,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 10,
+   "shot": "EM_LILYCOVE_CITY_11_3_ortho.png",
+   "rect_differ": 41196,
+   "rect_of": 71680,
+   "rect_percent": 57.472,
+   "above_differ": 0,
+   "above_of": 0,
+   "percent": 49.062,
+   "pixels_differ": 233423,
+   "pixels_compared": 475776,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/museum2.png",
+   "clipped": false,
+   "rank": 2,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    6
+   ],
+   "residual_percent": 47.86,
+   "region_percent": 57.472
+  },
+  {
+   "file": "weather_institute.lua",
+   "name": "weather",
+   "map": "EM_ROUTE119",
+   "pair": "general__fortree",
+   "rect": [
+    1,
+    26,
+    11,
+    32
+   ],
+   "status": "scored",
+   "centre": [
+    6,
+    29
+   ],
+   "player": [
+    6,
+    33
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_ROUTE119_6_29_ortho.png",
+   "rect_differ": 44669,
+   "rect_of": 78848,
+   "rect_percent": 56.652,
+   "above_differ": 21678,
+   "above_of": 33792,
+   "percent": 64.916,
+   "pixels_differ": 396352,
+   "pixels_compared": 610560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/weather.png",
+   "clipped": false,
+   "rank": 3,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 56.652,
+   "region_percent": 56.652
+  },
+  {
+   "file": "abandoned_ship_wreck.lua",
+   "name": "abandoned_ship_wreck",
+   "map": "EM_ROUTE108",
+   "pair": "general__slateport",
+   "rect": [
+    27,
+    3,
+    33,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    30,
+    4
+   ],
+   "player": [
+    30,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE108_30_4_ortho.png",
+   "rect_differ": 11140,
+   "rect_of": 21504,
+   "rect_percent": 51.804,
+   "above_differ": 11353,
+   "above_of": 21504,
+   "percent": 51.237,
+   "pixels_differ": 330541,
+   "pixels_compared": 645120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/abandoned_ship_wreck.png",
+   "clipped": false,
+   "rank": 4,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    2
+   ],
+   "residual_percent": 26.079,
+   "region_percent": 51.804
+  },
+  {
+   "file": "sootopolis_cone.lua",
+   "name": "soot_cone",
+   "map": "EM_SOOTOPOLIS_CITY",
+   "pair": "general__sootopolis",
+   "rect": [
+    8,
+    2,
+    10,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    9,
+    4
+   ],
+   "player": [
+    9,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_SOOTOPOLIS_CITY_9_4_ortho.png",
+   "rect_differ": 7876,
+   "rect_of": 15360,
+   "rect_percent": 51.276,
+   "above_differ": 6144,
+   "above_of": 6144,
+   "percent": 83.558,
+   "pixels_differ": 397547,
+   "pixels_compared": 475776,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/soot_cone.png",
+   "clipped": false,
+   "rank": 5,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 51.276,
+   "region_percent": 51.276
+  },
+  {
+   "file": "fortree_treehouse.lua",
+   "name": "treehouse",
+   "map": "EM_FORTREE_CITY",
+   "pair": "general__fortree",
+   "rect": [
+    8,
+    1,
+    12,
+    3
+   ],
+   "status": "scored",
+   "centre": [
+    10,
+    2
+   ],
+   "player": [
+    10,
+    4
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_FORTREE_CITY_10_2_ortho.png",
+   "rect_differ": 7698,
+   "rect_of": 15360,
+   "rect_percent": 50.117,
+   "above_differ": 4936,
+   "above_of": 5120,
+   "percent": 69.809,
+   "pixels_differ": 299788,
+   "pixels_compared": 429440,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/treehouse.png",
+   "clipped": false,
+   "rank": 6,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 50.117,
+   "region_percent": 50.117
+  },
+  {
+   "file": "ferry_birth_island.lua",
+   "name": "ferry_birth_island",
+   "map": "EM_BIRTH_ISLAND_EXTERIOR",
+   "pair": "general__dewford",
+   "rect": [
+    12,
+    24,
+    18,
+    28
+   ],
+   "status": "scored",
+   "centre": [
+    15,
+    26
+   ],
+   "player": [
+    15,
+    24
+   ],
+   "player_radius": 5,
+   "batch": 1,
+   "shot": "EM_BIRTH_ISLAND_EXTERIOR_15_26_ortho.png",
+   "rect_differ": 17915,
+   "rect_of": 35840,
+   "rect_percent": 49.986,
+   "above_differ": 7969,
+   "above_of": 21504,
+   "percent": 56.183,
+   "pixels_differ": 254575,
+   "pixels_compared": 453120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/ferry_birth_island.png",
+   "clipped": false,
+   "rank": 7,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 49.986,
+   "region_percent": 49.986
+  },
+  {
+   "file": "ferry_navel_rock.lua",
+   "name": "ferry_navel_rock",
+   "map": "EM_NAVEL_ROCK_EXTERIOR",
+   "pair": "general__dewford",
+   "rect": [
+    7,
+    18,
+    13,
+    22
+   ],
+   "status": "scored",
+   "centre": [
+    10,
+    20
+   ],
+   "player": [
+    10,
+    18
+   ],
+   "player_radius": 5,
+   "batch": 1,
+   "shot": "EM_NAVEL_ROCK_EXTERIOR_10_20_ortho.png",
+   "rect_differ": 17915,
+   "rect_of": 35840,
+   "rect_percent": 49.986,
+   "above_differ": 7757,
+   "above_of": 21504,
+   "percent": 49.446,
+   "pixels_differ": 156834,
+   "pixels_compared": 317184,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/ferry_navel_rock.png",
+   "clipped": false,
+   "rank": 8,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 49.986,
+   "region_percent": 49.986
+  },
+  {
+   "file": "pacifidlog_hut.lua",
+   "name": "pacifidlog_hut",
+   "map": "EM_PACIFIDLOG_TOWN",
+   "pair": "general__pacifidlog",
+   "rect": [
+    15,
+    10,
+    17,
+    13
+   ],
+   "status": "scored",
+   "centre": [
+    16,
+    11
+   ],
+   "player": [
+    16,
+    14
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_PACIFIDLOG_TOWN_16_11_ortho.png",
+   "rect_differ": 5832,
+   "rect_of": 12288,
+   "rect_percent": 47.461,
+   "above_differ": 5312,
+   "above_of": 9216,
+   "percent": 51.954,
+   "pixels_differ": 239402,
+   "pixels_compared": 460800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/pacifidlog_hut.png",
+   "clipped": false,
+   "rank": 9,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 47.461,
+   "region_percent": 47.461
+  },
+  {
+   "file": "devon_corp.lua",
+   "name": "devon2",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    7,
+    6,
+    16,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    11,
+    10
+   ],
+   "player": [
+    11,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 9,
+   "shot": "EM_RUSTBORO_CITY_11_10_ortho.png",
+   "rect_differ": 43732,
+   "rect_of": 102400,
+   "rect_percent": 42.707,
+   "above_differ": 16781,
+   "above_of": 30720,
+   "percent": 32.653,
+   "pixels_differ": 229084,
+   "pixels_compared": 701568,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/devon2.png",
+   "clipped": false,
+   "rank": 10,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 42.707,
+   "region_percent": 42.707
+  },
+  {
+   "file": "sootopolis_box.lua",
+   "name": "soot_box",
+   "map": "EM_SOOTOPOLIS_CITY",
+   "pair": "general__sootopolis",
+   "rect": [
+    44,
+    2,
+    46,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    45,
+    4
+   ],
+   "player": [
+    45,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_SOOTOPOLIS_CITY_45_4_ortho.png",
+   "rect_differ": 5420,
+   "rect_of": 15360,
+   "rect_percent": 35.286,
+   "above_differ": 2748,
+   "above_of": 6144,
+   "percent": 77.147,
+   "pixels_differ": 429256,
+   "pixels_compared": 556416,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/soot_box.png",
+   "clipped": false,
+   "rank": 11,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 35.286,
+   "region_percent": 35.286
+  },
+  {
+   "file": "sootopolis_box2.lua",
+   "name": "soot_box2",
+   "map": "EM_SOOTOPOLIS_CITY",
+   "pair": "general__sootopolis",
+   "rect": [
+    2,
+    5,
+    4,
+    9
+   ],
+   "status": "scored",
+   "centre": [
+    3,
+    7
+   ],
+   "player": [
+    3,
+    13
+   ],
+   "player_radius": 3,
+   "batch": 3,
+   "shot": "EM_SOOTOPOLIS_CITY_3_7_ortho.png",
+   "rect_differ": 5160,
+   "rect_of": 15360,
+   "rect_percent": 33.594,
+   "above_differ": 0,
+   "above_of": 9216,
+   "percent": 59.915,
+   "pixels_differ": 270338,
+   "pixels_compared": 451200,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/soot_box2.png",
+   "clipped": false,
+   "rank": 12,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 33.594,
+   "region_percent": 33.594
+  },
+  {
+   "file": "birch_lab.lua",
+   "name": "birch_lab",
+   "map": "EM_LITTLEROOT_TOWN",
+   "pair": "general__petalburg",
+   "rect": [
+    3,
+    12,
+    9,
+    16
+   ],
+   "status": "scored",
+   "centre": [
+    6,
+    14
+   ],
+   "player": [
+    6,
+    18
+   ],
+   "player_radius": 1,
+   "batch": 1,
+   "shot": "EM_LITTLEROOT_TOWN_6_14_ortho.png",
+   "rect_differ": 11550,
+   "rect_of": 35840,
+   "rect_percent": 32.227,
+   "above_differ": 1430,
+   "above_of": 21504,
+   "percent": 25.479,
+   "pixels_differ": 87404,
+   "pixels_compared": 343040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/birch_lab.png",
+   "clipped": false,
+   "rank": 13,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 32.227,
+   "region_percent": 32.227
+  },
+  {
+   "file": "b128_route114_fossilmaniacshouse.lua",
+   "name": "b128_route114_fossilmaniacshouse",
+   "map": "EM_ROUTE114",
+   "pair": "general__fallarbor",
+   "rect": [
+    28,
+    3,
+    31,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    29,
+    4
+   ],
+   "player": [
+    29,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE114_29_4_ortho.png",
+   "rect_differ": 3772,
+   "rect_of": 12288,
+   "rect_percent": 30.697,
+   "above_differ": 8412,
+   "above_of": 12288,
+   "percent": 37.799,
+   "pixels_differ": 185934,
+   "pixels_compared": 491904,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b128_route114_fossilmaniacshouse.png",
+   "clipped": false,
+   "rank": 14,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 30.697,
+   "region_percent": 30.697
+  },
+  {
+   "file": "littleroot_house_brendan.lua",
+   "name": "littleroot_house",
+   "map": "EM_LITTLEROOT_TOWN",
+   "pair": "general__petalburg",
+   "rect": [
+    2,
+    4,
+    6,
+    8
+   ],
+   "status": "scored",
+   "centre": [
+    4,
+    6
+   ],
+   "player": [
+    4,
+    9
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_LITTLEROOT_TOWN_4_6_ortho.png",
+   "rect_differ": 7784,
+   "rect_of": 25600,
+   "rect_percent": 30.406,
+   "above_differ": 5504,
+   "above_of": 15360,
+   "percent": 23.244,
+   "pixels_differ": 84495,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/littleroot_house.png",
+   "clipped": false,
+   "rank": 15,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 30.406,
+   "region_percent": 30.406
+  },
+  {
+   "file": "littleroot_house_may.lua",
+   "name": "littleroot_house_may",
+   "map": "EM_LITTLEROOT_TOWN",
+   "pair": "general__petalburg",
+   "rect": [
+    13,
+    4,
+    17,
+    8
+   ],
+   "status": "scored",
+   "centre": [
+    15,
+    6
+   ],
+   "player": [
+    15,
+    9
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_LITTLEROOT_TOWN_15_6_ortho.png",
+   "rect_differ": 7748,
+   "rect_of": 25600,
+   "rect_percent": 30.266,
+   "above_differ": 5476,
+   "above_of": 15360,
+   "percent": 23.238,
+   "pixels_differ": 84473,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/littleroot_house_may.png",
+   "clipped": false,
+   "rank": 16,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 30.266,
+   "region_percent": 30.266
+  },
+  {
+   "file": "x_trainerhill_tower.lua",
+   "name": "x_trainerhill_tower",
+   "map": "EM_ROUTE111",
+   "pair": "general__mauville",
+   "rect": [
+    29,
+    106,
+    33,
+    110
+   ],
+   "status": "scored",
+   "centre": [
+    31,
+    108
+   ],
+   "player": [
+    31,
+    110
+   ],
+   "player_radius": 1,
+   "batch": 4,
+   "shot": "EM_ROUTE111_31_108_ortho.png",
+   "rect_differ": 7476,
+   "rect_of": 25600,
+   "rect_percent": 29.203,
+   "above_differ": 9196,
+   "above_of": 15360,
+   "percent": 33.134,
+   "pixels_differ": 217572,
+   "pixels_compared": 656640,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_trainerhill_tower.png",
+   "clipped": false,
+   "rank": 17,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 29.203,
+   "region_percent": 29.203
+  },
+  {
+   "file": "b092_lavaridgetown_herbshop.lua",
+   "name": "b092_lavaridgetown_herbshop",
+   "map": "EM_LAVARIDGE_TOWN",
+   "pair": "general__lavaridge",
+   "rect": [
+    11,
+    12,
+    14,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    12,
+    13
+   ],
+   "player": [
+    12,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_LAVARIDGE_TOWN_12_13_ortho.png",
+   "rect_differ": 4480,
+   "rect_of": 16384,
+   "rect_percent": 27.344,
+   "above_differ": 0,
+   "above_of": 12288,
+   "percent": 30.559,
+   "pixels_differ": 111088,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b092_lavaridgetown_herbshop.png",
+   "clipped": false,
+   "rank": 18,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 27.344,
+   "region_percent": 27.344
+  },
+  {
+   "file": "b096_lavaridgetown_house.lua",
+   "name": "b096_lavaridgetown_house",
+   "map": "EM_LAVARIDGE_TOWN",
+   "pair": "general__lavaridge",
+   "rect": [
+    15,
+    12,
+    18,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    16,
+    13
+   ],
+   "player": [
+    16,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_LAVARIDGE_TOWN_16_13_ortho.png",
+   "rect_differ": 4444,
+   "rect_of": 16384,
+   "rect_percent": 27.124,
+   "above_differ": 0,
+   "above_of": 12288,
+   "percent": 30.564,
+   "pixels_differ": 111108,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b096_lavaridgetown_house.png",
+   "clipped": false,
+   "rank": 19,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 27.124,
+   "region_percent": 27.124
+  },
+  {
+   "file": "b124_route111_oldladysreststop.lua",
+   "name": "b124_route111_oldladysreststop",
+   "map": "EM_ROUTE111",
+   "pair": "general__mauville",
+   "rect": [
+    25,
+    15,
+    28,
+    18
+   ],
+   "status": "scored",
+   "centre": [
+    26,
+    16
+   ],
+   "player": [
+    26,
+    19
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE111_26_16_ortho.png",
+   "rect_differ": 4424,
+   "rect_of": 16384,
+   "rect_percent": 27.002,
+   "above_differ": 4648,
+   "above_of": 12288,
+   "percent": 31.244,
+   "pixels_differ": 241155,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b124_route111_oldladysreststop.png",
+   "clipped": false,
+   "rank": 20,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 27.002,
+   "region_percent": 27.002
+  },
+  {
+   "file": "b130_route116_tunnelersresthouse.lua",
+   "name": "b130_route116_tunnelersresthouse",
+   "map": "EM_ROUTE116",
+   "pair": "general__rustboro",
+   "rect": [
+    36,
+    5,
+    40,
+    8
+   ],
+   "status": "scored",
+   "centre": [
+    38,
+    6
+   ],
+   "player": [
+    38,
+    9
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE116_38_6_ortho.png",
+   "rect_differ": 5380,
+   "rect_of": 20480,
+   "rect_percent": 26.27,
+   "above_differ": 11620,
+   "above_of": 15360,
+   "percent": 41.218,
+   "pixels_differ": 299672,
+   "pixels_compared": 727040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b130_route116_tunnelersresthouse.png",
+   "clipped": false,
+   "rank": 21,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 26.27,
+   "region_percent": 26.27
+  },
+  {
+   "file": "b129_route114_lanetteshouse.lua",
+   "name": "b129_route114_lanetteshouse",
+   "map": "EM_ROUTE114",
+   "pair": "general__fallarbor",
+   "rect": [
+    25,
+    33,
+    29,
+    36
+   ],
+   "status": "scored",
+   "centre": [
+    27,
+    34
+   ],
+   "player": [
+    27,
+    37
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_ROUTE114_27_34_ortho.png",
+   "rect_differ": 5328,
+   "rect_of": 20480,
+   "rect_percent": 26.016,
+   "above_differ": 7560,
+   "above_of": 15360,
+   "percent": 32.3,
+   "pixels_differ": 241866,
+   "pixels_compared": 748800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b129_route114_lanetteshouse.png",
+   "clipped": false,
+   "rank": 22,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 26.016,
+   "region_percent": 26.016
+  },
+  {
+   "file": "b154_battlefrontier_rankinghall.lua",
+   "name": "b154_battlefrontier_rankinghall",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    32,
+    8,
+    38,
+    12
+   ],
+   "status": "scored",
+   "centre": [
+    35,
+    10
+   ],
+   "player": [
+    35,
+    13
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_35_10_ortho.png",
+   "rect_differ": 9124,
+   "rect_of": 35840,
+   "rect_percent": 25.458,
+   "above_differ": 19215,
+   "above_of": 21504,
+   "percent": 49.062,
+   "pixels_differ": 437088,
+   "pixels_compared": 890880,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b154_battlefrontier_rankinghall.png",
+   "clipped": false,
+   "rank": 23,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 25.458,
+   "region_percent": 25.458
+  },
+  {
+   "file": "pokemon_center.lua",
+   "name": "center2",
+   "map": "EM_PETALBURG_CITY",
+   "pair": "general__petalburg",
+   "rect": [
+    19,
+    13,
+    22,
+    16
+   ],
+   "status": "scored",
+   "centre": [
+    20,
+    14
+   ],
+   "player": [
+    20,
+    17
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_PETALBURG_CITY_20_14_ortho.png",
+   "rect_differ": 4132,
+   "rect_of": 16384,
+   "rect_percent": 25.22,
+   "above_differ": 1024,
+   "above_of": 12288,
+   "percent": 22.325,
+   "pixels_differ": 151737,
+   "pixels_compared": 679680,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/center2.png",
+   "clipped": false,
+   "rank": 24,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 25.22,
+   "region_percent": 25.22
+  },
+  {
+   "file": "b064_mossdeepcity_spacecenter.lua",
+   "name": "b064_mossdeepcity_spacecenter",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    60,
+    2,
+    68,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    64,
+    8
+   ],
+   "player": [
+    64,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 7,
+   "shot": "EM_MOSSDEEP_CITY_64_8_ortho.png",
+   "rect_differ": 32395,
+   "rect_of": 129024,
+   "rect_percent": 25.108,
+   "above_differ": 14253,
+   "above_of": 18432,
+   "percent": 56.863,
+   "pixels_differ": 408248,
+   "pixels_compared": 717952,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b064_mossdeepcity_spacecenter.png",
+   "clipped": false,
+   "rank": 25,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 25.108,
+   "region_percent": 25.108
+  },
+  {
+   "file": "b002_petalburgcity_wallyshouse.lua",
+   "name": "b002_petalburgcity_wallyshouse",
+   "map": "EM_PETALBURG_CITY",
+   "pair": "general__petalburg",
+   "rect": [
+    5,
+    2,
+    9,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    7,
+    3
+   ],
+   "player": [
+    7,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_PETALBURG_CITY_7_3_ortho.png",
+   "rect_differ": 4971,
+   "rect_of": 20480,
+   "rect_percent": 24.272,
+   "above_differ": 6280,
+   "above_of": 10240,
+   "percent": 28.746,
+   "pixels_differ": 119400,
+   "pixels_compared": 415360,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b002_petalburgcity_wallyshouse.png",
+   "clipped": false,
+   "rank": 26,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 24.272,
+   "region_percent": 24.272
+  },
+  {
+   "file": "b131_route117_pokemondaycare.lua",
+   "name": "b131_route117_pokemondaycare",
+   "map": "EM_ROUTE117",
+   "pair": "general__mauville",
+   "rect": [
+    50,
+    2,
+    53,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    51,
+    3
+   ],
+   "player": [
+    51,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE117_51_3_ortho.png",
+   "rect_differ": 3960,
+   "rect_of": 16384,
+   "rect_percent": 24.17,
+   "above_differ": 983,
+   "above_of": 8192,
+   "percent": 23.199,
+   "pixels_differ": 99862,
+   "pixels_compared": 430464,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b131_route117_pokemondaycare.png",
+   "clipped": false,
+   "rank": 27,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 24.17,
+   "region_percent": 24.17
+  },
+  {
+   "file": "b013_slateportcity_nameratershouse.lua",
+   "name": "b013_slateportcity_nameratershouse",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    4,
+    16,
+    7,
+    19
+   ],
+   "status": "scored",
+   "centre": [
+    5,
+    17
+   ],
+   "player": [
+    5,
+    20
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_SLATEPORT_CITY_5_17_ortho.png",
+   "rect_differ": 3952,
+   "rect_of": 16384,
+   "rect_percent": 24.121,
+   "above_differ": 1140,
+   "above_of": 12288,
+   "percent": 18.443,
+   "pixels_differ": 108358,
+   "pixels_compared": 587520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b013_slateportcity_nameratershouse.png",
+   "clipped": false,
+   "rank": 28,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 24.121,
+   "region_percent": 24.121
+  },
+  {
+   "file": "b138_safarizone_resthouse.lua",
+   "name": "b138_safarizone_resthouse",
+   "map": "EM_SAFARI_ZONE_SOUTHWEST",
+   "pair": "general__lilycove",
+   "rect": [
+    28,
+    4,
+    31,
+    7
+   ],
+   "status": "scored",
+   "centre": [
+    29,
+    5
+   ],
+   "player": [
+    29,
+    8
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_SAFARI_ZONE_SOUTHWEST_29_5_ortho.png",
+   "rect_differ": 3952,
+   "rect_of": 16384,
+   "rect_percent": 24.121,
+   "above_differ": 8504,
+   "above_of": 12288,
+   "percent": 49.112,
+   "pixels_differ": 256920,
+   "pixels_compared": 523136,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b138_safarizone_resthouse.png",
+   "clipped": false,
+   "rank": 29,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 24.121,
+   "region_percent": 24.121
+  },
+  {
+   "file": "b135_route123_berrymastershouse.lua",
+   "name": "b135_route123_berrymastershouse",
+   "map": "EM_ROUTE123",
+   "pair": "general__lilycove",
+   "rect": [
+    21,
+    3,
+    24,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    22,
+    4
+   ],
+   "player": [
+    22,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE123_22_4_ortho.png",
+   "rect_differ": 3944,
+   "rect_of": 16384,
+   "rect_percent": 24.072,
+   "above_differ": 8532,
+   "above_of": 12288,
+   "percent": 29.838,
+   "pixels_differ": 192493,
+   "pixels_compared": 645120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b135_route123_berrymastershouse.png",
+   "clipped": false,
+   "rank": 30,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 24.072,
+   "region_percent": 24.072
+  },
+  {
+   "file": "x_route124_diverhouse.lua",
+   "name": "x_route124_diverhouse",
+   "map": "EM_ROUTE124",
+   "pair": "general__mossdeep",
+   "rect": [
+    69,
+    45,
+    72,
+    48
+   ],
+   "status": "scored",
+   "centre": [
+    70,
+    46
+   ],
+   "player": [
+    70,
+    49
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE124_70_46_ortho.png",
+   "rect_differ": 3920,
+   "rect_of": 16384,
+   "rect_percent": 23.926,
+   "above_differ": 5920,
+   "above_of": 12288,
+   "percent": 46.804,
+   "pixels_differ": 318120,
+   "pixels_compared": 679680,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_route124_diverhouse.png",
+   "clipped": false,
+   "rank": 31,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 23.926,
+   "region_percent": 23.926
+  },
+  {
+   "file": "x_verdanturf_battletent.lua",
+   "name": "x_verdanturf_battletent",
+   "map": "EM_VERDANTURF_TOWN",
+   "pair": "general__mauville",
+   "rect": [
+    1,
+    3,
+    5,
+    7
+   ],
+   "status": "scored",
+   "centre": [
+    3,
+    5
+   ],
+   "player": [
+    3,
+    8
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_VERDANTURF_TOWN_3_5_ortho.png",
+   "rect_differ": 6044,
+   "rect_of": 25600,
+   "rect_percent": 23.609,
+   "above_differ": 5080,
+   "above_of": 15360,
+   "percent": 16.263,
+   "pixels_differ": 55789,
+   "pixels_compared": 343040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_verdanturf_battletent.png",
+   "clipped": false,
+   "rank": 32,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 23.609,
+   "region_percent": 23.609
+  },
+  {
+   "file": "x_route104_briney.lua",
+   "name": "x_route104_briney",
+   "map": "EM_ROUTE104",
+   "pair": "general__rustboro",
+   "rect": [
+    15,
+    47,
+    19,
+    50
+   ],
+   "status": "scored",
+   "centre": [
+    17,
+    48
+   ],
+   "player": [
+    17,
+    51
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE104_17_48_ortho.png",
+   "rect_differ": 4632,
+   "rect_of": 20480,
+   "rect_percent": 22.617,
+   "above_differ": 1609,
+   "above_of": 15360,
+   "percent": 44.143,
+   "pixels_differ": 381394,
+   "pixels_compared": 864000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_route104_briney.png",
+   "clipped": false,
+   "rank": 33,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 22.617,
+   "region_percent": 22.617
+  },
+  {
+   "file": "x_trainerhill_entrance.lua",
+   "name": "x_trainerhill_entrance",
+   "map": "EM_ROUTE111",
+   "pair": "general__mauville",
+   "rect": [
+    31,
+    112,
+    31,
+    113
+   ],
+   "status": "scored",
+   "centre": [
+    31,
+    112
+   ],
+   "player": [
+    31,
+    114
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_ROUTE111_31_112_ortho.png",
+   "rect_differ": 456,
+   "rect_of": 2048,
+   "rect_percent": 22.266,
+   "above_differ": 1592,
+   "above_of": 3072,
+   "percent": 34.628,
+   "pixels_differ": 227380,
+   "pixels_compared": 656640,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_trainerhill_entrance.png",
+   "clipped": false,
+   "rank": 34,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 22.266,
+   "region_percent": 22.266
+  },
+  {
+   "file": "poke_mart.lua",
+   "name": "mart2",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    12,
+    23,
+    15,
+    26
+   ],
+   "status": "scored",
+   "centre": [
+    13,
+    24
+   ],
+   "player": [
+    13,
+    27
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_SLATEPORT_CITY_13_24_ortho.png",
+   "rect_differ": 3520,
+   "rect_of": 16384,
+   "rect_percent": 21.484,
+   "above_differ": 0,
+   "above_of": 12288,
+   "percent": 19.39,
+   "pixels_differ": 149656,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/mart2.png",
+   "clipped": false,
+   "rank": 35,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 21.484,
+   "region_percent": 21.484
+  },
+  {
+   "file": "b062_mossdeepcity_stevenshouse.lua",
+   "name": "b062_mossdeepcity_stevenshouse",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    18,
+    7,
+    21,
+    10
+   ],
+   "status": "scored",
+   "centre": [
+    19,
+    8
+   ],
+   "player": [
+    19,
+    11
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_MOSSDEEP_CITY_19_8_ortho.png",
+   "rect_differ": 3492,
+   "rect_of": 16384,
+   "rect_percent": 21.313,
+   "above_differ": 11944,
+   "above_of": 12288,
+   "percent": 48.68,
+   "pixels_differ": 388883,
+   "pixels_compared": 798848,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b062_mossdeepcity_stevenshouse.png",
+   "clipped": false,
+   "rank": 36,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 21.313,
+   "region_percent": 21.313
+  },
+  {
+   "file": "x_frontier_pike.lua",
+   "name": "x_frontier_pike",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    40,
+    19,
+    44,
+    29
+   ],
+   "status": "scored",
+   "centre": [
+    42,
+    24
+   ],
+   "player": [
+    42,
+    30
+   ],
+   "player_radius": 0,
+   "batch": 8,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_42_24_ortho.png",
+   "rect_differ": 11868,
+   "rect_of": 56320,
+   "rect_percent": 21.072,
+   "above_differ": 4866,
+   "above_of": 15360,
+   "percent": 30.941,
+   "pixels_differ": 238818,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_pike.png",
+   "clipped": false,
+   "rank": 37,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 21.072,
+   "region_percent": 21.072
+  },
+  {
+   "file": "b001_petalburgcity_house1.lua",
+   "name": "b001_petalburgcity_house1",
+   "map": "EM_PETALBURG_CITY",
+   "pair": "general__petalburg",
+   "rect": [
+    9,
+    16,
+    12,
+    19
+   ],
+   "status": "scored",
+   "centre": [
+    10,
+    17
+   ],
+   "player": [
+    10,
+    20
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_PETALBURG_CITY_10_17_ortho.png",
+   "rect_differ": 3408,
+   "rect_of": 16384,
+   "rect_percent": 20.801,
+   "above_differ": 248,
+   "above_of": 12288,
+   "percent": 24.057,
+   "pixels_differ": 166285,
+   "pixels_compared": 691200,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b001_petalburgcity_house1.png",
+   "clipped": false,
+   "rank": 38,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 20.801,
+   "region_percent": 20.801
+  },
+  {
+   "file": "b133_route119_house.lua",
+   "name": "b133_route119_house",
+   "map": "EM_ROUTE119",
+   "pair": "general__fortree",
+   "rect": [
+    32,
+    106,
+    35,
+    109
+   ],
+   "status": "scored",
+   "centre": [
+    33,
+    107
+   ],
+   "player": [
+    33,
+    110
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE119_33_107_ortho.png",
+   "rect_differ": 3404,
+   "rect_of": 16384,
+   "rect_percent": 20.776,
+   "above_differ": 9272,
+   "above_of": 12288,
+   "percent": 49.863,
+   "pixels_differ": 304444,
+   "pixels_compared": 610560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b133_route119_house.png",
+   "clipped": false,
+   "rank": 39,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 20.776,
+   "region_percent": 20.776
+  },
+  {
+   "file": "b005_petalburgcity_house2.lua",
+   "name": "b005_petalburgcity_house2",
+   "map": "EM_PETALBURG_CITY",
+   "pair": "general__petalburg",
+   "rect": [
+    19,
+    21,
+    22,
+    24
+   ],
+   "status": "scored",
+   "centre": [
+    20,
+    22
+   ],
+   "player": [
+    20,
+    25
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_PETALBURG_CITY_20_22_ortho.png",
+   "rect_differ": 3400,
+   "rect_of": 16384,
+   "rect_percent": 20.752,
+   "above_differ": 3944,
+   "above_of": 12288,
+   "percent": 25.708,
+   "pixels_differ": 145612,
+   "pixels_compared": 566400,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b005_petalburgcity_house2.png",
+   "clipped": false,
+   "rank": 40,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 20.752,
+   "region_percent": 20.752
+  },
+  {
+   "file": "b106_verdanturftown_wandashouse.lua",
+   "name": "b106_verdanturftown_wandashouse",
+   "map": "EM_VERDANTURF_TOWN",
+   "pair": "general__mauville",
+   "rect": [
+    8,
+    11,
+    12,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    10,
+    12
+   ],
+   "player": [
+    10,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_VERDANTURF_TOWN_10_12_ortho.png",
+   "rect_differ": 4216,
+   "rect_of": 20480,
+   "rect_percent": 20.586,
+   "above_differ": 384,
+   "above_of": 15360,
+   "percent": 19.156,
+   "pixels_differ": 73558,
+   "pixels_compared": 384000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b106_verdanturftown_wandashouse.png",
+   "clipped": false,
+   "rank": 41,
+   "class": "wrong",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 20.586,
+   "region_percent": 20.586
+  },
+  {
+   "file": "b127_route113_glassworkshop.lua",
+   "name": "b127_route113_glassworkshop",
+   "map": "EM_ROUTE113",
+   "pair": "general__fallarbor",
+   "rect": [
+    32,
+    2,
+    35,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    33,
+    3
+   ],
+   "player": [
+    33,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE113_33_3_ortho.png",
+   "rect_differ": 3256,
+   "rect_of": 16384,
+   "rect_percent": 19.873,
+   "above_differ": 5520,
+   "above_of": 8192,
+   "percent": 32.787,
+   "pixels_differ": 198086,
+   "pixels_compared": 604160,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b127_route113_glassworkshop.png",
+   "clipped": false,
+   "rank": 42,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 19.873,
+   "region_percent": 19.873
+  },
+  {
+   "file": "b016_slateportcity_house.lua",
+   "name": "b016_slateportcity_house",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    20,
+    41,
+    29,
+    44
+   ],
+   "status": "scored",
+   "centre": [
+    24,
+    42
+   ],
+   "player": [
+    24,
+    45
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_SLATEPORT_CITY_24_42_ortho.png",
+   "rect_differ": 7920,
+   "rect_of": 40960,
+   "rect_percent": 19.336,
+   "above_differ": 1672,
+   "above_of": 30720,
+   "percent": 30.48,
+   "pixels_differ": 249304,
+   "pixels_compared": 817920,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b016_slateportcity_house.png",
+   "clipped": false,
+   "rank": 43,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 19.336,
+   "region_percent": 19.336
+  },
+  {
+   "file": "b083_oldaletown_house1.lua",
+   "name": "b083_oldaletown_house1",
+   "map": "EM_OLDALE_TOWN",
+   "pair": "general__petalburg",
+   "rect": [
+    4,
+    4,
+    7,
+    7
+   ],
+   "status": "scored",
+   "centre": [
+    5,
+    5
+   ],
+   "player": [
+    5,
+    8
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_OLDALE_TOWN_5_5_ortho.png",
+   "rect_differ": 3140,
+   "rect_of": 16384,
+   "rect_percent": 19.165,
+   "above_differ": 3384,
+   "above_of": 12288,
+   "percent": 26.139,
+   "pixels_differ": 89666,
+   "pixels_compared": 343040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b083_oldaletown_house1.png",
+   "clipped": false,
+   "rank": 44,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 19.165,
+   "region_percent": 19.165
+  },
+  {
+   "file": "b084_oldaletown_house2.lua",
+   "name": "b084_oldaletown_house2",
+   "map": "EM_OLDALE_TOWN",
+   "pair": "general__petalburg",
+   "rect": [
+    14,
+    13,
+    17,
+    16
+   ],
+   "status": "scored",
+   "centre": [
+    15,
+    14
+   ],
+   "player": [
+    15,
+    17
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_OLDALE_TOWN_15_14_ortho.png",
+   "rect_differ": 3140,
+   "rect_of": 16384,
+   "rect_percent": 19.165,
+   "above_differ": 124,
+   "above_of": 12288,
+   "percent": 23.534,
+   "pixels_differ": 80732,
+   "pixels_compared": 343040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b084_oldaletown_house2.png",
+   "clipped": false,
+   "rank": 45,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 19.165,
+   "region_percent": 19.165
+  },
+  {
+   "file": "b102_fallarbortown_moverelearnershouse.lua",
+   "name": "b102_fallarbortown_moverelearnershouse",
+   "map": "EM_FALLARBOR_TOWN",
+   "pair": "general__fallarbor",
+   "rect": [
+    0,
+    3,
+    3,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    1,
+    4
+   ],
+   "player": [
+    1,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_FALLARBOR_TOWN_1_4_ortho.png",
+   "rect_differ": 3112,
+   "rect_of": 16384,
+   "rect_percent": 18.994,
+   "above_differ": 7468,
+   "above_of": 12288,
+   "percent": 24.683,
+   "pixels_differ": 79616,
+   "pixels_compared": 322560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b102_fallarbortown_moverelearnershouse.png",
+   "clipped": false,
+   "rank": 46,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 18.994,
+   "region_percent": 18.994
+  },
+  {
+   "file": "x_frontier_factory.lua",
+   "name": "x_frontier_factory",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    4,
+    30,
+    18,
+    38
+   ],
+   "status": "scored",
+   "centre": [
+    11,
+    34
+   ],
+   "player": [
+    11,
+    39
+   ],
+   "player_radius": 0,
+   "batch": 7,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_11_34_ortho.png",
+   "rect_differ": 26154,
+   "rect_of": 138240,
+   "rect_percent": 18.919,
+   "above_differ": 33951,
+   "above_of": 46080,
+   "percent": 30.993,
+   "pixels_differ": 224933,
+   "pixels_compared": 725760,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_factory.png",
+   "clipped": false,
+   "rank": 47,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 18.919,
+   "region_percent": 18.919
+  },
+  {
+   "file": "b107_verdanturftown_friendshipratershouse.lua",
+   "name": "b107_verdanturftown_friendshipratershouse",
+   "map": "EM_VERDANTURF_TOWN",
+   "pair": "general__mauville",
+   "rect": [
+    0,
+    11,
+    3,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    1,
+    12
+   ],
+   "player": [
+    1,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_VERDANTURF_TOWN_1_12_ortho.png",
+   "rect_differ": 3036,
+   "rect_of": 16384,
+   "rect_percent": 18.53,
+   "above_differ": 1128,
+   "above_of": 12288,
+   "percent": 19.156,
+   "pixels_differ": 73558,
+   "pixels_compared": 384000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b107_verdanturftown_friendshipratershouse.png",
+   "clipped": false,
+   "rank": 48,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 18.53,
+   "region_percent": 18.53
+  },
+  {
+   "file": "b087_dewfordtown_hall.lua",
+   "name": "b087_dewfordtown_hall",
+   "map": "EM_DEWFORD_TOWN",
+   "pair": "general__dewford",
+   "rect": [
+    1,
+    0,
+    5,
+    3
+   ],
+   "status": "scored",
+   "centre": [
+    3,
+    1
+   ],
+   "player": [
+    3,
+    4
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_DEWFORD_TOWN_3_1_ortho.png",
+   "rect_differ": 3568,
+   "rect_of": 20480,
+   "rect_percent": 17.422,
+   "above_differ": 0,
+   "above_of": 0,
+   "percent": 30.881,
+   "pixels_differ": 80636,
+   "pixels_compared": 261120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b087_dewfordtown_hall.png",
+   "clipped": false,
+   "rank": 49,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 17.422,
+   "region_percent": 17.422
+  },
+  {
+   "file": "x_frontier_dome.lua",
+   "name": "x_frontier_dome",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    14,
+    6,
+    25,
+    17
+   ],
+   "status": "scored",
+   "centre": [
+    19,
+    11
+   ],
+   "player": [
+    19,
+    18
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_19_11_ortho.png",
+   "rect_differ": 24968,
+   "rect_of": 147456,
+   "rect_percent": 16.933,
+   "above_differ": 25086,
+   "above_of": 36864,
+   "percent": 33.046,
+   "pixels_differ": 300746,
+   "pixels_compared": 910080,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_dome.png",
+   "clipped": false,
+   "rank": 50,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 16.933,
+   "region_percent": 16.933
+  },
+  {
+   "file": "b108_verdanturftown_house.lua",
+   "name": "b108_verdanturftown_house",
+   "map": "EM_VERDANTURF_TOWN",
+   "pair": "general__mauville",
+   "rect": [
+    16,
+    12,
+    19,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    17,
+    13
+   ],
+   "player": [
+    17,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_VERDANTURF_TOWN_17_13_ortho.png",
+   "rect_differ": 2748,
+   "rect_of": 16384,
+   "rect_percent": 16.772,
+   "above_differ": 184,
+   "above_of": 12288,
+   "percent": 18.446,
+   "pixels_differ": 67056,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b108_verdanturftown_house.png",
+   "clipped": false,
+   "rank": 51,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 16.772,
+   "region_percent": 16.772
+  },
+  {
+   "file": "b050_lilycovecity_movedeletershouse.lua",
+   "name": "b050_lilycovecity_movedeletershouse",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    35,
+    3,
+    38,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    36,
+    4
+   ],
+   "player": [
+    36,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_LILYCOVE_CITY_36_4_ortho.png",
+   "rect_differ": 2736,
+   "rect_of": 16384,
+   "rect_percent": 16.699,
+   "above_differ": 6840,
+   "above_of": 12288,
+   "percent": 38.461,
+   "pixels_differ": 248122,
+   "pixels_compared": 645120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b050_lilycovecity_movedeletershouse.png",
+   "clipped": false,
+   "rank": 52,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 16.699,
+   "region_percent": 16.699
+  },
+  {
+   "file": "b053_lilycovecity_house3.lua",
+   "name": "b053_lilycovecity_house3",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    10,
+    19,
+    13,
+    22
+   ],
+   "status": "scored",
+   "centre": [
+    11,
+    20
+   ],
+   "player": [
+    11,
+    23
+   ],
+   "player_radius": 0,
+   "batch": 8,
+   "shot": "EM_LILYCOVE_CITY_11_20_ortho.png",
+   "rect_differ": 2712,
+   "rect_of": 16384,
+   "rect_percent": 16.553,
+   "above_differ": 128,
+   "above_of": 12288,
+   "percent": 32.19,
+   "pixels_differ": 233624,
+   "pixels_compared": 725760,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b053_lilycovecity_house3.png",
+   "clipped": false,
+   "rank": 53,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 16.553,
+   "region_percent": 16.553
+  },
+  {
+   "file": "b010_slateportcity_battletentlobby.lua",
+   "name": "b010_slateportcity_battletentlobby",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    8,
+    8,
+    12,
+    12
+   ],
+   "status": "scored",
+   "centre": [
+    10,
+    10
+   ],
+   "player": [
+    10,
+    13
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_SLATEPORT_CITY_10_10_ortho.png",
+   "rect_differ": 3924,
+   "rect_of": 25600,
+   "rect_percent": 15.328,
+   "above_differ": 11892,
+   "above_of": 15360,
+   "percent": 32.928,
+   "pixels_differ": 223676,
+   "pixels_compared": 679296,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b010_slateportcity_battletentlobby.png",
+   "clipped": false,
+   "rank": 54,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 15.328,
+   "region_percent": 15.328
+  },
+  {
+   "file": "b147_battlefrontier_lounge7.lua",
+   "name": "b147_battlefrontier_lounge7",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    4,
+    17,
+    6,
+    20
+   ],
+   "status": "scored",
+   "centre": [
+    5,
+    18
+   ],
+   "player": [
+    5,
+    21
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_5_18_ortho.png",
+   "rect_differ": 1880,
+   "rect_of": 12288,
+   "rect_percent": 15.299,
+   "above_differ": 7296,
+   "above_of": 9216,
+   "percent": 35.47,
+   "pixels_differ": 208392,
+   "pixels_compared": 587520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b147_battlefrontier_lounge7.png",
+   "clipped": false,
+   "rank": 55,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 15.299,
+   "region_percent": 15.299
+  },
+  {
+   "file": "x_slateport_museum.lua",
+   "name": "x_slateport_museum",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    28,
+    22,
+    33,
+    26
+   ],
+   "status": "scored",
+   "centre": [
+    30,
+    24
+   ],
+   "player": [
+    30,
+    27
+   ],
+   "player_radius": 0,
+   "batch": 7,
+   "shot": "EM_SLATEPORT_CITY_30_24_ortho.png",
+   "rect_differ": 4692,
+   "rect_of": 30720,
+   "rect_percent": 15.273,
+   "above_differ": 10608,
+   "above_of": 18432,
+   "percent": 26.727,
+   "pixels_differ": 181655,
+   "pixels_compared": 679680,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_slateport_museum.png",
+   "clipped": false,
+   "rank": 56,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 15.273,
+   "region_percent": 15.273
+  },
+  {
+   "file": "x_lilycove_house4.lua",
+   "name": "x_lilycove_house4",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    11,
+    11,
+    14,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    12,
+    12
+   ],
+   "player": [
+    12,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 11,
+   "shot": "EM_LILYCOVE_CITY_12_12_ortho.png",
+   "rect_differ": 2464,
+   "rect_of": 16384,
+   "rect_percent": 15.039,
+   "above_differ": 12040,
+   "above_of": 12288,
+   "percent": 45.866,
+   "pixels_differ": 343448,
+   "pixels_compared": 748800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_lilycove_house4.png",
+   "clipped": false,
+   "rank": 57,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 15.039,
+   "region_percent": 15.039
+  },
+  {
+   "file": "b099_fallarbortown_battletentlobby.lua",
+   "name": "b099_fallarbortown_battletentlobby",
+   "map": "EM_FALLARBOR_TOWN",
+   "pair": "general__fallarbor",
+   "rect": [
+    6,
+    3,
+    10,
+    7
+   ],
+   "status": "scored",
+   "centre": [
+    8,
+    5
+   ],
+   "player": [
+    8,
+    8
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_FALLARBOR_TOWN_8_5_ortho.png",
+   "rect_differ": 3840,
+   "rect_of": 25600,
+   "rect_percent": 15.0,
+   "above_differ": 9326,
+   "above_of": 15360,
+   "percent": 23.598,
+   "pixels_differ": 80952,
+   "pixels_compared": 343040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b099_fallarbortown_battletentlobby.png",
+   "clipped": false,
+   "rank": 58,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 15.0,
+   "region_percent": 15.0
+  },
+  {
+   "file": "b056_mossdeepcity_house1.lua",
+   "name": "b056_mossdeepcity_house1",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    27,
+    6,
+    30,
+    9
+   ],
+   "status": "scored",
+   "centre": [
+    28,
+    7
+   ],
+   "player": [
+    28,
+    10
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_MOSSDEEP_CITY_28_7_ortho.png",
+   "rect_differ": 2456,
+   "rect_of": 16384,
+   "rect_percent": 14.99,
+   "above_differ": 11364,
+   "above_of": 12288,
+   "percent": 47.581,
+   "pixels_differ": 365423,
+   "pixels_compared": 768000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b056_mossdeepcity_house1.png",
+   "clipped": false,
+   "rank": 59,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 14.99,
+   "region_percent": 14.99
+  },
+  {
+   "file": "b059_mossdeepcity_house2.lua",
+   "name": "b059_mossdeepcity_house2",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    66,
+    22,
+    69,
+    25
+   ],
+   "status": "scored",
+   "centre": [
+    67,
+    23
+   ],
+   "player": [
+    67,
+    26
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_MOSSDEEP_CITY_67_23_ortho.png",
+   "rect_differ": 2456,
+   "rect_of": 16384,
+   "rect_percent": 14.99,
+   "above_differ": 12200,
+   "above_of": 12288,
+   "percent": 55.688,
+   "pixels_differ": 416992,
+   "pixels_compared": 748800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b059_mossdeepcity_house2.png",
+   "clipped": false,
+   "rank": 60,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 14.99,
+   "region_percent": 14.99
+  },
+  {
+   "file": "b061_mossdeepcity_house3.lua",
+   "name": "b061_mossdeepcity_house3",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    48,
+    3,
+    51,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    49,
+    4
+   ],
+   "player": [
+    49,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_MOSSDEEP_CITY_49_4_ortho.png",
+   "rect_differ": 2440,
+   "rect_of": 16384,
+   "rect_percent": 14.893,
+   "above_differ": 11386,
+   "above_of": 12288,
+   "percent": 59.38,
+   "pixels_differ": 383075,
+   "pixels_compared": 645120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b061_mossdeepcity_house3.png",
+   "clipped": false,
+   "rank": 61,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 14.893,
+   "region_percent": 14.893
+  },
+  {
+   "file": "b049_lilycovecity_pokemontrainerfanclub.lua",
+   "name": "b049_lilycovecity_pokemontrainerfanclub",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    37,
+    11,
+    41,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    39,
+    12
+   ],
+   "player": [
+    39,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_LILYCOVE_CITY_39_12_ortho.png",
+   "rect_differ": 3036,
+   "rect_of": 20480,
+   "rect_percent": 14.824,
+   "above_differ": 7354,
+   "above_of": 15360,
+   "percent": 43.533,
+   "pixels_differ": 401196,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b049_lilycovecity_pokemontrainerfanclub.png",
+   "clipped": false,
+   "rank": 62,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 14.824,
+   "region_percent": 14.824
+  },
+  {
+   "file": "x_slateport_shipyard.lua",
+   "name": "x_slateport_shipyard",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    24,
+    32,
+    31,
+    38
+   ],
+   "status": "scored",
+   "centre": [
+    27,
+    35
+   ],
+   "player": [
+    27,
+    39
+   ],
+   "player_radius": 0,
+   "batch": 8,
+   "shot": "EM_SLATEPORT_CITY_27_35_ortho.png",
+   "rect_differ": 8172,
+   "rect_of": 57344,
+   "rect_percent": 14.251,
+   "above_differ": 16378,
+   "above_of": 24576,
+   "percent": 24.526,
+   "pixels_differ": 183647,
+   "pixels_compared": 748800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_slateport_shipyard.png",
+   "clipped": false,
+   "rank": 63,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 14.251,
+   "region_percent": 14.251
+  },
+  {
+   "file": "b045_lilycovecity_covelilymotel.lua",
+   "name": "b045_lilycovecity_covelilymotel",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    36,
+    20,
+    41,
+    24
+   ],
+   "status": "scored",
+   "centre": [
+    38,
+    22
+   ],
+   "player": [
+    38,
+    25
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_LILYCOVE_CITY_38_22_ortho.png",
+   "rect_differ": 4360,
+   "rect_of": 30720,
+   "rect_percent": 14.193,
+   "above_differ": 0,
+   "above_of": 18432,
+   "percent": 28.393,
+   "pixels_differ": 261670,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b045_lilycovecity_covelilymotel.png",
+   "clipped": false,
+   "rank": 64,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 14.193,
+   "region_percent": 14.193
+  },
+  {
+   "file": "x_slateport_fanclub.lua",
+   "name": "x_slateport_fanclub",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    2,
+    22,
+    6,
+    26
+   ],
+   "status": "scored",
+   "centre": [
+    4,
+    24
+   ],
+   "player": [
+    4,
+    27
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_SLATEPORT_CITY_4_24_ortho.png",
+   "rect_differ": 3512,
+   "rect_of": 25600,
+   "rect_percent": 13.719,
+   "above_differ": 1892,
+   "above_of": 15360,
+   "percent": 13.552,
+   "pixels_differ": 76500,
+   "pixels_compared": 564480,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_slateport_fanclub.png",
+   "clipped": false,
+   "rank": 65,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 13.719,
+   "region_percent": 13.719
+  },
+  {
+   "file": "b101_fallarbortown_cozmoshouse.lua",
+   "name": "b101_fallarbortown_cozmoshouse",
+   "map": "EM_FALLARBOR_TOWN",
+   "pair": "general__fallarbor",
+   "rect": [
+    5,
+    14,
+    8,
+    17
+   ],
+   "status": "scored",
+   "centre": [
+    6,
+    15
+   ],
+   "player": [
+    6,
+    18
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_FALLARBOR_TOWN_6_15_ortho.png",
+   "rect_differ": 2224,
+   "rect_of": 16384,
+   "rect_percent": 13.574,
+   "above_differ": 136,
+   "above_of": 12288,
+   "percent": 20.069,
+   "pixels_differ": 64736,
+   "pixels_compared": 322560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b101_fallarbortown_cozmoshouse.png",
+   "clipped": false,
+   "rank": 66,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 13.574,
+   "region_percent": 13.574
+  },
+  {
+   "file": "b063_mossdeepcity_house4.lua",
+   "name": "b063_mossdeepcity_house4",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    17,
+    13,
+    20,
+    16
+   ],
+   "status": "scored",
+   "centre": [
+    18,
+    14
+   ],
+   "player": [
+    18,
+    17
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_MOSSDEEP_CITY_18_14_ortho.png",
+   "rect_differ": 2184,
+   "rect_of": 16384,
+   "rect_percent": 13.33,
+   "above_differ": 11092,
+   "above_of": 12288,
+   "percent": 47.148,
+   "pixels_differ": 418225,
+   "pixels_compared": 887040,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b063_mossdeepcity_house4.png",
+   "clipped": false,
+   "rank": 67,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 13.33,
+   "region_percent": 13.33
+  },
+  {
+   "file": "b091_dewfordtown_house2.lua",
+   "name": "b091_dewfordtown_house2",
+   "map": "EM_DEWFORD_TOWN",
+   "pair": "general__dewford",
+   "rect": [
+    7,
+    5,
+    10,
+    8
+   ],
+   "status": "scored",
+   "centre": [
+    8,
+    6
+   ],
+   "player": [
+    8,
+    9
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_DEWFORD_TOWN_8_6_ortho.png",
+   "rect_differ": 2156,
+   "rect_of": 16384,
+   "rect_percent": 13.159,
+   "above_differ": 1360,
+   "above_of": 12288,
+   "percent": 25.152,
+   "pixels_differ": 91431,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b091_dewfordtown_house2.png",
+   "clipped": false,
+   "rank": 68,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 13.159,
+   "region_percent": 13.159
+  },
+  {
+   "file": "b052_lilycovecity_house2.lua",
+   "name": "b052_lilycovecity_house2",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    54,
+    12,
+    57,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    55,
+    13
+   ],
+   "player": [
+    55,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 7,
+   "shot": "EM_LILYCOVE_CITY_55_13_ortho.png",
+   "rect_differ": 2148,
+   "rect_of": 16384,
+   "rect_percent": 13.11,
+   "above_differ": 5304,
+   "above_of": 12288,
+   "percent": 53.6,
+   "pixels_differ": 493974,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b052_lilycovecity_house2.png",
+   "clipped": false,
+   "rank": 69,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 13.11,
+   "region_percent": 13.11
+  },
+  {
+   "file": "x_route104_flowershop.lua",
+   "name": "x_route104_flowershop",
+   "map": "EM_ROUTE104",
+   "pair": "general__rustboro",
+   "rect": [
+    3,
+    15,
+    8,
+    18
+   ],
+   "status": "scored",
+   "centre": [
+    5,
+    16
+   ],
+   "player": [
+    5,
+    19
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_ROUTE104_5_16_ortho.png",
+   "rect_differ": 3216,
+   "rect_of": 24576,
+   "rect_percent": 13.086,
+   "above_differ": 11611,
+   "above_of": 18432,
+   "percent": 29.408,
+   "pixels_differ": 172775,
+   "pixels_compared": 587520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_route104_flowershop.png",
+   "clipped": false,
+   "rank": 70,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 13.086,
+   "region_percent": 13.086
+  },
+  {
+   "file": "x_dewford_house1.lua",
+   "name": "x_dewford_house1",
+   "map": "EM_DEWFORD_TOWN",
+   "pair": "general__dewford",
+   "rect": [
+    16,
+    11,
+    19,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    17,
+    12
+   ],
+   "player": [
+    17,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_DEWFORD_TOWN_17_12_ortho.png",
+   "rect_differ": 2123,
+   "rect_of": 16384,
+   "rect_percent": 12.958,
+   "above_differ": 5520,
+   "above_of": 12288,
+   "percent": 26.786,
+   "pixels_differ": 102857,
+   "pixels_compared": 384000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_dewford_house1.png",
+   "clipped": false,
+   "rank": 71,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 12.958,
+   "region_percent": 12.958
+  },
+  {
+   "file": "x_cablecar_route112.lua",
+   "name": "x_cablecar_route112",
+   "map": "EM_ROUTE112",
+   "pair": "general__lavaridge",
+   "rect": [
+    27,
+    22,
+    32,
+    27
+   ],
+   "status": "scored",
+   "centre": [
+    29,
+    24
+   ],
+   "player": [
+    29,
+    28
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE112_29_24_ortho.png",
+   "rect_differ": 4676,
+   "rect_of": 36864,
+   "rect_percent": 12.684,
+   "above_differ": 13820,
+   "above_of": 18432,
+   "percent": 69.912,
+   "pixels_differ": 491286,
+   "pixels_compared": 702720,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_cablecar_route112.png",
+   "clipped": false,
+   "rank": 72,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 12.684,
+   "region_percent": 12.684
+  },
+  {
+   "file": "b051_lilycovecity_house1.lua",
+   "name": "b051_lilycovecity_house1",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    41,
+    3,
+    44,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    42,
+    4
+   ],
+   "player": [
+    42,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_LILYCOVE_CITY_42_4_ortho.png",
+   "rect_differ": 1980,
+   "rect_of": 16384,
+   "rect_percent": 12.085,
+   "above_differ": 5000,
+   "above_of": 12288,
+   "percent": 39.853,
+   "pixels_differ": 257100,
+   "pixels_compared": 645120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b051_lilycovecity_house1.png",
+   "clipped": false,
+   "rank": 73,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 12.085,
+   "region_percent": 12.085
+  },
+  {
+   "file": "x_frontier_pyramid.lua",
+   "name": "x_frontier_pyramid",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    51,
+    5,
+    65,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    58,
+    9
+   ],
+   "player": [
+    58,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 10,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_58_9_ortho.png",
+   "rect_differ": 17542,
+   "rect_of": 153600,
+   "rect_percent": 11.421,
+   "above_differ": 23080,
+   "above_of": 46080,
+   "percent": 42.608,
+   "pixels_differ": 303290,
+   "pixels_compared": 711808,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_pyramid.png",
+   "clipped": false,
+   "rank": 74,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 11.421,
+   "region_percent": 11.421
+  },
+  {
+   "file": "b118_route110_trickhouseentrance.lua",
+   "name": "b118_route110_trickhouseentrance",
+   "map": "EM_ROUTE110",
+   "pair": "general__mauville",
+   "rect": [
+    9,
+    61,
+    13,
+    66
+   ],
+   "status": "scored",
+   "centre": [
+    11,
+    63
+   ],
+   "player": [
+    11,
+    67
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE110_11_63_ortho.png",
+   "rect_differ": 3392,
+   "rect_of": 30720,
+   "rect_percent": 11.042,
+   "above_differ": 15360,
+   "above_of": 15360,
+   "percent": 48.513,
+   "pixels_differ": 352086,
+   "pixels_compared": 725760,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b118_route110_trickhouseentrance.png",
+   "clipped": false,
+   "rank": 75,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 11.042,
+   "region_percent": 11.042
+  },
+  {
+   "file": "b024_rustborocity_gym.lua",
+   "name": "b024_rustborocity_gym",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    24,
+    15,
+    29,
+    19
+   ],
+   "status": "scored",
+   "centre": [
+    26,
+    17
+   ],
+   "player": [
+    26,
+    20
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_RUSTBORO_CITY_26_17_ortho.png",
+   "rect_differ": 3200,
+   "rect_of": 30720,
+   "rect_percent": 10.417,
+   "above_differ": 4544,
+   "above_of": 18432,
+   "percent": 19.373,
+   "pixels_differ": 149529,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b024_rustborocity_gym.png",
+   "clipped": false,
+   "rank": 76,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 10.417,
+   "region_percent": 10.417
+  },
+  {
+   "file": "b017_mauvillecity_gym.lua",
+   "name": "b017_mauvillecity_gym",
+   "map": "EM_MAUVILLE_CITY",
+   "pair": "general__mauville",
+   "rect": [
+    5,
+    1,
+    10,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    7,
+    3
+   ],
+   "player": [
+    7,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_MAUVILLE_CITY_7_3_ortho.png",
+   "rect_differ": 3196,
+   "rect_of": 30720,
+   "rect_percent": 10.404,
+   "above_differ": 2676,
+   "above_of": 6144,
+   "percent": 14.825,
+   "pixels_differ": 61578,
+   "pixels_compared": 415360,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b017_mauvillecity_gym.png",
+   "clipped": false,
+   "rank": 77,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 10.404,
+   "region_percent": 10.404
+  },
+  {
+   "file": "b068_sootopoliscity_gym.lua",
+   "name": "b068_sootopoliscity_gym",
+   "map": "EM_SOOTOPOLIS_CITY",
+   "pair": "general__sootopolis",
+   "rect": [
+    28,
+    29,
+    33,
+    32
+   ],
+   "status": "scored",
+   "centre": [
+    30,
+    30
+   ],
+   "player": [
+    30,
+    33
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_SOOTOPOLIS_CITY_30_30_ortho.png",
+   "rect_differ": 2528,
+   "rect_of": 24576,
+   "rect_percent": 10.286,
+   "above_differ": 5736,
+   "above_of": 18432,
+   "percent": 45.594,
+   "pixels_differ": 420196,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b068_sootopoliscity_gym.png",
+   "clipped": false,
+   "rank": 78,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 10.286,
+   "region_percent": 10.286
+  },
+  {
+   "file": "b152_battlefrontier_battlepalacelobby.lua",
+   "name": "b152_battlefrontier_battlepalacelobby",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    40,
+    51,
+    50,
+    56
+   ],
+   "status": "scored",
+   "centre": [
+    45,
+    53
+   ],
+   "player": [
+    45,
+    57
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_45_53_ortho.png",
+   "rect_differ": 6932,
+   "rect_of": 67584,
+   "rect_percent": 10.257,
+   "above_differ": 17879,
+   "above_of": 33792,
+   "percent": 46.104,
+   "pixels_differ": 424897,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b152_battlefrontier_battlepalacelobby.png",
+   "clipped": false,
+   "rank": 79,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 10.257,
+   "region_percent": 10.257
+  },
+  {
+   "file": "x_mauville_eastblock.lua",
+   "name": "x_mauville_eastblock",
+   "map": "EM_MAUVILLE_CITY",
+   "pair": "general__mauville",
+   "rect": [
+    36,
+    11,
+    39,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    37,
+    12
+   ],
+   "player": [
+    38,
+    16
+   ],
+   "player_radius": 2,
+   "batch": 5,
+   "shot": "EM_MAUVILLE_CITY_37_12_ortho.png",
+   "rect_differ": 1680,
+   "rect_of": 16384,
+   "rect_percent": 10.254,
+   "above_differ": 0,
+   "above_of": 12288,
+   "percent": 18.51,
+   "pixels_differ": 79962,
+   "pixels_compared": 432000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_mauville_eastblock.png",
+   "clipped": false,
+   "rank": 80,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 10.254,
+   "region_percent": 10.254
+  },
+  {
+   "file": "b139_route121_safarizoneentrance.lua",
+   "name": "b139_route121_safarizoneentrance",
+   "map": "EM_SAFARI_ZONE_SOUTH",
+   "pair": "general__lilycove",
+   "rect": [
+    30,
+    31,
+    39,
+    33
+   ],
+   "status": "scored",
+   "centre": [
+    34,
+    32
+   ],
+   "player": [
+    32,
+    34
+   ],
+   "player_radius": 2,
+   "batch": 1,
+   "shot": "EM_SAFARI_ZONE_SOUTH_34_32_ortho.png",
+   "rect_differ": 3124,
+   "rect_of": 30720,
+   "rect_percent": 10.169,
+   "above_differ": 19292,
+   "above_of": 30720,
+   "percent": 35.179,
+   "pixels_differ": 172237,
+   "pixels_compared": 489600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b139_route121_safarizoneentrance.png",
+   "clipped": false,
+   "rank": 81,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 10.169,
+   "region_percent": 10.169
+  },
+  {
+   "file": "b089_dewfordtown_gym.lua",
+   "name": "b089_dewfordtown_gym",
+   "map": "EM_DEWFORD_TOWN",
+   "pair": "general__dewford",
+   "rect": [
+    5,
+    13,
+    10,
+    17
+   ],
+   "status": "scored",
+   "centre": [
+    7,
+    15
+   ],
+   "player": [
+    7,
+    18
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_DEWFORD_TOWN_7_15_ortho.png",
+   "rect_differ": 3036,
+   "rect_of": 30720,
+   "rect_percent": 9.883,
+   "above_differ": 892,
+   "above_of": 18432,
+   "percent": 24.856,
+   "pixels_differ": 80175,
+   "pixels_compared": 322560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b089_dewfordtown_gym.png",
+   "clipped": false,
+   "rank": 82,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 9.883,
+   "region_percent": 9.883
+  },
+  {
+   "file": "b057_mossdeepcity_gym.lua",
+   "name": "b057_mossdeepcity_gym",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    35,
+    5,
+    40,
+    9
+   ],
+   "status": "scored",
+   "centre": [
+    37,
+    7
+   ],
+   "player": [
+    37,
+    10
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_MOSSDEEP_CITY_37_7_ortho.png",
+   "rect_differ": 2922,
+   "rect_of": 30720,
+   "rect_percent": 9.512,
+   "above_differ": 12192,
+   "above_of": 18432,
+   "percent": 45.268,
+   "pixels_differ": 347659,
+   "pixels_compared": 768000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b057_mossdeepcity_gym.png",
+   "clipped": false,
+   "rank": 83,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 9.512,
+   "region_percent": 9.512
+  },
+  {
+   "file": "b055_lilycovecity_harbor.lua",
+   "name": "b055_lilycovecity_harbor",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    9,
+    30,
+    15,
+    32
+   ],
+   "status": "scored",
+   "centre": [
+    12,
+    31
+   ],
+   "player": [
+    12,
+    33
+   ],
+   "player_radius": 0,
+   "batch": 9,
+   "shot": "EM_LILYCOVE_CITY_12_31_ortho.png",
+   "rect_differ": 2044,
+   "rect_of": 21504,
+   "rect_percent": 9.505,
+   "above_differ": 9940,
+   "above_of": 21504,
+   "percent": 35.003,
+   "pixels_differ": 230066,
+   "pixels_compared": 657280,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b055_lilycovecity_harbor.png",
+   "clipped": false,
+   "rank": 84,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 9.505,
+   "region_percent": 9.505
+  },
+  {
+   "file": "b003_petalburgcity_gym.lua",
+   "name": "b003_petalburgcity_gym",
+   "map": "EM_PETALBURG_CITY",
+   "pair": "general__petalburg",
+   "rect": [
+    12,
+    4,
+    17,
+    8
+   ],
+   "status": "scored",
+   "centre": [
+    14,
+    6
+   ],
+   "player": [
+    14,
+    9
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_PETALBURG_CITY_14_6_ortho.png",
+   "rect_differ": 2860,
+   "rect_of": 30720,
+   "rect_percent": 9.31,
+   "above_differ": 10560,
+   "above_of": 18432,
+   "percent": 29.731,
+   "pixels_differ": 162115,
+   "pixels_compared": 545280,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b003_petalburgcity_gym.png",
+   "clipped": false,
+   "rank": 85,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 9.31,
+   "region_percent": 9.31
+  },
+  {
+   "file": "b037_fortreecity_gym.lua",
+   "name": "b037_fortreecity_gym",
+   "map": "EM_FORTREE_CITY",
+   "pair": "general__fortree",
+   "rect": [
+    19,
+    7,
+    24,
+    11
+   ],
+   "status": "scored",
+   "centre": [
+    21,
+    9
+   ],
+   "player": [
+    21,
+    12
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_FORTREE_CITY_21_9_ortho.png",
+   "rect_differ": 2860,
+   "rect_of": 30720,
+   "rect_percent": 9.31,
+   "above_differ": 10376,
+   "above_of": 18432,
+   "percent": 61.214,
+   "pixels_differ": 482657,
+   "pixels_compared": 788480,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b037_fortreecity_gym.png",
+   "clipped": false,
+   "rank": 86,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 9.31,
+   "region_percent": 9.31
+  },
+  {
+   "file": "x_frontier_tower.lua",
+   "name": "x_frontier_tower",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    11,
+    0,
+    21,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    16,
+    7
+   ],
+   "player": [
+    16,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 11,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_16_7_ortho.png",
+   "rect_differ": 14240,
+   "rect_of": 168960,
+   "rect_percent": 8.428,
+   "above_differ": 0,
+   "above_of": 0,
+   "percent": 37.798,
+   "pixels_differ": 264888,
+   "pixels_compared": 700800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_tower.png",
+   "clipped": false,
+   "rank": 87,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 8.428,
+   "region_percent": 8.428
+  },
+  {
+   "file": "b031_rustborocity_cuttershouse.lua",
+   "name": "b031_rustborocity_cuttershouse",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    7,
+    34,
+    11,
+    38
+   ],
+   "status": "scored",
+   "centre": [
+    9,
+    36
+   ],
+   "player": [
+    9,
+    39
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_RUSTBORO_CITY_9_36_ortho.png",
+   "rect_differ": 2112,
+   "rect_of": 25600,
+   "rect_percent": 8.25,
+   "above_differ": 0,
+   "above_of": 15360,
+   "percent": 15.255,
+   "pixels_differ": 103682,
+   "pixels_compared": 679680,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b031_rustborocity_cuttershouse.png",
+   "clipped": false,
+   "rank": 88,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 8.25,
+   "region_percent": 8.25
+  },
+  {
+   "file": "b022_mauvillecity_gamecorner.lua",
+   "name": "b022_mauvillecity_gamecorner",
+   "map": "EM_MAUVILLE_CITY",
+   "pair": "general__mauville",
+   "rect": [
+    5,
+    11,
+    11,
+    13
+   ],
+   "status": "scored",
+   "centre": [
+    8,
+    12
+   ],
+   "player": [
+    8,
+    14
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_MAUVILLE_CITY_8_12_ortho.png",
+   "rect_differ": 1764,
+   "rect_of": 21504,
+   "rect_percent": 8.203,
+   "above_differ": 0,
+   "above_of": 21504,
+   "percent": 18.829,
+   "pixels_differ": 103031,
+   "pixels_compared": 547200,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b022_mauvillecity_gamecorner.png",
+   "clipped": false,
+   "rank": 89,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 8.203,
+   "region_percent": 8.203
+  },
+  {
+   "file": "b048_lilycovecity_contestlobby.lua",
+   "name": "b048_lilycovecity_contestlobby",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    20,
+    18,
+    26,
+    24
+   ],
+   "status": "scored",
+   "centre": [
+    23,
+    21
+   ],
+   "player": [
+    23,
+    25
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_LILYCOVE_CITY_23_21_ortho.png",
+   "rect_differ": 3920,
+   "rect_of": 50176,
+   "rect_percent": 7.812,
+   "above_differ": 0,
+   "above_of": 21504,
+   "percent": 25.805,
+   "pixels_differ": 237823,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b048_lilycovecity_contestlobby.png",
+   "clipped": false,
+   "rank": 90,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 7.812,
+   "region_percent": 7.812
+  },
+  {
+   "file": "b093_lavaridgetown_gym.lua",
+   "name": "b093_lavaridgetown_gym",
+   "map": "EM_LAVARIDGE_TOWN",
+   "pair": "general__lavaridge",
+   "rect": [
+    2,
+    11,
+    7,
+    15
+   ],
+   "status": "scored",
+   "centre": [
+    4,
+    13
+   ],
+   "player": [
+    4,
+    16
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_LAVARIDGE_TOWN_4_13_ortho.png",
+   "rect_differ": 2200,
+   "rect_of": 30720,
+   "rect_percent": 7.161,
+   "above_differ": 4856,
+   "above_of": 18432,
+   "percent": 30.557,
+   "pixels_differ": 111082,
+   "pixels_compared": 363520,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b093_lavaridgetown_gym.png",
+   "clipped": false,
+   "rank": 91,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 7.161,
+   "region_percent": 7.161
+  },
+  {
+   "file": "b014_slateportcity_harbor.lua",
+   "name": "b014_slateportcity_harbor",
+   "map": "EM_SLATEPORT_CITY",
+   "pair": "general__slateport",
+   "rect": [
+    24,
+    7,
+    31,
+    12
+   ],
+   "status": "scored",
+   "centre": [
+    27,
+    9
+   ],
+   "player": [
+    27,
+    13
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_SLATEPORT_CITY_27_9_ortho.png",
+   "rect_differ": 3304,
+   "rect_of": 49152,
+   "rect_percent": 6.722,
+   "above_differ": 18016,
+   "above_of": 24576,
+   "percent": 36.083,
+   "pixels_differ": 249173,
+   "pixels_compared": 690560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b014_slateportcity_harbor.png",
+   "clipped": false,
+   "rank": 92,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 6.722,
+   "region_percent": 6.722
+  },
+  {
+   "file": "b117_route109_seashorehouse.lua",
+   "name": "b117_route109_seashorehouse",
+   "map": "EM_ROUTE109",
+   "pair": "general__slateport",
+   "rect": [
+    10,
+    3,
+    15,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    12,
+    4
+   ],
+   "player": [
+    12,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE109_12_4_ortho.png",
+   "rect_differ": 1228,
+   "rect_of": 18432,
+   "rect_percent": 6.662,
+   "above_differ": 6244,
+   "above_of": 18432,
+   "percent": 21.004,
+   "pixels_differ": 110097,
+   "pixels_compared": 524160,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b117_route109_seashorehouse.png",
+   "clipped": false,
+   "rank": 93,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 6.662,
+   "region_percent": 6.662
+  },
+  {
+   "file": "x_frontier_arena.lua",
+   "name": "x_frontier_arena",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    35,
+    23,
+    43,
+    29
+   ],
+   "status": "scored",
+   "centre": [
+    39,
+    26
+   ],
+   "player": [
+    39,
+    30
+   ],
+   "player_radius": 0,
+   "batch": 8,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_39_26_ortho.png",
+   "rect_differ": 4056,
+   "rect_of": 64512,
+   "rect_percent": 6.287,
+   "above_differ": 3312,
+   "above_of": 27648,
+   "percent": 26.572,
+   "pixels_differ": 244890,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_arena.png",
+   "clipped": false,
+   "rank": 94,
+   "class": "partly",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 6.287,
+   "region_percent": 6.287
+  },
+  {
+   "file": "x_mauville_house1.lua",
+   "name": "x_mauville_house1",
+   "map": "EM_MAUVILLE_CITY",
+   "pair": "general__mauville",
+   "rect": [
+    31,
+    11,
+    35,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    33,
+    12
+   ],
+   "player": [
+    33,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_MAUVILLE_CITY_33_12_ortho.png",
+   "rect_differ": 1212,
+   "rect_of": 20480,
+   "rect_percent": 5.918,
+   "above_differ": 0,
+   "above_of": 15360,
+   "percent": 17.033,
+   "pixels_differ": 86665,
+   "pixels_compared": 508800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_mauville_house1.png",
+   "clipped": false,
+   "rank": 95,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 5.918,
+   "region_percent": 5.918
+  },
+  {
+   "file": "x_frontier_exchange.lua",
+   "name": "x_frontier_exchange",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    7,
+    25,
+    13,
+    28
+   ],
+   "status": "scored",
+   "centre": [
+    10,
+    26
+   ],
+   "player": [
+    10,
+    29
+   ],
+   "player_radius": 0,
+   "batch": 9,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_10_26_ortho.png",
+   "rect_differ": 1564,
+   "rect_of": 28672,
+   "rect_percent": 5.455,
+   "above_differ": 7288,
+   "above_of": 21504,
+   "percent": 34.618,
+   "pixels_differ": 243267,
+   "pixels_compared": 702720,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_frontier_exchange.png",
+   "clipped": false,
+   "rank": 96,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 5.455,
+   "region_percent": 5.455
+  },
+  {
+   "file": "b078_evergrandecity_pokemonleague.lua",
+   "name": "b078_evergrandecity_pokemonleague",
+   "map": "EM_EVER_GRANDE_CITY",
+   "pair": "general__ever_grande",
+   "rect": [
+    13,
+    0,
+    23,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    18,
+    2
+   ],
+   "player": [
+    18,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_EVER_GRANDE_CITY_18_2_ortho.png",
+   "rect_differ": 3418,
+   "rect_of": 67584,
+   "rect_percent": 5.057,
+   "above_differ": 0,
+   "above_of": 0,
+   "percent": 39.345,
+   "pixels_differ": 213280,
+   "pixels_compared": 542080,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b078_evergrandecity_pokemonleague.png",
+   "clipped": false,
+   "rank": 97,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 5.057,
+   "region_percent": 5.057
+  },
+  {
+   "file": "frontier_gate.lua",
+   "name": "frontier_gate",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    23,
+    61,
+    29,
+    65
+   ],
+   "status": "scored",
+   "centre": [
+    26,
+    63
+   ],
+   "player": [
+    26,
+    66
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_26_63_ortho.png",
+   "rect_differ": 1776,
+   "rect_of": 35840,
+   "rect_percent": 4.955,
+   "above_differ": 6688,
+   "above_of": 21504,
+   "percent": 41.559,
+   "pixels_differ": 336192,
+   "pixels_compared": 808960,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/frontier_gate.png",
+   "clipped": false,
+   "rank": 98,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 4.955,
+   "region_percent": 4.955
+  },
+  {
+   "file": "x_cablecar_mtchimney.lua",
+   "name": "x_cablecar_mtchimney",
+   "map": "EM_MT_CHIMNEY",
+   "pair": "general__lavaridge",
+   "rect": [
+    14,
+    32,
+    19,
+    36
+   ],
+   "status": "scored",
+   "centre": [
+    16,
+    34
+   ],
+   "player": [
+    16,
+    37
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_MT_CHIMNEY_16_34_ortho.png",
+   "rect_differ": 1412,
+   "rect_of": 30720,
+   "rect_percent": 4.596,
+   "above_differ": 6428,
+   "above_of": 18432,
+   "percent": 56.548,
+   "pixels_differ": 475546,
+   "pixels_compared": 840960,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_cablecar_mtchimney.png",
+   "clipped": false,
+   "rank": 99,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 4.596,
+   "region_percent": 4.596
+  },
+  {
+   "file": "b134_route121_safarizoneentrance.lua",
+   "name": "b134_route121_safarizoneentrance",
+   "map": "EM_ROUTE121",
+   "pair": "general__lilycove",
+   "rect": [
+    35,
+    3,
+    39,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    37,
+    4
+   ],
+   "player": [
+    37,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_ROUTE121_37_4_ortho.png",
+   "rect_differ": 688,
+   "rect_of": 15360,
+   "rect_percent": 4.479,
+   "above_differ": 5616,
+   "above_of": 15360,
+   "percent": 56.277,
+   "pixels_differ": 363056,
+   "pixels_compared": 645120,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b134_route121_safarizoneentrance.png",
+   "clipped": false,
+   "rank": 100,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 4.479,
+   "region_percent": 4.479
+  },
+  {
+   "file": "b023_mauvillecity_house2.lua",
+   "name": "b023_mauvillecity_house2",
+   "map": "EM_MAUVILLE_CITY",
+   "pair": "general__mauville",
+   "rect": [
+    18,
+    11,
+    21,
+    14
+   ],
+   "status": "scored",
+   "centre": [
+    19,
+    12
+   ],
+   "player": [
+    19,
+    15
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_MAUVILLE_CITY_19_12_ortho.png",
+   "rect_differ": 688,
+   "rect_of": 16384,
+   "rect_percent": 4.199,
+   "above_differ": 0,
+   "above_of": 12288,
+   "percent": 18.911,
+   "pixels_differ": 143418,
+   "pixels_compared": 758400,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b023_mauvillecity_house2.png",
+   "clipped": false,
+   "rank": 101,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 4.199,
+   "region_percent": 4.199
+  },
+  {
+   "file": "b032_rustborocity_house2.lua",
+   "name": "b032_rustborocity_house2",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    28,
+    24,
+    32,
+    28
+   ],
+   "status": "scored",
+   "centre": [
+    30,
+    26
+   ],
+   "player": [
+    30,
+    29
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_RUSTBORO_CITY_30_26_ortho.png",
+   "rect_differ": 992,
+   "rect_of": 25600,
+   "rect_percent": 3.875,
+   "above_differ": 0,
+   "above_of": 15360,
+   "percent": 16.677,
+   "pixels_differ": 113347,
+   "pixels_compared": 679680,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b032_rustborocity_house2.png",
+   "clipped": false,
+   "rank": 102,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 3.875,
+   "region_percent": 3.875
+  },
+  {
+   "file": "b159_battlefrontier_lounge3.lua",
+   "name": "b159_battlefrontier_lounge3",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    64,
+    28,
+    66,
+    31
+   ],
+   "status": "scored",
+   "centre": [
+    65,
+    29
+   ],
+   "player": [
+    65,
+    32
+   ],
+   "player_radius": 0,
+   "batch": 6,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_65_29_ortho.png",
+   "rect_differ": 444,
+   "rect_of": 12288,
+   "rect_percent": 3.613,
+   "above_differ": 6880,
+   "above_of": 9216,
+   "percent": 41.706,
+   "pixels_differ": 254638,
+   "pixels_compared": 610560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b159_battlefrontier_lounge3.png",
+   "clipped": false,
+   "rank": 103,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 3.613,
+   "region_percent": 3.613
+  },
+  {
+   "file": "b028_rustborocity_pokemonschool.lua",
+   "name": "b028_rustborocity_pokemonschool",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    24,
+    30,
+    30,
+    34
+   ],
+   "status": "scored",
+   "centre": [
+    27,
+    32
+   ],
+   "player": [
+    27,
+    35
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_RUSTBORO_CITY_27_32_ortho.png",
+   "rect_differ": 1230,
+   "rect_of": 35840,
+   "rect_percent": 3.432,
+   "above_differ": 8452,
+   "above_of": 21504,
+   "percent": 16.753,
+   "pixels_differ": 125446,
+   "pixels_compared": 748800,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b028_rustborocity_pokemonschool.png",
+   "clipped": false,
+   "rank": 104,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 3.432,
+   "region_percent": 3.432
+  },
+  {
+   "file": "b145_battlefrontier_scottshouse.lua",
+   "name": "b145_battlefrontier_scottshouse",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    43,
+    2,
+    45,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    44,
+    3
+   ],
+   "player": [
+    44,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_44_3_ortho.png",
+   "rect_differ": 392,
+   "rect_of": 12288,
+   "rect_percent": 3.19,
+   "above_differ": 3024,
+   "above_of": 6144,
+   "percent": 33.553,
+   "pixels_differ": 159638,
+   "pixels_compared": 475776,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b145_battlefrontier_scottshouse.png",
+   "clipped": false,
+   "rank": 105,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 3.19,
+   "region_percent": 3.19
+  },
+  {
+   "file": "b158_battlefrontier_lounge6.lua",
+   "name": "b158_battlefrontier_lounge6",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    4,
+    6,
+    6,
+    8
+   ],
+   "status": "scored",
+   "centre": [
+    5,
+    7
+   ],
+   "player": [
+    5,
+    9
+   ],
+   "player_radius": 0,
+   "batch": 5,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_5_7_ortho.png",
+   "rect_differ": 232,
+   "rect_of": 9216,
+   "rect_percent": 2.517,
+   "above_differ": 4320,
+   "above_of": 9216,
+   "percent": 20.34,
+   "pixels_differ": 99587,
+   "pixels_compared": 489600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b158_battlefrontier_lounge6.png",
+   "clipped": false,
+   "rank": 106,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 2.517,
+   "region_percent": 2.517
+  },
+  {
+   "file": "b019_mauvillecity_bikeshop.lua",
+   "name": "b019_mauvillecity_bikeshop",
+   "map": "EM_MAUVILLE_CITY",
+   "pair": "general__mauville",
+   "rect": [
+    34,
+    2,
+    38,
+    5
+   ],
+   "status": "scored",
+   "centre": [
+    36,
+    3
+   ],
+   "player": [
+    36,
+    6
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_MAUVILLE_CITY_36_3_ortho.png",
+   "rect_differ": 448,
+   "rect_of": 20480,
+   "rect_percent": 2.188,
+   "above_differ": 7644,
+   "above_of": 10240,
+   "percent": 17.128,
+   "pixels_differ": 60796,
+   "pixels_compared": 354944,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b019_mauvillecity_bikeshop.png",
+   "clipped": false,
+   "rank": 107,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 2.188,
+   "region_percent": 2.188
+  },
+  {
+   "file": "x_cyclingroad_south.lua",
+   "name": "x_cyclingroad_south",
+   "map": "EM_ROUTE110",
+   "pair": "general__mauville",
+   "rect": [
+    15,
+    84,
+    20,
+    88
+   ],
+   "status": "scored",
+   "centre": [
+    17,
+    86
+   ],
+   "player": [
+    17,
+    89
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_ROUTE110_17_86_ortho.png",
+   "rect_differ": 660,
+   "rect_of": 30720,
+   "rect_percent": 2.148,
+   "above_differ": 15312,
+   "above_of": 18432,
+   "percent": 55.275,
+   "pixels_differ": 477573,
+   "pixels_compared": 864000,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_cyclingroad_south.png",
+   "clipped": false,
+   "rank": 108,
+   "class": "near",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 2.148,
+   "region_percent": 2.148
+  },
+  {
+   "file": "x_route111_winstrate.lua",
+   "name": "x_route111_winstrate",
+   "map": "EM_ROUTE111",
+   "pair": "general__mauville",
+   "rect": [
+    11,
+    109,
+    15,
+    113
+   ],
+   "status": "scored",
+   "centre": [
+    13,
+    111
+   ],
+   "player": [
+    13,
+    114
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_ROUTE111_13_111_ortho.png",
+   "rect_differ": 408,
+   "rect_of": 25600,
+   "rect_percent": 1.594,
+   "above_differ": 10756,
+   "above_of": 15360,
+   "percent": 41.382,
+   "pixels_differ": 319406,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_route111_winstrate.png",
+   "clipped": false,
+   "rank": 109,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 1.594,
+   "region_percent": 1.594
+  },
+  {
+   "file": "b143_battlefrontier_lounge2.lua",
+   "name": "b143_battlefrontier_lounge2",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    44,
+    41,
+    49,
+    44
+   ],
+   "status": "scored",
+   "centre": [
+    46,
+    42
+   ],
+   "player": [
+    46,
+    45
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_46_42_ortho.png",
+   "rect_differ": 372,
+   "rect_of": 24576,
+   "rect_percent": 1.514,
+   "above_differ": 5400,
+   "above_of": 18432,
+   "percent": 27.195,
+   "pixels_differ": 184840,
+   "pixels_compared": 679680,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b143_battlefrontier_lounge2.png",
+   "clipped": false,
+   "rank": 110,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 1.514,
+   "region_percent": 1.514
+  },
+  {
+   "file": "b044_lilycovecity_departmentstore.lua",
+   "name": "b044_lilycovecity_departmentstore",
+   "map": "EM_LILYCOVE_CITY",
+   "pair": "general__lilycove",
+   "rect": [
+    23,
+    0,
+    31,
+    6
+   ],
+   "status": "scored",
+   "centre": [
+    27,
+    3
+   ],
+   "player": [
+    27,
+    7
+   ],
+   "player_radius": 0,
+   "batch": 1,
+   "shot": "EM_LILYCOVE_CITY_27_3_ortho.png",
+   "rect_differ": 892,
+   "rect_of": 64512,
+   "rect_percent": 1.383,
+   "above_differ": 0,
+   "above_of": 0,
+   "percent": 43.147,
+   "pixels_differ": 260674,
+   "pixels_compared": 604160,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b044_lilycovecity_departmentstore.png",
+   "clipped": false,
+   "rank": 111,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 1.383,
+   "region_percent": 1.383
+  },
+  {
+   "file": "b157_battlefrontier_lounge5.lua",
+   "name": "b157_battlefrontier_lounge5",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    21,
+    48,
+    26,
+    51
+   ],
+   "status": "scored",
+   "centre": [
+    23,
+    49
+   ],
+   "player": [
+    23,
+    52
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_23_49_ortho.png",
+   "rect_differ": 328,
+   "rect_of": 24576,
+   "rect_percent": 1.335,
+   "above_differ": 4704,
+   "above_of": 18432,
+   "percent": 30.494,
+   "pixels_differ": 281037,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b157_battlefrontier_lounge5.png",
+   "clipped": false,
+   "rank": 112,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 1.335,
+   "region_percent": 1.335
+  },
+  {
+   "file": "b146_battlefrontier_lounge4.lua",
+   "name": "b146_battlefrontier_lounge4",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_WEST",
+   "pair": "general__battle_frontier_outside_west",
+   "rect": [
+    52,
+    42,
+    54,
+    44
+   ],
+   "status": "scored",
+   "centre": [
+    53,
+    43
+   ],
+   "player": [
+    53,
+    45
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_WEST_53_43_ortho.png",
+   "rect_differ": 104,
+   "rect_of": 9216,
+   "rect_percent": 1.128,
+   "above_differ": 912,
+   "above_of": 9216,
+   "percent": 25.838,
+   "pixels_differ": 133945,
+   "pixels_compared": 518400,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b146_battlefrontier_lounge4.png",
+   "clipped": false,
+   "rank": 113,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 1.128,
+   "region_percent": 1.128
+  },
+  {
+   "file": "b155_battlefrontier_lounge1.lua",
+   "name": "b155_battlefrontier_lounge1",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    3,
+    42,
+    5,
+    44
+   ],
+   "status": "scored",
+   "centre": [
+    4,
+    43
+   ],
+   "player": [
+    4,
+    45
+   ],
+   "player_radius": 0,
+   "batch": 3,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_4_43_ortho.png",
+   "rect_differ": 104,
+   "rect_of": 9216,
+   "rect_percent": 1.128,
+   "above_differ": 912,
+   "above_of": 9216,
+   "percent": 19.327,
+   "pixels_differ": 109097,
+   "pixels_compared": 564480,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b155_battlefrontier_lounge1.png",
+   "clipped": false,
+   "rank": 114,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 1.128,
+   "region_percent": 1.128
+  },
+  {
+   "file": "b160_battlefrontier_lounge8.lua",
+   "name": "b160_battlefrontier_lounge8",
+   "map": "EM_BATTLE_FRONTIER_OUTSIDE_EAST",
+   "pair": "general__battle_frontier_outside_east",
+   "rect": [
+    13,
+    49,
+    15,
+    51
+   ],
+   "status": "scored",
+   "centre": [
+    14,
+    50
+   ],
+   "player": [
+    14,
+    52
+   ],
+   "player_radius": 0,
+   "batch": 7,
+   "shot": "EM_BATTLE_FRONTIER_OUTSIDE_EAST_14_50_ortho.png",
+   "rect_differ": 76,
+   "rect_of": 9216,
+   "rect_percent": 0.825,
+   "above_differ": 0,
+   "above_of": 9216,
+   "percent": 26.82,
+   "pixels_differ": 213184,
+   "pixels_compared": 794880,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b160_battlefrontier_lounge8.png",
+   "clipped": false,
+   "rank": 115,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.825,
+   "region_percent": 0.825
+  },
+  {
+   "file": "x_cyclingroad_north.lua",
+   "name": "x_cyclingroad_north",
+   "map": "EM_ROUTE110",
+   "pair": "general__mauville",
+   "rect": [
+    14,
+    12,
+    19,
+    16
+   ],
+   "status": "scored",
+   "centre": [
+    16,
+    14
+   ],
+   "player": [
+    16,
+    17
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_ROUTE110_16_14_ortho.png",
+   "rect_differ": 224,
+   "rect_of": 30720,
+   "rect_percent": 0.729,
+   "above_differ": 6124,
+   "above_of": 18432,
+   "percent": 44.626,
+   "pixels_differ": 375284,
+   "pixels_compared": 840960,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_cyclingroad_north.png",
+   "clipped": false,
+   "rank": 116,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.729,
+   "region_percent": 0.729
+  },
+  {
+   "file": "b065_mossdeepcity_gamecorner.lua",
+   "name": "b065_mossdeepcity_gamecorner",
+   "map": "EM_MOSSDEEP_CITY",
+   "pair": "general__mossdeep",
+   "rect": [
+    35,
+    21,
+    39,
+    24
+   ],
+   "status": "scored",
+   "centre": [
+    37,
+    22
+   ],
+   "player": [
+    37,
+    25
+   ],
+   "player_radius": 0,
+   "batch": 8,
+   "shot": "EM_MOSSDEEP_CITY_37_22_ortho.png",
+   "rect_differ": 148,
+   "rect_of": 20480,
+   "rect_percent": 0.723,
+   "above_differ": 624,
+   "above_of": 15360,
+   "percent": 42.366,
+   "pixels_differ": 390442,
+   "pixels_compared": 921600,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b065_mossdeepcity_gamecorner.png",
+   "clipped": false,
+   "rank": 117,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.723,
+   "region_percent": 0.723
+  },
+  {
+   "file": "x_route118_pinkhouse.lua",
+   "name": "x_route118_pinkhouse",
+   "map": "EM_ROUTE118",
+   "pair": "general__mauville",
+   "rect": [
+    0,
+    14,
+    3,
+    17
+   ],
+   "status": "scored",
+   "centre": [
+    1,
+    15
+   ],
+   "player": [
+    1,
+    19
+   ],
+   "player_radius": 1,
+   "batch": 1,
+   "shot": "EM_ROUTE118_1_15_ortho.png",
+   "rect_differ": 52,
+   "rect_of": 16384,
+   "rect_percent": 0.317,
+   "above_differ": 8632,
+   "above_of": 12288,
+   "percent": 37.763,
+   "pixels_differ": 130945,
+   "pixels_compared": 346752,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/x_route118_pinkhouse.png",
+   "clipped": false,
+   "rank": 118,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.317,
+   "region_percent": 0.317
+  },
+  {
+   "file": "b033_rustborocity_flat2.lua",
+   "name": "b033_rustborocity_flat2",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    3,
+    43,
+    9,
+    51
+   ],
+   "status": "scored",
+   "centre": [
+    6,
+    47
+   ],
+   "player": [
+    6,
+    52
+   ],
+   "player_radius": 0,
+   "batch": 7,
+   "shot": "EM_RUSTBORO_CITY_6_47_ortho.png",
+   "rect_differ": 200,
+   "rect_of": 64512,
+   "rect_percent": 0.31,
+   "above_differ": 456,
+   "above_of": 21504,
+   "percent": 16.815,
+   "pixels_differ": 102666,
+   "pixels_compared": 610560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b033_rustborocity_flat2.png",
+   "clipped": false,
+   "rank": 119,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.31,
+   "region_percent": 0.31
+  },
+  {
+   "file": "b025_rustborocity_flat1.lua",
+   "name": "b025_rustborocity_flat1",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    9,
+    25,
+    17,
+    30
+   ],
+   "status": "scored",
+   "centre": [
+    13,
+    27
+   ],
+   "player": [
+    13,
+    31
+   ],
+   "player_radius": 0,
+   "batch": 2,
+   "shot": "EM_RUSTBORO_CITY_13_27_ortho.png",
+   "rect_differ": 12,
+   "rect_of": 55296,
+   "rect_percent": 0.022,
+   "above_differ": 7268,
+   "above_of": 27648,
+   "percent": 18.375,
+   "pixels_differ": 141822,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b025_rustborocity_flat1.png",
+   "clipped": false,
+   "rank": 120,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.022,
+   "region_percent": 0.022
+  },
+  {
+   "file": "b030_rustborocity_house1.lua",
+   "name": "b030_rustborocity_house1",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    31,
+    15,
+    35,
+    19
+   ],
+   "status": "scored",
+   "centre": [
+    33,
+    17
+   ],
+   "player": [
+    33,
+    20
+   ],
+   "player_radius": 0,
+   "batch": 4,
+   "shot": "EM_RUSTBORO_CITY_33_17_ortho.png",
+   "rect_differ": 0,
+   "rect_of": 25600,
+   "rect_percent": 0.0,
+   "above_differ": 3890,
+   "above_of": 15360,
+   "percent": 18.048,
+   "pixels_differ": 110196,
+   "pixels_compared": 610560,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b030_rustborocity_house1.png",
+   "clipped": false,
+   "rank": 121,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.0,
+   "region_percent": 0.0
+  },
+  {
+   "file": "b034_rustborocity_house3.lua",
+   "name": "b034_rustborocity_house3",
+   "map": "EM_RUSTBORO_CITY",
+   "pair": "general__rustboro",
+   "rect": [
+    24,
+    42,
+    29,
+    46
+   ],
+   "status": "scored",
+   "centre": [
+    26,
+    44
+   ],
+   "player": [
+    26,
+    47
+   ],
+   "player_radius": 0,
+   "batch": 8,
+   "shot": "EM_RUSTBORO_CITY_26_44_ortho.png",
+   "rect_differ": 0,
+   "rect_of": 30720,
+   "rect_percent": 0.0,
+   "above_differ": 3322,
+   "above_of": 18432,
+   "percent": 17.413,
+   "pixels_differ": 134404,
+   "pixels_compared": 771840,
+   "shift": [
+    0,
+    0
+   ],
+   "sheet": "sheets/b034_rustborocity_house3.png",
+   "clipped": false,
+   "rank": 122,
+   "class": "match",
+   "local_shift": [
+    0,
+    0
+   ],
+   "residual_percent": 0.0,
+   "region_percent": 0.0
+  }
+ ]
+}

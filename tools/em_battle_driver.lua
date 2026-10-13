@@ -4,7 +4,7 @@
 return function(game)
  local U=dofile('tests/drivers/util.lua')
  local dir=assert(os.getenv('SHOT_DIR'))
- assert(love.filesystem.getIdentity()=='pokemon-love2d-rseqa','refusing a non-QA identity')
+ assert((love.filesystem.getIdentity()=='pokemon-love2d-rseqa' or love.filesystem.getIdentity():match('^pokemon%-love2d%-rseqa%-p%d$')),'refusing a non-QA identity')
  do
   local okV,Ver=pcall(require,'src.core.Version')
   local okC,C=pcall(require,'src.mods.Gen3Compat')

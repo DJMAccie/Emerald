@@ -1,7 +1,7 @@
 -- Boot Emerald in the QA identity and watch the Stadium 2 importer extract.
 return function(game)
  local U=dofile('tests/drivers/util.lua')
- assert(love.filesystem.getIdentity()=='pokemon-love2d-rseqa','refusing a non-QA identity')
+ assert((love.filesystem.getIdentity()=='pokemon-love2d-rseqa' or love.filesystem.getIdentity():match('^pokemon%-love2d%-rseqa%-p%d$')),'refusing a non-QA identity')
  love.window.setMode(1280,720,{resizable=true})
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(120)

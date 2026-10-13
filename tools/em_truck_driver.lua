@@ -1,7 +1,7 @@
 -- POKEPORT_DRIVER: is the van solid across its whole model? (QA only)
 return function(game)
  local U=dofile('tests/drivers/util.lua')
- assert(love.filesystem.getIdentity()=='pokemon-love2d-rseqa','QA only')
+ assert((love.filesystem.getIdentity()=='pokemon-love2d-rseqa' or love.filesystem.getIdentity():match('^pokemon%-love2d%-rseqa%-p%d$')),'QA only')
  love.window.setMode(1280,720,{resizable=true})
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(120)
