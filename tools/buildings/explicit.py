@@ -59,7 +59,7 @@ def main():
         rec, img, kind = autorecipe.derive(g, None)
         if name in GABLE:
             segs = rec['pieces'][0]['segs']
-            n = sum(sg[1] for sg in segs if sg[0] == 'flat')
+            n = sum(sg[1] for sg in segs if sg[0] in ('flat', 'flatx'))   # flatx: a flat roof carried back
             segs[:] = [sg for sg in segs if sg[0] == 'wall'] + [('gable', n - GABLE[name], GABLE[name])]
             kind = 'gable %d/%d' % (n - GABLE[name], GABLE[name])
         if name in FLAT:

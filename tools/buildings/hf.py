@@ -67,12 +67,14 @@ def steps(row, n, d, h, share):
     grows by exactly one per row and each row lands on its own face. `share`
     is the part of the rows that rise (s / (1 + s) for a slope of s)."""
     di, hi, acc, out = int(math.floor(d + 1e-6)), int(math.ceil(h - 1e-6)), 0.0, []
-    for i in range(n):
+    # `row` may be a list of art rows (a slope with repeated courses)
+    rows = row if isinstance(row, list) else [row - i for i in range(n)]
+    for r in rows:
         acc += share
         if acc >= 0.5 or hi <= 0:
-            out.append((row - i, hi, di, 'rise')); hi += 1; acc -= 1.0
+            out.append((r, hi, di, 'rise')); hi += 1; acc -= 1.0
         else:
-            out.append((row - i, hi - 1, di, 'tread')); di += 1
+            out.append((r, hi - 1, di, 'tread')); di += 1
     return out, di, hi
 
 
@@ -102,6 +104,21 @@ def walk(pc, x):
             for i in range(n):
                 out.append((row - i, hv, int(math.floor(d + i + 1e-6)), 'flat'))
             d += n
+        elif kind == 'flatx':
+            # A flat roof deeper than it is drawn (the building's blocked
+            # footprint is deeper than the drawing shows): after the front
+            # rows down to art row m, e more rows repeat the P rows ending at
+            # m (the roof's own courses, in phase), then the drawing's rows
+            # carry on to the back edge. More courses, nothing stretched.
+            m, e, P = int(seg[2]), int(seg[3]), int(seg[4])
+            hv = max(0, int(math.ceil(h - 1e-6)) - 1)
+            rows = [(r, 'flat') for r in range(row, m, -1)] + [(m - (j % P), 'flatr') for j in range(e)] \
+                + [(r, 'flat') for r in range(m - (e % P), row - n, -1)]
+            for i, (r, kd) in enumerate(rows):
+                out.append((r, hv, int(math.floor(d + i + 1e-6)), kd))
+            d += len(rows)
+            row -= n
+            continue
         elif kind == 'gable':
             # A symmetric pitched roof as Gen 3 draws it: nf rows of front
             # slope up to the ridge line, then nb rows of the back slope seen
@@ -110,21 +127,37 @@ def walk(pc, x):
             # Equal depths both sides give the pitch: s = (nf-nb)/(nf+nb).
             nf, nb = int(seg[1]), int(seg[2])
             sl = (nf - nb) / float(nf + nb)
-            o, di, hi = steps(row, nf, d, h, sl / (1.0 + sl))
+            # ('gable', nf, nb, e, m, P): e px deeper than drawn, half on each
+            # slope. The front slope gets more of its own courses (the P rows
+            # ending at art row m, repeated in its middle); the ridge rises
+            # with it. The back slope gets the same depth, its far end laid
+            # with the same courses.
+            e = int(seg[3]) if len(seg) > 3 else 0
+            eb = 0
+            if e:
+                m, P = int(seg[4]), int(seg[5])
+                ef = int(round(e / 2.0 * (1.0 + sl)))
+                eb = int(round(e / 2.0 * (1.0 - sl)))
+                frows = list(range(row, m, -1)) + [m - (j % P) for j in range(ef)] + list(range(m - (ef % P), row - nf, -1))
+                o, di, hi = steps(frows, 0, d, h, sl / (1.0 + sl))
+            else:
+                o, di, hi = steps(row, nf, d, h, sl / (1.0 + sl))
             out += o
             row -= nf
             # the back slope falls sl per unit of depth. A column that keeps
             # the height of the one before shows one more drawing row; a
             # column one lower hides exactly behind it (same screen row) and
             # takes that row's colour. Every column exists: no slits.
+            brows = [row - i for i in range(nb)] + ([m - (j % P) for j in range(eb)] if eb else [])
             i, acc = 0, 0.0
-            while i < nb:
+            while i < len(brows):
                 acc += sl
+                kd = 'tread' if i < nb else 'flatr'
                 if acc >= 0.5 and hi > 1:
                     hi -= 1; acc -= 1.0
-                    out.append((row - i, hi - 1, di, 'tread')); di += 1
+                    out.append((brows[i], hi - 1, di, kd)); di += 1
                 else:
-                    out.append((row - i, hi - 1, di, 'tread')); di += 1; i += 1
+                    out.append((brows[i], hi - 1, di, kd)); di += 1; i += 1
             d, h = float(di), float(hi); row -= nb
             continue
         elif kind == 'mirror':
@@ -152,10 +185,13 @@ def trim_and_mirror(img, smp, trim=True):
     mirror = [m for m in smp if m[3] == 'mirror']
     front = [m for m in smp if m[3] != 'mirror']
     kept = []
-    for m in front:
+    for i, m in enumerate(front):
         row = m[0]
         if trim and 0 <= row < img.shape[0] and img[row, m[4] if len(m) > 4 else 0, 3] < 128 and m[3] != 'wall':
-            break
+            # a roof carried back with repeated courses goes on behind a
+            # ragged ridge line: every column keeps its full depth (no teeth)
+            if not any(f[3] == 'flatr' for f in front[i + 1:]):
+                break
         kept.append(m)
     if mirror:
         n = min(mirror[0][1], sum(1 for m in kept if m[3] != 'wall')) if trim else min(mirror[0][1], len(kept))
@@ -322,12 +358,18 @@ def build(img, recipe):
             # columns a..b-1 (cycled) instead of their own pixels, which are
             # the drawing's diagonal rim (vertical stripes in 3D)
             c = pixcol(paint[0] + (x - pc['x'][0]) % (paint[1] - paint[0]), row) if paint and kind == 'wall' else pixcol(x, row)
+            # plainx=(xa, xb, shift): repeated roof rows under a roof fitting
+            # (a vent) take the plain roof `shift` px to the side instead of
+            # repeating the fitting
+            px_ = pc.get('plainx')
+            if kind == 'flatr' and px_ and px_[0] <= x < px_[1] and 0 <= x - px_[2] < W:
+                c = pixcol(x - px_[2], row)
             if c >= 0:
                 if kind in ('wall', 'slope', 'rise'):
                     colS[x, hv, di] = c
-                if kind in ('flat', 'slope', 'tread'):
+                if kind in ('flat', 'flatr', 'slope', 'tread'):
                     colT[x, hv, di] = c
-            pix[(x, row)] = (hv, dv, kind)
+            pix.setdefault((x, row), []).append((hv, dv, kind))   # a repeated roof row lands on several cells
         if last and tail:
             row, hv, dv, kind = last
             c = pixcol(x, row)
@@ -355,10 +397,12 @@ def apply_relief(img, rects, pix, occ, colS, colT, solid):
             for row in range(ra, rb):
                 if (x, row) in pix:
                     off[(x, row)] = r['k']
-    for (x, row), k in off.items():
+    # a drawing pixel that landed on several cells: the last one, as before,
+    # plus every repeated-course copy of it (a parapet over a deepened roof)
+    cellsof = lambda key: list(dict.fromkeys([c for c in pix[key] if c[2] == 'flatr'] + [pix[key][-1]]))
+    for ((x, row), k), (hv, dv, kind) in [(it, cell) for it in off.items() for cell in cellsof(it[0])]:
         if k == 0:
             continue
-        hv, dv, kind = pix[(x, row)]
         di = dv + PAD
         p = img[row, x]
         c = pack(p[:3]) if p[3] >= 128 else -1

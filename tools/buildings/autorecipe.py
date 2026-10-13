@@ -84,6 +84,19 @@ def derive(g, it):
         nf, nb = roof_bottom - ridge, ridge - roof_top + 1
         segs = [('wall', wall), ('gable', nf, nb)]
         kind = 'gable %d/%d' % (nf, nb)
+        # deeper than drawn, like the flat roofs: over the blocked footprint
+        nblk = 0
+        for yy in range(y1, top - 1, -1):
+            if sum(1 for xx in range(x0, x1 + 1) if (mc[yy * MW + xx] >> 10) & 3) * 2 > (x1 - x0 + 1): nblk += 1
+            else: break
+        sl_ = (nf - nb) / float(nf + nb)
+        # one cell at most: the same house drawing must come out the same depth
+        # wherever it stands (a tree or cliff behind one copy blocks one more row)
+        gext = min(16, int(round((nblk * 16 - 2 * nf / (1.0 + sl_)) / 16.0)) * 16)
+        if gext >= 16 and nf >= 14:
+            P = 16 if nf >= 22 else 8
+            segs = [('wall', wall), ('gable', nf, nb, gext, roof_bottom - 3, P)]
+            kind += ' +%d deep' % gext
     elif nroof >= 4:
         # no ridge line: a flat roof seen from above
         segs = [('wall', wall), ('flat', nroof)]
@@ -99,18 +112,150 @@ def derive(g, it):
     wb = img[H - wall:H - 2, :, :3].astype(int)
     okb = mask[H - wall:H - 2] & (L[H - wall:H - 2] >= 90)
     cnt = Counter(map(tuple, wb[okb]))
-    main = np.array([c for c, _ in cnt.most_common(3)] or [(128, 128, 128)])
+    tops = [c for c, _ in cnt.most_common(6)] or [(128, 128, 128)]
+    # the wall is the biggest FAMILY of colours (planks are two or three tones
+    # of one colour), not the commonest single colour, which can be a grey
+    # frame or shadow
+    dist = lambda p_, q_: sum(abs(a_ - b_) for a_, b_ in zip(p_, q_))
+    fam = max(tops, key=lambda t: sum(n for c, n in cnt.items() if dist(c, t) <= 120))
+    main = np.array([c for c in tops if dist(c, fam) <= 120] or [fam])
     near = (np.abs(wb[:, :, None, :] - main[None, None, :, :]).sum(3).min(2) <= 48) & okb
-    best_c, best_v = 2, -1e9
-    for c in range(2, max(3, W - 6)):
-        band = L[H - wall:H - 2, c:c + 4]
-        v = near[:, c:c + 4].mean() * 1000 - band.var() * 0.01
-        if v > best_v: best_c, best_v = c, v
-    side = (best_c, best_c + 4)
+    # the widest strip that is plain wall all the way down (no outline, post,
+    # door or window column in it): laid across a back wall, a strip holding a
+    # dark column turns into a row of bars. Narrow down until one is clean; a
+    # single clean column still gives plain courses.
+    colshare = near.mean(0)
+    best_c, best_w = 2, 1
+    for w in (12, 8, 6, 4, 3, 2, 1):
+        cands = [(colshare[c:c + w].min(), -L[H - wall:H - 2, c:c + w].var(), c) for c in range(2, max(3, W - 2 - w))]
+        if not cands: continue
+        q, _, c = max(cands)
+        best_c, best_w = c, w
+        if q >= 0.9: break
+    side = (best_c, best_c + best_w)
     depth = max(32, (y1 - top + 1) * 16)       # the building's footprint depth
-    rec = dict(src=(pair, mp, x0, top, x1, y1), trim=True, bgmask=seen, keys=[],
-               pieces=[dict(x=(0, W), B=H - 1, d0=0, segs=segs, side=side, fill=side, **({'depth': depth} if kind == 'block' else {}))],
-               relief=[])
+    if kind.startswith('flat roof'):
+        # The engine's facade line can sit above the roof's real front edge
+        # (the gyms: 16 rows of roof were stood up as wall, the roof draped
+        # down the front). Find the edge in the drawing: carry the roof down
+        # while a row is still mostly the roof's own colours.
+        rb = img[roof_top + 2:roof_top + 10, :, :3].astype(int)
+        rm = mask[roof_top + 2:roof_top + 10]
+        rc = Counter(map(tuple, rb[rm]))
+        rtops = [c for c, _ in rc.most_common(6)]
+        if rtops:
+            rfam = max(rtops, key=lambda t: sum(n for c, n in rc.items() if dist(c, t) <= 96))
+            rmain = np.array([c for c in rtops if dist(c, rfam) <= 96] or [rfam])
+            extra = 0
+            for r in range(roof_bottom + 1, min(H - 8, roof_bottom + 25)):
+                m = mask[r]
+                if m.sum() < 8: break
+                share = ((np.abs(img[r, :, None, :3].astype(int) - rmain[None, :, :]).sum(2).min(1) <= 32) & m).sum() / float(m.sum())
+                if share < 0.6: break
+                extra += 1
+            # only where the facade's foot is stepped (a porch standing forward,
+            # as on the gyms): a tent or a dome drawn in one colour is not a roof edge
+            _f = np.array([(np.nonzero(mask[:, x])[0].max() if mask[:, x].any() else -1) for x in range(W)])
+            _k = np.clip(H - 1 - _f[_f >= 0], 0, 16)
+            _km = int(np.bincount(_k).argmax()) if len(_k) else 0
+            if extra >= 4 and _km > 0 and (_k < _km).sum() >= 8:
+                wall -= extra; nroof += extra; roof_bottom += extra
+                segs = [('wall', wall), ('flat', nroof)]
+                kind = 'flat roof %d' % nroof
+    pieces = [dict(x=(0, W), B=H - 1, d0=0, segs=segs, side=side, fill=side, **({'depth': depth} if kind == 'block' else {}))]
+    if kind.startswith('flat roof'):
+        # The foot of the facade is not one line: most columns stand a few
+        # rows above the drawing's last row (set back), a porch reaches it
+        # (it stands forward). Every column is the same height; where the
+        # foot is lower the roof starts lower too, and those rows are roof
+        # seen from above, not wall. So: each run of columns starts as far
+        # back as its foot is high, with one wall height for all.
+        foot = np.array([(np.nonzero(mask[:, x])[0].max() if mask[:, x].any() else -1) for x in range(W)])
+        k = np.where(foot >= 0, np.clip(H - 1 - foot, 0, 16), -1)
+        ks = k[k >= 0]
+        if len(ks):
+            kmode = int(np.bincount(ks).argmax())
+            k = np.where(k < 0, kmode, k)
+            k = np.array([int(np.median(k[max(0, x - 2):x + 3])) for x in range(W)])   # ragged ground cut
+            if 0 < kmode <= 16 and (k < kmode).sum() >= 8:
+                hw = wall - kmode
+                pieces, a0 = [], 0
+                for x in range(1, W + 1):
+                    if x == W or k[x] != k[a0]:
+                        kk = int(k[a0])
+                        pieces.append(dict(x=(a0, x), B=H - 1, d0=kk, segs=[('wall', hw), ('flat', nroof + kmode - kk)], side=side, fill=side))
+                        a0 = x
+                kind += ' porch'
+    # The drawing is flatter than the building: its blocked footprint (rows of
+    # cells nobody can enter, counted up from the door row) is deeper than the
+    # roof is drawn. A flat roof is carried back over the whole footprint with
+    # more of its own courses.
+    ext = 0
+    if kind.startswith('flat roof') and nroof >= 8:
+        nblk = 0
+        for yy in range(y1, top - 1, -1):
+            if sum(1 for xx in range(x0, x1 + 1) if (mc[yy * MW + xx] >> 10) & 3) * 2 > (x1 - x0 + 1): nblk += 1
+            else: break
+        deep = max((pc_['d0'] if not callable(pc_['d0']) else 0) + sum(sg[1] for sg in pc_['segs'] if sg[0] == 'flat') for pc_ in pieces)
+        # at most two cells more: a tall block's blocked rows are its height too
+        ext = min(32, int(round((nblk * 16 - deep) / 16.0)) * 16)
+        if ext >= 16:
+            if nroof >= 28:
+                # a coursed roof: one 16-row period of it, from its middle
+                P = 16
+                m = roof_top + 2 + P - 1 + (nroof - 4 - P) // 2
+            else:
+                # a small roof drawn as one piece (a lounge's lid): its most
+                # uniform row carried back, no second copy of its bands
+                P = 1
+                def plain(r):
+                    px = [tuple(v) for v in img[r, mask[r], :3]]
+                    return Counter(px).most_common(1)[0][1] / float(len(px)) if px else 0
+                m = max(range(roof_top + 2, roof_bottom - 1), key=plain)
+            for pc_ in pieces:
+                pc_['segs'] = [('flatx', sg[1], m, ext, P) if sg[0] == 'flat' else sg for sg in pc_['segs']]
+            kind += ' +%d deep' % ext
+        else:
+            ext = 0
+    prisms = []
+    if kind.startswith('flat roof') and pair == 'general__rustboro':
+        # Rustboro's roof vent (tile 0x223 over 0x22B): drawn as a box seen
+        # from above with a 6-row front, so it stands as a box 6 px above the
+        # roof. Its top is the 16 rows of the upper tile (20 px wide, starting
+        # 8 px left of the tile), its front the 6 rows under it.
+        for yy in range(top, y1 + 1):
+            for xx in range(x0, x1 + 1):
+                if (mc[yy * MW + xx] & 0x3ff) == 0x223:
+                    tx, ty = (xx - x0) * 16, (yy - top) * 16
+                    # behind the inserted courses the whole vent moves back with the roof
+                    sh = ext if ext and ty + 21 <= m else 0
+                    d0p = (H - 1 - (ty + 21)) - wall + sh
+                    if d0p >= 0 and tx - 8 >= 0:
+                        for pc_ in pieces: pc_['plainx'] = (tx - 12, W, 32)
+                        prisms.append(dict(x=(tx - 8, min(W, tx + 12)), d=(d0p, d0p + 16), h=(wall, wall + 6), B=H - 1 + sh,
+                                           mat=(tx, ty + 18), rows=(ty, ty + 22)))
+                        kind += ' vent'
+    relief = []
+    if kind.startswith('flat roof') and pair == 'general__rustboro' and (mc[top * MW + x0] & 0x3ff) == 0x224:
+        # Rustboro's grey houses: the roof is ringed by a crenellated parapet
+        # (a light top line with dark notches every 8 px along the back and
+        # the front edge, plain rails down the sides). It stands 3 px above
+        # the roof; the notches stay 1 px up, so the merlons read as teeth.
+        rt, rb_ = roof_top, roof_bottom
+        def teeth(ra, rbx, probe):
+            x = 0
+            while x < W:
+                tooth = L[probe, x] >= 150
+                x2 = x
+                while x2 < W and (L[probe, x2] >= 150) == tooth: x2 += 1
+                relief.append(dict(x=(x, x2), rows=(ra, rbx), k=-3 if tooth else -1))
+                x = x2
+        teeth(rt, rt + 7, rt + 5)                 # back edge
+        teeth(rb_ - 4, rb_ + 1, rb_ - 2)          # front edge
+        relief.append(dict(x=(0, 5), rows=(rt + 7, rb_ - 4), k=-3))
+        relief.append(dict(x=(W - 5, W), rows=(rt + 7, rb_ - 4), k=-3))
+        kind += ' parapet'
+    rec = dict(src=(pair, mp, x0, top, x1, y1), trim=True, bgmask=seen, keys=[], pieces=pieces, relief=relief, prisms=prisms)
     return rec, img, kind
 
 
