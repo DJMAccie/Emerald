@@ -60,6 +60,22 @@ def mode_colour(img, row, xs):
     return max(pool, key=lambda t: t[1])[0]
 
 
+def steps(row, n, d, h, share):
+    """n drawing rows up a slope as unit steps: every row is ONE riser (the
+    south face of voxel hi at depth di, screen row hi + di) or ONE tread (the
+    top of voxel hi - 1 at depth di, screen row hi + di), so height + depth
+    grows by exactly one per row and each row lands on its own face. `share`
+    is the part of the rows that rise (s / (1 + s) for a slope of s)."""
+    di, hi, acc, out = int(math.floor(d + 1e-6)), int(math.ceil(h - 1e-6)), 0.0, []
+    for i in range(n):
+        acc += share
+        if acc >= 0.5 or hi <= 0:
+            out.append((row - i, hi, di, 'rise')); hi += 1; acc -= 1.0
+        else:
+            out.append((row - i, hi - 1, di, 'tread')); di += 1
+    return out, di, hi
+
+
 def walk(pc, x):
     """Path samples for one column: (row, hv, dv, kind), plus end (d, h)."""
     d0 = pc.get('d0', 0)
@@ -94,16 +110,22 @@ def walk(pc, x):
             # Equal depths both sides give the pitch: s = (nf-nb)/(nf+nb).
             nf, nb = int(seg[1]), int(seg[2])
             sl = (nf - nb) / float(nf + nb)
-            dd, dh = 1.0 / (1.0 + sl), sl / (1.0 + sl)
-            for i in range(nf):
-                dm, hm = d + (i + 0.5) * dd, h + (i + 0.5) * dh
-                out.append((row - i, max(0, int(math.ceil(hm - 1e-6)) - 1), int(math.floor(dm + 1e-6)), 'slope'))
-            d += nf * dd; h += nf * dh; row -= nf
-            bd, bh = 1.0 / (1.0 - sl), -sl / (1.0 - sl)
-            for i in range(nb):
-                dm, hm = d + (i + 0.5) * bd, h + (i + 0.5) * bh
-                out.append((row - i, max(0, int(math.ceil(hm - 1e-6)) - 1), int(math.floor(dm + 1e-6)), 'flat'))
-            d += nb * bd; h += nb * bh; row -= nb
+            o, di, hi = steps(row, nf, d, h, sl / (1.0 + sl))
+            out += o
+            row -= nf
+            # the back slope falls sl per unit of depth. A column that keeps
+            # the height of the one before shows one more drawing row; a
+            # column one lower hides exactly behind it (same screen row) and
+            # takes that row's colour. Every column exists: no slits.
+            i, acc = 0, 0.0
+            while i < nb:
+                acc += sl
+                if acc >= 0.5 and hi > 1:
+                    hi -= 1; acc -= 1.0
+                    out.append((row - i, hi - 1, di, 'tread')); di += 1
+                else:
+                    out.append((row - i, hi - 1, di, 'tread')); di += 1; i += 1
+            d, h = float(di), float(hi); row -= nb
             continue
         elif kind == 'mirror':
             # done in build(), after the column is trimmed at the outline
@@ -111,12 +133,9 @@ def walk(pc, x):
             continue
         elif kind == 'slope':
             s = seg[2]
-            dd, dh = 1.0 / (1.0 + s), s / (1.0 + s)
-            for i in range(n):
-                dm, hm = d + (i + 0.5) * dd, h + (i + 0.5) * dh
-                out.append((row - i, max(0, int(math.ceil(hm - 1e-6)) - 1), int(math.floor(dm + 1e-6)), 'slope'))
-            d += n * dd
-            h += n * dh
+            o, di, hi = steps(row, n, d, h, s / (1.0 + s))
+            out += o
+            d, h = float(di), float(hi)
         row -= n
     return out, d, h
 
@@ -254,6 +273,10 @@ def build(img, recipe):
         d_front = min(top_d) if top_d else 0
         d_back = max(top_d) if top_d else 0
         side = pc.get('side')
+        # wall rows a gable end repeats: the upper wall, without its top two
+        # rows (the eave's shadow line)
+        wr = [wallrow[k] for k in sorted(wallrow)]
+        gable_rows = wr[-10:-2] or wr[:]
         # solid fill under the path
         cut = pc.get('cutout')
         for dv, hv in top_d.items():
@@ -267,6 +290,13 @@ def build(img, recipe):
                 solid[x, hh, di] = bands.get(hh, bands.get(max(bands) if bands else 0, pack((128, 128, 128))))
                 r = wallrow.get(hh)
                 if r is None:
+                    # above the walls (a gable end): the side takes more
+                    # courses of the wall itself, not bands of roof colour
+                    if side and gable_rows and x in (pc['x'][0], pc['x'][1] - 1):
+                        sa, sb = side
+                        c = pixcol(sa + (dv - d_front) % (sb - sa), gable_rows[hh % len(gable_rows)])
+                        if c >= 0:
+                            colE[x, hh, di] = c
                     continue
                 # a painted chamfer is a staircase of 1-px steps: every step's
                 # side is exposed, so every column gets the side art
@@ -279,6 +309,12 @@ def build(img, recipe):
                     c = pixcol(x, r)
                     if c >= 0:
                         colN[x, hh, di] = c
+                elif side and dv == d_back:
+                    # a plain back wall: the side's own columns laid across it
+                    sa, sb = side
+                    c = pixcol(sa + (x - pc['x'][0]) % (sb - sa), r)
+                    if c >= 0:
+                        colN[x, hh, di] = c
         paint = pc.get('paint')
         for (row, hv, dv, kind) in smp:
             di = dv + PAD
@@ -287,9 +323,9 @@ def build(img, recipe):
             # the drawing's diagonal rim (vertical stripes in 3D)
             c = pixcol(paint[0] + (x - pc['x'][0]) % (paint[1] - paint[0]), row) if paint and kind == 'wall' else pixcol(x, row)
             if c >= 0:
-                if kind in ('wall', 'slope'):
+                if kind in ('wall', 'slope', 'rise'):
                     colS[x, hv, di] = c
-                if kind in ('flat', 'slope'):
+                if kind in ('flat', 'slope', 'tread'):
                     colT[x, hv, di] = c
             pix[(x, row)] = (hv, dv, kind)
         if last and tail:
@@ -326,7 +362,7 @@ def apply_relief(img, rects, pix, occ, colS, colT, solid):
         di = dv + PAD
         p = img[row, x]
         c = pack(p[:3]) if p[3] >= 128 else -1
-        if kind in ('wall', 'slope'):
+        if kind in ('wall', 'slope', 'rise'):
             if k > 0:
                 for t in range(k):
                     occ[x, hv, di + t] = False
@@ -465,7 +501,9 @@ def mesh(v):
         idx = idx[order]
         run = None
         for (x, h, d) in idx:
-            c = pick(colE, x, h, d)
+            # an unpainted side (a step of a slanted wall, a window's reveal)
+            # takes the colour of its own front face before the body's material
+            c = int(colE[x, h, d]) if colE[x, h, d] >= 0 else (int(colS[x, h, d]) if colS[x, h, d] >= 0 else int(solid[x, h, d]))
             if run and run[0] == x and run[1] == h and run[2] + run[3] == d and run[4] == c:
                 run[3] += 1
             else:

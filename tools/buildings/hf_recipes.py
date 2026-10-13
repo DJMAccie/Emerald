@@ -409,7 +409,11 @@ def _ferry(mp, x0, y0):
 TRAINER_HILL_PENTHOUSE = dict(
     src=('building__trainer_hill', 'EM_TRAINER_HILL_ROOF', 7, 0, 17, 6), trim=True,
     bgtiles=[0x36B], keys=[], indoor=True,
-    pieces=[dict(x=(0, 176), B=95, d0=0, segs=[('wall', 40), ('flat', 'top')], side=(40, 44), fill=(40, 44), back='front')],
+    # the front is a chevron: its foot runs from row 107 at the middle column up
+    # to row 67 at both ends (40 rows over 88 px), so each column starts that
+    # much further back; B is the drawing's last row, where the game puts depth 0
+    pieces=[dict(x=(0, 176), B=111, d0=lambda x: 4 + int(round(abs(x - 88) * 40 / 88.0)),
+                 segs=[('wall', 28), ('flat', 'top')], side=(40, 44), fill=(40, 44), back='front')],
     relief=[dict(x=(44, 66), rows=(64, 95), k=3), dict(x=(110, 136), rows=(64, 95), k=3)],
 )
 

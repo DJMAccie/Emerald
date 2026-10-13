@@ -72,6 +72,8 @@ return function(game)
    for li,level in ipairs(levels) do
     if C then C.setLevel(level,game);C.yaw=tonumber(os.getenv('EM_YAW')) or 0 end
     U.wait(wait)
+    -- the 3D scene is built over many frames after a load (Rustboro ~9 s): wait for it
+    for _=1,900 do if not C or C.active then break end;U.wait(1) end;U.wait(20)
     local g=ground(case)
     print('[EM view]',case[1],'level',level,'active',C and tostring(C.active),'rendered',C and C.rendered)
     -- the ortho shot is the same for every level (it has its own camera):

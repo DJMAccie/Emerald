@@ -30,6 +30,10 @@ SHEETS = os.path.join(DOCS, 'sheets')
 SWEEP = '/private/tmp/claude-501/-Users-user-Documents-Emerald/fec03359-0ca0-44c6-8339-007ace534169/scratchpad/sweep'
 PLAN = os.path.join(SWEEP, 'plan.json')
 DIFFDIR = os.path.join(SWEEP, 'diff')
+# options (set in main from --files, --scratch, --only-file, --docs, --max-cases); defaults are the old behaviour
+RUN_FILES = 'Voxel3D.lua'   # the first file passed to qa_tryp.sh; --files adds to it
+ONLY = None                 # set of bake file names from --only-file, or None for all
+MAX_CASES = 0               # 0 = one batch per k-th building; N = split every batch into chunks of at most N cases
 # a batch holds at most one building per map: a second load of the same map in one QA process can come
 # out blank (seen 3 times in the first sweep), so the k-th building of every map goes into batch k
 RADIUS = 8             # player search radius (Manhattan) around the cell below the rect
@@ -66,6 +70,12 @@ def cmd_plan():
     t0 = time.time()
     # index.lua is the list of buildings, not a building: the 122 others are swept
     files = sorted(f for f in glob.glob(os.path.join(DATA, '*.lua')) if os.path.basename(f) != 'index.lua')
+    if ONLY is not None:
+        have = {os.path.basename(f) for f in files}
+        missing = ONLY - have
+        files = [f for f in files if os.path.basename(f) in ONLY]
+        if missing:
+            raise SystemExit('--only-file names not in data/buildings: %s' % ', '.join(sorted(missing)))
     entries, seen_names = [], {}
     for path in files:
         e = parse_file(path)
@@ -99,6 +109,23 @@ def cmd_plan():
         per_map[e['map']] = per_map.get(e['map'], 0) + 1
         e['batch'] = per_map[e['map']]
         e['shot'] = '%s_%d_%d_ortho.png' % (e['map'], e['centre'][0], e['centre'][1])
+    if MAX_CASES:
+        # chunks keep the one-building-per-map rule (a chunk is a slice of one k-th-building batch);
+        # the groups are collected before any batch number is reused
+        groups = {}
+        for e in ok:
+            groups.setdefault(e['batch'], []).append(e)
+        nxt = 0
+        for k in sorted(groups):
+            grp = sorted(groups[k], key=lambda e: (e['map'], e['name']))
+            for i in range(0, len(grp), MAX_CASES):
+                nxt += 1
+                for e in grp[i:i + MAX_CASES]:
+                    e['batch'] = nxt
+    for b in {e['batch'] for e in ok}:
+        maps = [e['map'] for e in ok if e['batch'] == b]
+        if len(maps) != len(set(maps)):
+            raise SystemExit('batch %d loads a map twice: %s' % (b, sorted(maps)))
     os.makedirs(SWEEP, exist_ok=True)
     json.dump({'entries': entries, 'planned_s': round(time.time() - t0, 2)},
               open(PLAN, 'w'), indent=1)
@@ -131,7 +158,7 @@ def cmd_run():
         t = time.time()
         with open(os.path.join(bd, 'qa_stdout.txt'), 'w') as fo:
             # 150 frames per case (qa_run's EM_WAIT): at 60 some shots were taken before the map's geometry was built
-            r = subprocess.run([QA_TRYP, 'Voxel3D.lua', bd, cases, '4', '0', '150'], env=env,
+            r = subprocess.run([QA_TRYP, RUN_FILES, bd, cases, '4', '0', '150'], env=env,
                                stdout=fo, stderr=subprocess.STDOUT)
         return b, r.returncode, round(time.time() - t, 1)
     with ThreadPoolExecutor(max_workers=3) as ex:
@@ -257,9 +284,10 @@ def write_md(order):
              'centred on the rectangle centre cell, player on the walkable cell below the rectangle. '
              'Scored by `tools/ortho45/diff.py --rect <rect> --shift auto --mask building` (tol 12). '
              'MASK: only BUILDING pixels count. `ref.building_mask` takes the original art only: the ring of cells '
-             '2 cells around the rectangle gives the ground metatiles; a rectangle pixel equal to the same in-cell pixel '
-             'of one of them is ground (water, paving, terrain), the rest is building; one hole-closing pass '
-             '(a ground pixel with 6+ building neighbours becomes building). '
+             '2 cells around the rectangle gives the ground metatiles (walkable ring cells, plus blocked ones seen 4+ times); '
+             'a rectangle pixel equal to the same in-cell pixel of one of them is a ground candidate; only candidates '
+             '4-connected to the rectangle border through candidates are ground (water, paving, terrain); '
+             'everything else is building (the silhouette). '
              '`masked %` = differing building pixels / building pixels in the rectangle (the scored number, sorted by it). '
              '`all px %` = the same over every pixel of the rectangle, as before the mask. '
              '`mask px` = building map px / rectangle map px. '
@@ -294,7 +322,32 @@ def write_md(order):
     open(os.path.join(DOCS, 'BUILDINGS.md'), 'w').write('\n'.join(L) + '\n')
 
 def main():
-    cmd = sys.argv[1] if len(sys.argv) > 1 else ''
+    global RUN_FILES, ONLY, MAX_CASES, SWEEP, PLAN, DIFFDIR, DOCS, SHEETS
+    opts = {}
+    args = sys.argv[1:]
+    rest = []
+    i = 0
+    while i < len(args):
+        if args[i] in ('--files', '--scratch', '--only-file', '--docs', '--max-cases'):
+            if i + 1 >= len(args):
+                raise SystemExit('%s needs a value' % args[i])
+            opts[args[i]] = args[i + 1]; i += 2
+        else:
+            rest.append(args[i]); i += 1
+    if '--files' in opts:
+        RUN_FILES = 'Voxel3D.lua ' + opts['--files']
+    if '--only-file' in opts:
+        ONLY = set(os.path.basename(l.strip()) for l in open(opts['--only-file']) if l.strip())
+    if '--max-cases' in opts:
+        MAX_CASES = int(opts['--max-cases'])
+    if '--scratch' in opts:
+        SWEEP = os.path.abspath(opts['--scratch'])
+        PLAN = os.path.join(SWEEP, 'plan.json')
+        DIFFDIR = os.path.join(SWEEP, 'diff')
+    if '--docs' in opts:
+        DOCS = os.path.abspath(opts['--docs'])
+    SHEETS = os.path.join(DOCS, 'sheets')
+    cmd = rest[0] if rest else ''
     if cmd == 'plan': cmd_plan()
     elif cmd == 'run': cmd_run()
     elif cmd == 'score': cmd_score()

@@ -92,12 +92,20 @@ def derive(g, it):
         # all facade, no roof drawn: a flat top running back over the footprint
         segs = [('wall', wall)]
         kind = 'block'
-    # a calm facade column for sides/back: lowest variance, not dark
-    best_c, best_v = 2, 1e9
+    # the wall's own material for sides/back: the 4-px facade strip that is
+    # most made of the wall's commonest colours (never a door or a window,
+    # however calm), calmest on a tie
+    from collections import Counter
+    wb = img[H - wall:H - 2, :, :3].astype(int)
+    okb = mask[H - wall:H - 2] & (L[H - wall:H - 2] >= 90)
+    cnt = Counter(map(tuple, wb[okb]))
+    main = np.array([c for c, _ in cnt.most_common(3)] or [(128, 128, 128)])
+    near = (np.abs(wb[:, :, None, :] - main[None, None, :, :]).sum(3).min(2) <= 48) & okb
+    best_c, best_v = 2, -1e9
     for c in range(2, max(3, W - 6)):
         band = L[H - wall:H - 2, c:c + 4]
-        v = band.var() + (200 if band.mean() < 90 else 0)
-        if v < best_v: best_c, best_v = c, v
+        v = near[:, c:c + 4].mean() * 1000 - band.var() * 0.01
+        if v > best_v: best_c, best_v = c, v
     side = (best_c, best_c + 4)
     depth = max(32, (y1 - top + 1) * 16)       # the building's footprint depth
     rec = dict(src=(pair, mp, x0, top, x1, y1), trim=True, bgmask=seen, keys=[],

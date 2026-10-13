@@ -62,6 +62,8 @@ return function(game)
    for _,level in ipairs(os.getenv('EM_LEVELS') and dofile(os.getenv('EM_LEVELS')) or {4}) do
     if C then C.setLevel(level,game);C.yaw=tonumber(os.getenv('EM_YAW')) or 0 end
     U.wait(wait)
+    -- the scene of a new map is built over many frames now (flat map meanwhile): wait for it
+    for _=1,900 do if not C or C.active then break end;U.wait(1) end;U.wait(20)
     ground()
     print('[EM view]',case[1],'level',level,'active',C and tostring(C.active),'rendered',C and C.rendered)
     local base=dir..'/'..case[1]..'_'..level

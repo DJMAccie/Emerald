@@ -166,12 +166,14 @@ def screen_map_px(x, y, scale=2, w=1280, h=720, dx=0, dy=0):
 def building_mask(map_id, rect, cache=None, slot=None, pair=None, world=None):
     """BUILDING pixels of a rectangle (x0,y0,x1,y1 map cells, inclusive), from the original art only.
     Returns (H*16, W*16) bool over map pixels, True only inside the rectangle.
-    Ring = map cells within 2 of the rectangle, outside it; ground = the metatiles found in the ring.
-    A rectangle pixel is GROUND when its colour equals the same in-cell pixel of one ground tile
-    (opaque pixels only); other opaque pixels are BUILDING. Then one hole-closing pass: a GROUND
-    pixel with >= 6 BUILDING of its 8 neighbours becomes BUILDING. Transparent pixels are never BUILDING."""
+    Ring = map cells within 2 of the rectangle, outside it. Ground set = metatiles of walkable ring
+    cells (collision 0) plus blocked ring metatiles seen at least 4 times in the ring (repeating
+    terrain); a blocked id seen 1-3 times (a neighbouring wall) is not ground.
+    Candidate ground pixel = opaque and equal to the same in-cell pixel of a ground-set tile.
+    Silhouette: only candidates 4-connected to the rectangle's border through candidates are ground;
+    every other opaque pixel is BUILDING. Transparent pixels are never BUILDING."""
     m = load_map(map_id, cache, slot, pair, world)
-    img, mid, W, H = m['img'], m['mid'], m['W'], m['H']
+    img, mid, coll, W, H = m['img'], m['mid'], m['coll'], m['W'], m['H']
     x0, y0, x1, y1 = rect
     out = np.zeros((H * 16, W * 16), bool)
     rx0, rx1, ry0, ry1 = max(0, x0), min(W - 1, x1), max(0, y0), min(H - 1, y1)
@@ -180,13 +182,18 @@ def building_mask(map_id, rect, cache=None, slot=None, pair=None, world=None):
     ring = np.zeros((H, W), bool)
     ring[max(0, y0 - 2):min(H, y1 + 3), max(0, x0 - 2):min(W, x1 + 3)] = True
     ring[max(0, y0):min(H, y1 + 1), max(0, x0):min(W, x1 + 1)] = False
+    # ground set: walkable ring metatiles, and blocked ones that repeat (4+ cells in the ring)
+    ground_ids = []
+    for g in np.unique(mid[ring]):
+        sel = ring & (mid == g)
+        if (coll[sel] == 0).any() or sel.sum() >= 4:
+            ground_ids.append(int(g))
     # tiles: the composited 16x16 of each ground metatile (the same pixels ref.py draws)
-    ground_ids = [int(g) for g in np.unique(mid[ring])]
     py0, py1, px0, px1 = ry0 * 16, (ry1 + 1) * 16, rx0 * 16, (rx1 + 1) * 16
     R = img[py0:py1, px0:px1, :3].astype(np.int16)
     A = img[py0:py1, px0:px1, 3] > 0
     ny, nx = ry1 - ry0 + 1, rx1 - rx0 + 1
-    gnd = np.zeros(A.shape, bool)
+    cand = np.zeros(A.shape, bool)
     for g in ground_ids:
         cy, cx = (int(t) for t in np.argwhere(ring & (mid == g))[0])
         T = img[cy * 16:cy * 16 + 16, cx * 16:cx * 16 + 16]
@@ -194,13 +201,19 @@ def building_mask(map_id, rect, cache=None, slot=None, pair=None, world=None):
             continue
         Tc = np.tile(T[..., :3].astype(np.int16), (ny, nx, 1))[:A.shape[0], :A.shape[1]]
         Ta = np.tile(T[..., 3] > 0, (ny, nx))[:A.shape[0], :A.shape[1]]
-        gnd |= (R == Tc).all(axis=2) & Ta & A
-    bld = A & ~gnd
-    p = np.pad(bld, 1)
-    nb = sum(p[1 + dy:1 + dy + bld.shape[0], 1 + dx:1 + dx + bld.shape[1]].astype(np.int8)
-             for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dy or dx)
-    bld = bld | (gnd & (nb >= 6))
-    out[py0:py1, px0:px1] = bld
+        cand |= (R == Tc).all(axis=2) & Ta & A
+    # silhouette: flood the candidates inward from the rectangle's border (outside counts as outside)
+    border = np.zeros(A.shape, bool)
+    border[0, :] = border[-1, :] = border[:, 0] = border[:, -1] = True
+    reach = cand & border
+    while True:
+        p = np.pad(reach, 1)
+        grow = (p[:-2, 1:-1] | p[2:, 1:-1] | p[1:-1, :-2] | p[1:-1, 2:])[:A.shape[0], :A.shape[1]]
+        new = (reach | (grow & cand))
+        if (new == reach).all():
+            break
+        reach = new
+    out[py0:py1, px0:px1] = A & ~reach
     return out
 
 def main():
