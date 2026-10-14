@@ -36,7 +36,10 @@ BOXES = {
     'route118_pinkhouse': ('EM_ROUTE118', 'general__mauville', [0, 14, 3, 17], 16),
     'trainerhill_tower': ('EM_ROUTE111', 'general__mauville', [29, 106, 33, 110], 109),
     'trainerhill_entrance': ('EM_ROUTE111', 'general__mauville', [31, 112, 31, 113], 113),
+    'mauville_gamecorner': ('EM_MAUVILLE_CITY', 'general__mauville', [5, 10, 11, 13], 12),   # row 10 is its roof's back (walkable, over-layer)
 }
+# exported under the name its existing bake already has (the game matches on it)
+NAMES = {'mauville_gamecorner': 'b022_mauvillecity_gamecorner'}
 # extra ground colours cut from the outside in (cliff rock around a building)
 # roof override: the hip-roofed Fan Club reads as a steep symmetric gable
 # whose ridge is the roof's top edge (nb rows of back slope)
@@ -71,7 +74,9 @@ def main():
         if name in KEYS: rec['keys'] = KEYS[name]; rec['flood'] = True
         v = hf.build(img, rec); q = hf.mesh(v)
         views = [hf.crop_to_content(hf.render(q, v, level=4, yaw=y)).convert('RGB') for y in (0, 35, 215)]
-        if a.export: hf.export('x_' + name, rec, img, q, v, os.path.join(a.export, 'x_' + name + '.lua'))
+        if a.export:
+            nm = NAMES.get(name, 'x_' + name)
+            hf.export(nm, rec, img, q, v, os.path.join(a.export, nm + '.lua'))
         ims = [Image.fromarray(img).convert('RGB')] + views
         ims = [i.resize((i.width * 2, i.height * 2), Image.NEAREST) for i in ims]
         pane = Image.new('RGB', (sum(i.width for i in ims) + 40, max(i.height for i in ims) + 14), (20, 20, 24)); x = 0

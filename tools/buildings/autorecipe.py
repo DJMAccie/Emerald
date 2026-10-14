@@ -125,13 +125,27 @@ def derive(g, it):
     # dark column turns into a row of bars. Narrow down until one is clean; a
     # single clean column still gives plain courses.
     colshare = near.mean(0)
-    best_c, best_w = 2, 1
-    for w in (12, 8, 6, 4, 3, 2, 1):
-        cands = [(colshare[c:c + w].min(), -L[H - wall:H - 2, c:c + w].var(), c) for c in range(2, max(3, W - 2 - w))]
-        if not cands: continue
-        q, _, c = max(cands)
-        best_c, best_w = c, w
-        if q >= 0.9: break
+    # A 4-6 px strip of the wall WITH its texture (plank lines, stone joints
+    # are the wall's own colours): the most wall-coloured window in which
+    # every column is still mostly wall, so no outline, post, door or window
+    # column (those turn a back wall into bars). Failing that, the widest
+    # plain strip.
+    best_c, best_w, best_v = None, 4, -1.0
+    for w in (6, 4):
+        for c in range(2, max(3, W - 2 - w)):
+            cs = colshare[c:c + w]
+            if cs.min() < 0.6: continue
+            v = cs.mean() + 0.002 * L[H - wall:H - 2, c:c + w].var() ** 0.5
+            if v > best_v: best_c, best_w, best_v = c, w, v
+        if best_c is not None: break
+    if best_c is None:
+        best_c, best_w = 2, 1
+        for w in (12, 8, 6, 4, 3, 2, 1):
+            cands = [(colshare[c:c + w].min(), -L[H - wall:H - 2, c:c + w].var(), c) for c in range(2, max(3, W - 2 - w))]
+            if not cands: continue
+            q, _, c = max(cands)
+            best_c, best_w = c, w
+            if q >= 0.9: break
     side = (best_c, best_c + best_w)
     depth = max(32, (y1 - top + 1) * 16)       # the building's footprint depth
     if kind.startswith('flat roof'):
@@ -208,8 +222,12 @@ def derive(g, it):
                 # a small roof drawn as one piece (a lounge's lid): its most
                 # uniform row carried back, no second copy of its bands
                 P = 1
+                # only a full-width row: a rounded corner row of the lid is narrower,
+                # and carried back it steps the back of the roof in at both sides
+                full = max(mask[r].sum() for r in range(roof_top + 2, roof_bottom - 1))
                 def plain(r):
                     px = [tuple(v) for v in img[r, mask[r], :3]]
+                    if len(px) < full: return 0
                     return Counter(px).most_common(1)[0][1] / float(len(px)) if px else 0
                 m = max(range(roof_top + 2, roof_bottom - 1), key=plain)
             for pc_ in pieces:

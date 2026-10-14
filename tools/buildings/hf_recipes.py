@@ -284,27 +284,40 @@ MUSEUM2 = _shift(MUSEUM, 32, ('general__lilycove', 'EM_LILYCOVE_CITY', 7, 0, 16,
 def _weather():
     ground = [(99, 66, 82), (132, 90, 90), (156, 115, 115), (189, 148, 140), (222, 181, 165),
               (66, 181, 132), (115, 197, 165), (165, 214, 197)] + [c for c in [(58, 82, 0), (58, 140, 49), (115, 197, 165), (132, 197, 99), (181, 255, 132)] if c[1] > c[0] + 30]
-    def end(x0, x1, left):
-        return lambda x: int(round(((x1 - x) if left else (x - x0)) * 0.9))
+    # the glass bows: the drawing's bands slope about 0.45 rows per column
+    # from the pilasters (x48, x128) out to the silhouette (x8, x167), so the
+    # front steps back 0.45 voxel per column there and the bow's roof is cut
+    # by its silhouette
+    def bow(x0, x1, left):
+        return lambda x: int(round(0.45 * ((x1 - x) if left else (x - x0))))
     segs = [('wall', 57), ('flat', 47)]
     return dict(
         src=('general__fortree', 'EM_ROUTE119', 1, 26, 11, 32), trim=True, flood=True,
         keys=ground,
         pieces=[
-            dict(x=(0, 20), B=111, d0=end(0, 20, True), segs=segs, side=(26, 34), fill=(26, 34)),
-            dict(x=(20, 156), B=111, d0=0, segs=segs, side=(26, 34), fill=(26, 34)),
-            dict(x=(156, 176), B=111, d0=end(156, 176, False), segs=segs, side=(26, 34), fill=(26, 34)),
+            dict(x=(8, 48), B=111, d0=bow(8, 48, True), segs=segs, side=(26, 34), fill=(26, 34)),
+            dict(x=(48, 128), B=111, d0=0, segs=segs, side=(56, 72), fill=(56, 72)),
+            dict(x=(128, 168), B=111, d0=bow(128, 168, False), segs=segs, side=(26, 34), fill=(26, 34)),
         ],
         relief=[
-            dict(x=(19, 57), rows=(8, 38), k=-7),     # left radar dome
-            dict(x=(121, 158), rows=(8, 38), k=-7),   # right radar dome
-            dict(x=(14, 30), rows=(30, 46), k=-3),    # satellite balls
-            dict(x=(30, 44), rows=(36, 48), k=-3),
-            dict(x=(132, 146), rows=(36, 48), k=-3),
-            dict(x=(146, 162), rows=(30, 46), k=-3),
             dict(x=(70, 106), rows=(96, 111), k=3),   # doorway set in
             dict(x=(36, 140), rows=(66, 74), k=2),    # window bands set in
             dict(x=(36, 140), rows=(88, 96), k=2),
+        ],
+        # the two radar domes: three round drums of shrinking radius stand on
+        # the roof (h 57 = roof), each painted from its own drawing rows 8..50
+        prisms=[
+            dict(x=(18, 46), d=(11, 39), h=(57, 62), B=111, mat=(40, 46), rows=(8, 50), round=True),
+            dict(x=(21, 43), d=(14, 36), h=(62, 67), B=111, mat=(40, 46), rows=(8, 50), round=True),
+            dict(x=(24, 40), d=(17, 33), h=(67, 71), B=111, mat=(40, 46), rows=(8, 50), round=True),
+            dict(x=(130, 158), d=(11, 39), h=(57, 62), B=111, mat=(40, 46), rows=(8, 50), round=True),
+            dict(x=(133, 155), d=(14, 36), h=(62, 67), B=111, mat=(40, 46), rows=(8, 50), round=True),
+            dict(x=(136, 152), d=(17, 33), h=(67, 71), B=111, mat=(40, 46), rows=(8, 50), round=True),
+            # the two small vents each side: 4-5 px drums on the roof
+            dict(x=(12, 25), d=(7, 20), h=(57, 62), B=111, mat=(40, 46), rows=(30, 48), round=True),
+            dict(x=(28, 38), d=(6, 16), h=(57, 61), B=111, mat=(40, 46), rows=(30, 48), round=True),
+            dict(x=(151, 164), d=(7, 20), h=(57, 62), B=111, mat=(40, 46), rows=(30, 48), round=True),
+            dict(x=(138, 148), d=(6, 16), h=(57, 61), B=111, mat=(40, 46), rows=(30, 48), round=True),
         ],
     )
 
@@ -402,7 +415,18 @@ def _ferry(mp, x0, y0):
     return dict(
         src=('general__dewford', mp, x0, y0, x0 + 6, y0 + 4), trim=True, bgtiles=[0x170, 0x189], keys=[],
         claimBlocked=True,
-        pieces=[dict(x=(0, 112), B=79, d0=0, segs=[('wall', 16), ('flat', 'top')], side=(50, 54), fill=(50, 54))],
+        # the hull (white, rows 64..79) to h 16, the cabin front (windows, rows 55..63)
+        # to h 25, then the striped deck at h 25 running back to row 9; the drawn
+        # deck is x 16..95 only, the lifeboat crates stand outboard of it
+        pieces=[dict(x=(16, 96), B=79, d0=0, segs=[('wall', 16), ('wall', 9), ('flat', 46)], side=(50, 54), fill=(50, 54), back='front')],
+        # the wheelhouse on the deck's back edge (rows 0..8, x 33..78): its white front
+        # is depth 46 and it is 6 high (h 25..31)
+        prisms=[dict(x=(33, 79), d=(46, 50), h=(25, 31), B=79, rows=(0, 9), mat=(55, 5)),
+                # lifeboats in their davits, one each side and two tiers each (rows 18..42 and 50..74)
+                dict(x=(1, 16), d=(32, 46), h=(5, 30), B=79, rows=(17, 43), mat=(3, 19)),
+                dict(x=(96, 111), d=(32, 46), h=(5, 30), B=79, rows=(17, 43), mat=(3, 19)),
+                dict(x=(1, 16), d=(0, 14), h=(5, 30), B=79, rows=(49, 75), mat=(3, 19)),
+                dict(x=(96, 111), d=(0, 14), h=(5, 30), B=79, rows=(49, 75), mat=(3, 19))],
         relief=[])
 
 
