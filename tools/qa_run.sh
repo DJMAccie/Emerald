@@ -50,10 +50,11 @@ done
 until mkdir /tmp/emerald-qa.setup 2>/dev/null; do stale /tmp/emerald-qa.setup; sleep 1; done; SETUP=1
 QI="$HOME/Library/Application Support/pokemon-love2d-rseqa"
 # the QA identity's zoom drifts to -3 (shots from far away): reset it every run
+# (QA_ZOOM=-2 matches the user's own game)
 python3 - <<PY
 import re
 p="$QI/options.lua";s=open(p,'rb').read()
-s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = 0,",s,count=1)
+s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = ${QA_ZOOM:-0},",s,count=1)
 s=re.sub(rb"fireredCamera = \d+,",b"fireredCamera = 4,",s,count=1)
 # borderless = desktop fullscreen at boot, then the driver shrinks it: a
 # full-screen flash per run. QA always boots windowed.

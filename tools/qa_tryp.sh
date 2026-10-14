@@ -108,10 +108,12 @@ while :; do
   rmdir /tmp/emerald-qa.setup; SETUP=; sleep 3
 done
 mkdir /tmp/emerald-qa.prun.$N
-QI="$QI" python3 - <<'PY'
+# the copy takes main QA's options (camera, props, light) as they stand; QA_ZOOM as in qa_run.sh
+cp "$MAIN/options.lua" "$QI/options.lua"
+QI="$QI" QZ="${QA_ZOOM:-0}" python3 - <<'PY'
 import os,re
 p=os.environ["QI"]+"/options.lua";s=open(p,'rb').read()
-s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = 0,",s,count=1)
+s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = "+os.environ["QZ"].encode()+b",",s,count=1)
 s=re.sub(rb"fireredCamera = \d+,",b"fireredCamera = 4,",s,count=1)
 s=re.sub(rb'videoMode = "\w+",',b'videoMode = "windowed",',s,count=1)
 open(p,'wb').write(s)

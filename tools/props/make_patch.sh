@@ -6,7 +6,8 @@
 set -euo pipefail
 B=~/Documents/battle-art-notquiteog
 E=~/Documents/Emerald
-OWN_LIB="lib/Gen3Scene.lua lib/Gen3Mass.lua lib/Gen3Outdoor.lua lib/Gen3EmeraldShapes.lua lib/Gen3TileShape.lua lib/Gen3Objects.lua lib/Gen3Terrain.lua lib/CliffMasonry.lua lib/Gen3Elevation.lua lib/NativeTreeArt.lua lib/VoxelHull.lua lib/Gen3Canopy.lua lib/TreePresentation.lua lib/Gen3Boundary.lua lib/Gen3WaterEdge.lua lib/Gen3RockSprites.lua lib/Gen3EmeraldShapes.lua"
+# OWN_LIB_EXTRA="lib/A.lua lib/B.lua" adds files for one run (another session's builder files)
+OWN_LIB="${OWN_LIB_EXTRA:-} lib/Gen3Scene.lua lib/Gen3Mass.lua lib/Gen3Outdoor.lua lib/Gen3EmeraldShapes.lua lib/Gen3TileShape.lua lib/Gen3Objects.lua lib/Gen3Terrain.lua lib/CliffMasonry.lua lib/Gen3Elevation.lua lib/NativeTreeArt.lua lib/VoxelHull.lua lib/Gen3Canopy.lua lib/TreePresentation.lua lib/Gen3Boundary.lua lib/Gen3WaterEdge.lua lib/Gen3RockSprites.lua lib/Gen3EmeraldShapes.lua"
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 git -C "$B" archive HEAD | tar -x -C "$T"

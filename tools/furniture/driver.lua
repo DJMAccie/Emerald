@@ -19,6 +19,8 @@ return function(game)
  for _,case in ipairs(cases) do
   -- QA only: flags={'FLAG_NAME',...} on a case are set before the map loads (state-dependent scenery)
   if case.flags then pcall(function() local R=require('src.core.game3.rse.init');for _,f in ipairs(case.flags)do R.setFlag(f,true)end end) end
+  -- QA only: probe={x0,x1,z0,z1,y0} prints every mesh with vertices in that world box ([EM probe])
+  do local lib=export and export.lib;if lib then lib.require('Voxel3D').probe=case.probe;lib.require('Gen3Scene').probeBox=case.box;lib.require('Gen3Scene').probeSeen=nil end end
   local ok,err=pcall(function() assert(Map.load(nil,game,case[1],{x=case[2],y=case[3],facing='down'})) end)
   print('[EM view] load',case[1],ok,err or '')
   if ok then
@@ -56,12 +58,46 @@ return function(game)
     print('[EM view]',case[1],'level',level,'active',C and tostring(C.active),'rendered',C and C.rendered)
     local okZ,Zoom=pcall(require,'src.render.Zoom'); local okR,Renderer=pcall(require,'src.render.Renderer')
     local scene=export and export.lib and export.lib.require('Gen3Scene')
+    -- entering a map shows a small first area (Gen3Scene.NEAR) before the full one the player
+    -- normally sees: wait for the full build, or rock masses are shot from a cut-down window
+    -- (and for the build round THIS spot: the window follows the player lazily, and the previous
+    -- case's window stays on screen while the new one builds)
+    for _=1,90 do
+     local d=scene and scene.distance
+     local b=d and d.bounds
+     local px,py=Player.cellX or 0,Player.cellY or 0
+     local near=d and scene.NEAR and d.radius==scene.NEAR
+     local centred=not (b and d.radius) or (b[1]<=px-24 and b[3]>=px+24 and b[2]<=py-24 and b[4]>=py+24)
+     if not near and centred then break end
+     U.wait(10)
+    end
     local ww,wh,flags=love.window.getMode(); print('[EM win]',ww,wh,'dpi',love.window.getDPIScale(),'px',love.graphics.getWidth(),love.graphics.getHeight(),'scene',scene and scene.renderWidth,scene and scene.renderHeight,'display',flags and flags.display)
     print('[EM cam]',C and C.level,C and C.pitch,C and C.yaw,'zoom',okZ and Zoom.scale and Zoom.scale(okR and Renderer:fitScale() or 1) or '?','fit',okR and Renderer:fitScale() or '?','dist',scene and scene.distance and scene.distance.radius,'player',Player.cellX,Player.cellY)
     EM_N=(EM_N or 0)+1
     local path=os.getenv('EM_INDEXED') and string.format('%s/b%03d.png',dir,EM_N) or dir..'/'..case[1]..'_'..level..'.png'
     local f=io.open(path) if f then f:close(); path=path:gsub('%.png$','_'..(os.time()%1000)..'.png') end
     U.shot(game,path)
+    -- QA only: dump={x0,y0,x1,y1} on a case prints every built cell of that rectangle ([CELL] lines:
+    -- tile, shape, collision, floor, and the rock mass it belongs to with that mass's height for it)
+    if case.dump and scene and scene.debugRaw then
+     local d=case.dump
+     for y=d[2],d[4] do for x=d[1],d[3] do
+      local c=scene.debugRaw(x,y)
+      if c then
+       local s=c.shape or {}
+       local m=c.mass
+       local mh=m and m.rock and m.rock.H and m.rock.H[c]
+       local extra={}
+       for k,v in pairs(c)do local t=type(v);if (t=='number' or t=='boolean' or t=='string') and k~='mid' and k~='cx' and k~='cy' and k~='collision' and k~='pair' and k~='nativePair' and k~='primary' and k~='secondary' then extra[#extra+1]=k..'='..tostring(v) end end
+       for k,v in pairs(s)do local t=type(v);if (t=='number' or t=='boolean' or t=='string') and k~='kind' then extra[#extra+1]='s.'..k..'='..tostring(v) end end
+       for k,v in pairs(c)do if type(v)=='table' and k~='shape' and k~='ts' and k~='mass' then extra[#extra+1]=k..'{}' end end
+       if type(c.floor)=='table' then for k,v in pairs(c.floor)do local t=type(v);if t=='number' or t=='boolean' or t=='string' then extra[#extra+1]='f.'..k..'='..tostring(v) end end end
+       table.sort(extra)
+       print(string.format('[CELL] %s %d %d %03X %s coll=%s mass=%s mh=%s n=%s %s',case[1],x,y,c.mid or 0,tostring(s.kind),tostring(c.collision),
+        m and tostring(m):sub(-6) or '-',tostring(mh),m and #m.members or '-',table.concat(extra,' ')))
+      end
+     end end
+    end
     if os.getenv('EM_AUDIT') and scene and scene.debugCell then
      -- the scene's window follows the player lazily: wait until it is centred on this
      -- case's spot before scanning (a stale window audited the previous spot's cells again)
