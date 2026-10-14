@@ -469,6 +469,20 @@ def apply_prisms(img, prisms, occ, colS, colT, solid):
             return pack(q[:3])
         cx, cd = (xa + xb - 1) / 2.0, (d0 + d1 - 1) / 2.0
         rx, rd = (xb - xa) / 2.0, (d1 - d0) / 2.0
+        # wrap=(u0, u1, r0, r1): a round prism is painted all the way round
+        # with the drawing's strip u0..u1 x rows r0..r1, laid along its
+        # circumference (thatch or weave running round a hut, not a picture
+        # projected onto its front and draped over its top)
+        wrap = p.get('wrap')
+
+        def wrapped(x, d, h):
+            u0, u1, w0, w1 = wrap
+            ang = math.atan2(d - cd, x - cx)
+            circ = 2 * math.pi * max(rx, rd)
+            u = u0 + int(((ang + math.pi) / (2 * math.pi)) * circ) % (u1 - u0)
+            r = w0 + (h1 - 1 - h) % (w1 - w0)
+            q = img[r, u]
+            return pack(q[:3]) if q[3] >= 128 else mat
         for x in range(xa, xb):
             for d in range(d0, d1):
                 if p.get('round') and ((x - cx) / rx) ** 2 + ((d - cd) / rd) ** 2 > 1.0:
@@ -476,15 +490,15 @@ def apply_prisms(img, prisms, occ, colS, colT, solid):
                 di = d + PAD
                 for h in range(h0, h1):
                     occ[x, h, di] = True
-                    solid[x, h, di] = mat
+                    solid[x, h, di] = wrapped(x, d, h) if wrap else mat
                     colS[x, h, di] = -1
                     colT[x, h, di] = -1
                 # front face: the first voxel of this column toward the viewer
                 front = d == d0 or (p.get('round') and ((x - cx) / rx) ** 2 + ((d - 1 - cd) / rd) ** 2 > 1.0)
                 if front:
                     for h in range(h0, h1):
-                        colS[x, h, di] = art(x, B - h - d)
-                colT[x, h1 - 1, di] = art(x, B - (h1 - 1) - d)
+                        colS[x, h, di] = wrapped(x, d, h) if wrap else art(x, B - h - d)
+                colT[x, h1 - 1, di] = wrapped(x, d, h1 - 1) if wrap else art(x, B - (h1 - 1) - d)
 
 
 # ---------------------------------------------------------------- meshing

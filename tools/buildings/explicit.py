@@ -37,18 +37,33 @@ BOXES = {
     'trainerhill_tower': ('EM_ROUTE111', 'general__mauville', [29, 106, 33, 110], 109),
     'trainerhill_entrance': ('EM_ROUTE111', 'general__mauville', [31, 112, 31, 113], 113),
     'mauville_gamecorner': ('EM_MAUVILLE_CITY', 'general__mauville', [5, 10, 11, 13], 12),   # row 10 is its roof's back (walkable, over-layer)
+    'slateport_harbor': ('EM_SLATEPORT_CITY', 'general__slateport', [24, 7, 31, 12], 11),
+    'lilycove_harbor': ('EM_LILYCOVE_CITY', 'general__lilycove', [9, 30, 15, 32], 31),
+    'route109_seashorehouse': ('EM_ROUTE109', 'general__slateport', [10, 3, 15, 5], 4),
+    'frontier_battlepalace_lobby': ('EM_BATTLE_FRONTIER_OUTSIDE_EAST', 'general__battle_frontier_outside_east', [40, 51, 50, 56], 53),
+    'frontier_rankinghall': ('EM_BATTLE_FRONTIER_OUTSIDE_EAST', 'general__battle_frontier_outside_east', [32, 8, 38, 12], 10),
 }
 # exported under the name its existing bake already has (the game matches on it)
-NAMES = {'mauville_gamecorner': 'b022_mauvillecity_gamecorner'}
+NAMES = {'mauville_gamecorner': 'b022_mauvillecity_gamecorner',
+         'slateport_harbor': 'b014_slateportcity_harbor', 'lilycove_harbor': 'b055_lilycovecity_harbor',
+         'route109_seashorehouse': 'b117_route109_seashorehouse', 'frontier_battlepalace_lobby': 'b152_battlefrontier_battlepalacelobby',
+         'frontier_rankinghall': 'b154_battlefrontier_rankinghall'}
 # extra ground colours cut from the outside in (cliff rock around a building)
 # roof override: the hip-roofed Fan Club reads as a steep symmetric gable
 # whose ridge is the roof's top edge (nb rows of back slope)
 GABLE = {'slateport_fanclub': 8, 'verdanturf_battletent': 18, 'frontier_dome': 50, 'frontier_pyramid': 30, 'route104_flowershop': 10}
 # parapet-rimmed gravel roofs the ridge finder reads as a gable
 FLAT = {'mauville_eastblock', 'cyclingroad_north', 'cyclingroad_south', 'route111_winstrate'}
+# art columns beside the footprint that are not building (sign, fence, bush, sand, water):
+# made ground, so they take the map's own cells instead of standing up as boxes
+NOT_BUILDING = {'route109_seashorehouse': [(80, 96)], 'slateport_harbor': [(0, 16)], 'lilycove_harbor': [(111, 112)]}
 # stand on this map cell's floor instead of the footprint's own
 STAND = {'trainerhill_tower': (34, 108)}
-KEYS = {'trainerhill_tower': [(99, 66, 82), (132, 90, 90), (156, 115, 115), (189, 148, 140), (222, 181, 165)]}
+KEYS = {'trainerhill_tower': [(99, 66, 82), (132, 90, 90), (156, 115, 115), (189, 148, 140), (222, 181, 165)],
+        # the grass, bushes and trees round the harbour's roof (cut in from the edges)
+        'slateport_harbor': [(115, 197, 165), (58, 140, 49), (132, 197, 99), (181, 255, 132), (58, 82, 0)],
+        # the sand round the seashore house's sign and its right-hand corner
+        'route109_seashorehouse': [(222, 206, 132)]}
 
 
 
@@ -60,6 +75,8 @@ def main():
         if a.only and name not in a.only.split(','): continue
         g = {'map': mp, 'pair': pair, 'box': box, 'wallTop': wt}
         rec, img, kind = autorecipe.derive(g, None)
+        if name in NOT_BUILDING and rec.get('bgmask') is not None:
+            for x0, x1 in NOT_BUILDING[name]: rec['bgmask'][:, x0:x1] = True
         if name in GABLE:
             segs = rec['pieces'][0]['segs']
             n = sum(sg[1] for sg in segs if sg[0] in ('flat', 'flatx'))   # flatx: a flat roof carried back

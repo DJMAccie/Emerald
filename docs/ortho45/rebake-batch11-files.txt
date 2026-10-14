@@ -1,0 +1,5 @@
+b014_slateportcity_harbor.lua
+b055_lilycovecity_harbor.lua
+b117_route109_seashorehouse.lua
+b154_battlefrontier_rankinghall.lua
+b152_battlefrontier_battlepalacelobby.lua

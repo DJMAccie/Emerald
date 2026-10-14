@@ -1,0 +1,5 @@
+pacifidlog_hut.lua
+abandoned_ship_wreck.lua
+sootopolis_box.lua
+sootopolis_box2.lua
+sootopolis_cone.lua
