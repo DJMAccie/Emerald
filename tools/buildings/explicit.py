@@ -59,6 +59,8 @@ FLAT = {'mauville_eastblock', 'cyclingroad_north', 'cyclingroad_south', 'route11
 NOT_BUILDING = {'route109_seashorehouse': [(80, 96)], 'slateport_harbor': [(0, 16)], 'lilycove_harbor': [(111, 112)]}
 # stand on this map cell's floor instead of the footprint's own
 STAND = {'trainerhill_tower': (34, 108)}
+# the door cells (map x, y) where the side-wall picker must not take its strip
+DOORS = {'lilycove_house4': [(12, 14)]}
 KEYS = {'trainerhill_tower': [(99, 66, 82), (132, 90, 90), (156, 115, 115), (189, 148, 140), (222, 181, 165)],
         # the grass, bushes and trees round the harbour's roof (cut in from the edges)
         'slateport_harbor': [(115, 197, 165), (58, 140, 49), (132, 197, 99), (181, 255, 132), (58, 82, 0)],
@@ -74,7 +76,7 @@ def main():
     for name, (mp, pair, box, wt) in BOXES.items():
         if a.only and name not in a.only.split(','): continue
         g = {'map': mp, 'pair': pair, 'box': box, 'wallTop': wt}
-        rec, img, kind = autorecipe.derive(g, None)
+        rec, img, kind = autorecipe.derive(g, {'doors': DOORS[name]} if name in DOORS else None)
         if name in NOT_BUILDING and rec.get('bgmask') is not None:
             for x0, x1 in NOT_BUILDING[name]: rec['bgmask'][:, x0:x1] = True
         if name in GABLE:

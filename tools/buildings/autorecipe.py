@@ -22,6 +22,12 @@ import hf, bldmodel as M
 def lum(p): return 0.3 * p[..., 0] + 0.59 * p[..., 1] + 0.11 * p[..., 2]
 
 
+# side strips set by hand where the calm strip is a fine brick or panel pattern
+# that turns into streaks along a long back (the League: 6-px brick joints):
+# one window bay of the facade, wall and window, at the facade's own period
+SIDE = {78: (24, 40)}
+
+
 def derive(g, it):
     pair, mp = g['pair'], g['map']
     x0, y0, x1, y1 = g['box']
@@ -131,13 +137,46 @@ def derive(g, it):
     # column (those turn a back wall into bars). Failing that, the widest
     # plain strip.
     best_c, best_w, best_v = None, 4, -1.0
+    # First by structure, not by colour family: the commonest family can be the
+    # grey frame and skirting (Dewford's hall took a 1-px outline column and
+    # stood as a slate slab on three sides and both gable ends). A strip that is
+    # opaque wall all the way down, on no door column (the cartridge's doors), no
+    # window glass and no dark outline or post column (laid along the depth those
+    # turn a wall into bars); of those, the one with the most of the wall's own
+    # texture whose columns are alike.
+    wl = L[H - wall:H - 2]
+    door = np.zeros(W, bool)
+    for d_ in (it or {}).get('doors') or ():   # (explicit.py's bakes name no door)
+        a_ = (d_[0] - x0) * 16
+        door[max(0, a_):max(0, a_ + 16)] = True
+    blue = (wb[..., 2] > wb[..., 0] + 40) & (wb[..., 2] > wb[..., 1] + 15) & (wl > 100)
+    # glass is a block of blue (a pane), not a scattered dot (Dewford's stucco is
+    # dotted light blue): six of the nine pixels round it blue
+    nb = sum(np.roll(np.roll(blue.astype(int), dy_, 0), dx_, 1) for dy_ in (-1, 0, 1) for dx_ in (-1, 0, 1))
+    glass = blue & (nb >= 6)
+    good = (mask[H - wall:H - 2].mean(0) >= .97) & ~door & (glass.mean(0) < .15) & ((wl < 105).mean(0) < .35)
+    # the infill that covers most of the wall (stucco, planks), not a post: each
+    # strip scores the share of the wall its own colours cover, plus a little for
+    # texture, minus columns unlike each other
+    share_ = Counter(map(tuple, wb[:, good].reshape(-1, 3)))
+    tot_ = float(sum(share_.values())) or 1.0
     for w in (6, 4):
         for c in range(2, max(3, W - 2 - w)):
-            cs = colshare[c:c + w]
-            if cs.min() < 0.6: continue
-            v = cs.mean() + 0.002 * L[H - wall:H - 2, c:c + w].var() ** 0.5
+            if not good[c:c + w].all(): continue
+            seg = [tuple(p_) for p_ in wb[:, c:c + w].reshape(-1, 3)]
+            v = sum(share_[p_] for p_ in seg) / (tot_ * len(seg)) * 10 + 0.05 * min(len(set(seg)), 10) \
+                - 0.02 * wl[:, c:c + w].mean(0).std()
             if v > best_v: best_c, best_w, best_v = c, w, v
         if best_c is not None: break
+    if best_c is None:
+        best_v = -1.0
+        for w in (6, 4):
+            for c in range(2, max(3, W - 2 - w)):
+                cs = colshare[c:c + w]
+                if cs.min() < 0.6: continue
+                v = cs.mean() + 0.002 * L[H - wall:H - 2, c:c + w].var() ** 0.5
+                if v > best_v: best_c, best_w, best_v = c, w, v
+            if best_c is not None: break
     if best_c is None:
         best_c, best_w = 2, 1
         for w in (12, 8, 6, 4, 3, 2, 1):
@@ -147,6 +186,52 @@ def derive(g, it):
             best_c, best_w = c, w
             if q >= 0.9: break
     side = (best_c, best_c + best_w)
+    fill_, gside = side, None
+    # A strip of one flat colour (a post, bare stucco) laid along a gable end and
+    # across the back stands there as a slab (Lilycove's and Dewford's houses:
+    # three sides of plain blue or slate). Where the facade has a window, a bay
+    # of it -- wall, the window in its frame, wall -- repeats along the hidden
+    # walls instead, as a house's side has its own windows; the gable triangle
+    # above keeps plain courses of the wall beside that window.
+    # (both read on the wall's lower two thirds: the engine's wall band can
+    # start in the roof's eave, whose blue tiles read as glass)
+    lo = wall // 3
+    sv = wb[lo:, side[0]:side[1]].reshape(-1, 3)
+    if (it or {}).get('n') in SIDE:
+        gside, side = side, SIDE[it['n']]
+    elif len(sv) and Counter(map(tuple, sv)).most_common(1)[0][1] / float(len(sv)) > .6:
+        gl = (glass[lo:].mean(0) >= .15) & ~door
+        bays, x_ = [], 2
+        while x_ < W - 2:
+            if not gl[x_]: x_ += 1; continue
+            g0 = x_
+            while x_ < W - 2 and gl[x_]: x_ += 1
+            l, r = g0, x_                      # the panes; out through the frame to wall
+            while l > 2 and not good[l - 1] and not door[l - 1] and l > g0 - 4: l -= 1
+            while r < W - 2 and not good[r] and not door[r] and r < x_ + 4: r += 1
+            m = 3                              # three columns of wall each side
+            if l - m >= 2 and r + m <= W - 2 and good[l - m:l].all() and good[r:r + m].all() \
+                    and not door[l - m:r + m].any() and (mask[H - wall:H - 2, l - m:r + m].mean(0) >= .97).all() \
+                    and 8 <= r - l <= 32:
+                bays.append((x_ - g0, l - m, r + m, l))
+        if bays:
+            _, b0, b1, l = max(bays)
+            side, gside = (b0, b1), (b0, l)
+        else:
+            # walls the colour of glass (Lilycove's blue houses: the glass test
+            # reads every post as a pane): the widest stretch of facade beside
+            # the door, posts, wall and window as drawn, is the module repeated
+            ok_ = ~door & (mask[H - wall:H - 2].mean(0) >= .97)
+            run, x_ = None, 1
+            while x_ < W - 1:
+                if not ok_[x_]: x_ += 1; continue
+                a_ = x_
+                while x_ < W - 1 and ok_[x_]: x_ += 1
+                if run is None or x_ - a_ > run[1] - run[0]:
+                    run = (a_, x_)
+            if run and 16 <= run[1] - run[0] <= 40 and door.any():
+                gside = side
+                side = run
     depth = max(32, (y1 - top + 1) * 16)       # the building's footprint depth
     if kind.startswith('flat roof'):
         # The engine's facade line can sit above the roof's real front edge
@@ -176,7 +261,7 @@ def derive(g, it):
                 wall -= extra; nroof += extra; roof_bottom += extra
                 segs = [('wall', wall), ('flat', nroof)]
                 kind = 'flat roof %d' % nroof
-    pieces = [dict(x=(0, W), B=H - 1, d0=0, segs=segs, side=side, fill=side, **({'depth': depth} if kind == 'block' else {}))]
+    pieces = [dict(x=(0, W), B=H - 1, d0=0, segs=segs, side=side, fill=fill_, **({'gside': gside} if gside else {}), **({'depth': depth} if kind == 'block' else {}))]
     if kind.startswith('flat roof'):
         # The foot of the facade is not one line: most columns stand a few
         # rows above the drawing's last row (set back), a porch reaches it
@@ -197,7 +282,7 @@ def derive(g, it):
                 for x in range(1, W + 1):
                     if x == W or k[x] != k[a0]:
                         kk = int(k[a0])
-                        pieces.append(dict(x=(a0, x), B=H - 1, d0=kk, segs=[('wall', hw), ('flat', nroof + kmode - kk)], side=side, fill=side))
+                        pieces.append(dict(x=(a0, x), B=H - 1, d0=kk, segs=[('wall', hw), ('flat', nroof + kmode - kk)], side=side, fill=fill_, **({'gside': gside} if gside else {})))
                         a0 = x
                 kind += ' porch'
     # The drawing is flatter than the building: its blocked footprint (rows of

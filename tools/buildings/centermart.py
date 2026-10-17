@@ -18,7 +18,7 @@ from collections import Counter
 from PIL import Image
 
 NATIVE = os.path.expanduser('~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native/')
-DATA = os.path.expanduser('~/Documents/battle-art-notquiteog/data/buildings/')
+DATA = os.environ.get('CM_DATA', os.path.expanduser('~/Documents/battle-art-notquiteog/data/buildings/'))
 W, HW, CH = 64, 25, 7            # width, wall height, corner chamfer
 STEPS = [28, 31, 34, 36]         # mansard height after each px in from the edge
 TOP = 36
@@ -120,6 +120,23 @@ def build(name, D):
             return (x, y) if not bg[y][x] else (x, low[x])
         return wallRef[y]
 
+    # windows on the hidden walls: the door's own glass in its frame (columns 16-31), sill raised to
+    # h 7, one centred on each side and two on the back (a blank banded wall read as a slab in 3D)
+    def window(u, h):
+        y = 63 - h
+        if not (0 <= u < 16 and 44 <= y <= 56): return None
+        return (16, 46) if y in (44, 56) or u in (0, 15) else (16 + u, y)
+
+    def hiddenWall(x, z, hh, back):
+        if back:
+            for x0 in (12, 36):
+                p = window(x - x0, hh)
+                if p: return p
+        else:
+            p = window(z - (D // 2 - 8), hh)
+            if p: return p
+        return wallPaint(x, hh, False)
+
     def bandPaint(h, tread):               # the band at height h, by the front's own step order
         if h < HW: return None
         prev, k = HW, 0
@@ -164,7 +181,7 @@ def build(name, D):
             # north risers
             hn = Hat(x, z + 1)
             for hh in range(hn, h):
-                if hh < HW: p = wallPaint(x, hh, False)
+                if hh < HW: p = hiddenWall(x, z, hh, True) if not cs else wallPaint(x, hh, False)
                 elif hh >= TOP: p = (x, 23 - (hh - TOP)) if ped[x] else stripe(x, hh)
                 else: p = bandPaint(hh, False)
                 add(2, x, x + 1, hh, hh + 1, z + 1, z + 1, p, cs if hh < HW else 0)
@@ -172,7 +189,7 @@ def build(name, D):
             for f, nx, xe in ((5, x - 1, x), (4, x + 1, x + 1)):
                 hs = Hat(nx, z)
                 for hh in range(hs, h):
-                    if hh < HW: p = wallPaint(x, hh, z < CH and cs > 0)
+                    if hh < HW: p = wallPaint(x, hh, True) if (z < CH and cs > 0) else hiddenWall(x, z, hh, False) if not cs else wallPaint(x, hh, False)
                     elif hh >= TOP: p = stripe(x, hh + z)
                     else: p = bandPaint(hh, False)
                     add(f, xe, xe, hh, hh + 1, z + 1, z, p, cs if hh < HW else 0)

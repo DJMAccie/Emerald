@@ -281,6 +281,7 @@ def build(img, recipe):
     colT = np.full((W, HH, DD), -1, np.int32)
     colE = np.full((W, HH, DD), -1, np.int32)     # east/west faces
     colN = np.full((W, HH, DD), -1, np.int32)     # back faces
+    sideE = np.full((W, HH, DD), -1, np.int32)    # the side art at every wall cell (see below)
     solid = np.full((W, HH, DD), pack((128, 128, 128)), np.int32)
     pix = {}       # (x,row) -> (hv, dv, kind)
     keys = {pack(k) for k in recipe.get('keys', [])}
@@ -292,8 +293,17 @@ def build(img, recipe):
         c = pack(p[:3])
         return -1 if c in keys else c
 
+    # each piece's outermost standing columns: where a drawing's outline column
+    # is cut away (ground), the column inside it is the side wall, and it takes
+    # the side art (it used to take the row's flat band colour: a plain slab)
+    ends = {}
+    for x, es in cols.items():
+        for e in es:
+            a_, b_ = ends.get(id(e[0]), (x, x))
+            ends[id(e[0])] = (min(a_, x), max(b_, x))
     for x, pc, smp, de, he, tail in [(x,) + e for x, es in cols.items() for e in es]:
         xs = range(*pc.get('fill', pc['x']))   # where the body's material is read
+        edge = x in (pc['x'][0], pc['x'][1] - 1) or x in ends[id(pc)]
         bands = {}
         wallrow = {}
         for (row, hv, dv, kind) in smp:
@@ -318,6 +328,20 @@ def build(img, recipe):
         gable_rows = wr[-10:-2] or wr[:]
         # solid fill under the path
         cut = pc.get('cutout')
+        if cut and 'towers' not in pc:
+            # a card of its own pixels (gantries, a rocket) is towers and gaps:
+            # each run of columns that is drawn through most of the card's rows
+            # is one tower, and its sides cycle its own columns (a lattice tower
+            # shows its lattice all round, not the row's average colour)
+            rows_ = sorted(set(wallrow.values()))
+            op = [np.mean([img[r_, xx, 3] >= 128 for r_ in rows_]) if rows_ else 0 for xx in range(W)]
+            tw, xx = [], pc['x'][0]
+            while xx < pc['x'][1]:
+                if op[xx] < .3: xx += 1; continue
+                a_ = xx
+                while xx < pc['x'][1] and op[xx] >= .3: xx += 1
+                tw.append((a_, xx))
+            pc['towers'] = tw
         for dv, hv in top_d.items():
             di = dv + PAD
             for hh in range(hv + 1):
@@ -328,22 +352,30 @@ def build(img, recipe):
                 occ[x, hh, di] = True
                 solid[x, hh, di] = bands.get(hh, bands.get(max(bands) if bands else 0, pack((128, 128, 128))))
                 r = wallrow.get(hh)
+                if cut and r is not None:
+                    t_ = [t for t in pc['towers'] if t[0] <= x < t[1]]
+                    c = pixcol(t_[0][0] + (dv - d_front) % (t_[0][1] - t_[0][0]), r) if t_ else -1
+                    c = c if c >= 0 else pixcol(x, r)
+                    if c >= 0:
+                        colE[x, hh, di] = c
                 if r is None:
                     # above the walls (a gable end): the side takes more
                     # courses of the wall itself, not bands of roof colour
-                    if side and gable_rows and x in (pc['x'][0], pc['x'][1] - 1):
-                        sa, sb = side
+                    if side and gable_rows and edge:
+                        sa, sb = pc.get('gside') or side   # (plain wall courses, no window bay)
                         c = pixcol(sa + (dv - d_front) % (sb - sa), gable_rows[hh % len(gable_rows)])
                         if c >= 0:
                             colE[x, hh, di] = c
                     continue
                 # a painted chamfer is a staircase of 1-px steps: every step's
                 # side is exposed, so every column gets the side art
-                if side and (pc.get('paint') or x in (pc['x'][0], pc['x'][1] - 1)):
+                if side:
                     sa, sb = side
                     c = pixcol(sa + (dv - d_front) % (sb - sa), r)
                     if c >= 0:
-                        colE[x, hh, di] = c
+                        sideE[x, hh, di] = c
+                        if pc.get('paint') or edge:
+                            colE[x, hh, di] = c
                 if pc.get('back') == 'front' and dv == d_back:
                     c = pixcol(x, r)
                     if c >= 0:
@@ -386,6 +418,13 @@ def build(img, recipe):
                 di = dl + t + PAD
                 if c >= 0 and (kind != 'wall' or rr is not None):   # a wall's top row is not a roof: leave material
                     colT[x, hv, di] = c
+    # a wall cell whose side is open though its column is not a piece's end (an
+    # upper storey set back from the one below, a notch in the footprint) takes
+    # the side art too, not the row's flat band colour
+    open_ = np.zeros_like(occ)
+    open_[1:] |= ~occ[:-1]; open_[:-1] |= ~occ[1:]; open_[0] = True; open_[-1] = True
+    m_ = occ & open_ & (colE < 0) & (sideE >= 0)
+    colE[m_] = sideE[m_]
     apply_relief(img, recipe.get('relief', []), pix, occ, colS, colT, solid)
     apply_prisms(img, recipe.get('prisms', []), occ, colS, colT, solid)
     apply_volumes(img, recipe.get('volumes', []), occ, colS, colT, colE, colN, solid)
@@ -418,6 +457,20 @@ def _profile(profs, t):
     return best
 
 
+def _catmull(pts, n):
+    """n+1 points on a uniform Catmull-Rom curve through pts (tuples, every component
+    interpolated; the ends repeated)."""
+    P = [pts[0]] + list(pts) + [pts[-1]]
+    out = []
+    for i in range(n + 1):
+        f = i / float(n) * (len(pts) - 1)
+        k = min(int(f), len(pts) - 2); t = f - k
+        p0, p1, p2, p3 = P[k], P[k + 1], P[k + 2], P[k + 3]
+        out.append(tuple(.5 * (2 * b + (-a + c) * t + (2 * a - 5 * b + 4 * c - e) * t * t + (-a + 3 * b - 3 * c + e) * t ** 3)
+                         for a, b, c, e in zip(p0, p1, p2, p3)))
+    return out
+
+
 def volume_inside(v):
     s = v['shape']
     if s == 'plan':           # a prism standing on a polygon plan: poly=[(x, d), ...], h=(h0, h1)
@@ -443,6 +496,37 @@ def volume_inside(v):
     if s == 'super':          # a rounded wall: superellipse plan c=(x, d), r=(rx, rd), exponent p, h=(h0, h1)
         (cx, cd), (rx, rd), p, (h0, h1) = v['c'], v['r'], v.get('p', 8.0), v['h']
         return lambda x, d, h: h0 <= h < h1 and abs((x + .5 - cx) / rx) ** p + abs((d + .5 - cd) / rd) ** p <= 1.0
+    if s == 'dome':           # a superellipse dome: plan c=(x, d), r=(rx, rd), exponent p, crown height top
+        (cx, cd), (rx, rd), p, top = v['c'], v['r'], v.get('p', 2.0), v['top']
+
+        def dome(x, d, h):        # (fuller than 3DS's S^(2/p) + (h/top)^2 <= 1: the Battle Dome's drawn
+            S_ = abs((x + .5 - cx) / rx) ** p + abs((d + .5 - cd) / rd) ** p   # shell is boxy, 13% off vs 15%)
+            return S_ < 1 and S_ + ((h + .5) / top) ** 2 <= 1.0
+        return dome
+    if s == 'union':          # 3DS's Volume: parts ('tube', [(x, h, d, r), ...]) (a Catmull-Rom curve),
+        fs = []               # ('dome', cx, cd, rx, rd, top, p), ('box', x0, x1, h0, h1, d0, d1)
+        for part in v['parts']:
+            if part[0] == 'tube':
+                path = _catmull(part[1], 48)
+                segs = list(zip(path, path[1:]))
+
+                def tube(x, d, h, segs=segs):
+                    q = (x + .5, h + .5, d + .5)
+                    for a, b in segs:
+                        dv = (b[0] - a[0], b[1] - a[1], b[2] - a[2])
+                        dd = dv[0] ** 2 + dv[1] ** 2 + dv[2] ** 2 or 1e-9
+                        t = max(0.0, min(1.0, sum((q[k] - a[k]) * dv[k] for k in range(3)) / dd))
+                        r = a[3] + (b[3] - a[3]) * t
+                        if sum((q[k] - a[k] - dv[k] * t) ** 2 for k in range(3)) <= r * r:
+                            return True
+                    return False
+                fs.append(tube)
+            elif part[0] == 'dome':
+                fs.append(volume_inside(dict(shape='dome', c=part[1:3], r=part[3:5], top=part[5], p=part[6])))
+            elif part[0] == 'box':
+                x0, x1, h0, h1, d0, d1 = part[1:]
+                fs.append(lambda x, d, h, b=(x0, x1, h0, h1, d0, d1): b[0] <= x < b[1] and b[2] <= h < b[3] and b[4] <= d < b[5])
+        return lambda x, d, h: any(f(x, d, h) for f in fs)
     raise ValueError('unknown volume shape %r' % s)
 
 
@@ -462,6 +546,19 @@ def volume_extent(v):
     if s == 'super':
         cd, rd = v['c'][1], v['r'][1]
         return int(math.floor(cd - rd)), int(math.ceil(cd + rd)), int(v['h'][1])
+    if s == 'dome':
+        cd, rd = v['c'][1], v['r'][1]
+        return int(math.floor(cd - rd)), int(math.ceil(cd + rd)), int(math.ceil(v['top']))
+    if s == 'union':
+        lo, hi, top = [], [], []
+        for part in v['parts']:
+            if part[0] == 'tube':
+                lo += [q[2] - q[3] for q in part[1]]; hi += [q[2] + q[3] for q in part[1]]; top += [q[1] + q[3] for q in part[1]]
+            elif part[0] == 'dome':
+                lo.append(part[2] - part[4]); hi.append(part[2] + part[4]); top.append(part[5])
+            else:
+                lo.append(part[5]); hi.append(part[6]); top.append(part[4])
+        return int(math.floor(min(lo))), int(math.ceil(max(hi))), int(math.ceil(max(top)))
     raise ValueError('unknown volume shape %r' % s)
 
 
@@ -474,6 +571,13 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
                              optionally kept in r0..r1 (the clean wall, not the shadow at its foot);
       wrap=(u0, u1, r0, r1)  that strip of the drawing run round a round solid by angle (thatch);
       neither                the volume's material colour `mat`=(x, row).
+      mirror=dm              a round solid's far half (depth past dm) takes the drawing of the near
+                             half at the mirrored depth 2*dm - d (3DS's mirror_z): a dome seen from
+                             behind shows its own ribs and rim, not one flat material;
+      corner=(c0, c1)        with side: a hidden wall cell k px (plan distance) from one of the plan
+                             polygon's vertices takes facade column c0+k while k < c1-c0, so every
+                             vertical edge wears the outline, highlight and shadow the drawing gives
+                             its front corners (a white stucco wall is framed, not a flat slab).
     v: shape (see volume_inside), B, rows=(r0, r1) its own art rows, mat."""
     H, W = img.shape[:2]
     for v in vols:
@@ -481,6 +585,7 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
         r0, r1 = v.get('rows', (0, H))
         mat = pack(img[v['mat'][1], v['mat'][0], :3])
         side, wrap = v.get('side'), v.get('wrap')
+        corner = v.get('corner') if v.get('poly') else None
 
         def art(x, row):
             if not (r0 <= row < r1 and 0 <= row < H and 0 <= x < W):
@@ -490,15 +595,61 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
         d0, d1, h1 = volume_extent(v)
         cells = {(x, d, h) for x in range(W) for d in range(d0 - 1, d1 + 2) for h in range(0, h1 + 1)
                  if d + PAD >= 0 and inside(x, d, h)}
+        if v.get('carve'):
+            # silhouette carving: a cell whose exposed front or top projects onto the ground (a
+            # transparent / keyed pixel inside the drawing) is not there - the solid shrinks to the
+            # drawn outline (a dome wider than the head it stands for loses its flare)
+            for _ in range(200):
+                gone = [c for c in cells if 0 <= B - c[2] - c[1] < H and art(c[0], B - c[2] - c[1]) < 0
+                        and ((c[0], c[1] - 1, c[2]) not in cells or (c[0], c[1], c[2] + 1) not in cells)]
+                if not gone:
+                    break
+                cells.difference_update(gone)
         if not cells:
             continue
         front = {}                                   # the front plane's depth at each height
+        tops = {}                                    # the top cell of each column (x, d)
         for (x, d, h) in cells:
             front[h] = min(front.get(h, d), d)
+            tops[(x, d)] = max(tops.get((x, d), -1), h)
         cx = (min(c[0] for c in cells) + max(c[0] for c in cells)) / 2.0
         cd = (min(c[1] for c in cells) + max(c[1] for c in cells)) / 2.0
 
-        def hidden(x, d, h):
+        mir = v.get('mirror')
+
+        carry = v.get('carry')
+
+        def hidden(x, d, h, wall=False):
+            if carry is not None:
+                # carry=(axis x, k): a round body's hidden faces wear what its back shows from above
+                # at the point k of the way out from the axis (a snake's sides continue its back)
+                xc = int(carry[0] + (x + .5 - carry[0]) * carry[1])
+                hh = tops.get((xc, d))
+                if hh is not None:
+                    c = art(xc, B - hh - d)
+                    if c >= 0:
+                        return c
+                return mat
+            if v['shape'] == 'dome' and mir is not None:
+                # the side quarters (|u| > |w|) carry on what the front shows at that height: the
+                # front surface's colour at a column near the silhouette, inside it (the belt and the
+                # shell run round the dome; the drawing's own edge column is outline and lawn)
+                (cx_, cd_), (rx_, rd_), p_, top_ = v['c'], v['r'], v.get('p', 2.0), v['top']
+                u_, w_ = (x + .5 - cx_) / rx_, (d + .5 - cd_) / rd_
+                if abs(u_) > abs(w_):
+                    lim = max(0.0, 1 - ((h + .5) / top_) ** 2)   # the plan's S at this height
+                    us = min(.85, .9 * lim ** (1 / p_))
+                    q_ = lim - us ** p_
+                    if q_ > 0:
+                        df = cd_ - rd_ * q_ ** (1 / p_)
+                        c = art(int(cx_ + math.copysign(us * rx_, u_)), int(round(B - h - df)))
+                        if c >= 0:
+                            return c
+                    return mat
+            if mir is not None:
+                c = art(x, B - h - (2 * mir - d if d > mir else d))
+                if c >= 0:
+                    return c
             if wrap:
                 u0, u1, w0, w1 = wrap
                 ang = math.atan2(d - cd, x - cx)
@@ -510,6 +661,12 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
                 row = B - h - front[h]
                 if len(side) == 4:                   # (u0, u1, r0, r1): rows kept inside the clean wall band,
                     row = min(max(row, side[2]), side[3] - 1)   # not the ground shadow drawn at its foot
+                if wall and corner:
+                    k = int(min(math.hypot(x + .5 - px_, d + .5 - pd_) for px_, pd_ in v['poly']))
+                    if k < corner[1] - corner[0]:
+                        c = art(corner[0] + k, row)
+                        if c >= 0:
+                            return c
                 c = art(u0 + (d + x) % (u1 - u0), row)
                 return c if c >= 0 else mat
             return mat
@@ -518,18 +675,28 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
             occ[x, h, di] = True
             solid[x, h, di] = mat
             colS[x, h, di] = colT[x, h, di] = colE[x, h, di] = colN[x, h, di] = -1
+        def far(x, d):
+            # a round solid's far half and side quarters are not in the drawing at all: every face
+            # there takes the mirrored / carried-round colour (the drawing row a far cell's top
+            # projects to is the crown or the sky above it, which speckled the shell white)
+            # (the side quarters' tops and fronts stay the drawing: the play camera sees them)
+            return mir is not None and d > mir
         for (x, d, h) in cells:
             di = d + PAD
+            fr = far(x, d)
+            # above the drawing's top edge (a crown the cell rect cuts off) there is no drawing:
+            # the solid's own material, not a mirrored row
+            top_ = mir is not None and B - h - d < 0
             if (x, d - 1, h) not in cells:           # seen head-on: the drawing at its own row
-                c = art(x, B - h - d)
+                c = mat if top_ else -1 if fr else art(x, B - h - d)
                 colS[x, h, di] = c if c >= 0 else hidden(x, d, h)
             if (x, d, h + 1) not in cells:           # seen from above: the drawing at its own row
-                c = art(x, B - h - d)
+                c = mat if top_ else -1 if fr else art(x, B - h - d)
                 colT[x, h, di] = c if c >= 0 else hidden(x, d, h)
             if (x - 1, d, h) not in cells or (x + 1, d, h) not in cells:
-                colE[x, h, di] = hidden(x, d, h)
+                colE[x, h, di] = hidden(x, d, h, True)
             if (x, d + 1, h) not in cells:
-                colN[x, h, di] = hidden(x, d, h)
+                colN[x, h, di] = hidden(x, d, h, True)
 
 
 def apply_relief(img, rects, pix, occ, colS, colT, solid):

@@ -120,6 +120,17 @@ OUT_DONE = {}
 POCKETS = {}
 # lone cells in a notch of a mountainside, at no terrace's height in the drawing
 POCKET_SKIP = {('EM_ROUTE119', (32, 30)), ('EM_MOSSDEEP_CITY', (57, 16))}
+# floors lifted by hand where the cartridge's ratings contradict the drawing and links put a drawn
+# stair flat or upside down: {map: [(levels, [cells, one per floor component])]}.
+# Tried and left out (2026-10-17): Route 119's middle. Its drawing stacks the lower plateau (33,92),
+# the upper plateau (35,86) up the stair at (35,89) level with the log bridge and the west plateau
+# (5,82), the grass above that plateau up the stair at (5,80), and the floors above that grass up
+# the stairs at (19,53), (6,54) and (21,48). At one level a stair that needs the grass at (26,51)
+# 3 up and the forest at (12,28) 6 up, which stood its north edge as tall grass-faced cliffs over
+# the floors beside it. The two stairs stay flat and reversed by decision.
+# NOTE: this generator no longer reproduces the installed Route 115 row (it rewrites (19,21) and
+# (21,13) to level 5 and drops (17,66)): splice single rows, never regenerate the whole file.
+LEVEL_ADD = {}
 def build_outdoor(mp):
     # (0xE8: the narrow flight between two posts; rated caves bring their own stair tiles)
     W, H, cells, comps, comp, edges, _, _, _ = sp.analyse(mp, OUTDOOR_MIDS.get(mp, {0xAF, 0xCF, 0xE8}))
@@ -169,10 +180,16 @@ def build_outdoor(mp):
                             found.add(off[j])
                         break
         if len(found) == 1: off[k] = found.pop(); POCKETS[mp].append((comps[k][0], len(comps[k]), off[k]))
+    add = {}
+    for n, pts in LEVEL_ADD.get(mp, []):
+        for p in pts:
+            k = comp.get(p)
+            assert k is not None, (mp, p)
+            add[k] = n
     pins = []
     for k in range(len(comps)):
-        if off.get(k, 0) and rawnib(k) not in (0, 1, 15):
-            pins.append((comps[k][0][0], comps[k][0][1], min(nib(k) - 3, 3) + off[k]))
+        if (off.get(k, 0) or k in add) and rawnib(k) not in (0, 1, 15):
+            pins.append((comps[k][0][0], comps[k][0][1], min(nib(k) - 3, 3) + off.get(k, 0) + add.get(k, 0)))
     return pins, sorted(stairs)
 
 def build(mp):

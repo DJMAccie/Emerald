@@ -27,7 +27,8 @@ FILES=$1; OUT=$2; CASES=$3; LEVEL=${4:-4}; YAW=${5:-0}; WAIT=${6:-60}
 LOCK=/tmp/emerald-qa.lock
 AS="$HOME/Library/Application Support"
 MAIN="$AS/pokemon-love2d-rseqa"
-M=~/Documents/battle-art-notquiteog
+# QA_SRC: take the named files from this tree instead of the mod source (a QA-only probe build)
+M=${QA_SRC:-$HOME/Documents/battle-art-notquiteog}
 LIMIT=${QA_LIMIT:-360}; [ "$LIMIT" -gt 400 ] && LIMIT=400
 COPIES=4; GAMES=4
 # a bare name is a lib file; a name with a slash is a path under the mod root

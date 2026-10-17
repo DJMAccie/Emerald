@@ -24,6 +24,19 @@ it stands in front of; a side's footprint is its one column of the drawing at it
     steps     the left or right edge of the 45-degree silhouette moving exactly 1 px per row
               for 4 rows or more: a stair; the faces owning those edge pixels are flagged.
 
+Calibrated for this pipeline (2026-10-17), each rule a fault the eye sees, not a by-product:
+    ground    south faces only. North, east and west faces face away from or run edge-on to the
+              drawing's camera, and a deep building's back wall projects onto the ground behind it
+              by construction (25 000 such flags, none visible). A flagged region must also cover
+              GROUND_MIN_AREA drawing px: a 1-2 px corner sliver is not a wall on the lawn. Colours
+              the ref mask calls ground that a building is made of (SHARED) are not ground there.
+    stretch   12 px deep (STRETCH_DEPTH, was 4: planks 6 px apart flagged every board) and a band:
+              the smeared colour must cover STRETCH_ROWS consecutive heights of one side
+              column. A roof rim or a course line 1-3 px tall running back along a side is that
+              line continued, as drawn, not a front colour dragged backwards.
+    steps     only where the drawing's own outline does not step the same way: a 45-degree
+              chamfer (octagons, the gyms' and the Center's cut corners) is drawn as a pixel stair.
+
 Adapted from the defect scanner of Emerald 3DS (3ds_port/scripts/voxel_defect_scan.py in
 ZallaxDev/pokeemerald-3Ds-dualscreen, read in a shallow clone). Its checks are the idea; the
 code here is written for flat-coloured quads. The 3DS licence:
@@ -82,8 +95,13 @@ HOLE_MIN = 0.70        # opaque share of an upright face's footprint, below whic
 GROUND_MAX = 0.50      # ground-colour share of an upright face's footprint, above which it is ground
 THIN_PLAN = 8          # px: the narrower side of a group's ground plan
 THIN_LONG = 16         # px: the longer side must stay under this (3DS: 2 x thin)
-STRETCH_DEPTH = 4      # px of depth a side run needs
+STRETCH_DEPTH = 12     # px of depth a side run needs (a side strip repeats every 4-16 px: a run inside
+                       # one period, planks between their joints, is its texture, not a smear)
 STEP_ROWS = 4          # rows in a run where an outline moves exactly 1 px per row
+STRETCH_ROWS = 4       # consecutive heights a smeared side colour must cover to be a band
+GROUND_MIN_AREA = 24   # drawing px a ground-flagged region must cover
+# colours the ref mask takes for ground (seen on the plaza) that these buildings are made of
+SHARED = {'x_frontier_dome': {0xdee6ef}, 'x_frontier_tower': set(), 'x_frontier_factory': set()}
 BG = (26, 28, 34)
 MARK = 0.5             # overlay strength of a flagged pixel in preview.png
 PANEL = 3              # preview scale
@@ -151,7 +169,8 @@ def ground_colours(info, art, mask_fn):
     cd = codes(art)
     ground = set(np.unique(cd[op & ~bm]).tolist())
     building = set(np.unique(cd[op & bm]).tolist())
-    return np.array(sorted(ground - building), np.int64)
+    ground -= SHARED.get(info['name'], set()) | SHARED.get(os.path.basename(info.get('path', '')).replace('.lua', ''), set())
+    return np.array(sorted(ground - building), np.int64), bm
 
 
 def stair_runs(edge):
@@ -215,11 +234,12 @@ def scan(info, mask_fn):
     n = len(quads)
     notes = []
     gset = np.zeros(0, np.int64)
+    bmask = None
     if mask_fn is None:
         notes.append('ground check off: ref.py not importable (%s)' % MASK_NOTE)
     else:
         try:
-            gset = ground_colours(info, art, mask_fn)
+            gset, bmask = ground_colours(info, art, mask_fn)
         except Exception as e:
             notes.append('ground check off: %s: %s' % (type(e).__name__, str(e)[:160]))
 
@@ -236,6 +256,7 @@ def scan(info, mask_fn):
     # wholly above or beside the drawing (a back wall behind a deep roof) has no drawing to
     # measure: it is counted as unmeasured, not as a hole.
     unmeasured = 0
+    gcand = []
     for i, q in enumerate(quads):
         if q[0] not in UPRIGHT:
             continue
@@ -249,14 +270,35 @@ def scan(info, mask_fn):
         if share < HOLE_MIN:
             faults['holes'][i].append('%d%% of its drawn footprint is opaque' % round(100 * share))
             marks['holes'][rv, cv] = True
-        if gset.size:
+        if gset.size and q[0] == 1:
             gshare = (op[rv, cv] & np.isin(cd[rv, cv], gset)).sum() / rv.size
             if gshare > GROUND_MAX:
+                gcand.append((i, rv, cv, gshare))
+    # a ground region counts once it covers GROUND_MIN_AREA drawing px
+    if gcand:
+        gm = np.zeros((H, W), bool)
+        for i, rv, cv, _ in gcand:
+            gm[rv, cv] = True
+        lab = np.zeros((H, W), np.int64); area = {}; k = 0
+        for r0 in range(H):
+            for c0 in range(W):
+                if gm[r0, c0] and not lab[r0, c0]:
+                    k += 1; st = [(r0, c0)]; lab[r0, c0] = k; a = 0
+                    while st:
+                        r1, c1 = st.pop(); a += 1
+                        for r2, c2 in ((r1 + 1, c1), (r1 - 1, c1), (r1, c1 + 1), (r1, c1 - 1)):
+                            if 0 <= r2 < H and 0 <= c2 < W and gm[r2, c2] and not lab[r2, c2]:
+                                lab[r2, c2] = k; st.append((r2, c2))
+                    area[k] = a
+        for i, rv, cv, gshare in gcand:
+            if max(area[l] for l in lab[rv, cv]) >= GROUND_MIN_AREA:
                 faults['ground'][i].append('%d%% of its footprint is ground colour' % round(100 * gshare))
                 marks['ground'][rv, cv] = True
 
-    # stretch: a side run that repeats the south face's colour at its front edge
+    # stretch: a side run that repeats the south face's colour at its front edge, in a band
+    # STRETCH_ROWS heights tall (collected first, then kept by band)
     front = front_index(quads)
+    scand = []
     for run in side_runs(quads, colour_of):
         q0, qn = quads[run[0]], quads[run[-1]]
         depth = qn[6] - q0[5]
@@ -271,9 +313,21 @@ def scan(info, mask_fn):
         _, fi = min(cands, key=lambda t: abs(t[0] - zf))
         if colour_of(fi) != colour_of(run[0]) or colour_of(fi) < 0:
             continue
+        scand.append((run, q0[0], col, q0[3], depth, q0[5], qn[6]))
+    band = defaultdict(set)
+    for run, f, col, h, depth, za, zb in scand:
+        band[(f, col)].add(h)
+    for run, f, col, h, depth, za, zb in scand:
+        hs = band[(f, col)]
+        lo = h
+        while lo - 1 in hs: lo -= 1
+        hi = h
+        while hi + 1 in hs: hi += 1
+        if hi - lo + 1 < STRETCH_ROWS:
+            continue
         for i in run:
-            faults['stretch'][i].append('run of %d px depth (z %d..%d) repeats the south face #%06x'
-                                        % (depth, q0[5], qn[6], colour_of(i)))
+            faults['stretch'][i].append('run of %d px depth (z %d..%d), band of %d rows, repeats the south face #%06x'
+                                        % (depth, za, zb, hi - lo + 1, colour_of(i)))
             r, c = fp[i]
             marks['stretch'][r[inside[i]], c[inside[i]]] = True
 
@@ -319,9 +373,20 @@ def scan(info, mask_fn):
         cs = np.flatnonzero(owner[r] >= 0)
         if cs.size:
             left[r], right[r] = int(cs[0]), int(cs[-1])
-    for edge, side in ((left, 'left'), (right, 'right')):
+    # the drawing's own outline (opaque building pixels): a stair it draws is no fault
+    dm = op & bmask if bmask is not None else op
+    dleft, dright = [None] * H, [None] * H
+    for r in range(H):
+        cs = np.flatnonzero(dm[r])
+        if cs.size:
+            dleft[r], dright[r] = int(cs[0]), int(cs[-1])
+    for edge, side, dedge in ((left, 'left', dleft), (right, 'right', dright)):
         for first, last, step in stair_runs(edge):
-            for r in range(first, last + 1):
+            rows_ = range(first, last + 1)
+            same = sum(1 for r in rows_ if dedge[r] is not None and abs(dedge[r] - edge[r]) <= 1)
+            if same >= .75 * len(rows_):
+                continue
+            for r in rows_:
                 i = int(owner[r, edge[r]])
                 faults['steps'][i].append('%s edge moves %+d px a row, rows %d-%d' % (side, step, first, last))
                 marks['steps'][r, edge[r]] = True

@@ -5,6 +5,7 @@ Rows/x are in the building's own drawing (catalogue box + `crop` cell offsets).
 set of columns that share a path; `d0` may be a function of x (chamfers).
 relief k > 0 pushes the pixel in (wall) / digs it down (roof); k < 0 pulls it out.
 """
+import math
 
 # Pokemon Center: 64x48 drawing (inventory #4).  Chamfered front corners, a
 # dark canopy band, a red drum roof with the ball logo standing as a wall, and
@@ -339,7 +340,7 @@ def _treehouse(x0):
     hut = [('wall', 26), ('slope', 10, 1.5), ('slope', 11, 0.3), ('mirror', 21)]
     return dict(
         src=('general__fortree', 'EM_FORTREE_CITY', x0, 1, x0 + 4, 3), trim=True, bgtiles=[0x0C6, 0x0C7, 0x017], keys=[],
-        pieces=[dict(x=(18, 62), B=47, d0=0, segs=hut, side=(28, 32), fill=(28, 32))],
+        pieces=[dict(x=(18, 62), B=47, d0=0, segs=hut, side=(22, 32), fill=(28, 32))],   # (side: the ringed post and the plank wall beside it)
         relief=[dict(x=(30, 52), rows=(26, 46), k=4),    # the dark doorway goes in
                 dict(x=(24, 26), rows=(23, 46), k=-1),   # the yellow corner posts stand proud
                 dict(x=(54, 56), rows=(23, 46), k=-1),
@@ -465,7 +466,8 @@ def _mossdeep_house(x0, y0):
         src=('general__mossdeep', 'EM_MOSSDEEP_CITY', x0, y0, x0 + 3, y0 + 3), trim=True,
         bgtiles=[0x001, 0x002, 0x00A, 0x00B], keys=[],
         pieces=[dict(x=(0, 64), B=63, d0=0, segs=[('wall', 28), ('flat', 4), ('wall', 32)], tail=40, roofRow=34,
-                     side=(12, 16), fill=(12, 16), back='front')],
+                     side=(36, 60), fill=(12, 16))],   # (sides and back: the window bay, wall-window-wall,
+                                                      # not the front again: that put the door on the back)
         relief=[dict(x=(16, 31), rows=(42, 63), k=2),     # the door set in
                 dict(x=(40, 56), rows=(41, 52), k=2)],    # the window set in
     )
@@ -480,7 +482,7 @@ def _soot_cone(x0, y0):
     8 px corners cut; the spire's base octagon x 4-44, depth 6-40, its apex 48 high over x 24,
     depth 23 (art row 8)."""
     base = dict(shape='plan', poly=[(8, 0), (40, 0), (48, 8), (48, 31), (40, 39), (8, 39), (0, 31), (0, 8)],
-                h=(0, 22), B=79, mat=(5, 66), side=(2, 7, 58, 71))
+                h=(0, 22), B=79, mat=(5, 66), side=(2, 7, 58, 71), corner=(0, 1))   # (the outline at each vertex)
     spire = dict(shape='pyramid', poly=[(13, 40), (35, 40), (44, 29), (44, 14), (37, 6), (11, 6), (4, 14), (4, 29)],
                  h0=22, apex=(24, 23, 48), B=79, mat=(24, 24), side=(16, 34))
     return dict(
@@ -503,7 +505,7 @@ def _soot_box(x0, y0, front):
     drawn skylight grid (Emerald 3DS's sootopolis_flat_house, MIT). Its roof had been relief pushed up
     into a parapet that read as battlements; now the roof is flat and the grid lies on it."""
     house = dict(shape='plan', poly=[(0, 0), (48, 0), (48, 34), (0, 34)], h=(0, 30), B=79, mat=(4, 55),
-                 side=(3, 6, 50, 78))
+                 side=(3, 6, 50, 78), corner=(1, 7))   # (outline, highlight, stucco, shadow: the front's corner)
     return dict(
         src=('general__sootopolis', 'EM_SOOTOPOLIS_CITY', x0, y0, x0 + 2, y0 + 4), trim=True, bgtiles=SOOT_BG, keys=[],
         volumes=[house], prisms=front,
@@ -511,6 +513,129 @@ def _soot_box(x0, y0, front):
     )
 
 
+# The Battle Dome (cells x14..25, y6..17; drawing 192x192). It was read as a gable roof, and from
+# behind its ribs stood as a comb of slabs. Rebuilt after Emerald 3DS's battle_dome (MIT): a white
+# superellipse dome 92 high on an ellipse 98 by 70 (p 2.6), its far half wearing the near half's
+# drawing (ribs and the orange rim, mirrored), standing within a two-tier glass base (24 then 48
+# high) with the porch in front. 3DS coordinates (art 208x224 from map row 4) converted: x = X - 8,
+# d = 224 - Z. Its crown rises past the drawing's top row (the cell rect starts two rows lower),
+# so the crown takes the dome's own white.
+def _frontier_dome():
+    dome = dict(shape='dome', c=(96, 78), r=(98, 70), p=2.6, top=92, B=191, mat=(96, 40), mirror=78)
+    glass = lambda x0, x1, d0, d1, h: dict(shape='plan', poly=[(x0, d0), (x1, d0), (x1, d1), (x0, d1)], h=(0, h),
+                                           B=191, mat=(x0 + 8, 191 - d0 - h // 2), side=(x0 + 4, x0 + 20))
+    return dict(
+        src=('general__battle_frontier_outside_west', 'EM_BATTLE_FRONTIER_OUTSIDE_WEST', 14, 6, 25, 17), trim=True,
+        keys=[(115, 197, 165), (66, 181, 132), (165, 214, 197)],   # the lawn round it is ground, never dome
+        volumes=[glass(16, 176, 8, 54, 24), glass(32, 160, 24, 64, 48), glass(72, 120, 0, 28, 30), dome],
+    )
+
+
+FRONTIER_DOME = _frontier_dome()
+
+
+def _oct(x0, x1, d0, d1, cut):
+    """A plan octagon (x, d): the rectangle with its corners cut."""
+    return [(x0 + cut, d0), (x1 - cut, d0), (x1, d0 + cut), (x1, d1 - cut), (x1 - cut, d1),
+            (x0 + cut, d1), (x0, d1 - cut), (x0, d0 + cut)]
+
+
+# The Battle Factory (cells x4..18, y30..38; drawing 240x144). It was read as one wavy block whose
+# sides and back were horizontal streaks. Rebuilt after Emerald 3DS's battle_factory (MIT):
+# octagonal towers side by side, flat topped, their corners cut - the middle one (x 87-153) 101
+# high, the outer pairs 80 - and a fence line down each end. 3DS z converted: d = 144 - z.
+def _frontier_factory():
+    side = (100, 108)
+    tower = lambda x0, x1, d0, d1, cut, h: dict(shape='plan', poly=_oct(x0, x1, d0, d1, cut), h=(0, h), B=143,
+                                               mat=(120, 60), side=side, corner=(x0, x0 + 1))
+    return dict(
+        src=('general__battle_frontier_outside_west', 'EM_BATTLE_FRONTIER_OUTSIDE_WEST', 4, 30, 18, 38), trim=True, keys=[],
+        volumes=[tower(87, 153, 0, 43, 8, 101),
+                 tower(8, 64, 8, 48, 8, 80), tower(176, 232, 8, 48, 8, 80),
+                 tower(60, 92, 8, 48, 6, 80), tower(148, 180, 8, 48, 6, 80),
+                 dict(shape='plan', poly=[(0, 0), (8, 0), (8, 84), (0, 84)], h=(0, 14), B=143, mat=(4, 136), side=(0, 8)),
+                 dict(shape='plan', poly=[(232, 0), (240, 0), (240, 84), (232, 84)], h=(0, 14), B=143, mat=(236, 136), side=(232, 240))],
+    )
+
+
+FRONTIER_FACTORY = _frontier_factory()
+
+
+# The Battle Pyramid (cells x51..65, y5..14; drawing 240x160). After Emerald 3DS's battle_pyramid
+# (MIT): thirteen tiers 8 high, each 8 in on the sides and 4 in front and back (the base x 8-232,
+# depth 0-104), the portico before the entrance and its tower, the chain-fence posts either side.
+# 3DS z converted: d = 160 - z (its drawing is a row taller; the steps before the door stand on
+# that row, outside this cell rect, and are the map's own).
+def _frontier_pyramid():
+    box = lambda x0, x1, d0, d1, h0, h1, sd: dict(shape='plan', poly=[(x0, d0), (x1, d0), (x1, d1), (x0, d1)],
+                                                  h=(h0, h1), B=159, mat=(120, 80), side=sd)
+    # (each tier's hidden faces take its own front band's rows, never the sand above it)
+    vols = [box(8 + 8 * i, 232 - 8 * i, 4 * i, 104 - 4 * i, 8 * i, 8 * i + 8,
+                (16 + 8 * i, 32 + 8 * i, 152 - 12 * i, 160 - 12 * i)) for i in range(13)]
+    vols += [box(40, 200, 0, 20, 0, 20, (60, 76)), box(104, 136, 0, 40, 0, 40, (60, 76)),
+             box(0, 16, 0, 130, 0, 10, (2, 6)), box(224, 240, 0, 130, 0, 10, (226, 230))]
+    return dict(src=('general__battle_frontier_outside_east', 'EM_BATTLE_FRONTIER_OUTSIDE_EAST', 51, 5, 65, 14),
+                trim=True, keys=[], volumes=vols)
+
+
+FRONTIER_PYRAMID = _frontier_pyramid()
+
+
+# The Battle Pike (cells x40..44, y19..29; drawing 80x176): Seviper lying on the ground, the open
+# mouth the door. It stood as a banded box. After Emerald 3DS's battle_pike_volume (MIT): the body
+# a tube (r 26-30) along the middle, the tail lying behind it and curling west, the head a broad
+# dome, the yellow fins along its sides, the tongue a carpeted ramp. 3DS z converted: d = 208 - z
+# (its drawing starts two rows higher: the tail's tip lies on rows 17-18, outside this cell rect,
+# so the tail is cut at the rect's back edge). Hidden faces carry its back's pattern round.
+def _frontier_pike():
+    fins = [(8, 112), (72, 112), (6, 92), (74, 92), (8, 80), (72, 80), (10, 58), (70, 58)]
+    parts = [('tube', [(40, 20, 112, 26), (40, 22, 88, 28), (40, 24, 58, 30)]),
+             ('tube', [(44, 12, 118, 14), (54, 12, 146, 13.5), (50, 12, 170, 12.5), (48, 12, 176, 11.3)]),
+             ('dome', 40, 34, 38, 30, 44, 2.0)] + [('dome', x, d, 9, 9, 16, 2.0) for x, d in fins] + \
+            [('box', 24, 56, 0, 8, 0, 32)]
+    return dict(src=('general__battle_frontier_outside_west', 'EM_BATTLE_FRONTIER_OUTSIDE_WEST', 40, 19, 44, 29), trim=True,
+                keys=[(115, 197, 165), (189, 189, 189), (214, 214, 214), (165, 165, 165), (165, 214, 197)],
+                volumes=[dict(shape='union', parts=parts, B=175, mat=(20, 60), carry=(40, .3), carve=True)])
+
+
+FRONTIER_PIKE = _frontier_pike()
+
+
+def _rounded_plan(cx, cd, rx, rd, p=4.0, n=32):
+    """A superellipse plan polygon (x, d), its corners rounded (3DS's rounded_plan)."""
+    pts = []
+    for k in range(n):
+        t = 2 * math.pi * k / n
+        c, s_ = math.cos(t), math.sin(t)
+        pts.append((cx + rx * math.copysign(abs(c) ** (2 / p), c), cd + rd * math.copysign(abs(s_) ** (2 / p), s_)))
+    return pts
+
+
+# The Battle Frontier's small houses and lounges (48 or 96 wide). They were boxes whose sides were
+# the roof's red stripes stacked. After Emerald 3DS's frontier_house (MIT): a rounded block 36 high,
+# its plan a superellipse (front at depth 0.3, 28 deep), the flat orange roof and the red band on
+# top, the walls its front; the door ones take their wall beside the door round the sides, the
+# glass ones their glass. 3DS z converted: d = 64 - z (the drawings are bottom-aligned).
+def _frontier_house(mp, pair, x0, y0, x1, y1, glass):
+    W, H = (x1 - x0 + 1) * 16, (y1 - y0 + 1) * 16
+    plan = _rounded_plan(W / 2.0, 14.5, W / 2.0 + .6, 14.2, p=10.0 if W <= 48 else 14.0, n=32 if W <= 48 else 48)
+    side = (20, 28) if glass else (10, 18)
+    return dict(src=(pair, mp, x0, y0, x1, y1), trim=True, keys=list(GRASS),
+                volumes=[dict(shape='plan', poly=plan, h=(0, 36), B=H - 1, mat=(side[0] + 2, H - 12), side=side)])
+
+
+_FW, _FE = ('EM_BATTLE_FRONTIER_OUTSIDE_WEST', 'general__battle_frontier_outside_west'), ('EM_BATTLE_FRONTIER_OUTSIDE_EAST', 'general__battle_frontier_outside_east')
+FRONTIER_HOUSES = {
+    'b143_battlefrontier_lounge2': _frontier_house(*_FW, 44, 41, 49, 44, False),
+    'b145_battlefrontier_scottshouse': _frontier_house(*_FW, 43, 2, 45, 5, False),
+    'b146_battlefrontier_lounge4': _frontier_house(*_FW, 52, 42, 54, 44, True),
+    'b147_battlefrontier_lounge7': _frontier_house(*_FW, 4, 17, 6, 20, True),
+    'b155_battlefrontier_lounge1': _frontier_house(*_FE, 3, 42, 5, 44, True),
+    'b157_battlefrontier_lounge5': _frontier_house(*_FE, 21, 48, 26, 51, False),
+    'b158_battlefrontier_lounge6': _frontier_house(*_FE, 4, 6, 6, 8, True),
+    'b159_battlefrontier_lounge3': _frontier_house(*_FE, 64, 28, 66, 31, False),
+    'b160_battlefrontier_lounge8': _frontier_house(*_FE, 13, 49, 15, 51, True),
+}
 SOOT_CONE = _soot_cone(8, 2)
 # the porch round the door and the pilasters either side of it stand out
 SOOT_BOX = _soot_box(44, 2, [_proud((14, 34), (50, 80), 2, (4, 55)), _proud((9, 11), (50, 80), 2, (4, 55)),
@@ -605,4 +730,4 @@ PALACE_LOBBY = _palace_lobby()
 
 RECIPES = {'frontier_gate': FRONTIER_GATE, 'ferry_birth_island': _ferry('EM_BIRTH_ISLAND_EXTERIOR', 12, 24), 'ferry_navel_rock': _ferry('EM_NAVEL_ROCK_EXTERIOR', 7, 18),
            'trainer_hill_penthouse': TRAINER_HILL_PENTHOUSE, 'abandoned_ship_wreck': WRECK, 'b064_mossdeepcity_spacecenter': SPACE_CENTER,
-           **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM, 'b152_battlefrontier_battlepalacelobby': PALACE_LOBBY}
+           **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'frontier_dome': FRONTIER_DOME, 'frontier_factory': FRONTIER_FACTORY, 'frontier_pyramid': FRONTIER_PYRAMID, 'frontier_pike': FRONTIER_PIKE, **FRONTIER_HOUSES, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM, 'b152_battlefrontier_battlepalacelobby': PALACE_LOBBY}
