@@ -247,7 +247,10 @@ def build(img, recipe):
         img[isk, 3] = 0
     cols = {}
     dmax = hmax = 0
-    for pc in recipe['pieces']:
+    for vol in recipe.get('volumes', []):           # volumes set the model's room as well as pieces do
+        _, vd1, vh1 = volume_extent(vol)
+        dmax, hmax = max(dmax, vd1 + 2), max(hmax, vh1 + 2)
+    for pc in recipe.get('pieces', []):
         xs = range(*pc['x'])
         tail = pc.get('tail', 0)
         for x in xs:
@@ -385,7 +388,148 @@ def build(img, recipe):
                     colT[x, hv, di] = c
     apply_relief(img, recipe.get('relief', []), pix, occ, colS, colT, solid)
     apply_prisms(img, recipe.get('prisms', []), occ, colS, colT, solid)
+    apply_volumes(img, recipe.get('volumes', []), occ, colS, colT, colE, colN, solid)
     return dict(occ=occ, colS=colS, colT=colT, colE=colE, colN=colN, solid=solid, W=W, HH=HH, DD=DD)
+
+
+# ---------------------------------------------------------------- volumes
+# Solids of any plan the drawing implies, after Emerald 3DS's PlanPrism, PlanPyramid, lathe and
+# superellipse slab (3ds_port/scripts/voxel_building.py; MIT, Copyright (c) 2026 Zallax and Emerald 3DS
+# contributors): an octagonal base, an eight-sided spire, a round hut's thatch cone. Coordinates are
+# ours: x = art column, d = depth (0 = the front at the foot), h = height; a voxel shows art row
+# B - h - d. Converting a 3DS spec: x = X, h = Y, d = B - Z.
+def _inside_poly(px, py, poly):
+    inside, n = False, len(poly)
+    for i in range(n):
+        (x1, y1), (x2, y2) = poly[i], poly[(i + 1) % n]
+        if (y1 > py) != (y2 > py) and px < x1 + (py - y1) * (x2 - x1) / (y2 - y1):
+            inside = not inside
+    return inside
+
+
+def _profile(profs, t):
+    """The radius at height t over a lathe's foot: the widest of its profiles [(dh, r), ...]."""
+    best = None
+    for prof in profs:
+        for (h0, r0), (h1, r1) in zip(prof, prof[1:]):
+            if h0 <= t <= h1:
+                r = r0 + (r1 - r0) * ((t - h0) / (h1 - h0) if h1 > h0 else 0)
+                best = r if best is None else max(best, r)
+    return best
+
+
+def volume_inside(v):
+    s = v['shape']
+    if s == 'plan':           # a prism standing on a polygon plan: poly=[(x, d), ...], h=(h0, h1)
+        poly, (h0, h1) = v['poly'], v['h']
+        return lambda x, d, h: h0 <= h < h1 and _inside_poly(x + .5, d + .5, poly)
+    if s == 'pyramid':        # the polygon shrinking to apex=(x, d, h) from its base at h0
+        poly, h0, (ax, ad, ah) = v['poly'], v['h0'], v['apex']
+
+        def pyr(x, d, h):
+            if not (h0 <= h < ah):
+                return False
+            k = 1 - (h + .5 - h0) / (ah - h0)
+            return k > 0 and _inside_poly(ax + (x + .5 - ax) / k, ad + (d + .5 - ad) / k, poly)
+        return pyr
+    if s == 'lathe':          # round, centre c=(x, d), foot h0, radius by profile(s); squash = depth/width
+        (cx, cd), h0, sq = v['c'], v['h0'], v.get('squash', .5)
+        profs = v['prof'] if isinstance(v['prof'][0][0], (list, tuple)) else [v['prof']]
+
+        def lathe(x, d, h):
+            r = _profile(profs, h + .5 - h0)
+            return bool(r and r > 0) and ((x + .5 - cx) / r) ** 2 + ((d + .5 - cd) / (r * sq)) ** 2 <= 1.0
+        return lathe
+    if s == 'super':          # a rounded wall: superellipse plan c=(x, d), r=(rx, rd), exponent p, h=(h0, h1)
+        (cx, cd), (rx, rd), p, (h0, h1) = v['c'], v['r'], v.get('p', 8.0), v['h']
+        return lambda x, d, h: h0 <= h < h1 and abs((x + .5 - cx) / rx) ** p + abs((d + .5 - cd) / rd) ** p <= 1.0
+    raise ValueError('unknown volume shape %r' % s)
+
+
+def volume_extent(v):
+    """(d0, d1, h1): the depth range and the top a volume may reach (for the model's room)."""
+    s = v['shape']
+    if s in ('plan', 'pyramid'):
+        ds = [q[1] for q in v['poly']]
+        top = v['h'][1] if s == 'plan' else v['apex'][2]
+        return int(math.floor(min(ds))), int(math.ceil(max(ds))), int(math.ceil(top))
+    if s == 'lathe':
+        profs = v['prof'] if isinstance(v['prof'][0][0], (list, tuple)) else [v['prof']]
+        rmax = max(r for prof in profs for _, r in prof)
+        hmax = max(dh for prof in profs for dh, _ in prof)
+        cd, sq = v['c'][1], v.get('squash', .5)
+        return int(math.floor(cd - rmax * sq)), int(math.ceil(cd + rmax * sq)), int(math.ceil(v['h0'] + hmax))
+    if s == 'super':
+        cd, rd = v['c'][1], v['r'][1]
+        return int(math.floor(cd - rd)), int(math.ceil(cd + rd)), int(v['h'][1])
+    raise ValueError('unknown volume shape %r' % s)
+
+
+def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
+    """Each volume's voxels are filled, and every face the camera can see is painted by projecting
+    it back onto the drawing (art row B - h - d), so head-on the solid is exactly the drawing.
+    Faces the drawing never shows take the building's OWN pixels, never another tile's:
+      side=(u0, u1[, r0, r1]) the facade columns u0..u1 repeated along the hidden face, each at the
+                             drawing row of the front at that height (3DS's side strip), the rows
+                             optionally kept in r0..r1 (the clean wall, not the shadow at its foot);
+      wrap=(u0, u1, r0, r1)  that strip of the drawing run round a round solid by angle (thatch);
+      neither                the volume's material colour `mat`=(x, row).
+    v: shape (see volume_inside), B, rows=(r0, r1) its own art rows, mat."""
+    H, W = img.shape[:2]
+    for v in vols:
+        inside, B = volume_inside(v), v['B']
+        r0, r1 = v.get('rows', (0, H))
+        mat = pack(img[v['mat'][1], v['mat'][0], :3])
+        side, wrap = v.get('side'), v.get('wrap')
+
+        def art(x, row):
+            if not (r0 <= row < r1 and 0 <= row < H and 0 <= x < W):
+                return -1
+            q = img[row, x]
+            return pack(q[:3]) if q[3] >= 128 else -1
+        d0, d1, h1 = volume_extent(v)
+        cells = {(x, d, h) for x in range(W) for d in range(d0 - 1, d1 + 2) for h in range(0, h1 + 1)
+                 if d + PAD >= 0 and inside(x, d, h)}
+        if not cells:
+            continue
+        front = {}                                   # the front plane's depth at each height
+        for (x, d, h) in cells:
+            front[h] = min(front.get(h, d), d)
+        cx = (min(c[0] for c in cells) + max(c[0] for c in cells)) / 2.0
+        cd = (min(c[1] for c in cells) + max(c[1] for c in cells)) / 2.0
+
+        def hidden(x, d, h):
+            if wrap:
+                u0, u1, w0, w1 = wrap
+                ang = math.atan2(d - cd, x - cx)
+                u = u0 + int((ang + math.pi) / (2 * math.pi) * 4 * max(1, u1 - u0)) % (u1 - u0)
+                q = img[w0 + (h1 - h) % (w1 - w0), u]
+                return pack(q[:3]) if q[3] >= 128 else mat
+            if side:
+                u0, u1 = side[0], side[1]
+                row = B - h - front[h]
+                if len(side) == 4:                   # (u0, u1, r0, r1): rows kept inside the clean wall band,
+                    row = min(max(row, side[2]), side[3] - 1)   # not the ground shadow drawn at its foot
+                c = art(u0 + (d + x) % (u1 - u0), row)
+                return c if c >= 0 else mat
+            return mat
+        for (x, d, h) in cells:
+            di = d + PAD
+            occ[x, h, di] = True
+            solid[x, h, di] = mat
+            colS[x, h, di] = colT[x, h, di] = colE[x, h, di] = colN[x, h, di] = -1
+        for (x, d, h) in cells:
+            di = d + PAD
+            if (x, d - 1, h) not in cells:           # seen head-on: the drawing at its own row
+                c = art(x, B - h - d)
+                colS[x, h, di] = c if c >= 0 else hidden(x, d, h)
+            if (x, d, h + 1) not in cells:           # seen from above: the drawing at its own row
+                c = art(x, B - h - d)
+                colT[x, h, di] = c if c >= 0 else hidden(x, d, h)
+            if (x - 1, d, h) not in cells or (x + 1, d, h) not in cells:
+                colE[x, h, di] = hidden(x, d, h)
+            if (x, d + 1, h) not in cells:
+                colN[x, h, di] = hidden(x, d, h)
 
 
 def apply_relief(img, rects, pix, occ, colS, colT, solid):

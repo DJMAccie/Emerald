@@ -120,10 +120,15 @@ Key Lua modules for terrain:
   fill: Route 112's west margin shows the Heights-style rock cells (x 0..17, y 31..40, base 48) whose
   tops are drawn and whose sides/back are not closed, and the fill beside them floats as well. Check
   `dump=` for whether the cells in the shot are inside the map before blaming `Gen3Boundary`.
+- **Scripted runs skip the `core.update` mod hook**: with `POKEPORT_DRIVER` set, `main.lua` calls
+  `Game:update` itself and never `PlatformHooks.update`, so anything in a `core.update` hook (the 1ST
+  look, mouse capture, pad polling in `Gen3Integration`) is dead in QA. A driver testing it calls
+  `require('src.mods.Runtime').call('core.update',function()end,game,1/60)` each frame itself
+  (pattern: the first-person test driver, 2026-10-17).
 - The game process **cannot write outside its own save directory**: `io.open('/tmp/...','w')` succeeds
   and writes nothing. Hand the file handle from the driver (`Scene.geoFile=f`) instead.
 
-## 6. Open items (as of 2026-10-16)
+## 6. Open items (as of 2026-10-17)
 
 - **Route 112's west margin still shows flat plates hanging over the drop** from the orbit camera at
   `{'EM_ROUTE112',6,45}` / `{'EM_ROUTE112',12,45}` (yaw 1.6). Two separate faults are involved:
@@ -161,16 +166,50 @@ Key Lua modules for terrain:
      whose group ends at a lower walkable cell, ground and canopy can part company by a course or
      more. Print `c.cx, c.cy, c.base, c.canopyBottom, treeY` for the boundary tree cells in the shot
      before changing anything.
-- Fill outside Route 112's west map edge floats as stepped plates (visible only from the orbit camera).
+
+     **2026-10-17, more ruled out** (each rendered at `{'EM_ROUTE112',27,29}` level 7 yaw 2.2):
+     - `supportFill` runs INSIDE `Gen3Elevation.bind`'s per-cell loop (once per cell, neighbours still
+       nil read as 0), so the west fill comes out a random 16/32 mix that changes from load to load.
+       Calling it once after the loop gives identical heights on every load - and the plates did not
+       move. **Not shipped, reverted:** the in-loop bug is what keeps all map-edge fill at <=16 px.
+       Fixed, fill beside high ground stays high: a tall sand-block tower at Route 111's edge (orbit
+       view), taller fill forests on Routes 113/116/123 and Fortree, and inside-map rock masses and
+       canopies that span fill cells change height too (sweep 2026-10-17: mh changed on 259 cells,
+       canopyBottom on 182). The real fix is one belt height per map for all fill (Emerald 3DS
+       `voxel_mesh_builder.c:1518-1660`), plus a wall from the belt up to higher edge cells; only
+       then move `supportFill` out of the loop.
+     - `Gen3Hills` green patches (`G[k]=greenFloor`, line ~247) blanked for one run: the near hills
+       change, the plates do not.
+     - The scene window ends at x=-8 west of Route 112 and nothing dumped there (x -40..-1, y 0..60,
+       or north y -40..0) stands high. `Backdrop.lua` is not used by Gen3.
+     So the plates are not the west fill, not Hills' grass and not the backdrop. They sit at one
+     height across the whole horizon: next suspects are a connected map's far geometry (Route 111 /
+     Mt. Chimney side) or a far-distance draw path. Find their world position first (`box=` on a
+     guessed rectangle, or the probe driver) before changing code.
+- Battle Frontier East/West rock stays on the dome builder: in `Gen3Rock.MAPS` (tried 2026-10-17)
+  their low pond and garden walls climb into tall spikes and pillars. They need their own rule
+  (cap at the drawn face rows, or 3DS-style counted terraces). Also tried the same day: adding
+  both maps to `RUNFACE` (a face climbs only in an east-west run). Still wrong - the rock pile east
+  of the Battle Factory splits into thin vertical slivers (soft-rock patches, not the side bands)
+  and the Pike/Arena pond walls still tower. Next try belongs with the counted-terrace (relief)
+  work, not more Gen3Rock knobs. Sky Pillar and Southern Island were
+  moved onto `Gen3Rock` the same day: rock 1:1 in courses instead of stretched domes.
+- Stairs (audit 2026-10-17 on the five old leftovers): Mossdeep 63,21, R111 17,36, R115 28,8 and
+  Safari SW 8,2 are now `ok`. Still open, all small: R119 35,89 `flat` (a stair cut through a drawn
+  terrace face 070/073/07B/089, but the terrace is walk-connected to the lower floor elsewhere, so
+  the generator ties them; needs a per-terrace pin), R119 5,80 `reversed`, and a 19 px walkable
+  jump on Safari SW between (9,8) and (10,8).
 - Mt. Pyre: **done 2026-10-16, user's choice.** `Gen3Rock.SMOOTH_SKIP` now lists only
   `EM_MT_PYRE_EXTERIOR`, so the exterior's drawn graveyard terraces stay crisp blocks (soft rock made
   a mess of those walls) while the summit's outer mountain gets the soft rolling treatment. The
   exterior render is pixel-identical to before; sweep over Mt. Chimney, Routes 114/112/104 and
   Rustboro clean. A/B: `docs/shots/mtpyre-rock-block-vs-soft-2026-10-16.png`.
-- Rustboro's lamp posts: diagnosed 2026-10-16, **user approved a restyle to match the art**.
-  What the art draws (`0_3 general__rustboro`): the lamp block is 2 cells wide and 2 tall - head in
-  the row above the foot row, `next_mid` 0x300/0x302 over 0x05E (four cells: 0x05E, 0x05E / 0x300,
-  0x302). In the drawing the lamp is a *slender* navy post (about 2 px wide) with a flared foot, a
+- Rustboro's lamp posts: **done 2026-10-17** (`lib/Gen3Lamp.lua`, ported from Emerald 3DS, MIT):
+  slender rings 1:1 from the drawing, lantern glass and a warm pool of light at night. The tile ids
+  below were WRONG: the 17 lamps are foot 0x21A (blocked) with head 0x212 (or 0x213 at (15,18)) in
+  the cell north, head art in the OVER layer; 0x05E/0x300/0x302 are the street paving. The diagnosis
+  history below is kept for the lessons in it.
+  Old note: diagnosed 2026-10-16, user approved a restyle to match the art. In the drawing the lamp is a *slender* navy post (about 2 px wide) with a flared foot, a
   collared waist and a pale BLUE glass lantern under a peaked cap - 16 px wide, 32 tall in total.
   In 3D the post comes out roughly twice as thick as drawn and the lantern does not read at all:
   the cap overhangs it, so the head is a dark layered slab with the pale glass hidden inside.

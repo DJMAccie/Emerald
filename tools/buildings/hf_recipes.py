@@ -121,10 +121,12 @@ def _museum():
             dict(x=(152, 186), rows=(36, 62), k=2)]
     return dict(
         inv=47, crop=(0, 0, 0, 1),
+        # 40 deep where the roofs are drawn 32/33 rows: the 8 rows of extra depth carry the roof's own
+        # courses (flatx), not a plain navy fill (which stood on every roof as a dark band)
         pieces=[
-            dict(x=(32, 72), B=110, d0=0, segs=[('wall', 46), ('flat', 32)], depth=40, side=(34, 44), back='front'),
-            dict(x=(72, 152), B=110, d0=0, segs=[('wall', 69), ('flat', 33)], depth=40, side=(73, 82), back='front'),
-            dict(x=(152, 192), B=110, d0=0, segs=[('wall', 46), ('flat', 32)], depth=40, side=(176, 186), back='front'),
+            dict(x=(32, 72), B=110, d0=0, segs=[('wall', 46), ('flatx', 32, 48, 8, 8)], side=(34, 44), back='front'),
+            dict(x=(72, 152), B=110, d0=0, segs=[('wall', 69), ('flatx', 33, 25, 8, 8)], side=(73, 82), back='front'),
+            dict(x=(152, 192), B=110, d0=0, segs=[('wall', 46), ('flatx', 32, 48, 8, 8)], side=(176, 186), back='front'),
         ],
         relief=rel, keys=[(115, 197, 165), (66, 181, 132)],
     )
@@ -472,79 +474,77 @@ def _mossdeep_house(x0, y0):
 # Sootopolis houses (3x4 cells each). Ground = the crater rock tiles around.
 SOOT_BG = [0x2D9, 0x2E1, 0x2D4, 0x2D8, 0x2E0, 0x2E2, 0x254, 0x255, 0x25E, 0x25F, 0x242, 0x241, 0x2D3, 0x2DA]
 def _soot_cone(x0, y0):
-    """White round drum under a stepped round dark roof (House1 kind)."""
-    # every part is a circle of its own centre (x 23.5, depth 19.5): radius r is x 24-r..24+r, depth 20-r..20+r
-    # wrap: the drum's plain white wall (columns 1..6, rows 60..69) and the roof's plain grey (columns 16..33,
-    # rows 22..25) run round each ring, not down its front
-    ring = lambda r, h0, h1: dict(x=(24 - r, 24 + r), d=(20 - r, 20 + r), h=(h0, h1), B=79, rows=(0, 80), mat=(24, 24), round=True, wrap=(16, 34, 22, 26))
-    prisms = [dict(x=(4, 44), d=(0, 40), h=(0, 29), B=79, rows=(0, 80), mat=(5, 66), round=True, wrap=(1, 7, 60, 70)),
-              ring(21, 28, 33), ring(16, 33, 38), ring(10, 38, 43), ring(4, 43, 53),     # eaves, then the tiers
-              # the door and the two dark pillars stand proud of the drum, painted from their drawing rows
-              dict(x=(16, 34), d=(0, 2), h=(0, 21), B=79, rows=(58, 79), mat=(24, 70)),
-              dict(x=(9, 14), d=(0, 4), h=(0, 23), B=79, rows=(56, 79), mat=(10, 70)),
-              dict(x=(34, 39), d=(0, 4), h=(0, 23), B=79, rows=(56, 79), mat=(38, 70))]
+    """Spire house (House1 kind): an octagonal white base under an eight-sided pyramid of dark stone.
+    It was a round drum under stepped round tiers, which is not what the drawing shows. Measurements
+    from Emerald 3DS's sootopolis_spire (MIT): base 22 high on the octagon x 0-48, depth 0-39 with
+    8 px corners cut; the spire's base octagon x 4-44, depth 6-40, its apex 48 high over x 24,
+    depth 23 (art row 8)."""
+    base = dict(shape='plan', poly=[(8, 0), (40, 0), (48, 8), (48, 31), (40, 39), (8, 39), (0, 31), (0, 8)],
+                h=(0, 22), B=79, mat=(5, 66), side=(2, 7, 58, 71))
+    spire = dict(shape='pyramid', poly=[(13, 40), (35, 40), (44, 29), (44, 14), (37, 6), (11, 6), (4, 14), (4, 29)],
+                 h0=22, apex=(24, 23, 48), B=79, mat=(24, 24), side=(16, 34))
     return dict(
         src=('general__sootopolis', 'EM_SOOTOPOLIS_CITY', x0, y0, x0 + 2, y0 + 4), trim=True, bgtiles=SOOT_BG, keys=[],
-        # one-column pieces buried in the cap and the drum: the first sets the model's height, the second its depth
-        # (prisms do not count toward either)
-        pieces=[dict(x=(23, 24), B=79, d0=20, h0=48, segs=[('wall', 5)]),
-                dict(x=(23, 24), B=79, d0=20, h0=0, segs=[('wall', 1)], tail=20)],
-        prisms=prisms,
+        volumes=[base, spire],
+        # the two dark pillars stand proud of the base, painted from their own drawing rows
+        prisms=[dict(x=(9, 14), d=(-2, 1), h=(0, 23), B=77, rows=(56, 79), mat=(10, 70)),
+                dict(x=(34, 39), d=(-2, 1), h=(0, 23), B=77, rows=(56, 79), mat=(38, 70))],
     )
 
 
-def _soot_box(x0, y0):
-    """Flat-roofed box with a skylight grid and a stepped porch (House2 kind)."""
+def _proud(x, rows, n, mat, B=79):
+    """A strip of the front standing n px proud (a porch, a pilaster, a badge): a box in front of the
+    wall whose face shows its own drawing rows (B shifted by n so the rows stay where they are drawn)."""
+    return dict(x=x, d=(-n, 0), h=(B + 1 - rows[1], B + 1 - rows[0]), B=B - n, rows=rows, mat=mat)
+
+
+def _soot_box(x0, y0, front):
+    """Flat-roofed white house (House2 kind): a block 30 high and 34 deep whose flat roof carries the
+    drawn skylight grid (Emerald 3DS's sootopolis_flat_house, MIT). Its roof had been relief pushed up
+    into a parapet that read as battlements; now the roof is flat and the grid lies on it."""
+    house = dict(shape='plan', poly=[(0, 0), (48, 0), (48, 34), (0, 34)], h=(0, 30), B=79, mat=(4, 55),
+                 side=(3, 6, 50, 78))
     return dict(
         src=('general__sootopolis', 'EM_SOOTOPOLIS_CITY', x0, y0, x0 + 2, y0 + 4), trim=True, bgtiles=SOOT_BG, keys=[],
-        pieces=[dict(x=(0, 48), B=79, d0=0, segs=[('wall', 30), ('flat', 34)], side=(11, 15), fill=(11, 15))],
-        relief=[dict(x=(8, 40), rows=(22, 40), k=1),        # skylight panes set in
-                dict(x=(14, 34), rows=(50, 79), k=-2),      # stepped porch stands out
-                dict(x=(9, 11), rows=(50, 79), k=-2),       # pilasters either side of the door stand out
-                dict(x=(37, 39), rows=(50, 79), k=-2),
-                dict(x=(16, 32), rows=(60, 79), k=2)],      # door set in
+        volumes=[house], prisms=front,
         anchor_skip_cells=[(0, 2)],                          # left corner tile varies between houses
     )
 
 
 SOOT_CONE = _soot_cone(8, 2)
-SOOT_BOX = _soot_box(44, 2)
-# the same box with a diamond front and no door (no warp; the town's extra buildings)
-SOOT_BOX2 = dict(_soot_box(2, 5), relief=[dict(x=(8, 40), rows=(22, 40), k=1),       # skylight panes set in
-                                          dict(x=(3, 6), rows=(47, 77), k=-1),       # wall pilasters stand out
-                                          dict(x=(43, 46), rows=(47, 77), k=-1),
-                                          dict(x=(21, 27), rows=(58, 60), k=-1),     # diamond badge, stepped
-                                          dict(x=(19, 29), rows=(61, 67), k=-1),
-                                          dict(x=(21, 27), rows=(68, 70), k=-1)],
-                 pieces=[dict(x=(0, 48), B=79, d0=0, segs=[('wall', 30), ('flat', 34)], side=(8, 12), fill=(8, 12))],
+# the porch round the door and the pilasters either side of it stand out
+SOOT_BOX = _soot_box(44, 2, [_proud((14, 34), (50, 80), 2, (4, 55)), _proud((9, 11), (50, 80), 2, (4, 55)),
+                             _proud((37, 39), (50, 80), 2, (4, 55))])
+# the same box with a diamond front and no door (no warp; the town's extra buildings): wall pilasters and
+# the stepped diamond badge stand out
+SOOT_BOX2 = dict(_soot_box(2, 5, [_proud((3, 6), (50, 77), 1, (4, 55)), _proud((43, 46), (50, 77), 1, (4, 55)),
+                                  _proud((21, 27), (58, 60), 1, (4, 55)), _proud((19, 29), (61, 67), 1, (4, 55)),
+                                  _proud((21, 27), (68, 70), 1, (4, 55))]),
                  anchor_skip_cells=[])
 
 
 # Pacifidlog hut (every hut is the same drawing; cells x15..17, y10..13 of the
-# first): a round woven drum (rows 37..63) under a turtle-shell dome
-# (rows 11..36), on the raft. Raft planks and sea are the ground.
+# first): a round woven wall under a thatch cone with its finial, on the raft.
+# Raft planks and sea are the ground.
 def _hut():
-    # every part is a circle of its own centre (x 23.5, depth 19.5): radius r is x 24-r..24+r, depth 20-r..20+r
-    # wrap: the thatch courses (drawing columns 1..14, rows 30..33) run round each ring, not down its front
-    ring = lambda h0, h1, r: dict(x=(24 - r, 24 + r), d=(20 - r, 20 + r), h=(h0, h1), B=63, rows=(0, 35), mat=(21, 10), round=True, wrap=(9, 21, 26, 32))
-    # the drum: a round prism 40 deep and 40 wide on the raft; its front is the drawing's wall (rows 34..63),
-    # its back and ends the golden weave (9, 45). The door is painted from the drawing's rows (a prism cannot be set in)
-    # wrap: the golden weave with one blue post (drawing columns 0..4, rows 46..58) runs round the drum
-    drum = dict(x=(4, 44), d=(0, 40), h=(0, 29), B=63, rows=(0, 64), mat=(9, 45), round=True, wrap=(0, 5, 46, 59))
-    # the dome: concentric rings shrinking to the apex (h 41); the first one is 1 wider than the drum (eaves)
-    dome = [dict(x=(1, 47), d=(-3, 43), h=(26, 31), B=63, rows=(0, 35), mat=(21, 10), round=True, wrap=(9, 21, 26, 32)), ring(31, 33, 20), ring(33, 35, 19), ring(35, 38, 16), ring(38, 40, 12), ring(40, 41, 6)]
-    # the top knob (drawing rows 1..14): a small round ball on the apex
-    knob = dict(ring(41, 46, 5), wrap=(21, 26, 5, 8))   # the knob's own pixels
+    """Measurements from Emerald 3DS's pacifidlog_hut (MIT): the wall 21 high on a rounded plan half
+    as deep as wide (superellipse, centre x 24 depth 10.5, radii 21 x 11); the thatch a cone and its
+    finial whose eave overhangs the wall, its foot lifted 21 along the view (centre depth 12). It was
+    a drum 40 deep under a dome of rings, twice too deep and without the finial."""
+    wall = dict(shape='super', c=(24, 10.5), r=(21, 11), p=8.0, h=(0, 21), B=63, mat=(9, 45),
+                wrap=(0, 5, 46, 59))                 # the golden weave with one blue post runs round it
+    thatch = dict(shape='lathe', c=(24, 12), h0=21, squash=.54, B=63, mat=(21, 10), wrap=(9, 21, 26, 32),
+                  prof=[[(0, 25.5), (3, 25.5), (4, 24), (16, 2.5), (17.5, 0)],             # the cone, eave first
+                        [(13, 3.5), (19, 3.5), (21, 7), (28, 7), (31, 4), (33, 0)]])        # the finial
     return dict(
         src=('general__pacifidlog', 'EM_PACIFIDLOG_TOWN', 15, 10, 17, 13), trim=True, flood=True,
         # the top row of the square is sea behind the hut: the model draws it but the cells stay water
         claimFrom=1,
         # the golden wall weave is not ground: only the pale raft edge and the sea are keys
         keys=[(239, 230, 165)] + [(82, 107, 214), (107, 132, 214)],
-        # one-column pieces buried in the drum and the knob: they set the model's depth and height (prisms do not count toward them)
-        pieces=[dict(x=(23, 24), B=63, d0=39, segs=[('wall', 29)]), dict(x=(23, 24), B=63, d0=19, h0=41, segs=[('wall', 5)])],
-        # the door: a thin box on the drum front at the drawn door (its own rows 44..63), since a wrapped drum paints no door
-        prisms=[drum, dict(x=(18, 30), d=(-1, 1), h=(0, 20), B=63, rows=(44, 64), mat=(9, 45))] + dome + [knob],
+        volumes=[wall, thatch],
+        # the door stands a pixel proud of the wall, painted from its own drawing rows
+        prisms=[dict(x=(18, 30), d=(-2, 0), h=(0, 20), B=63, rows=(44, 64), mat=(9, 45))],
     )
 
 
