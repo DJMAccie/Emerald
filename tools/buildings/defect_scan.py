@@ -403,6 +403,18 @@ def scan(info, mask_fn):
             same = sum(1 for r in rows_ if dedge[r] is not None and abs(dedge[r] - edge[r]) <= 1)
             if same >= .75 * len(rows_):
                 continue
+            # rows the drawing has no building in (a dome's crown risen past the drawing's top row): nothing
+            # to compare a stair with - unmeasured, not a fault
+            drawn = sum(1 for r in rows_ if dedge[r] is not None)
+            if drawn < .75 * len(rows_):
+                continue
+            # where the drawing's own edge curves over these rows (it moves on half of them or more: a dome's
+            # crown, a coil, a round roof) a 1 px stair is the curve laid in voxels; the fault is a stair
+            # against a straight drawn edge
+            moves = sum(1 for r in range(first, last) if dedge[r] is not None and dedge[r + 1] is not None
+                        and dedge[r + 1] != dedge[r])
+            if moves >= .5 * (last - first):
+                continue
             for r in rows_:
                 i = int(owner[r, edge[r]])
                 faults['steps'][i].append('%s edge moves %+d px a row, rows %d-%d' % (side, step, first, last))
