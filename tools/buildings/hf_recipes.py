@@ -505,7 +505,7 @@ def _soot_box(x0, y0, front):
     drawn skylight grid (Emerald 3DS's sootopolis_flat_house, MIT). Its roof had been relief pushed up
     into a parapet that read as battlements; now the roof is flat and the grid lies on it."""
     house = dict(shape='plan', poly=[(0, 0), (48, 0), (48, 34), (0, 34)], h=(0, 30), B=79, mat=(4, 55),
-                 side=(3, 6, 50, 78), corner=(1, 7))   # (outline, highlight, stucco, shadow: the front's corner)
+                 side=(3, 13, 50, 78), corner=(1, 7))   # (pilaster columns 9-11 repeat along the sides: a plain stucco side read as a flat slab) (outline, highlight, stucco, shadow: the front's corner)
     return dict(
         src=('general__sootopolis', 'EM_SOOTOPOLIS_CITY', x0, y0, x0 + 2, y0 + 4), trim=True, bgtiles=SOOT_BG, keys=[],
         volumes=[house], prisms=front,

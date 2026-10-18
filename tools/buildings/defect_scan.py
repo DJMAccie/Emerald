@@ -30,7 +30,9 @@ Calibrated for this pipeline (2026-10-17), each rule a fault the eye sees, not a
               by construction (25 000 such flags, none visible). A flagged region must also cover
               GROUND_MIN_AREA drawing px: a 1-2 px corner sliver is not a wall on the lawn. Colours
               the ref mask calls ground that a building is made of (SHARED) are not ground there.
-    stretch   12 px deep (STRETCH_DEPTH, was 4: planks 6 px apart flagged every board) and a band:
+    stretch   not where the front row at that height is itself mostly that colour (a drawn stripe
+              running round, the Center's mansard band); 12 px deep (STRETCH_DEPTH, was 4: planks
+              6 px apart flagged every board) and a band:
               the smeared colour must cover STRETCH_ROWS consecutive heights of one side
               column. A roof rim or a course line 1-3 px tall running back along a side is that
               line continued, as drawn, not a front colour dragged backwards.
@@ -98,10 +100,14 @@ THIN_LONG = 16         # px: the longer side must stay under this (3DS: 2 x thin
 STRETCH_DEPTH = 12     # px of depth a side run needs (a side strip repeats every 4-16 px: a run inside
                        # one period, planks between their joints, is its texture, not a smear)
 STEP_ROWS = 4          # rows in a run where an outline moves exactly 1 px per row
+PLINTH = 8             # a stretch band starting at the ground and ending below this height is a plinth
 STRETCH_ROWS = 4       # consecutive heights a smeared side colour must cover to be a band
+STRIPE = 0.6           # share of the front row in the run's colour above which it is a drawn stripe
 GROUND_MIN_AREA = 24   # drawing px a ground-flagged region must cover
 # colours the ref mask takes for ground (seen on the plaza) that these buildings are made of
-SHARED = {'x_frontier_dome': {0xdee6ef}, 'x_frontier_tower': set(), 'x_frontier_factory': set()}
+# (the Battle Tower's cream pilasters #b5b5a5 - 3140 drawing px, all of them tower - and the Frontier's
+# white #dee6ef, its pavement and its buildings' walls alike)
+SHARED = {'x_frontier_dome': {0xdee6ef}, 'x_frontier_tower': {0xb5b5a5}, 'x_frontier_factory': {0xdee6ef}}
 BG = (26, 28, 34)
 MARK = 0.5             # overlay strength of a flagged pixel in preview.png
 PANEL = 3              # preview scale
@@ -313,17 +319,28 @@ def scan(info, mask_fn):
         _, fi = min(cands, key=lambda t: abs(t[0] - zf))
         if colour_of(fi) != colour_of(run[0]) or colour_of(fi) < 0:
             continue
+        # a stripe the front itself draws (the front row at this height is mostly this colour, a
+        # band running round the building) is continued, not smeared
+        fr = [colour_of(i) for x in range(0, W) for (_, i) in front.get((x, hm), [])]
+        if fr and fr.count(colour_of(run[0])) >= STRIPE * len(fr):
+            continue
         scand.append((run, q0[0], col, q0[3], depth, q0[5], qn[6]))
+    # (a band is one colour: horizontal courses of different colours continued round the building, a
+    # striped stone base, are the front's own rows - a smear is one front colour dragged back over rows)
     band = defaultdict(set)
     for run, f, col, h, depth, za, zb in scand:
-        band[(f, col)].add(h)
+        band[(f, col, colour_of(run[0]))].add(h)
     for run, f, col, h, depth, za, zb in scand:
-        hs = band[(f, col)]
+        hs = band[(f, col, colour_of(run[0]))]
         lo = h
         while lo - 1 in hs: lo -= 1
         hi = h
         while hi + 1 in hs: hi += 1
         if hi - lo + 1 < STRETCH_ROWS:
+            continue
+        # a band at the foot of the wall, under PLINTH px tall: a base course running round the
+        # building as drawn on its front (the Center's and the gyms' grey plinth), not a smear
+        if lo <= 2 and hi < PLINTH:
             continue
         for i in run:
             faults['stretch'][i].append('run of %d px depth (z %d..%d), band of %d rows, repeats the south face #%06x'

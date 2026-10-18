@@ -61,6 +61,10 @@ NOT_BUILDING = {'route109_seashorehouse': [(80, 96)], 'slateport_harbor': [(0, 1
 STAND = {'trainerhill_tower': (34, 108)}
 # the door cells (map x, y) where the side-wall picker must not take its strip
 DOORS = {'lilycove_house4': [(12, 14)]}
+# the facade columns repeated along the hidden walls, where the automatic picker takes a plain strip
+# (the cable-car stations' bare stucco; the Ranking Hall's awning stripe, its grey windows not read as glass):
+# a wall with its post, a pillar with its window panel
+SIDES = {'cablecar_route112': (2, 15), 'cablecar_mtchimney': (81, 93), 'frontier_rankinghall': (8, 24), 'frontier_arena': (8, 24)}
 KEYS = {'trainerhill_tower': [(99, 66, 82), (132, 90, 90), (156, 115, 115), (189, 148, 140), (222, 181, 165)],
         # the grass, bushes and trees round the harbour's roof (cut in from the edges)
         'slateport_harbor': [(115, 197, 165), (58, 140, 49), (132, 197, 99), (181, 255, 132), (58, 82, 0)],
@@ -89,6 +93,8 @@ def main():
             n = sum(sg[1] + (sg[2] if sg[0] == 'gable' else 0) for sg in segs if sg[0] != 'wall')
             segs[:] = [sg for sg in segs if sg[0] == 'wall'] + [('flat', n)]
             kind = 'flat roof %d' % n
+        if name in SIDES:
+            for p_ in rec['pieces']: p_['side'] = p_['fill'] = SIDES[name]; p_.pop('gside', None)
         if name in STAND: rec['standOn'] = STAND[name]
         if name in KEYS: rec['keys'] = KEYS[name]; rec['flood'] = True
         v = hf.build(img, rec); q = hf.mesh(v)

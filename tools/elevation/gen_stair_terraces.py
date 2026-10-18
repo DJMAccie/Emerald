@@ -128,6 +128,10 @@ POCKET_SKIP = {('EM_ROUTE119', (32, 30)), ('EM_MOSSDEEP_CITY', (57, 16))}
 # the stairs at (19,53), (6,54) and (21,48). At one level a stair that needs the grass at (26,51)
 # 3 up and the forest at (12,28) 6 up, which stood its north edge as tall grass-faced cliffs over
 # the floors beside it. The two stairs stay flat and reversed by decision.
+# Hand pins spliced into the installed file (not produced here): Lilycove's south strip (30,33),
+# rated 5 but drawn as the same flat grass as the field it joins through an elevation-0 row
+# (31,13 at level 1), stood 32 px up behind a grass wall with 8 walkable jumps; it is pinned level
+# 1, and (31,13) and (53,4) are pinned at their old heights (any pin re-solves the map).
 # NOTE: this generator no longer reproduces the installed Route 115 row (it rewrites (19,21) and
 # (21,13) to level 5 and drops (17,66)): splice single rows, never regenerate the whole file.
 LEVEL_ADD = {}

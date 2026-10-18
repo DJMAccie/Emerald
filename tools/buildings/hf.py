@@ -203,8 +203,42 @@ def trim_and_mirror(img, smp, trim=True):
     return kept
 
 
+EDGE_TRIM = 4      # at most this many edge columns a side are cut as ground (see build)
+EDGE_GROUND = 0.7  # a column is ground when this share of its opaque drawing is not building
+
+
+def ground_columns(src, img, rows=None):
+    """Per drawing column: is it ground? Ground colours as the defect scanner takes them from
+    ref.building_mask (tools/ortho45/ref.py): seen on the rectangle's ground, never on its building;
+    a column is ground when EDGE_GROUND of its opaque pixels are those colours. None when ref.py is
+    unavailable."""
+    H, W = img.shape[:2]
+    try:
+        sys.path.insert(0, os.path.join(HERE, '..', 'ortho45'))
+        import ref
+        pair, mp, x0, y0, x1, y1 = src
+        full = ref.building_mask(mp, [x0, y0, x1, y1], pair=pair)
+        bm = full[y0 * 16:(y1 + 1) * 16, x0 * 16:(x1 + 1) * 16]
+    except Exception:
+        return None
+    if bm.shape != (H, W):
+        return None
+    a = img[..., :3].astype(np.int64)
+    cd = (a[..., 0] << 16) | (a[..., 1] << 8) | a[..., 2]
+    op = img[..., 3] >= 128
+    gset = set(np.unique(cd[op & ~bm]).tolist()) - set(np.unique(cd[op & bm]).tolist())
+    isg = np.isin(cd, np.array(sorted(gset), np.int64)) & op
+    r0, r1 = rows or (0, H)
+    out = []
+    for x in range(W):
+        n = op[r0:r1, x].sum()
+        out.append(bool(n) and isg[r0:r1, x].sum() >= EDGE_GROUND * n)
+    return out
+
+
 def build(img, recipe):
     H, W = img.shape[:2]
+    img0 = img
     # key colours (the ground around the building) are not building
     keys0 = {tuple(k) for k in recipe.get('keys', [])}
     trim = recipe.get('trim', False)
@@ -418,6 +452,21 @@ def build(img, recipe):
                 di = dl + t + PAD
                 if c >= 0 and (kind != 'wall' or rr is not None):   # a wall's top row is not a roof: leave material
                     colT[x, hv, di] = c
+    # edge columns that are ground in the drawing are not building: a house drawn a few px in from its
+    # cells' edge (its outline at column 2, lawn at 0-1) stood that much wider than its picture, the
+    # front's first columns painted over the lawn (defect_scan 'ground'). Only piece-built models
+    # (autorecipe, explicit.py); hand volumes carve themselves.
+    # (the wall's rows only: a roof drawn over those columns stays, an eave over the lawn)
+    if recipe.get('pieces') and (recipe.get('src') or recipe.get('inv')) and EDGE_TRIM:
+        pc0 = recipe['pieces'][0]
+        wall = sum(sg[1] for sg in pc0.get('segs', []) if sg[0] == 'wall')
+        B0 = pc0.get('B', H - 1)
+        gcols = ground_columns(art_src(recipe), img0, (max(0, B0 - wall + 1), B0 + 1)) if wall else None
+        if gcols is not None:
+            for xs in (range(0, EDGE_TRIM), range(W - 1, W - 1 - EDGE_TRIM, -1)):
+                for x in xs:
+                    if not gcols[x]: break
+                    occ[x, :wall] = False; colS[x, :wall] = -1; colT[x, :wall] = -1; colE[x, :wall] = -1; colN[x, :wall] = -1
     # a wall cell whose side is open though its column is not a piece's end (an
     # upper storey set back from the one below, a notch in the footprint) takes
     # the side art too, not the row's flat band colour
@@ -956,6 +1005,17 @@ def crop_to_content(im, bg=(26, 28, 34), pad=8):
         return im
     return im.crop((max(0, xs.min() - pad), max(0, ys.min() - pad),
                     min(im.width, xs.max() + pad), min(im.height, ys.max() + pad)))
+
+
+def art_src(recipe):
+    """(pair, map, x0, y0, x1, y1) of a recipe's drawing: its own src, or its inventory box and crop."""
+    if 'src' in recipe:
+        return recipe['src']
+    cat = {e['n']: e for e in json.load(open(os.path.join(ROOT, 'shots_inv/catalogue.json')))}
+    e = cat[recipe['inv']]
+    x0, y0, x1, y1 = e['box']
+    dx0, dy0, dx1, dy1 = recipe.get('crop', (0, 0, 0, 0))
+    return (e['pair'], e['map'], x0 + dx0, y0 + dy0, x1 + dx1, y1 + dy1)
 
 
 def load_art(recipe):
