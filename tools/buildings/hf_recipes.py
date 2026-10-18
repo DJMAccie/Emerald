@@ -521,7 +521,10 @@ def _soot_box(x0, y0, front):
 # d = 224 - Z. Its crown rises past the drawing's top row (the cell rect starts two rows lower),
 # so the crown takes the dome's own white.
 def _frontier_dome():
-    dome = dict(shape='dome', c=(96, 78), r=(98, 70), p=2.6, top=92, B=191, mat=(96, 40), mirror=78)
+    # (2026-10-18: the drawing is not symmetric - its west foot stands out to the drawing's edge, its east foot
+    # recedes behind the glass base with lawn beside it - so the west half is squarer, pl 3.4, and the east half
+    # a little narrower, 93: the round foot laid in voxels had stood as a 1 px stair on both corners)
+    dome = dict(shape='dome', c=(96, 78), r=(98, 70), p=2.6, pl=3.4, rxr=93, top=92, B=191, mat=(96, 40), mirror=78)
     glass = lambda x0, x1, d0, d1, h: dict(shape='plan', poly=[(x0, d0), (x1, d0), (x1, d1), (x0, d1)], h=(0, h),
                                            B=191, mat=(x0 + 8, 191 - d0 - h // 2), side=(x0 + 4, x0 + 20))
     return dict(
@@ -658,7 +661,8 @@ def _hut():
     a drum 40 deep under a dome of rings, twice too deep and without the finial."""
     wall = dict(shape='super', c=(24, 10.5), r=(21, 11), p=8.0, h=(0, 21), B=63, mat=(9, 45),
                 wrap=(0, 5, 46, 59))                 # the golden weave with one blue post runs round it
-    thatch = dict(shape='lathe', c=(24, 12), h0=21, squash=.54, B=63, mat=(21, 10), wrap=(9, 21, 26, 32),
+    # (2026-10-18: squash .54 -> .47: the eave's front corners stood 1-2 px outside the drawn eave, a 1 px stair)
+    thatch = dict(shape='lathe', c=(24, 12), h0=21, squash=.47, B=63, mat=(21, 10), wrap=(9, 21, 26, 32),
                   prof=[[(0, 25.5), (3, 25.5), (4, 24), (16, 2.5), (17.5, 0)],             # the cone, eave first
                         [(13, 3.5), (19, 3.5), (21, 7), (28, 7), (31, 4), (33, 0)]])        # the finial
     return dict(

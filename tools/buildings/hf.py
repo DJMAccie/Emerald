@@ -547,9 +547,12 @@ def volume_inside(v):
         return lambda x, d, h: h0 <= h < h1 and abs((x + .5 - cx) / rx) ** p + abs((d + .5 - cd) / rd) ** p <= 1.0
     if s == 'dome':           # a superellipse dome: plan c=(x, d), r=(rx, rd), exponent p, crown height top
         (cx, cd), (rx, rd), p, top = v['c'], v['r'], v.get('p', 2.0), v['top']
+        pl, pr = v.get('pl', p), v.get('pr', p)   # the x term's exponent west / east of the centre and the
+        rxr = v.get('rxr', rx)                    # east radius (a dome drawn fuller on one side)
 
         def dome(x, d, h):        # (fuller than 3DS's S^(2/p) + (h/top)^2 <= 1: the Battle Dome's drawn
-            S_ = abs((x + .5 - cx) / rx) ** p + abs((d + .5 - cd) / rd) ** p   # shell is boxy, 13% off vs 15%)
+            u = (x + .5 - cx) / (rx if x + .5 < cx else rxr)                     # shell is boxy, 13% off vs 15%)
+            S_ = abs(u) ** (pl if u < 0 else pr) + abs((d + .5 - cd) / rd) ** p
             return S_ < 1 and S_ + ((h + .5) / top) ** 2 <= 1.0
         return dome
     if s == 'union':          # 3DS's Volume: parts ('tube', [(x, h, d, r), ...]) (a Catmull-Rom curve),
@@ -684,11 +687,14 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
                 # front surface's colour at a column near the silhouette, inside it (the belt and the
                 # shell run round the dome; the drawing's own edge column is outline and lawn)
                 (cx_, cd_), (rx_, rd_), p_, top_ = v['c'], v['r'], v.get('p', 2.0), v['top']
+                if x + .5 >= cx_:
+                    rx_ = v.get('rxr', rx_)
                 u_, w_ = (x + .5 - cx_) / rx_, (d + .5 - cd_) / rd_
                 if abs(u_) > abs(w_):
+                    px_ = v.get('pl', p_) if u_ < 0 else v.get('pr', p_)
                     lim = max(0.0, 1 - ((h + .5) / top_) ** 2)   # the plan's S at this height
-                    us = min(.85, .9 * lim ** (1 / p_))
-                    q_ = lim - us ** p_
+                    us = min(.85, .9 * lim ** (1 / px_))
+                    q_ = lim - us ** px_
                     if q_ > 0:
                         df = cd_ - rd_ * q_ ** (1 / p_)
                         c = art(int(cx_ + math.copysign(us * rx_, u_)), int(round(B - h - df)))

@@ -1,5 +1,22 @@
 # First-person gate: report and handoff (2026-10-18)
 
+## Current status (end of 2026-10-18, session local_15a48300)
+
+User rules: "this game must be perfect", "no exempts for anything". One Emerald session at a time.
+
+| Gate | Status |
+|---|---|
+| 3D within 1 s | Met earlier; final serial re-time of all 212 maps still to do. |
+| Outdoor + room surveys | Done earlier. Open: Mt. Pyre Summit slit (24,16 yaw 0). Fortree deck corners not reproduced. Pre-existing, newly seen: floating tree-crown slivers looking west off Route 120's west edge (spots 5,64 and 12,82, yaw 4.71), in the old build too. Final magenta re-survey to do. |
+| Buildings / defect scanner | 6eb8ba5: Battle Dome (pl 3.4, rxr 93) and Pacifidlog hut (squash .47) clean; scanner steps rule gains an under-layer ground test (`under_ground()`). Left: Ranking Hall b154 ground 4 (roof-back risers h53-56, grey #84848c, over the drawn rock); SHARED entries for x_frontier_dome/tower/factory still in defect_scan.py. |
+| Map edges | Done (4b06331). |
+| Stairs / ledges | 301a30e ledges 0/401; 214435f: Route 115 meadow 8 px + smooth ramp, Route 120 field 32 / basin 64 / plateau 96 + east-west smooth ramp. Whole-map audit: 0 flat, 0 reversed, 0 cliff jumps, coverage partial 0. |
+| Battles / grass / overworld Pokemon | Re-check after all commits. |
+
+Open list, in order: Ranking Hall; replace the SHARED entries with real rules or fixes; the summit slit; final pass (serial re-time of 212 maps, magenta re-survey + room spot-checks, stairs audit, defect scan, battles/grass/overworld before vs after); report.
+
+How-to and gotchas: side-session notes `local_15a48300.../gate-handover-2026-10-18-s5.md` (scratch scripts var.py, splice.py, views.py, one.sh, make_patch_own.sh). Another session was editing battle-art-notquiteog lib/Gen3Scene.lua + Gen3Outdoor.lua (Outdoor.ledgeFloor, uncommitted, not installed): tools/props/make_patch.sh always copies those two from the working tree, so while that work is there use a copy with OWN_LIB set to your own files. A QA run whose log shows `dist nil` / "scene fallback" captured 2D, not 3D.
+
 ## The goal (set by the user with /goal, still active)
 
 > Emerald passes these gates, all installed and pushed: every map shows 3D within 1 s of entering;
@@ -131,3 +148,29 @@ Still open: the summit hairlines, Jagged Pass stair gap, Ever Grande ledge rims,
 - USP: battle frames vs the pre-change build differ ≤1.2% (animation timing, same as before); Routes 102/117/119 grass and overworld Pokémon identical.
 - Outdoor survey complete: 53 maps × 4 first-person directions + orbit (Littleroot re-shot from (14,12), clear of the truck; Route 114 north filled in). Magenta only at the haze horizon apart from the small slivers listed above.
 - Ever Grande's ledge "rims" are the drawing's own grass pixels on the ledge tops, tilted with the rock face (left as is).
+
+### Bakes after trim_edges.py (7c2d741)
+Dewford Gym and Slateport museum trimmed and clean. Defect scan: 12 bakes (ground 7, stretch 5, steps 2).
+Remaining ground faults are not edge strips: herb shop = a 1 px riser at the roof's back top over the sky
+above it; league, Fallarbor tent, Ranking Hall, cable car (1 face), Battle Tower lawn patches, contest
+lobby (trim leaves a thin post there, so skipped). Each needs its own look.
+
+### Ledges (301a30e, end of 2026-10-18)
+Whole-map dumps (`tools/em_cells_driver.lua` now dumps every cell, 60aa380) found 211 of 401 outdoor
+ledges that did not drop. Fixed and installed: TerrainLevels ledge relief + sloped relief floors in
+Gen3Scene (`c.slope`, `TerrainLevels.at` follows it) + connectors (plain-ground layer-0 "stairs"
+between level floors ride the relief). Audit: 0 bad ledges; stairs unchanged; 13 new 4 px steps, all
+deliberate (Jagged Pass stepping stones, Route 119 nook, one on Route 111 13,18). Speed: all ≤750 ms.
+Open:
+- ~~Z-fighting streak beside a ledge~~ fixed: Gen3Scene laid a full-cell ground plane at y=0 under
+  every ledge, and a drop ledge's lip top is also at y=0. `Gen3Outdoor.ledgeFloor` now emits only
+  the ground a drop ledge leaves bare (grass rows behind a front lip; none for a side ledge).
+  Checked old vs new: Routes 114/115/116 + Safari SW first person clean; play/orbit unchanged; audit
+  0 of 401 bad ledges.
+- Faint marks at a few ledge ends on Route 115 (overview).
+- Found by the whole-map dump, pre-existing: flat stair Route 115 (10,70), reversed Route 120 (12,86),
+  5 walkable cliff jumps on one map, 532 walkable 4-15 px steps between open floor cells.
+- Mesh checksums are noisy run to run (Rustboro, Route 110, Lilycove); Slateport water 32,9-10 flips
+  0/16 rarely. Use cell dumps, not checksums, to prove "no change".
+- The 4 failing unit tests (terrain_levels, native_elevation, gen3_adapter, native_option_consumers)
+  fail the same on the pre-change tree.

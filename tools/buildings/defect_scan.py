@@ -107,7 +107,8 @@ GROUND_MIN_AREA = 24   # drawing px a ground-flagged region must cover
 # colours the ref mask takes for ground (seen on the plaza) that these buildings are made of
 # (the Battle Tower's cream pilasters #b5b5a5 - 3140 drawing px, all of them tower - and the Frontier's
 # white #dee6ef, its pavement and its buildings' walls alike)
-SHARED = {'x_frontier_dome': {0xdee6ef}, 'x_frontier_tower': {0xb5b5a5}, 'x_frontier_factory': {0xdee6ef}}
+SHARED = {'x_frontier_dome': {0xdee6ef}, 'x_frontier_tower': {0xb5b5a5}, 'x_frontier_factory': {0xdee6ef},
+}
 BG = (26, 28, 34)
 MARK = 0.5             # overlay strength of a flagged pixel in preview.png
 PANEL = 3              # preview scale
@@ -164,6 +165,65 @@ def load_mask_fn():
         return None, '%s: %s' % (type(e).__name__, e)
 
 
+def over_layer(info, shape):
+    """Drawing pixels painted by a tile's over-layer (drawn above the player in the cartridge)."""
+    import layers, voxproto
+    x0, y0, x1, y1 = info['rect']
+    L = layers.load(info['pair']); W, H, cells = voxproto.map_cells(info['map'])
+    m = np.zeros(shape, bool)
+    if 'o' not in L:
+        return m
+    for yy in range(y1 - y0 + 1):
+        for xx in range(x1 - x0 + 1):
+            o = layers.tile(L, 'o', cells[(y0 + yy) * W + x0 + xx] & 0x3FF)
+            if o is not None:
+                m[yy * 16:(yy + 1) * 16, xx * 16:(xx + 1) * 16] = o[..., 3] >= 128
+    return m
+
+
+def under_ground(info, shape):
+    """Drawing pixels a building cell shows only from its under layer, where that under layer is the same tile
+    as a walkable ground cell's round the rectangle: the ground drawn beneath a building's over-layer art in
+    a mixed tile (Pacifidlog's raft planks beside the hut's eave). Colour cannot tell them apart - the planks
+    are the hut wall's own gold - but the tile layers can. Pixel by pixel: the same under-layer pixel in the
+    same place as a ground tile's, with nothing drawn over it."""
+    import layers, voxproto
+    x0, y0, x1, y1 = info['rect']
+    L = layers.load(info['pair']); W, H, cells = voxproto.map_cells(info['map'])
+    m = np.zeros(shape, bool)
+    if not all(k in L for k in 'umo'):
+        return m
+    ground = set()
+    for yy in range(max(0, y0 - 2), min(H, y1 + 3)):
+        for xx in range(max(0, x0 - 2), min(W, x1 + 3)):
+            if x0 <= xx <= x1 and y0 <= yy <= y1:
+                continue
+            v = cells[yy * W + xx]
+            if (v >> 10) & 3 == 0:
+                u = layers.tile(L, 'u', v & 0x3FF)
+                if u is not None:
+                    ground.add(u.tobytes())
+    grounds = [np.frombuffer(g, np.uint8).reshape(16, 16, 4) for g in ground]
+    for yy in range(y1 - y0 + 1):
+        for xx in range(x1 - x0 + 1):
+            mid = cells[(y0 + yy) * W + x0 + xx] & 0x3FF
+            u, mm, o = (layers.tile(L, k, mid) for k in 'umo')
+            if u is None:
+                continue
+            # (pixel by pixel, as ref.building_mask matches its composites: the hut's corner tiles carry the
+            # raft's planks in their own under-layer tile, the same pixels in the same places)
+            same = np.zeros((16, 16), bool)
+            for g in grounds:
+                same |= (u == g).all(axis=2) & (g[..., 3] >= 128)
+            only = same & (u[..., 3] >= 128)
+            if mm is not None:   # (a middle layer repeating the under layer pixel for pixel draws nothing over it)
+                only &= ~((mm[..., 3] >= 128) & ~(mm == u).all(axis=2))
+            if o is not None:
+                only &= o[..., 3] < 128
+            m[yy * 16:(yy + 1) * 16, xx * 16:(xx + 1) * 16] = only
+    return m
+
+
 def ground_colours(info, art, mask_fn):
     """Colours the rectangle shows on its ground and never on its building (ref.py's split)."""
     x0, y0, x1, y1 = info['rect']
@@ -173,7 +233,10 @@ def ground_colours(info, art, mask_fn):
         raise ValueError('mask %s vs drawing %s' % (bm.shape, art.shape[:2]))
     op = art[..., 3] >= 128
     cd = codes(art)
-    ground = set(np.unique(cd[op & ~bm]).tolist())
+    # (not from a tile's over-layer: that is roof drawn over the cells behind a building - the herb shop's
+    # top tile row, whose peach band is Lavaridge's sand colour - never the ground)
+    over = over_layer(info, bm.shape)
+    ground = set(np.unique(cd[op & ~bm & ~over]).tolist())
     building = set(np.unique(cd[op & bm]).tolist())
     ground -= SHARED.get(info['name'], set()) | SHARED.get(os.path.basename(info.get('path', '')).replace('.lua', ''), set())
     return np.array(sorted(ground - building), np.int64), bm
@@ -391,7 +454,12 @@ def scan(info, mask_fn):
         if cs.size:
             left[r], right[r] = int(cs[0]), int(cs[-1])
     # the drawing's own outline (opaque building pixels): a stair it draws is no fault
+    # (less what a cell shows only from a ground under layer: the raft beside Pacifidlog's hut eave)
     dm = op & bmask if bmask is not None else op
+    try:
+        dm = dm & ~under_ground(info, (H, W))
+    except Exception as e:
+        notes.append('under-layer ground off: %s: %s' % (type(e).__name__, str(e)[:120]))
     dleft, dright = [None] * H, [None] * H
     for r in range(H):
         cs = np.flatnonzero(dm[r])

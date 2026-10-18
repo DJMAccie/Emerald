@@ -4,7 +4,9 @@ from collections import defaultdict, Counter
 #  (1) every staircase: joins floors at different heights (ok), the same height (flat),
 #      the north floor lower than the south (reversed, N-S only), or one end blocked (odd);
 #  (2) every walkable 4-neighbour pair more than one level (16 px) apart, with neither cell a
-#      stair, ladder, ledge, rail, bridge/deck or water (cliff pairs = impossible height jumps).
+#      stair, ladder, ledge, rail, bridge/deck or water (cliff pairs = impossible height jumps);
+#  (3) every jump ledge with walkable floor on both sides of its jump: the floor it is jumped from must stand
+#      LEDGE_MIN px or more above the floor it lands on (needs the dump's ldrop field: the jump's dx,dy).
 # Writes <dir>/stairs_all.tsv and <dir>/cliff_pairs.tsv. Old dumps (no flags) still work.
 # usage: stairs_audit.py <dir>
 P=sys.argv[1]
@@ -30,7 +32,8 @@ for f in sorted(glob.glob(P+'/st/dump*.txt')):
                     k,v=t.split('=',1); flags[k]=v
             maps[p[0]][(int(p[1]),int(p[2]))]=(int(p[3],16),p[4],p[5][5:],float(p[8][5:]) if p[8][5:] not in ('nil','') else 0.0,
                 {'stairs':flags.get('stairs')=='1','ladder':flags.get('ladder')=='1','ledge':flags.get('ledge')=='1',
-                 'rail':flags.get('rail')=='1','bridge':flags.get('bridge')=='1','door':flags.get('door')=='1','sdir':flags.get('sdir','-'),'elev':flags.get('elev','nil')})
+                 'rail':flags.get('rail')=='1','bridge':flags.get('bridge')=='1','door':flags.get('door')=='1','sdir':flags.get('sdir','-'),'elev':flags.get('elev','nil'),
+                 'ldrop':flags.get('ldrop','-')})
         except Exception: pass
 # ---- (1) staircases
 flat=[];ok=0;odd=[];rev=[];rows_out=[];cnt=Counter();per=defaultdict(Counter)
@@ -150,3 +153,27 @@ print('total',sum(cl_per.values()),'maps',len(cl_per),' by place:',dict(cl_pl))
 print('blocked by elevation (a cliff the game enforces): total',sum(bl_per.values()),'maps',len(bl_per),' by place:',dict(bl_pl))
 for m,nn in sorted(bl_per.items(),key=lambda kv:-kv[1]): print('  blocked',m,nn)
 for m,nn in sorted(cl_per.items(),key=lambda kv:-kv[1]): print(m,nn)
+
+# ---- (3) ledges: the jump goes down
+LEDGE_MIN=4
+lg_rows=[];lg_per=Counter();lg_n=0
+for mp,cells in sorted(maps.items()):
+    pair,W,H=info.get(mp,('',0,0))
+    if place(mp,pair)!='outdoor': continue
+    def walk(k):
+        c=cells.get(k)
+        return c and c[2] in('0','nil') and c[1] not in('water','tree') and not c[4]['ledge'] and 0<=k[0]<W and 0<=k[1]<H
+    for k,c in sorted(cells.items()):
+        if not c[4]['ledge'] or c[4]['ldrop'] in('-',None): continue
+        dx,dy=(int(v) for v in c[4]['ldrop'].split(','))
+        hi,lo=(k[0]-dx,k[1]-dy),(k[0]+dx,k[1]+dy)
+        if not(walk(hi) and walk(lo)): continue
+        lg_n+=1
+        d=cells[hi][3]-cells[lo][3]
+        if d<LEDGE_MIN:
+            lg_per[mp]+=1;lg_rows.append((mp,k[0],k[1],'%g'%cells[hi][3],'%g'%cells[lo][3],'%g'%d))
+with open(P+'/ledges_bad.tsv','w') as f:
+    f.write('map\tx\ty\tfrom\tto\tdrop\n')
+    for r in lg_rows: f.write('\t'.join(str(v) for v in r)+'\n')
+print('== ledges (outdoor): %d checked, %d where the jump does not go down %d px ==' % (lg_n,len(lg_rows),LEDGE_MIN))
+for m,nn in sorted(lg_per.items(),key=lambda kv:-kv[1]): print(m,nn,[(r[1],r[2],r[3],r[4]) for r in lg_rows if r[0]==m][:6])
