@@ -57,6 +57,9 @@ FLAT = {'mauville_eastblock', 'cyclingroad_north', 'cyclingroad_south', 'route11
 # art columns beside the footprint that are not building (sign, fence, bush, sand, water):
 # made ground, so they take the map's own cells instead of standing up as boxes
 NOT_BUILDING = {'route109_seashorehouse': [(80, 96)], 'slateport_harbor': [(0, 16)], 'lilycove_harbor': [(111, 112)]}
+# (wall-top row, top band row): low roofs stop at their own drawn top edge, not the tallest part's
+# (the Ranking Hall's wings beside its vault, with the cliff drawn behind them)
+ROWCAP = {'frontier_rankinghall': (31, 8)}
 # stand on this map cell's floor instead of the footprint's own
 STAND = {'trainerhill_tower': (34, 108)}
 # the door cells (map x, y) where the side-wall picker must not take its strip
@@ -95,6 +98,15 @@ def main():
             kind = 'flat roof %d' % n
         if name in SIDES:
             for p_ in rec['pieces']: p_['side'] = p_['fill'] = SIDES[name]; p_.pop('gside', None)
+        if name in ROWCAP:
+            # each column's roof stops at its drawn top: the topmost row of the unbroken building
+            # run up from the wall top (the vault, drawn up to the top band, keeps its full roof)
+            r0, rmin = ROWCAP[name]; bg = rec['bgmask']; cap = {}
+            for x in range(img.shape[1]):
+                r = r0
+                while r - 1 >= rmin and not bg[r - 1, x] and img[r - 1, x, 3] >= 128: r -= 1
+                if r > rmin: cap[x] = r
+            for p_ in rec['pieces']: p_['rowcap'] = cap
         if name in STAND: rec['standOn'] = STAND[name]
         if name in KEYS: rec['keys'] = KEYS[name]; rec['flood'] = True
         v = hf.build(img, rec); q = hf.mesh(v)

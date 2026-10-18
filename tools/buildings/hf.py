@@ -292,6 +292,19 @@ def build(img, recipe):
             smp = [s if s[3] == 'mirror' else s + (x,) for s in smp]
             smp = trim_and_mirror(img, [s for s in smp if s[3] == 'mirror' or 0 <= s[0] < H], trim)
             smp = [s[:4] for s in smp]
+            # rowcap: the column's roof stops rising at the first sample above this drawing row
+            # (a low wing beside a tall vault, whose extra courses would climb on behind its
+            # drawn top edge over the cliff). It keeps its depth: the rest is carried back level
+            # at that height (no higher than the roof it replaces), laid with the RC rows under
+            # the drawn top edge.
+            cap = pc.get('rowcap', {}).get(x)
+            if cap is not None:
+                cut = next((i for i, s_ in enumerate(smp) if s_[3] != 'wall' and s_[0] < cap), None)
+                if cut is not None and cut > 0:
+                    hc = max(s_[1] for s_ in smp[:cut])
+                    rc = pc.get('rowcap_rows', (2, 8))
+                    smp = smp[:cut] + [(cap + rc[0] + j % rc[1], min(s_[1], hc), s_[2], 'flatr')
+                                       for j, s_ in enumerate(smp[cut:])]
             # a column whose whole facade is ground (cut away) is not building
             if trim and smp and all(img[s_[0], x, 3] < 128 for s_ in smp if s_[3] == 'wall' and 0 <= s_[0] < H):
                 continue

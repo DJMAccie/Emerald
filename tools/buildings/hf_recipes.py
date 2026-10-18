@@ -548,14 +548,25 @@ def _oct(x0, x1, d0, d1, cut):
 # octagonal towers side by side, flat topped, their corners cut - the middle one (x 87-153) 101
 # high, the outer pairs 80 - and a fence line down each end. 3DS z converted: d = 144 - z.
 def _frontier_factory():
+    # (2026-10-18: the drawing's lower towers recede deeper at their front corners than the 3DS octagon: the
+    # pavement runs in to their feet. Front chamfers go 16 px back (the notches between towers), the two outer
+    # front corners 16 across x 24 back; the 8 px cuts had stood the corners' feet over the drawn pavement)
     side = (100, 108)
-    tower = lambda x0, x1, d0, d1, cut, h: dict(shape='plan', poly=_oct(x0, x1, d0, d1, cut), h=(0, h), B=143,
-                                               mat=(120, 60), side=side, corner=(x0, x0 + 1))
+
+    def tower(x0, x1, d0, d1, cut, h, cf=None, left=None, right=None):
+        p = _oct(x0, x1, d0, d1, cut)
+        if cf:
+            p[2], p[7] = (x1, d0 + cf), (x0, d0 + cf)
+        if left:
+            p[0], p[7] = (x0 + left[0], d0), (x0, d0 + left[1])
+        if right:
+            p[1], p[2] = (x1 - right[0], d0), (x1, d0 + right[1])
+        return dict(shape='plan', poly=p, h=(0, h), B=143, mat=(120, 60), side=side, corner=(x0, x0 + 1))
     return dict(
         src=('general__battle_frontier_outside_west', 'EM_BATTLE_FRONTIER_OUTSIDE_WEST', 4, 30, 18, 38), trim=True, keys=[],
         volumes=[tower(87, 153, 0, 43, 8, 101),
-                 tower(8, 64, 8, 48, 8, 80), tower(176, 232, 8, 48, 8, 80),
-                 tower(60, 92, 8, 48, 6, 80), tower(148, 180, 8, 48, 6, 80),
+                 tower(8, 64, 8, 48, 8, 80, cf=16, left=(16, 24)), tower(176, 232, 8, 48, 8, 80, cf=16, right=(16, 24)),
+                 tower(60, 92, 8, 48, 6, 80, cf=16), tower(148, 180, 8, 48, 6, 80, cf=16),
                  dict(shape='plan', poly=[(0, 0), (8, 0), (8, 84), (0, 84)], h=(0, 14), B=143, mat=(4, 136), side=(0, 8)),
                  dict(shape='plan', poly=[(232, 0), (240, 0), (240, 84), (232, 84)], h=(0, 14), B=143, mat=(236, 136), side=(232, 240))],
     )

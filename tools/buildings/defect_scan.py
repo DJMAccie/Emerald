@@ -28,8 +28,11 @@ Calibrated for this pipeline (2026-10-17), each rule a fault the eye sees, not a
     ground    south faces only. North, east and west faces face away from or run edge-on to the
               drawing's camera, and a deep building's back wall projects onto the ground behind it
               by construction (25 000 such flags, none visible). A flagged region must also cover
-              GROUND_MIN_AREA drawing px: a 1-2 px corner sliver is not a wall on the lawn. Colours
-              the ref mask calls ground that a building is made of (SHARED) are not ground there.
+              GROUND_MIN_AREA drawing px: a 1-2 px corner sliver is not a wall on the lawn. A ground
+              colour counts only where the terrain reaches it (ground_reach): pixels of a cell drawn with
+              a tile the map repeats in the open, or joined to one through ground colours. The Battle
+              Tower's cream pilasters and the Dome's white shell share the plaza's colours but no
+              terrain reaches them (was a per-bake colour exemption list, SHARED, until 2026-10-18).
     stretch   not where the front row at that height is itself mostly that colour (a drawn stripe
               running round, the Center's mansard band); 12 px deep (STRETCH_DEPTH, was 4: planks
               6 px apart flagged every board) and a band:
@@ -75,6 +78,7 @@ import argparse
 import glob
 import math
 import os
+import re
 import sys
 from collections import Counter, defaultdict
 
@@ -104,11 +108,8 @@ PLINTH = 8             # a stretch band starting at the ground and ending below 
 STRETCH_ROWS = 4       # consecutive heights a smeared side colour must cover to be a band
 STRIPE = 0.6           # share of the front row in the run's colour above which it is a drawn stripe
 GROUND_MIN_AREA = 24   # drawing px a ground-flagged region must cover
-# colours the ref mask takes for ground (seen on the plaza) that these buildings are made of
-# (the Battle Tower's cream pilasters #b5b5a5 - 3140 drawing px, all of them tower - and the Frontier's
-# white #dee6ef, its pavement and its buildings' walls alike)
-SHARED = {'x_frontier_dome': {0xdee6ef}, 'x_frontier_tower': {0xb5b5a5}, 'x_frontier_factory': {0xdee6ef},
-}
+REACH = True           # ground colours count only where the ground round the rectangle reaches them
+REPEAT = 4             # times a tile must appear in the open (outside every bake rectangle) to be terrain
 BG = (26, 28, 34)
 MARK = 0.5             # overlay strength of a flagged pixel in preview.png
 PANEL = 3              # preview scale
@@ -238,8 +239,68 @@ def ground_colours(info, art, mask_fn):
     over = over_layer(info, bm.shape)
     ground = set(np.unique(cd[op & ~bm & ~over]).tolist())
     building = set(np.unique(cd[op & bm]).tolist())
-    ground -= SHARED.get(info['name'], set()) | SHARED.get(os.path.basename(info.get('path', '')).replace('.lua', ''), set())
     return np.array(sorted(ground - building), np.int64), bm
+
+
+_RECTS = {}
+
+
+def bake_rects(mapname, folder):
+    """The rectangles of every bake on this map (headers only)."""
+    key = (mapname, folder)
+    if key not in _RECTS:
+        out = []
+        for f in glob.glob(os.path.join(folder, '*.lua')):
+            with open(f, encoding='utf-8') as fh:
+                hdr = fh.read(600)
+            m = re.search(r"map='([^']*)'.*?x0=(-?\d+),y0=(-?\d+),x1=(-?\d+),y1=(-?\d+)", hdr)
+            if m and m.group(1) == mapname:
+                out.append(tuple(int(v) for v in m.groups()[1:]))
+        _RECTS[key] = out
+    return _RECTS[key]
+
+
+def ground_reach(info, shape, gset):
+    """Drawing pixels of the ground colours that belong to the terrain: those in a terrain cell, and those
+    joined to one (4-way, through ground colours only), over the rectangle and one tile round it. A terrain
+    cell is drawn with a tile the map also uses REPEAT+ times in the open, outside every building's
+    rectangle (rock, lawn, pavement). A ground colour reached from no terrain cell - the Battle Tower's cream
+    pilasters, the Battle Dome's white shell running on past its rectangle, a wall painted the path's colour
+    inside its outline - is the building painted that colour, not ground."""
+    x0, y0, x1, y1 = info['rect']
+    import voxproto
+    MW, MH, cells = voxproto.map_cells(info['map'])
+    rects = bake_rects(info['map'], os.path.dirname(os.path.abspath(info['path'])) if info.get('path') else B.DATA)
+    if info['rect'] not in rects:
+        rects = rects + [info['rect']]
+    count = Counter()
+    for yy in range(MH):
+        for xx in range(MW):
+            if not any(a <= xx <= c and b <= yy <= d for a, b, c, d in rects):
+                count[cells[yy * MW + xx] & 0x3FF] += 1
+    ex0, ey0, ex1, ey1 = max(0, x0 - 1), max(0, y0 - 1), min(MW - 1, x1 + 1), min(MH - 1, y1 + 1)
+    big = M.compose(info['pair'], info['map'], ex0, ey0, ex1, ey1)
+    ok = (big[..., 3] >= 128) & np.isin(codes(big), gset)
+    terrain = np.zeros(ok.shape, bool)
+    for yy in range(ey0, ey1 + 1):
+        for xx in range(ex0, ex1 + 1):
+            if count[cells[yy * MW + xx] & 0x3FF] >= REPEAT:
+                terrain[(yy - ey0) * 16:(yy - ey0 + 1) * 16, (xx - ex0) * 16:(xx - ex0 + 1) * 16] = True
+    # (a terrain cell's ground colours, and the ground-coloured pixels touching a terrain cell whatever the
+    # terrain's own colours: the pink rock edge a house tile carries beside brown cliff)
+    edge = terrain.copy()
+    edge[1:] |= terrain[:-1]; edge[:-1] |= terrain[1:]; edge[:, 1:] |= terrain[:, :-1]; edge[:, :-1] |= terrain[:, 1:]
+    seen = ok & edge
+    st = list(zip(*np.nonzero(seen)))
+    BH, BW = ok.shape
+    while st:
+        r, c = st.pop()
+        for r2, c2 in ((r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)):
+            if 0 <= r2 < BH and 0 <= c2 < BW and ok[r2, c2] and not seen[r2, c2]:
+                seen[r2, c2] = True; st.append((r2, c2))
+    oy, ox = (y0 - ey0) * 16, (x0 - ex0) * 16
+    H, W = shape
+    return seen[oy:oy + H, ox:ox + W]
 
 
 def stair_runs(edge):
@@ -309,6 +370,7 @@ def scan(info, mask_fn):
     else:
         try:
             gset, bmask = ground_colours(info, art, mask_fn)
+            greach = ground_reach(info, (H, W), gset) if REACH else np.ones((H, W), bool)
         except Exception as e:
             notes.append('ground check off: %s: %s' % (type(e).__name__, str(e)[:160]))
 
@@ -340,7 +402,7 @@ def scan(info, mask_fn):
             faults['holes'][i].append('%d%% of its drawn footprint is opaque' % round(100 * share))
             marks['holes'][rv, cv] = True
         if gset.size and q[0] == 1:
-            gshare = (op[rv, cv] & np.isin(cd[rv, cv], gset)).sum() / rv.size
+            gshare = (op[rv, cv] & np.isin(cd[rv, cv], gset) & greach[rv, cv]).sum() / rv.size
             if gshare > GROUND_MAX:
                 gcand.append((i, rv, cv, gshare))
     # a ground region counts once it covers GROUND_MIN_AREA drawing px

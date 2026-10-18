@@ -94,8 +94,8 @@ MOUNTAIN = (set(range(0x064, 0x0c0)) | set(range(0x172, 0x193)) | {0x1a0, 0x1a8,
 # was counted a level a row down whole columns of the staircase (a pillar).
 # 0x26A over 0x27A is a diagonal edge drawn as face ends (Fallarbor's
 # terrace turning south-east): the General's 074 over 07d, one level a pair.
-OWN_TWINS = {E.TS_FALLARBOR: {0x268: 0x07c, 0x269: 0x07c, 0x26a: 0x074,
-                              0x270: 0x070, 0x278: 0x07c, 0x27a: 0x07d}}
+import rock_tables as RT  # noqa: E402
+OWN_TWINS = {E.TS_FALLARBOR: dict(RT.OWN_TWINS_BROWN)}
 
 GROUND, TOP, ROCK, UNKNOWN = "G", "T", "R", "?"
 WORLD = ("world",)

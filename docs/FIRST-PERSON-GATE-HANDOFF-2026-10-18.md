@@ -1,21 +1,21 @@
 # First-person gate: report and handoff (2026-10-18)
 
-## Current status (end of 2026-10-18, session local_15a48300)
+## Current status (2026-10-18 night, final pass, session 0227e01e)
 
-User rules: "this game must be perfect", "no exempts for anything". One Emerald session at a time.
+User rules: "this game must be perfect", "no exempts for anything".
+Installed and pushed this pass: 15ac137 (b962396's pink/beige relief installed on the user's yes; Route 123 and Route 115 holes closed), 710c8de (ObliqueWall uv cache, same mesh).
+The machine never got quiet (Spotlight mds + other sessions' QA games, load 17-90), so timings carry +-20% noise.
 
 | Gate | Status |
 |---|---|
-| 3D within 1 s | Met earlier; final serial re-time of all 212 maps still to do. |
-| Outdoor + room surveys | Done earlier. Open: Mt. Pyre Summit slit (24,16 yaw 0). Fortree deck corners not reproduced. Pre-existing, newly seen: floating tree-crown slivers looking west off Route 120's west edge (spots 5,64 and 12,82, yaw 4.71), in the old build too. Final magenta re-survey to do. |
-| Buildings / defect scanner | 6eb8ba5: Battle Dome (pl 3.4, rxr 93) and Pacifidlog hut (squash .47) clean; scanner steps rule gains an under-layer ground test (`under_ground()`). Left: Ranking Hall b154 ground 4 (roof-back risers h53-56, grey #84848c, over the drawn rock); SHARED entries for x_frontier_dome/tower/factory still in defect_scan.py. |
+| 3D within 1 s | Serial re-time of all 212 maps on the final install (load ~25): 210 under 1 s, no 2D fallbacks; Rustboro 1134 ms, Route 112 1050 ms; median 83 ms (unchanged), total +7% vs the 065f37c8 run, Route 111 +250 ms with the relief. Old vs new trees interleaved (3 rounds each): ranges overlap (Rustboro 790-1418 old / 864-1652 new, Dewford Gym 768-1302 / 849-2430, highest values at load 92). Dewford Gym build work 591 -> 520 ms after 710c8de. **Not met under load**: Rustboro/Route 112 need real headroom (BuildingVoxels.mesh, VoxelHull dominate Rustboro). |
+| Outdoor surveys | Magenta re-survey on the final install, 55 spots x (L6 4 yaws + L7): 275/275 frames, none in 2D. Route 123 (canopy bank down to tall grass) and Route 115 nook (Gen3Hills grass patch closed up to the fence row) fixed; Routes 111/114 with relief clean. **Left: 1 px hairlines** (Route 116 rock edges, shore-bank foot on Route 122/131/Pacifidlog, Mossdeep and Ever Grande ground seams, Route 112 L7 frame edge) and the orbit horizon band (Southern Island, Route 110 L7). Spots: scratch 0227e01e svF/, frames svbF/. Rooms: no room code changed except ObliqueWall (8 maps pixel-identical walls). |
+| Buildings / defect scanner | Installed bakes (122): 0 faults in every class. |
 | Map edges | Done (4b06331). |
-| Stairs / ledges | 301a30e ledges 0/401; 214435f: Route 115 meadow 8 px + smooth ramp, Route 120 field 32 / basin 64 / plateau 96 + east-west smooth ramp. Whole-map audit: 0 flat, 0 reversed, 0 cliff jumps, coverage partial 0. |
-| Battles / grass / overworld Pokemon | Re-check after all commits. |
+| Stairs / ledges | Whole-map audit on the final install (with relief): 55/55 maps, outdoor ok 105 / flat 0 / reversed 0, walkable jumps 0, ledges 0/401. Odd 3 (two warps in a flight on Mt. Pyre, Frontier West (19,68) one end walled) and 18 elevation-blocked cliffs on 4 maps: same in every whole-map run. |
+| Battles / grass / overworld Pokemon | Pre-session files vs final install: battle 150-480 differ 0.6-1.2% (random stats: HP 33 vs 34), battle_720 a different random move (Thundershock vs Scratch, the camera follows it), stage identical; Routes 102/117/119 the same scene, wandering NPCs elsewhere. Unchanged. |
 
-Open list, in order: Ranking Hall; replace the SHARED entries with real rules or fixes; the summit slit; final pass (serial re-time of 212 maps, magenta re-survey + room spot-checks, stairs audit, defect scan, battles/grass/overworld before vs after); report.
-
-How-to and gotchas: side-session notes `local_15a48300.../gate-handover-2026-10-18-s5.md` (scratch scripts var.py, splice.py, views.py, one.sh, make_patch_own.sh). Another session was editing battle-art-notquiteog lib/Gen3Scene.lua + Gen3Outdoor.lua (Outdoor.ledgeFloor, uncommitted, not installed): tools/props/make_patch.sh always copies those two from the working tree, so while that work is there use a copy with OWN_LIB set to your own files. A QA run whose log shows `dist nil` / "scene fallback" captured 2D, not 3D.
+Previous hand-off brief: .claude/handoffs/2026-10-18-gate-final-pass.md
 
 ## The goal (set by the user with /goal, still active)
 
