@@ -273,11 +273,17 @@ if __name__ == '__main__':
            '-- cave=true: a cave whose floor levels are read from its drawing',
            '-- (tools/elevation/cave_levels.py), on without a switch in Gen3EmeraldTerraces.',
            'return {rise=%d,' % RISE]
+    rows = {}
     for mp in maps:
         pins, stairs = build(mp)
         r = RISE_BY_MAP.get(mp) or (16 if mp in CAVES or mp in OUT_DONE else None)
-        lua.append(' %s={%s%spins={%s},' % (mp, 'cave=true,' if mp in CAVES else 'on=true,' if mp in OUT_DONE else '', ('rise=%d,' % r) if r else '', ','.join('{%d,%d,%d}' % p for p in pins)))
-        lua.append('  stairs={%s}},' % ','.join('{%d,%d}' % s for s in stairs))
+        rows[mp] = [' %s={%s%spins={%s},' % (mp, 'cave=true,' if mp in CAVES else 'on=true,' if mp in OUT_DONE else '', ('rise=%d,' % r) if r else '', ','.join('{%d,%d,%d}' % p for p in pins)),
+                    '  stairs={%s}},' % ','.join('{%d,%d}' % s for s in stairs)]
         print(mp, 'levels', sorted({p[2] for p in pins}), 'stair cells', len(stairs))
+    # hand-made rows live in height_overrides.json, not in the output file (see height_overrides.py)
+    if not os.environ.get('GEN_NO_OVERRIDES'):
+        import height_overrides as ho
+        rows = ho.apply(rows)
+    for mp in rows: lua.extend(rows[mp])
     lua.append('}')
-    open(OUT, 'w').write('\n'.join(lua) + '\n')
+    open(os.environ.get('GEN_OUT') or OUT, 'w').write('\n'.join(lua) + '\n')
