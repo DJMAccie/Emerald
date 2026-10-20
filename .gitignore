@@ -20,3 +20,6 @@ world.lua
 atlases/
 shots*/
 sheets*/
+
+# autoloop work area: rc tree (mod code), geometry dumps, runs and shots (game-derived), never repo content
+.autoloop/

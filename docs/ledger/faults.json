@@ -348,5 +348,41 @@
   "found": "2026-10-20",
   "source": "docs/HEIGHT-PATH.md",
   "fixed": "2026-10-20"
+ },
+ {
+  "id": "F030",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "floating-props",
+  "cell": "-5,42",
+  "text": "Boundary fill west of the map draws a house roof (tiles 0x030-0x033, cells -6..-3,43) whose plates stand 58-68 px over ground dropped to 0: a striped plate floats in the sky seen from the route (autoloop D1, box -6..-3 x 42, gap 66; shot .autoloop/runs/cal1/shotsB_y08/b022.png)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  -5,42  h59  cam7/0.8"
+ },
+ {
+  "id": "F031",
+  "map": "EM_ROUTE103",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "rock",
+  "cell": "46,1",
+  "text": "Rock terraces on the north edge have holes you see into: dark hollow with the inside faces showing, 'melted' look (autoloop D1 box 46..61 x 0..6, gap up to 47; shot .autoloop/runs/cal1/shotsA_y08/b002.png)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE103  46,1  h23  cam7/0.8"
+ },
+ {
+  "id": "F032",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "floating-props",
+  "cell": "12,21",
+  "text": "Thin green plates hang in mid-air beside the red rock walls of the terrace area (autoloop D1 box -2..26 x 21..26; shot .autoloop/runs/cal1/shotsA_y08/b012.png); the back wall also shows grass texture striped down vertical rock",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  12,21  h39  cam7/0.8"
  }
 ]
