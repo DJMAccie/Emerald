@@ -167,3 +167,50 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   Southern Island; Battle Frontier East/West; Mt Pyre summit; Route 119): the same class F031 is fixing, so re-sweep after
   F031 lands and expect the queue to shrink. F003 (Route 104 mini-stairs) cannot be located: D3 finds no mini-stairs
   anywhere on Route 104 at any step limit; it needs the user's screenshot.
+- 2026-10-20 21:10 TWO FIXES MERGED INTO rc main:
+  * e3011de F006 Route 112 stair flanks (verifier KEEP: the two enclosed-sky holes of 120 and 270 px2 in the orbit frame
+    are gone, no regression in 10 review frames; air at the box 2716 -> 28 px2).
+  * 1d04b0e F031 soft-rock E/W art 1:1 + straight course cuts (gate PASS, zero cell changes; verifier KEEP: crest teeth and
+    the smeared bands gone, no new sky pixel, silhouette unchanged).
+  Detector lessons: (1) a dump's mesh tags are file:line numbers, so they must be resolved against the source of the tree
+  that produced the dump (`detect.py --lib <that tree>/lib`) - with rc main's newer source the tags resolved to nothing
+  (0 triangles); sweep.sh and gate.sh pass the right lib, ad-hoc runs must too. (2) Both "aperture" tests (erode the open
+  air to demand a >4 px opening; require lower open ground beside the plate) were tried and rejected: they removed the
+  verified real holes as well, because a visible hole is often a slit a few px wide behind a lip. The air rule stays a
+  HINT that ranks candidates; judging needs captures (next: capture-triage of the top clusters).
+  Fixer F030b (Route 112 west boundary remainder) and F032 (green plates beside the red rock) are running; rc re-sweep on
+  the fixed tree started to measure the class effect.
+- 2026-10-20 20:50 After the two fixes, rc main re-swept headless in 106 s (158 maps, 0 unsettled). Detector before/after:
+  outdoor air regions 3059 -> 2201 (gap>=4 & area>=200: 269 -> 251), total flagged area 1.10M -> 0.98M px2; steps unchanged
+  (121). The two fixes cure their own classes; the bulk of the remaining air regions is the terraced-mountain inside (cliff,
+  158 regions, 0.83M px2) which the captures showed to be correct in game. Queue ranking changed accordingly: object-like
+  cells (flat/awning/roof/tree/ledge/sign/water) first, big cliff masses last (triage.py). New pipeline: discover.sh
+  (captures the top N clusters at levels 4 and 7 + index.json) and discover judges (a subagent that opens the full frames
+  and decides REAL / FALSE / UNCLEAR with a pixel box; brief in the prompt, taste from the terrain skill).
+  First discovery batch: 9 object-like cases (Mt Chimney flat x30, Battle Frontier roof, Route 109 flat, Slateport awnings,
+  Fortree trees, Rustboro roof, Route 123/ Ever Grande water, Safari wall) - 0 fallbacks (my earlier "2 fallbacks" was
+  discover.sh grepping its own summary line; fixed). F030b and F032 fixers still running.
+- 2026-10-21 00:10 Discovery judging by workflow (22 cases, one agent per case, each cropping full-size frames): 1 REAL, 5 FALSE,
+  8 UNCLEAR. The UNCLEARs were my bug: shots.sh numbers frames b001.. INSIDE each batch dir, and my index assumed one global
+  numbering, so 8 judges were sent to frames that do not exist (they found the right frames from run.log and reported it -
+  good). discover.sh now indexes per batch; disc-main/index.json reindexed.
+  REAL: F039 - the margin water plate north of Route 123 (cells 104..114 x -3..-1, base 48) hangs over open air with a
+  40-60 px sky band between its lip and the lake (judge's pixel box 640,70,990,190 in batch02/b001.png).
+  FALSE (recorded so the queue does not chase them again): Route 109's beach top layer (no visible underside), Slateport's
+  market awnings (cloth on four posts - the detector does not skip 'awning' cells), Fortree's big-tree crowns (trunk
+  visible under each), Rustboro's glass tower roof (enclosed shell, roof mesh excluded by design), Route 110's cycling road
+  deck (designed bridge clearance with legs in the water). Lesson for the detector: skip awning/bridge cells and tree
+  crowns as sources; the remaining false positives are enclosed shells, which need the captures to judge.
+- 2026-10-21 22:30 FIRST FULL TIER 1 RUN on the candidate (rc main, 158 maps, all gates, 50 min):
+  sweep PASS (632 shots, 0 fallbacks, 0 Lua errors, 0 watchdogs); stairs+ledges PASS (113 stairs ok, 0 flat, 0 reversed,
+  0 cliff jumps, 0 of 401 ledges bad); defects PASS (122 bakes, 0 flagged); floats PASS (4471 masses, 0 floats);
+  magenta FAIL by count (207 of 632 level-7 frames have magenta in the lower 45%, 15 with a lot) - the gate had never been
+  run on the whole world before, so this may be pre-existing: a baseline run of the same gate on the installed tree
+  (upstream e6a02ab) is going now (.autoloop/runs/baseline-magenta.log) to compare; repeat FAIL (1 unstable cell between two
+  runs = the builder pairs() noise F037; 100 cells differ from the F025 baseline, drift from other sessions' installs plus
+  F006's intended cell changes); load FAIL but on a polluted machine (load_avg 23.6, median 434 ms, 9 timeouts -> rerun
+  quiet).
+  Faults: 8 open tier 1 (F001, F002, F004 ledges/stairs; F003 unlocatable; F032 green plates; F035 canopy plate; F038 roof
+  row at base 0; F039 Route 123 margin water plate), 1 parked (F030), 6 fixed (F005, F006, F007, F025, F029, F031).
+  Next: F039 fixer started; F032/F035/F038 are the same plate family; ledges need a dedicated fixer or the other session's
+  work; magenta needs the baseline answer before anyone chases it.

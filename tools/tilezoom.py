@@ -1,6 +1,6 @@
 # tv.py <pairdir> <out.png> <S> <layer u|o|c> mid,mid,...  : zoomed tiles, a row tick every 4 px
-import sys,zlib,glob,struct
-sys.path.insert(0,'/Users/user/Documents/Emerald/tools')
+import sys,os,zlib,glob,struct
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import sheet
 d,out,S,layer=sys.argv[1],sys.argv[2],int(sys.argv[3]),sys.argv[4]
 mids=[int(x,0) for x in sys.argv[5].split(',')]

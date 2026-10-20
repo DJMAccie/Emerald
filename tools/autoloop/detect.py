@@ -231,7 +231,10 @@ def detect_air(path, min_gap=3.0, min_area=8.0, box=None, libdir=None, verbose=F
     gapall[(gapall > 0) & (topall <= base + 1.0)] = 0
     # cells that are meant to have air under parts of them
     for (cx, cy), c in cells.items():
-        if c.get('bridge') == '1' or c.get('rail') == '1':
+        # awnings are cloth on four posts and bridges are decks on legs (judged 2026-10-21: not faults; the awning cells
+        # gave Slateport six false regions). Tree crowns are left in: their trunks are drawn, but a crown over nothing is
+        # a real class (F035) - those need the capture judge, the detector only hints.
+        if c.get('bridge') == '1' or c.get('rail') == '1' or c.get('kind') in ('awning',):
             if cx0 <= cx < cx1 and cz0 <= cy < cz1:
                 gapall[(cx - cx0) * vx:(cx - cx0 + 1) * vx, (cy - cz0) * vz:(cy - cz0 + 1) * vz] = 0
     lab, n = ndimage.label(gapall > 0, structure=np.ones((3, 3), bool))

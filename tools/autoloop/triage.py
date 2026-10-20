@@ -108,9 +108,15 @@ def main(argv):
         else:
             clusters.append({'map': c['map'], 'kind': c['kind'], 'cell_kind': c['cell_kind'], 'box': list(c['box']),
                              'regions': [c], 'area': c['area_px'] or 0, 'gap': c['gap_max'] or 0})
+    # Ranking for a person looking at captures: things that should not float (props, roofs, awnings, trees, ledges,
+    # signs, extruded furniture, flat ground) come before cliff masses, because a big cliff mass with air under its top
+    # is usually a terraced mountain's inside (checked by eye 2026-10-20 on Ever Grande, Route 111, Sootopolis, Route 115:
+    # all correct in game), while F006's real fault was 3 small flat/cliff cells beside a stair.
     for cl in clusters:
         cl['score'] = round(cl['area'] * max(cl['gap'], 1))
-    clusters.sort(key=lambda c: -c['score'])
+        cl['order'] = (2 if cl['cell_kind'] == 'cliff' and cl['area'] > 5000 else
+                       (0 if cl['cell_kind'] not in ('cliff', None) else 1))
+    clusters.sort(key=lambda c: (c['order'], -c['score']))
     print('%-30s %-6s %-8s %-18s %5s %4s %7s %s' % ('map', 'kind', 'cell', 'box', 'regs', 'gap', 'area', 'score'))
     for cl in clusters[:o.top]:
         print('%-30s %-6s %-8s %-18s %5d %4.0f %7d %7d' % (cl['map'], cl['kind'], cl['cell_kind'], ','.join(map(str, cl['box'])),

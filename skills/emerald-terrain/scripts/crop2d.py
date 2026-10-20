@@ -3,7 +3,7 @@
 # Original map art for cells x0..x1, y0..y1 (inclusive). Grid line every cell,
 # coordinates printed every 5 cells; "ids" also prints metatile id + collision.
 import sys, os, zlib, struct, json, glob
-sys.path.insert(0, '/Users/user/Documents/Emerald/tools')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'tools'))
 from sheet import png, FONT
 C = os.path.expanduser('~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba')
 def raw(p):

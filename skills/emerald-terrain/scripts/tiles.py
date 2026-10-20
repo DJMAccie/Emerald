@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # tiles.py PAIR FIRST LAST OUT.png [scale=4] [cols=8]  labelled sheet of metatiles FIRST..LAST (hex ok)
 import sys, os, zlib, struct, glob
-sys.path.insert(0, '/Users/user/Documents/Emerald/tools')
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'tools'))
 from sheet import png, FONT
 C = os.path.expanduser('~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native')
 def raw(p):

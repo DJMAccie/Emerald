@@ -1,6 +1,6 @@
 # mapsheet.py with zlib-wrapped cache files decompressed on read
-import sys,zlib,struct
-sys.path.insert(0,'/Users/user/Documents/Emerald/tools')
+import sys,os,zlib,struct
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 import sheet
 def _raw(p):
     b=open(p,'rb').read()

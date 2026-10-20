@@ -363,9 +363,12 @@
   "class": "floating-props",
   "cell": "-5,42",
   "text": "Boundary fill west of the map draws a house roof (tiles 0x030-0x033, cells -6..-3,43) whose plates stand 58-68 px over ground dropped to 0: a striped plate floats in the sky seen from the route (autoloop D1, box -6..-3 x 42, gap 66; shot .autoloop/runs/cal1/shotsB_y08/b022.png)",
-  "status": "open",
+  "status": "parked",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE112  -5,42  h59  cam7/0.8"
+  "source": "tour: EM_ROUTE112  -5,42  h59  cam7/0.8",
+  "attempts": 2,
+  "parked": "2026-10-20",
+  "evidence": "Two attempts (0fd360b, 2957245) both pass the 8-map gate (the 3096 px2 / gap 34 region gone, 0 cell changes, 0 fallbacks) but a whole-world comparison of the candidate tree against rc main shows 30 genuinely new air regions elsewhere (Mossdeep 63..65 x 18..21 and others, ~200 px2 each, gap 21; Route 115 19..20 x 32..37, 908 px2). The visible symptom of this fault (the striped plate floating in the sky west of Route 112) is a CANOPY mesh and is tracked as F035. Branch fix/F030b parked with the patch; merge only after those 30 regions are explained. New finding logged as F038."
  },
  {
   "id": "F031",
@@ -427,7 +430,8 @@
   "text": "Tree canopy plates float with sky above and below at the west-margin tree clump (cells 9..10 x 40..41, base 48, tiles 0x203/0x211/0x0C6) and further off (26,39; 28..30 x 33..35), canopy meshes at y~75 (found by fixer F030 ray-casting .autoloop/runs/cal1/shotsB_y08/b022.png; the air detector does not read canopy meshes)",
   "status": "open",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE112  9,40  h75  cam7/0.8"
+  "source": "tour: EM_ROUTE112  9,40  h75  cam7/0.8",
+  "evidence": "The visible plate in the calibration frame (.autoloop/runs/cal1/shotsB_y08/b022.png, top left) was ray-cast by the F030 fixer to canopy meshes at y~75 in Route 112 cells 9..10 x 40..41 (base 48) and cells 26,39 / 28..30 x 33..35: the detector does not read canopy meshes, so neither gate nor detector covers it. Needs a trunk/support check or a canopy-aware region rule."
  },
  {
   "id": "F036",
@@ -452,5 +456,29 @@
   "status": "open",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  0,0  h0  cam4/0"
+ },
+ {
+  "id": "F038",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "floating-props",
+  "cell": "-4,53",
+  "text": "West boundary fill: cells -5..-3 x 53 are roof tiles (0x010-0x012, col=y) with base 0 beside neighbours at base 32, and the building's roof geometry stands at 63..83: a roof row floating over ground drawn at 0 (found by fixer F030b, pre-existing in rc main e6a02ab and 1d04b0e; the F030 family on 'roof' shape kinds, which 0fd360b left alone)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  -4,53  h74  cam7/0.8"
+ },
+ {
+  "id": "F039",
+  "map": "EM_ROUTE123",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "floating-props",
+  "cell": "104,-2",
+  "text": "The margin water plate beyond the map's north edge (cells 104..114 x -3..-1, base 48) hangs over open air: a 40-60 px band of pure sky shows between its lip and the lake below (level-4 frame .autoloop/runs/disc-main/batch02/b001.png, box 640,70,990,190; found by the discovery judge, who calibrated the camera against the dumped geometry). Rocks on the lip are silhouetted against the sky gap; nothing closes the 48 px drop",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE123  104,-2  h48  cam4/0"
  }
 ]
