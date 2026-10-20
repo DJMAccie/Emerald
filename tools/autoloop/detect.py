@@ -242,9 +242,12 @@ def detect_air(path, min_gap=3.0, min_area=8.0, box=None, libdir=None, verbose=F
             'area_px': round(area), 'gap_max': round(float(gv.max()), 1), 'gap_med': round(float(np.median(gv)), 1),
             'y_top': round(float(np.median(tv)), 1), 'cells': len(cc),
             'inside_map': bool(0 <= mx < W and 0 <= mz < H),
+            # touches the last 2 cells of the analysed area: the build window ends near there, so builders cut or
+            # round the geometry (window-edge artifacts, F031 finding); ranked last and ignored by the gate
+            'edge': bool(c_x0 <= cx0 + 1 or c_z0 <= cz0 + 1 or c_x1 >= cx1 - 2 or c_z1 >= cz1 - 2),
             'cell_info': {k: mc.get(k) for k in ('tile', 'kind', 'base', 'coll', 'ledge', 'stairs', 'mass') if k in mc},
             'score': round(area * float(gv.max()))})
-    regions.sort(key=lambda r: -r['score'])
+    regions.sort(key=lambda r: (r['edge'], -r['score']))
     return {'map': head['map'], 'W': W, 'H': H, 'tris': int(len(tris)), 'regions': regions,
             'kinds': dict(collections.Counter(kinds[int(t)] for t in a[:, 0]))}
 
@@ -365,10 +368,52 @@ def detect_steps(cells_path, max_step=8.0, min_run=2, faces=None):
     return regions
 
 
+def detect_void(path, libdir=None, margin=6, min_cells=1):
+    """D1b floating over nothing: canopy or ground surfaces whose column has NO other surface below them at all (no
+    ground, no water) inside the analysed area - plates with sky above and below (F035: Route 112's west-margin tree
+    crowns at y~75 over cells where no ground is drawn). Returns regions in cells (2 px columns grouped 8-connected)."""
+    head, tags, a = load(path)
+    src = source_lines(libdir)
+    kinds = {t: tag_kind(src, v['tag']) for t, v in tags.items()}
+    W, H = head['W'], head['H']
+    cx0, cz0, cx1, cz1 = -margin, -margin, W + margin, H + margin
+    GW, GH = (cx1 - cx0) * 8, (cz1 - cz0) * 8
+    low = np.full((GW, GH), np.inf, np.float32)      # lowest surface height per 2 px column (ground/water/rock)
+    sel = np.array([kinds.get(int(t)) in ('under', 'water', 'civic') for t in a[:, 0]], bool)
+    def cover(tris, grid, fn):
+        p = sample(tris)
+        ix = np.floor(p[:, 0] / 2 - cx0 * 8).astype(np.int64)
+        iz = np.floor(p[:, 2] / 2 - cz0 * 8).astype(np.int64)
+        ok = (ix >= 0) & (ix < GW) & (iz >= 0) & (iz < GH)
+        fn.at(grid, (ix[ok], iz[ok]), p[ok, 1])
+    t = a[sel][:, 1:10]
+    for c in range(0, len(t), 4000):
+        cover(t[c:c + 4000], low, np.minimum)
+    out = np.zeros((GW, GH), bool)
+    cs = np.array([kinds.get(int(t)) == 'canopy' for t in a[:, 0]], bool)
+    tc = a[cs][:, 1:10]
+    if len(tc):
+        top = np.full((GW, GH), -np.inf, np.float32)
+        for c in range(0, len(tc), 4000):
+            cover(tc[c:c + 4000], top, np.maximum)
+        out |= np.isfinite(top) & (~np.isfinite(low) | (low > top))
+    lab, n = ndimage.label(out, structure=np.ones((3, 3), bool))
+    regions = []
+    for r, sl in enumerate(ndimage.find_objects(lab), 1):
+        m = lab[sl] == r
+        if m.sum() < 4:
+            continue
+        bx = [cx0 + sl[0].start // 8, cz0 + sl[1].start // 8, cx0 + (sl[0].stop - 1) // 8, cz0 + (sl[1].stop - 1) // 8]
+        edge = bx[0] <= cx0 + 1 or bx[1] <= cz0 + 1 or bx[2] >= cx1 - 2 or bx[3] >= cz1 - 2
+        regions.append({'box': bx, 'area_px': int(m.sum()) * 4, 'edge': bool(edge)})
+    regions.sort(key=lambda r: (r['edge'], -r['area_px']))
+    return regions
+
+
 def main(argv):
     import argparse, os
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['air', 'tags', 'steps'])
+    ap.add_argument('cmd', choices=['air', 'tags', 'steps', 'void'])
     ap.add_argument('geo', nargs='+')
     ap.add_argument('--json')
     ap.add_argument('--min-gap', type=float, default=3.0)
@@ -389,6 +434,17 @@ def main(argv):
                 zs = a[sel][:, [3, 6, 9]]
                 rng = lambda q: '%.0f..%.0f' % (q.min(), q.max()) if q.size else '-'
                 print('%3d %-8s %-48s %-10s tris %7d  x %s y %s z %s' % (t, tag_kind(src, v['tag']), v['tag'], v['fn'], int(sel.sum()), rng(xs), rng(ys), rng(zs)))
+        return 0
+    if o.cmd == 'void':
+        res = []
+        for p in o.geo:
+            regs = detect_void(p, o.lib)
+            res.append({'map': os.path.basename(p)[:-7], 'regions': regs})
+            print('%-32s void regions %3d' % (res[-1]['map'], len([r for r in regs if not r['edge']])))
+            for g in regs[:o.top]:
+                print('   box %-20s area %5d px2 %s' % (g['box'], g['area_px'], 'edge' if g['edge'] else ''))
+        if o.json:
+            json.dump(res, open(o.json, 'w'), indent=1)
         return 0
     if o.cmd == 'steps':
         res = []

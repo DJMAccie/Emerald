@@ -55,9 +55,11 @@
   "class": "floating-props",
   "cell": "45,7",
   "text": "Floating rock mass, 13 px up",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-19",
-  "source": "handoff"
+  "source": "handoff",
+  "fixed": "2026-10-20",
+  "evidence": "Not reproducible on the installed build (rc 01aee72, 2026-10-20): level-4 shot from 47,7 shows the bluff at 45,7 standing on its floor (.autoloop/runs/cal1/shotsA_y08/b021.png); fixed by 1b0efaa. Detector still reports a hollow higher up at 46..47,5..6 (y 78), not visible from the town: left to the world sweep."
  },
  {
   "id": "F006",
@@ -79,9 +81,11 @@
   "class": "floating-props",
   "cell": "24,14",
   "text": "Floating rock mass, 4 px up",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-19",
-  "source": "handoff"
+  "source": "handoff",
+  "fixed": "2026-10-20",
+  "evidence": "Not reproducible on the installed build (rc 01aee72, 2026-10-20): geometry of 24,13-14 starts at y=0 on ground 0 (no gap), level-4 shot (cal1/shotsB_y08/b017.png) and level-7 yaw 3.9 shot (cal1/shotsB_y39/b009.png) show the stone standing on the grass. The 4 px came from Gen3Rock.checkFloat, which BETA-NOTES-2026-10-20 already called untrusted."
  },
  {
   "id": "F008",
@@ -384,5 +388,53 @@
   "status": "open",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  12,21  h39  cam7/0.8"
+ },
+ {
+  "id": "F033",
+  "map": "EM_MOSSDEEP_CITY",
+  "area": "Terrain",
+  "tier": 2,
+  "class": "first-person",
+  "cell": "53,10",
+  "text": "Pale translucent green panels round the rock east of the Pokemon Center, about cells 52-55 x 9-12 (level-4 shot .autoloop/runs/cal1/shotsA_y08/b021.png, right side); same look as F009 on Mt. Pyre: find whether it is a fade/cut-away feature or a glass/transparency fault",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_MOSSDEEP_CITY  53,10  h64  cam4/0"
+ },
+ {
+  "id": "F034",
+  "map": "EM_ROUTE103",
+  "area": "Terrain",
+  "tier": 2,
+  "class": "determinism",
+  "cell": "40,3",
+  "text": "Rock and shore geometry depends on the tileset animation frame: building with the general__petalburg atlas at a different water/flower frame changes 168 of 420 triangles in cells 40..79 x 3..6 (engine E1 headless vs in-game, 2026-10-20); the builder reads animated atlas pixels somewhere outside Gen3Objects' pristine copy, so the shape depends on when the build runs",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE103  40,3  h0  cam4/0"
+ },
+ {
+  "id": "F035",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "floating-props",
+  "cell": "9,40",
+  "text": "Tree canopy plates float with sky above and below at the west-margin tree clump (cells 9..10 x 40..41, base 48, tiles 0x203/0x211/0x0C6) and further off (26,39; 28..30 x 33..35), canopy meshes at y~75 (found by fixer F030 ray-casting .autoloop/runs/cal1/shotsB_y08/b022.png; the air detector does not read canopy meshes)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  9,40  h75  cam7/0.8"
+ },
+ {
+  "id": "F036",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 2,
+  "class": "determinism",
+  "cell": "22,10",
+  "text": "Cell 22,10 (0x25E door) came out 'cliff mass=t' instead of 'flat mass=-' in one of four identical-code dumps (fixer F006, 2026-10-20), which also removes the big detector region at 0..25 x 6..20: build-dependent classification still present on Route 112",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  22,10  h0  cam4/0"
  }
 ]

@@ -121,3 +121,31 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   (a ramp drawn as a slope is not counted: Oldale 8,22-25 is sloped). Top hit on Route 115 = F002 box 19..24 x 70..73.
   Tools: `region_cases.py` (detector regions -> capture cases), `shots.sh` (indexed captures on rc).
   Next: yaw 3.9 shots (cal1/shotsA_y39, shotsB_y39) for F005/F007 and the rest; then gate.sh; then world sweep.
+- 2026-10-20 18:20 Gate built (`gate.sh` + `gate_eval.py`; self-test on an unchanged tree says "not fixed", 0 new, 0 cells).
+  Fixers are subagents, one fault each, own worktree `.autoloop/wt/<F>` (brief: `docs/autoloop/FIXER-BRIEF.md`).
+  Running: F030 (Route 112 roof plate in the west boundary) and F031 (Route 103 hollow rock), both pinned to base 01aee72.
+  Closed with evidence: F005 (Mossdeep 45,7, fixed by 1b0efaa), F007 (Route 103 24,14, not reproducible; the 4 px came
+  from the untrusted Gen3Rock audit). New: F030-F032 tier 1, F033 tier 2 (translucent green panels, Mossdeep, like F009).
+  rc synced to the real install (e6a02ab: other sessions installed the Route 104 ridge and Route 115 terraces). World
+  geometry sweep of e6a02ab started (`sweep.sh`, 158 maps, 2 games at a time). Ledge/R115 stair faults F001/F002/F004:
+  other sessions are active on Gen3Outdoor and Route 115 today; take them only after checking their handoffs.
+- 2026-10-20 18:30 F006 diagnosed from the cells: the rock cells flanking the Route 112 stair flight at x 20-21 (19,42-43 and
+  22,42-43) took the treads' floors (28.8, 19.2) while their neighbours are at 0/48, so they float; fixer F006 started (base
+  e6a02ab). `install_rc.sh` written (dry run / --yes / --rollback; installs only rc's loop commits into game, QA and mod
+  source with backup; refuses on stale rc, running game, or a file someone else changed). D4 (ledges) deferred while another
+  session works on Gen3Outdoor. Next round: collect fixer reports (F030, F031, F006) -> verifier subagent on each PASS ->
+  rebase onto rc main and re-gate -> merge; triage the world sweep (top regions per map -> captures -> vision check).
+- 2026-10-20 18:55 Tool corrections from fixer/engine findings: (1) driver pins rng + tileset animation BEFORE the boot
+  (dumps depended on boot timing); (2) the boot map (Littleroot) is re-entered via another map (dumped empty before);
+  (3) each spot owns only cells 6+ inside its build window (spot seams dropped closing walls: the big Route 103 46..61 and
+  Route 112 0..24 regions were dump artifacts; F031's VISIBLE teeth/streaks are real and being fixed); (4) dump-edge
+  regions tagged 'edge', ignored by the gate. Old caches moved to .autoloop/old/. F030 fixer: the striped plate in b022 is a
+  CANOPY mesh (new fault F035); its box is Lavaridge's Poke Mart roof row whose ground plane sits at 0 under a cell at 32
+  (fixing: building-claimed cliff cells take their ground at the cell's base). Engine E1: headless == in-game on Oldale,
+  Rustboro, Route 103 (1.5-4 s CPU/map). Sweep restarted (sweep2.log).
+- 2026-10-20 19:15 Round 2: gate gets a REVIEW verdict (class fixes change cells elsewhere on purpose: those areas get
+  before/after captures for the verifier instead of failing); `docs/autoloop/VERIFIER-BRIEF.md`; D1b `detect.py void`
+  (canopy over no surface; does not catch F035, whose crowns stand 27 px over ground like normal walk-under crowns: needs
+  a trunk check); F036 logged (Route 112 22,10 door flips cliff/flat between identical builds). F006 fixer: flank heights
+  come from TerrainLevels' support BFS using flight cells as donors; fix in TerrainLevels + flightTreads closes sides,
+  gate running. Sweep of e6a02ab running slowly (QA slots shared with three fixers' gates).

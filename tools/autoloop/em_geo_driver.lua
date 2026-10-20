@@ -12,12 +12,14 @@
 return function(game)
  local U=dofile('tests/drivers/util.lua')
  assert((love.filesystem.getIdentity()=='pokemon-love2d-rseqa' or love.filesystem.getIdentity():match('^pokemon%-love2d%-rseqa%-p%d$')),'refusing a non-QA identity')
+ -- Pins BEFORE the boot (engine E1 finding 2026-10-20): Mirage Tower hidden, tileset animation off. Pinned after the
+ -- 90-frame Littleroot boot, the general__petalburg atlas stayed at whatever water/flower frame the boot reached, and the
+ -- rock builder reads those pixels: Route 103's dump then depended on boot timing (168 of 420 rock/shore triangles).
+ require('src.core.game3.rng').Random=function()return 0 end
+ require('src.core.game3.tileset_anim')._enabled=false
  love.window.setMode(1280,720,{resizable=true})
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
- -- same pins as em_cells_driver: Mirage Tower hidden, tileset animation off (pixel classification is stable)
- require('src.core.game3.rng').Random=function()return 0 end
- require('src.core.game3.tileset_anim')._enabled=false
  local ex=game.mods.exports.BATTLE_ART_VOXEL_FORK
  local Scene=ex.lib.require('Gen3Scene')
  local C=(ex.gen3 or ex.firered).camera
@@ -63,6 +65,13 @@ return function(game)
  for l in io.lines(os.getenv('EM_MAPS'))do local m,x,y=l:match('^(%S+)%s+(%d+)%s+(%d+)');if m then maps[#maps+1]={m,tonumber(x),tonumber(y)} end end
  for _,m in ipairs(maps)do
   local id=m[1];local t0=love.timer.getTime()
+  -- reloading the map already loaded (the boot map, Littleroot) starts no build, so settle() would wait for nothing:
+  -- step onto another map first (Littleroot came out empty and 'unsettled' in the first world sweep)
+  local cur=Map.currentDef and Map.currentDef()
+  if Map.current==id or (cur and cur.id==id) then
+   pcall(Map.load,nil,game,id=='EM_ROUTE101' and 'EM_OLDALE_TOWN' or 'EM_ROUTE101',{x=10,y=10,facing='down'})
+   settle()
+  end
   local ok=pcall(Map.load,nil,game,id,{x=m[2],y=m[3],facing='down'})
   C.setLevel(4,game)
   local def=Map.currentDef()
@@ -74,7 +83,7 @@ return function(game)
    local out,cl,tags,tagN={},{},{},{}
    local written,tried={},{}
    local spots,tris,allSettled=0,0,true
-   for spot=1,12 do
+   for spot=1,20 do
     if spot>1 then
      local mx,my
      for cy=0,H-1 do for cx=0,W-1 do if not mx and not written[cx..':'..cy] and not tried[cx..':'..cy] then mx,my=cx,cy end end end
@@ -88,8 +97,20 @@ return function(game)
     spots=spot
     -- cells built in this spot and not written before (margin round the map included)
     local mine={}
+    -- Own only cells well inside this spot's build window (INNER cells from its edge, unless that edge is the end of
+    -- the dumped area): at a window edge the builders round or drop geometry toward the missing cells (F031 finding:
+    -- Route 103's rock lost its closing wall at a spot seam and a 2 px crack opened the whole interior to the sky).
+    local wx0,wx1,wy0,wy1=1e9,-1e9,1e9,-1e9
+    for cy=-MARGIN-40,H-1+MARGIN+40 do for cx=-MARGIN-40,W-1+MARGIN+40 do
+     if Scene.debugCell(cx,cy) then wx0,wx1,wy0,wy1=math.min(wx0,cx),math.max(wx1,cx),math.min(wy0,cy),math.max(wy1,cy) end
+    end end
+    local INNER=6
+    local ix0=(wx0<=-MARGIN) and -1e9 or wx0+INNER
+    local ix1=(wx1>=W-1+MARGIN) and 1e9 or wx1-INNER
+    local iy0=(wy0<=-MARGIN) and -1e9 or wy0+INNER
+    local iy1=(wy1>=H-1+MARGIN) and 1e9 or wy1-INNER
     for cy=-MARGIN,H-1+MARGIN do for cx=-MARGIN,W-1+MARGIN do
-     local c=not written[cx..':'..cy] and Scene.debugCell(cx,cy)
+     local c=not written[cx..':'..cy] and cx>=ix0 and cx<=ix1 and cy>=iy0 and cy<=iy1 and Scene.debugCell(cx,cy)
      if c then written[cx..':'..cy]=true;mine[cx..':'..cy]=true
       local r=Scene.debugRaw(cx,cy) or {}
       local g=r.stairs;local sk=r.shape and r.shape.kind or ''

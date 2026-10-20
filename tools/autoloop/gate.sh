@@ -70,7 +70,17 @@ if rows:
     s.save(g + '/sheet.png')
     print('[gate] sheet', g + '/sheet.png', len(rows), 'rows')
 PY
-SF=$(cat "$G"/shots_*/run.log 2>/dev/null | grep -c fallback)
+if [ $EV -eq 2 ]; then
+  # REVIEW: before/after of every area where cells changed outside the box (levels 4 and 7, yaw 0.8)
+  RCASES=$(python3 -I -c "import json;print(','.join(\"{'%s',%d,%d}\"%tuple(s) for s in json.load(open('$G/verdict.json'))['review_spots']))")
+  if [ -n "$RCASES" ]; then
+    AUTOLOOP_RC=$BT "$ROOT/tools/autoloop/shots.sh" "$G/review_base" "$RCASES" 4,7 0.8 150 &
+    sleep 20; AUTOLOOP_RC=$RC "$ROOT/tools/autoloop/shots.sh" "$G/review_fix" "$RCASES" 4,7 0.8 150 &
+    wait; python3 "$ROOT/tools/autoloop/review_sheet.py" "$G"
+  fi
+fi
+SF=$(cat "$G"/shots_*/run.log "$G"/review_*/run.log 2>/dev/null | grep -c fallback)
 echo "[gate] fallbacks in capture runs: $SF"
 [ "$FB" -eq 0 ] && [ "$SF" -eq 0 ] && [ $EV -eq 0 ] && { echo "[gate] PASS (pending verifier)"; exit 0; }
+[ "$FB" -eq 0 ] && [ "$SF" -eq 0 ] && [ $EV -eq 2 ] && { echo "[gate] REVIEW: fault fixed, cells changed elsewhere; the verifier judges sheet_review.png too"; exit 2; }
 echo "[gate] FAIL"; exit 1

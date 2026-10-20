@@ -52,7 +52,8 @@ def main(argv):
     o = ap.parse_args(argv)
     box = [int(v) for v in o.box.split(',')]
     maps = sorted(f[:-7] for f in os.listdir(o.base) if f.endswith('.geo.gz'))
-    v = {'map': o.map, 'box': box, 'kind': o.kind, 'maps': maps, 'reasons': [], 'new': [], 'cells_changed': {}, 'fault_before': [], 'fault_after': []}
+    v = {'map': o.map, 'box': box, 'kind': o.kind, 'maps': maps, 'reasons': [], 'new': [], 'cells_changed': {}, 'fault_before': [], 'fault_after': [], 'review_spots': []}
+    review = False
     ok = True
     for m in maps:
         if not os.path.exists(os.path.join(o.fix, m + '.geo.gz')):
@@ -73,6 +74,8 @@ def main(argv):
                 v['reasons'].append('not fixed: %d %s region(s) still at the box' % (len(v['fault_after']), o.kind))
         for kind, rb, rf in (('air', ab, af), ('steps', sb, sf)):
             for r in rf:
+                if r.get('edge'):
+                    continue
                 if m == o.map and overlap(r['box'], box, 1):
                     continue
                 if not any(overlap(r['box'], q['box']) for q in rb):
@@ -89,16 +92,35 @@ def main(argv):
                 if not inside:
                     changed.append([k[0], k[1]])
         if changed:
-            ok = False
+            # a class fix changes other places on purpose: not a failure by itself, but every changed area must be
+            # looked at (REVIEW): one capture spot per 8-cell cluster of changed cells, on the nearest walkable cell
+            review = True
             v['cells_changed'][m] = changed[:40] + ([['...', len(changed)]] if len(changed) > 40 else [])
-            v['reasons'].append('%s: %d cell line(s) changed outside the fault box' % (m, len(changed)))
+            v['reasons'].append('%s: %d cell line(s) changed outside the fault box (review)' % (m, len(changed)))
+            seen = set()
+            for x, y in changed:
+                k = (x // 8, y // 8)
+                if k in seen:
+                    continue
+                seen.add(k)
+                best = None
+                for (cx, cy), line in cf.items():
+                    f = line.split()
+                    if 'coll=0' in f and f[4] != 'water' and abs(cx - x) + abs(cy - y) <= 10:
+                        d = abs(cx - x) + abs(cy - y)
+                        if best is None or d < best[0]:
+                            best = (d, cx, cy)
+                if best:
+                    v['review_spots'].append([m, best[1], best[2]])
     if any(n['failing'] for n in v['new']):
         v['reasons'].append('new detector regions: ' + ', '.join('%s %s %s' % (n['map'], n['kind'], n['box']) for n in v['new'] if n['failing']))
     v['pass'] = ok
-    print(json.dumps({k: v[k] for k in ('pass', 'reasons')}, indent=1))
+    v['status'] = 'FAIL' if not ok else ('REVIEW' if review else 'PASS')
+    v['review_spots'] = v['review_spots'][:24]
+    print(json.dumps({k: v[k] for k in ('status', 'reasons', 'review_spots')}, indent=1))
     if o.out:
         json.dump(v, open(o.out, 'w'), indent=1)
-    return 0 if ok else 1
+    return {'PASS': 0, 'FAIL': 1, 'REVIEW': 2}[v['status']]
 
 
 if __name__ == '__main__':
