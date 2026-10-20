@@ -11,7 +11,7 @@ ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 NAME=$1; MAP=$2; BOX=$3; KIND=$4; SPOT=$5; BASEC=${6:-main}
 RC=${FIX_TREE:-$ROOT/.autoloop/rc}
 G=$ROOT/.autoloop/gates/$NAME; mkdir -p "$G"
-REGRESSION=${GATE_MAPS:-"EM_ROUTE103 EM_ROUTE112 EM_ROUTE115 EM_MOSSDEEP_CITY EM_RUSTBORO_CITY EM_OLDALE_TOWN EM_ROUTE111 EM_FORTREE_CITY"}
+REGRESSION=${GATE_MAPS:-"EM_ROUTE103 EM_ROUTE112 EM_ROUTE113 EM_LAVARIDGE_TOWN EM_ROUTE115 EM_MOSSDEEP_CITY EM_RUSTBORO_CITY EM_OLDALE_TOWN EM_ROUTE111 EM_FORTREE_CITY"}
 [ -n "$(git -C "$RC" status --porcelain)" ] && { echo "rc has uncommitted changes: commit the fix on its branch first"; exit 3; }
 BASEH=$(git -C "$RC" rev-parse --short "$BASEC"); FIXH=$(git -C "$RC" rev-parse --short HEAD)
 [ "$BASEH" = "$FIXH" ] && { echo "fix tree HEAD equals base ($BASEH): nothing to gate"; exit 3; }

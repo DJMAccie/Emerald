@@ -248,3 +248,69 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   F039 residual region (784 px2 at 111..116 x -3..0, gap 47) is visible to the gate again. Lesson recorded: capture from a
   clean tree commit, never from a worktree a fixer is editing (one of my judge frames did not reproduce - the verifier
   caught it and reproduced the gate frame four times instead).
+- 2026-10-22 00:45 Candidate re-synced with the installs other sessions made (rc.sh sync merged 987b75e into rc main, keeping
+  F006 + F031). That is now the protocol: sync, re-gate, then the candidate stays a true delta against the game. The sync
+  showed why it matters: F006's own regions are still cured (1700, 224, 224, 228 px2 -> none) but a 292 px2 / 7 px gap
+  survives at 15..18 x 43 that the newer base reopened (before the sync F006's leftovers were 28 px2 total) -> F006 gets a
+  short attempt 2 on the new base. A pre-existing 1392-1904 px2 region at 12..20 x 40..42 (tile 0x2F8) is a different
+  fault, logged as F041.
+  Gate semantics fixed twice today: (1) regions are matched by identity at the box (overlap within 2 cells) so a
+  pre-existing neighbour no longer counts as "not fixed"; (2) matching uses only regions above the visibility floor, or a
+  1700 px2 base region "matches" an 8 px2 dust speck and looks cured when it is not.
+  F032 attempt 1 style rejected by me as well after looking at the crop myself (before: bright round bushes; after:
+  flat-topped chunky boxes with vertical banding) - attempt 2 (fix/F032c) is rebuilding the bush by repeating art rows 1:1.
+- 2026-10-22 01:30 F038 MERGED (rc main d0b72d5) after an independent reviewer judged the rendered evidence (the gate is
+  blind to it: building models come from FlatMesh/love.graphics.newMesh, which the geometry driver does not hook): both herb
+  shops, the gym and the Poke Center on Route 112 and three buildings on Route 113 now stand on their drawn ground, each a
+  rigid 32 px lift with no stretch, the "open roof" filled by the shop's own walls, and no other visible change but occlusion.
+  TOOLING GAP to close: wrap love.graphics.newMesh (FlatMesh's packed-float path) in em_geo_driver so building models enter
+  the dump as their own tag, and let detect.py treat them as solid - then this class is gateable. Until then such fixes need
+  a rendered A/B and a reviewer, which is what happened here.
+- 2026-10-22 01:45 F039 attempt 2 (fix/F039b 1d7ee7d) closes the visible holes: sky-coloured enclosed components in the box
+  went 2317+2622+25 -> 23 px2, the drop now shows each cell's own tile in 16 px courses (1:1), and a second real cause was
+  found (a sea-rock cell that turns into a cliff bank drew no ground/water plane and its sea water patch lay at y=0, so the
+  sea surface was missing over the shelf - now at base+0.05). The gate still FAILs on one 2188 px2 region at the box that is
+  air enclosed under the sea margin (invisible); the same detector reported 3 regions there before (780+276+3116 px2), so the
+  fix halves and merges an invisible volume. Verifier asked to confirm invisibility. The fixer suggested limiting the
+  rock-cell exception to top>base+1, but that cannot work: attempt 1's VISIBLE holes had the same top==base==48, so the
+  discriminator is whether the air is open, not where the plate sits - and my aperture experiments showed the detector cannot
+  tell a visible slit from an enclosed volume. Final judgement on such regions is the frames, recorded as a tooling limit.
+  Four agents were running (F039 verifier, F032 verifier, F006b, F039b finishing).
+- 2026-10-22 01:55 TOOLING: the geometry dump now carries building/prop models. FlatMesh packed them as a flat number list and
+  uploaded with love.graphics.newMesh, so Voxel3D.newMesh never saw them; the driver now wraps FlatMesh.mesh and rebuilds
+  the vertex tables (tag 'FlatMesh:model', detect kind 'model'), and detect counts models as solid surfaces. Verified
+  headless: Rustboro's dump gains 240,224 model triangles; the F006 box region that the fix cures is visible in base
+  (1700 px2) and absent in the candidate.
+  BUT: this does NOT make F038's class gateable, which is worth recording so nobody retries it - with models as solid, the
+  "-8..-5 x 53" air region disappears in BASE as well, because the model's own walls enclose that attic even when the
+  building stands 32 px too low. The fault is a buried facade, not an air region. The right tool is a new detector (D5:
+  compare each model's foot height with the ground drawn under it, from the same dump), queued; until it exists, sunk-model
+  fixes are verified on rendered A/B by a reviewer, which is what F038 got.
+  Since the driver changed, the world sweep should be re-run once idle to have a model-inclusive baseline for D5.
+- 2026-10-22 02:30 F039 attempt 2 MERGED (ccad67d) after a KEEP: the sky band goes 11,551 -> 23 px2 at level 4 both yaws, no
+  regression over levels 4/6/7 plus six extra yaws and shore/lake spots, and the reviewer confirmed the one region the gate
+  still flags is air enclosed under the sea plate (invisible). It also closes a pre-existing 1,147 px2 Route 103 hole. Caveat
+  recorded: the new margin-wall block is not limited to shape.seaRock.
+  F032 PARKED after a second REJECT (attempts=2). The reviewer's causes, all real: the 0x218-footed crown at (10,38) sits on a
+  relief cell that ramps 48->59.3, so the bush built at base 48 is ~11 px buried and the exposed relief face reads as stripes
+  in the player camera; at level 6 yaw 3.9 a bush fills 40% of the frame; and 11 of 40 crowns (south neighbour 0x203/0x3B8)
+  keep the lifted slab and still float - logged as F042 with the cell list. What worked: the 0x21A-footed conversions read as
+  bright leafy bushes. Prescription for a third attempt is in the ledger row.
+  F006b (fix/F006b 95ad58b) closes the 15..18 x 43 slit (5068 -> 72 px2 of sub-floor slivers) and with it F041's class
+  (a flat plate at the solved floor over the mass's own top below it); verifier running. Gate regression set extended with
+  EM_ROUTE113 and EM_LAVARIDGE_TOWN after the reviewer pointed out GROUND_BUSH also changes Lavaridge and the gate never
+  looked there.
+- 2026-10-22 02:50 D5 EXISTS (`detect.py models`): with the FlatMesh capture in the dump, each connected model group's foot is
+  compared with the highest ground it stands on (the drawn terrain surface, else the cell's solved floor). It reproduces the
+  F038 fault exactly on the base tree - Route 112 box [-5,53,-1,56] foot 0 vs ground 32 (-32 px), Route 113 box [-7,5,-3,8]
+  foot 0 vs 56 (-56 px) - and flags NOTHING on the candidate that contains F038. So the sunk-building class is gateable from
+  now on, and F038's merge is confirmed by geometry, not only by the rendered A/B. Two false-start formulations were tried and
+  dropped (whole-fill grouping averaged a sunk house away against its neighbours; per-cell feet read every roof-only cell as
+  floating).
+- 2026-10-22 03:05 D5 world scan (candidate, 158 maps): 17 models flagged as BURIED (|error| >= 16 px, >= 3 cells), none
+  floating. Biggest: Fortree [4,2,11,7] -64 px, Sootopolis x2 -32, Mossdeep [18,8,22,11] -32, Fortree x4 -32, Battle Frontier
+  West -32, then -24/-16. Captures of the three biggest spots (.autoloop/runs/d5check, levels 4 and 7): Fortree's treehouse
+  huts stand correctly on their walkways, so that -64 is a model whose foot includes a support post or a lower platform part,
+  not a sunk building; Sootopolis' rim terraces are ambiguous from one frame. So D5 is proven as a GATE for a fix (base vs
+  candidate on F038) but its world list needs the same calibration the air rule needed (reference choice for models standing
+  on decks/platforms). Not logged as faults; calibration set = those three spots.

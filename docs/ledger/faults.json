@@ -73,7 +73,7 @@
   "found": "2026-10-19",
   "source": "handoff",
   "fixed": "2026-10-20",
-  "evidence": "Fixed on branch fix/F006, merged into rc main e3011de. Air at the box 2716 px2 -> 28 px2 (three sub-visible slivers of 8-12 px2); 0 fallbacks. Verifier (full-resolution before/after, levels 4/6/7, two yaws): the two enclosed-sky holes at (378,406) 120 px2 and (415,465) 270 px2 in the orbit frame are gone, no visible regression in 10 review frames on other maps; only detector dust remains. Sheets: .autoloop/gates/F006/sheet.png, sheet_review.png, verify/."
+  "evidence": "Fixed on branch fix/F006, merged into rc main e3011de. Air at the box 2716 px2 -> 28 px2 (three sub-visible slivers of 8-12 px2); 0 fallbacks. Verifier (full-resolution before/after, levels 4/6/7, two yaws): the two enclosed-sky holes at (378,406) 120 px2 and (415,465) 270 px2 in the orbit frame are gone, no visible regression in 10 review frames on other maps; only detector dust remains. Sheets: .autoloop/gates/F006/sheet.png, sheet_review.png, verify/. RE-GATE on the newer base 987b75e (after rc.sh sync, which merged another session's Gen3Rock/terrain install): the fault's own regions are all gone (1700, 224, 224, 228 px2 -> none) but a 292 px2 region at 15..18 x 43 (tile 0x2EF, base 8) survives with a 7 px gap where before it had 23 - so the newer base reopened a small part of the stair-side gap. Needs a short attempt 2 on the new base."
  },
  {
   "id": "F007",
@@ -392,11 +392,12 @@
   "class": "floating-props",
   "cell": "12,21",
   "text": "Thin green plates hang in mid-air beside the red rock walls of the terrace area (autoloop D1 box -2..26 x 21..26; shot .autoloop/runs/cal1/shotsA_y08/b012.png); the back wall also shows grass texture striped down vertical rock",
-  "status": "open",
+  "status": "parked",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  12,21  h39  cam7/0.8",
-  "attempts": 1,
-  "evidence": "Attempt 1 (fix/F032b c0a4b23: crown built as a solid standing bush) removes the floating plate (verifier: base plate at (803,508)-(1018,617) and (442,422)-(598,549) gone, no camera can clip into the bush) but was REJECTED: the bush is a 4-px box whose top and side faces stretch a 0.5-px art strip across 4 px (8x) - it reads as a dark, flat-topped, striped table beside the bright round bushes in the player camera. Attempt 2 (fix/F032c) must repeat art rows/columns 1:1 instead of stretching. Evidence: .autoloop/gates/F032/verify/REGRESSION_lvl4y08_bush_base_vs_fix.png"
+  "attempts": 2,
+  "evidence": "Attempt 1 (fix/F032b c0a4b23: crown built as a solid standing bush) removes the floating plate (verifier: base plate at (803,508)-(1018,617) and (442,422)-(598,549) gone, no camera can clip into the bush) but was REJECTED: the bush is a 4-px box whose top and side faces stretch a 0.5-px art strip across 4 px (8x) - it reads as a dark, flat-topped, striped table beside the bright round bushes in the player camera. Attempt 2 (fix/F032c) must repeat art rows/columns 1:1 instead of stretching. Evidence: .autoloop/gates/F032/verify/REGRESSION_lvl4y08_bush_base_vs_fix.png Attempt 1 style: I looked at the verifier crop myself (.autoloop/gates/F032/verify/REGRESSION_lvl4y08_bush_base_vs_fix.png): BEFORE bright rounded bushes, AFTER flat-topped chunky boxes with dark vertical banding - agrees with the REJECT. Attempt 2 (fix/F032c) rebuilds the bush by repeating the art rows/columns 1:1. ATTEMPT 2 (fix/F032c 6fb06e5, an elliptical lathe: front+rear shells, per-column depth from an ellipse, no top or side faces) was REJECTED too, by an independent reviewer on fresh captures: (1) in the player camera the plant whose crown (10,38) has a 0x218 foot on a relief cell still reads as a dark, vertically striped, flat-fronted block next to a bright round bush - the bush is built at the cell base 48 while the relief ramps 48->59.3, so it is ~11 px buried and the exposed relief face is the stripes; (2) at level 6 yaw 3.9 a bush fills 40% of the frame with flat green facets (a screen of leaves); (3) plates still hang in the fix frames because only 29 of 40 crowns have a 0x218/0x21A south neighbour (the other 11 are logged as F042). What DID work: the in-box 0x21A-foot conversions at (18,24)->(18,25) read as bright leafy bushes. Prescription for a third attempt: build the bush at the DRAWN relief height of its cell, and either convert or justify the 0x203/0x3B8-footed crowns. Crops: .autoloop/gates/F032c_verify/",
+  "parked": "2026-10-21"
  },
  {
   "id": "F033",
@@ -467,11 +468,12 @@
   "class": "floating-props",
   "cell": "-4,53",
   "text": "West boundary fill: cells -5..-3 x 53 are roof tiles (0x010-0x012, col=y) with base 0 beside neighbours at base 32, and the building's roof geometry stands at 63..83: a roof row floating over ground drawn at 0 (found by fixer F030b, pre-existing in rc main e6a02ab and 1d04b0e; the F030 family on 'roof' shape kinds, which 0fd360b left alone)",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  -4,53  h74  cam7/0.8",
   "attempts": 1,
-  "evidence": "Attempt 1 (fix/F038, commit 317e33d: a house seen from another map kept the map floor offset) fails the gate: one air region of 144 px2 (over the 32 px2 visibility floor) still at the box, and 20 cell lines changed on Route 111 plus 3 on Route 112 (class risk). Branch kept for a second attempt. Dumps: .autoloop/gates/F038/fix_a|fix_b vs .autoloop/geo-cache/h-1d04b0e/{a,b}."
+  "evidence": "Fixed on fix/F038 (commit 2d7da17, merged into rc main d0b72d5, lib/BuildingModels.lua: the lift offset comes from the ground drawn in front of the door). The gate cannot judge this class - building models are built by FlatMesh/love.graphics.newMesh, outside the geometry dump hook - so an independent reviewer judged rendered ortho before/after: Route 112 both herb shops (wall bottom 439 / grass 440), the gym (423/424) and the Poke Center stand on their ground; Route 113 the Cozmo house (407/408), battle tent (439/440) and Poke Center (439/440); each object is a rigid 64 screen px = 32 world px lift with dx=0 and patch match error 0.0 (no stretch); the open roof over the left shop is filled by its own walls; Route 112 diff is only the three building components plus occlusion, Route 113 exactly four; all changed cell lines are blocked cells, no walkable base moved. Crops: .autoloop/gates/F038/verify/.",
+  "fixed": "2026-10-21"
  },
  {
   "id": "F039",
@@ -481,11 +483,12 @@
   "class": "floating-props",
   "cell": "104,-2",
   "text": "The margin water plate beyond the map's north edge (cells 104..114 x -3..-1, base 48) hangs over open air: a 40-60 px band of pure sky shows between its lip and the lake below (level-4 frame .autoloop/runs/disc-main/batch02/b001.png, box 640,70,990,190; found by the discovery judge, who calibrated the camera against the dumped geometry). Rocks on the lip are silhouetted against the sky gap; nothing closes the 48 px drop",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE123  104,-2  h48  cam4/0",
   "attempts": 1,
-  "evidence": "Attempt 1 (fix/F039 e491240: the two blocked shore-water passes now test collision==7 instead of collision~=0, so the surfable sea is no longer dragged down to the lake) fixes the water drag (3 detector regions gone, sea back at 48 on 40 Route 123 cells, +60 tris) but was REJECTED: two static enclosed sky holes remain inside the box - 2317 px2 at (754,97)-(863,164) under shoreline cliff cells (110,-1)/(111,-1) and 2622 px2 at (875,103)-(971,181) under (116,-1)/(117,-1), each with a boulder silhouetted against sky, because the new water walls stop at the water cells and those ridge cells have no face down to the lake. Attempt 2 (fix/F039b) closes those faces with rock art at 1:1. Evidence: .autoloop/gates/F039/verify/F039_sky_fix_box3x.png"
+  "evidence": "Attempt 1 (fix/F039 e491240: the two blocked shore-water passes now test collision==7 instead of collision~=0, so the surfable sea is no longer dragged down to the lake) fixes the water drag (3 detector regions gone, sea back at 48 on 40 Route 123 cells, +60 tris) but was REJECTED: two static enclosed sky holes remain inside the box - 2317 px2 at (754,97)-(863,164) under shoreline cliff cells (110,-1)/(111,-1) and 2622 px2 at (875,103)-(971,181) under (116,-1)/(117,-1), each with a boulder silhouetted against sky, because the new water walls stop at the water cells and those ridge cells have no face down to the lake. Attempt 2 (fix/F039b) closes those faces with rock art at 1:1. Evidence: .autoloop/gates/F039/verify/F039_sky_fix_box3x.png ATTEMPT 2 MERGED (ccad67d): the sea surface is drawn at the converted bank's own height (base+0.05) and a margin rock cell over lower water gets a face down to it in 16 px courses. Independent reviewer: the sky band goes 11,551 px2 -> 23 px2 at level 4 both yaws; no regression at levels 4/6/7 including six extra yaws and shore/lake spots; 0 fallbacks; it also closes a pre-existing 1,147 px2 hole on Route 103. The one region the gate still flags (2,188 px2 at 108..117 x -2..-1) is air enclosed UNDER the sea plate, confirmed invisible from every camera a player can reach. Caveat: the new margin-wall block is not limited to shape.seaRock.",
+  "fixed": "2026-10-21"
  },
  {
   "id": "F040",
@@ -498,5 +501,30 @@
   "status": "open",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  21,20  h26  cam7/0.8"
+ },
+ {
+  "id": "F041",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "ledges",
+  "cell": "16,42",
+  "text": "A pre-existing air region that is NOT the F006 stair fault: 1392-1904 px2 at cells 12..20 x 40..42 (tile 0x2F8, base 48, gap 23 px) survives both the installed build and the candidate; the stair fix removed its own regions (1700, 224, 224, 228 px2) but this one remains. Needs its own diagnosis (ledge/wall face beside the stair, class of F001/F004)",
+  "status": "open",
+  "found": "2026-10-21",
+  "source": "tour: EM_ROUTE112  16,42  h48  cam4/0",
+  "evidence": "Cured by the F006b fix (fix/F006b 95ad58b: a cliff mass cell's footprint is closed from the lowest floor beside it up to the plate, and that floor laid under it): the class is \"a flat plate at the solved floor over the mass's own top below it, open along a side whose neighbour is level\". Gate at F006b: the 12..20 x 40..42 region goes away with the 15..18 x 43 one (5068 -> 72 px2 of sub-floor slivers). Pending that fix's merge."
+ },
+ {
+  "id": "F042",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "floating-props",
+  "cell": "21,27",
+  "text": "Eleven of Route 112's 40 ash-bush crowns still hang as lifted plates with no trunk: the ones whose south neighbour is 0x203/0x3B8 rather than 0x218/0x21A, at (21,27),(22,28),(23,27),(24,27),(27,34),(28,32),(30,29),(31,28),(32,28),(33,25),(9,38) (found by the F032 attempt-2 reviewer, crop .autoloop/gates/F032c_verify/plate_L7y08_1040_sky.png: three plates in the sky from spot 10,40 level 7). Same lifted-slab class as F032; F032's conversion rule cannot cover them as written",
+  "status": "open",
+  "found": "2026-10-21",
+  "source": "tour: EM_ROUTE112  21,27  h26  cam7/0.8"
  }
 ]

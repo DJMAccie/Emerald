@@ -43,6 +43,28 @@ return function(game)
   g[#g+1]={verts=verts,map=map,tag=tag,fn=info.name or '-'}
   return orig(verts,map,format)
  end
+ -- Building/prop models are packed as a flat number list by FlatMesh and uploaded with love.graphics.newMesh, so
+ -- Voxel3D.newMesh never sees them and the dumps had no models at all: F038 (houses 32 px low inside a fill) could not be
+ -- gated on geometry for that reason. Wrap FlatMesh.mesh and turn its flat list back into the same vertex tables.
+ do local ok,FM=pcall(ex.lib.require,'FlatMesh')
+  if ok and type(FM)=='table' and type(FM.mesh)=='function' then
+   local omesh=FM.mesh
+   FM.mesh=function(f,n)
+    if n and n>0 then
+     local k=key()
+     local g=groups[k];if not g then g={};groups[k]=g;order[#order+1]=k end
+     local verts={}
+     for v=0,n/6-1 do local o=v*6;verts[v+1]={f[o+1],f[o+2],f[o+3],f[o+4],f[o+5],f[o+6]} end
+     local idx={}
+     for q=0,#verts/4-1 do local b=q*4;local m=#idx
+      idx[m+1],idx[m+2],idx[m+3],idx[m+4],idx[m+5],idx[m+6]=b+1,b+2,b+3,b+1,b+3,b+4
+     end
+     g[#g+1]={verts=verts,map=idx,tag='FlatMesh:model',fn='model'}
+    end
+    return omesh(f,n)
+   end
+  end
+ end
  local DECK={general__fortree={[0x256]=1}}
  for t=0x210,0x21D do DECK.general__fortree[t]=1 end
  local function settle()

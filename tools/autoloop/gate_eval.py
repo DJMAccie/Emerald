@@ -86,19 +86,28 @@ def main(argv):
             v['fault_after'] = [r for r in rf if overlap(r['box'], box, 1)]
             if not v['fault_before']:
                 v['reasons'].append('note: no %s region at the box in BASE (the detector does not see this fault)' % o.kind)
+            # A region the BASE already had at the box is not this fault, and a region the fix keeps in the same
+            # place is not fixed: match by overlap (2 cells), then only unmatched base regions count as cured and
+            # only unmatched fix regions above the floor count as remaining.
+            def match(r, pool):
+                return any(overlap(r['box'], q['box'], 2) for q in pool)
             over = [r for r in v['fault_after'] if (r.get('area_px') or 0) >= VIS_FLOOR]
+            cured = [r for r in v['fault_before'] if (r.get('area_px') or 0) >= VIS_FLOOR and not match(r, over)]
+            survived = [r for r in over if match(r, v['fault_before'])]
+            v['fault_matched'] = {'cured': len(cured), 'survived': len(survived)}
             area_b = sum(r.get('area_px') or 0 for r in v['fault_before'])
             area_a = sum(r.get('area_px') or 0 for r in v['fault_after'])
             v['fault_area'] = {'before': area_b, 'after': area_a}
             if v['fault_after']:
                 v['reasons'].append('slivers at the box: %d region(s), %d px2 total (visibility floor %d px2)'
                                     % (len(v['fault_after']), area_a, VIS_FLOOR))
-            if over:
+            if survived:
                 ok = False
-                v['reasons'].append('not fixed: %d %s region(s) over the visibility floor at the box' % (len(over), o.kind))
-            elif v['fault_before'] and area_a > 0.10 * area_b:
+                v['reasons'].append('not fixed: %d region(s) over the visibility floor survive at the box (matched to base)'
+                                    % len(survived))
+            elif not cured and v['fault_before']:
                 ok = False
-                v['reasons'].append('not fixed: flagged area at the box only fell from %d to %d px2' % (area_b, area_a))
+                v['reasons'].append('not fixed: none of the base regions at the box went away')
         for kind, rb, rf in (('air', ab, af), ('steps', sb, sf)):
             for r in rf:
                 if r.get('edge'):

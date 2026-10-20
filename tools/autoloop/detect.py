@@ -26,7 +26,7 @@ LOOK_DROP = 4.0                     # how far below the plate that lower ground 
 
 # Mesh origins that are terrain. Tags look like 'Gen3Scene.lua:2571<Gen3Scene.lua:2589': the second line is the
 # upload('<kind>', ...) call. Filled from a smoke dump: see TERRAIN_KINDS and tag_kind().
-TERRAIN_KINDS = {'under', 'civic', 'water'}   # water: a lower surface (rock floating over a pond)
+TERRAIN_KINDS = {'under', 'civic', 'water', 'model'}   # model: building/prop meshes (FlatMesh)   # water: a lower surface (rock floating over a pond)
 
 
 def load(path):
@@ -65,6 +65,8 @@ def load_cells(path):
 
 def tag_kind(src_lines, tag):
     """'under'/'roof'/... for Gen3Scene field meshes (read from the upload call's source line), else a short name."""
+    if tag == 'FlatMesh:model':
+        return 'model'
     m = re.match(r'([^:]+):(\d+)<([^:]+):(\d+)', tag)
     if not m:
         return tag
@@ -436,10 +438,103 @@ def detect_void(path, libdir=None, margin=6, min_cells=1):
     return regions
 
 
+def detect_models(path, libdir=None, tol=8.0, min_area=64.0):
+    """D5 buried/floating building models: every model mesh group (tag 'model', FlatMesh) is split into the models it
+    contains (connected in the x/z grid at 1 px), and each model's FOOT (its lowest vertex) is compared with the ground
+    drawn under it (the highest 'under' surface inside its outline). A foot well below that ground is a buried facade
+    (F038: houses in a fill stood 32-56 px low), well above it is a floating model. Reports one entry per model group of
+    flagged cells, with the vertical error in px."""
+    head, tags, a = load(path)
+    cells = load_cells(path.replace('.geo.gz', '.cells'))
+    src = source_lines(libdir)
+    kinds = {t: tag_kind(src, v['tag']) for t, v in tags.items()}
+    model = np.array([kinds.get(int(t)) == 'model' for t in a[:, 0]], bool) if len(a) else np.zeros(0, bool)
+    if not model.any():
+        return {'map': head.get('map'), 'models': [], 'triangles': 0}
+    mt = a[model][:, 1:10].reshape(-1, 3, 3)
+    cx = np.floor(mt[:, :, 0].mean(1) / 16).astype(int)
+    cz = np.floor(mt[:, :, 2].mean(1) / 16).astype(int)
+    foot = np.full(mt.shape[0], np.inf, np.float32)
+    top = np.full(mt.shape[0], -np.inf, np.float32)
+    for i in range(mt.shape[0]):
+        ys = mt[i, :, 1]
+        foot[i] = ys.min()
+        top[i] = ys.max()
+    # ground under each model triangle, from the terrain surfaces (under/water/civic, not models)
+    terr = np.array([kinds.get(int(t)) in ('under', 'water', 'civic') for t in a[:, 0]], bool) if len(a) else np.zeros(0, bool)
+    ground = {}
+    if terr.any():
+        tt = a[terr][:, 1:10].reshape(-1, 3, 3)
+        # only upward faces count as ground
+        n = np.cross(tt[:, 1] - tt[:, 0], tt[:, 2] - tt[:, 0])
+        up = n[:, 1] > 0.5 * (np.linalg.norm(n, axis=1) + 1e-9)
+        for tri in tt[up]:
+            k = (int(np.floor(tri[:, 0].mean() / 16)), int(np.floor(tri[:, 2].mean() / 16)))
+            y = float(tri[:, 1].mean())
+            if k not in ground or y > ground[k]:
+                ground[k] = y
+    cells_used = {}
+    for i in range(mt.shape[0]):
+        cells_used.setdefault((cx[i], cz[i]), []).append(i)
+    # per CELL: the model's foot in that cell against the ground drawn in that cell (a whole-fill group would average
+    # a sunk house away against its neighbours - the F038 shop is 32 px low while the shop next to it is right)
+    def cellbase(k):
+        c = cells.get((int(k[0]), int(k[1])))
+        if not c:
+            return None
+        try:
+            return float(c.get('base'))
+        except (TypeError, ValueError):
+            return None
+    ref = {}
+    for k in cells_used:
+        g = ground.get(k)
+        cb = cellbase(k)
+        if g is None and cb is None:
+            continue
+        ref[k] = g if (cb is None or (g is not None and g >= cb)) else cb
+    # ONE MODEL = a connected group of cells; its foot is the group's lowest vertex and its reference the HIGHEST ground
+    # the group stands on (a per-cell foot would read every roof-only cell as floating, and comparing a whole fill at once
+    # would average a sunk house away against its neighbours)
+    lab2, groups2 = {}, []
+    for k in sorted(ref):
+        if k in lab2:
+            continue
+        stack, comp = [k], []
+        lab2[k] = len(groups2)
+        while stack:
+            c = stack.pop()
+            comp.append(c)
+            for dx in (-1, 0, 1):
+                for dz in (-1, 0, 1):
+                    n2 = (c[0] + dx, c[1] + dz)
+                    if n2 in ref and n2 not in lab2:
+                        lab2[n2] = len(groups2)
+                        stack.append(n2)
+        groups2.append(comp)
+    out = []
+    for comp in groups2:
+        idxs = [i for c in comp for i in cells_used.get(c, [])]
+        if len(idxs) < 24:
+            continue
+        f = float(min(foot[i] for i in idxs))
+        g = float(max(ref[c] for c in comp))
+        err = f - g
+        if abs(err) < tol:
+            continue
+        xs = [c[0] for c in comp]
+        zs = [c[1] for c in comp]
+        out.append({'box': [int(min(xs)), int(min(zs)), int(max(xs)), int(max(zs))], 'foot': round(f, 1),
+                    'ground': round(g, 1), 'error': round(err, 1), 'cells': len(comp), 'tris': len(idxs),
+                    'buried': err < 0, 'area_px': len(comp) * 256})
+    out.sort(key=lambda r: -abs(r['error']))
+    return {'map': head.get('map'), 'models': out, 'triangles': int(model.sum())}
+
+
 def main(argv):
     import argparse, os
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['air', 'tags', 'steps', 'void'])
+    ap.add_argument('cmd', choices=['air', 'tags', 'steps', 'void', 'models'])
     ap.add_argument('geo', nargs='+')
     ap.add_argument('--json')
     ap.add_argument('--min-gap', type=float, default=3.0)
@@ -460,6 +555,18 @@ def main(argv):
                 zs = a[sel][:, [3, 6, 9]]
                 rng = lambda q: '%.0f..%.0f' % (q.min(), q.max()) if q.size else '-'
                 print('%3d %-8s %-48s %-10s tris %7d  x %s y %s z %s' % (t, tag_kind(src, v['tag']), v['tag'], v['fn'], int(sel.sum()), rng(xs), rng(ys), rng(zs)))
+        return 0
+    if o.cmd == 'models':
+        res = []
+        for p in o.geo:
+            r = detect_models(p, o.lib)
+            res.append(r)
+            print('%-30s model tris %7d  flagged models %3d' % (r['map'], r['triangles'], len(r['models'])))
+            for g in r['models'][:o.top]:
+                print('   box %-18s foot %6.1f ground %6.1f error %+7.1f cells %3d tris %6d %s'
+                      % (g['box'], g['foot'], g['ground'], g['error'], g['cells'], g['tris'], 'BURIED' if g['buried'] else 'FLOATING'))
+        if o.json:
+            json.dump(res, open(o.json, 'w'), indent=1)
         return 0
     if o.cmd == 'void':
         res = []
