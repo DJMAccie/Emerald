@@ -1,32 +1,32 @@
 {
  "items": [
   {
-   "name": "Stairs: flat / reversed / cliff jumps (55 outdoor maps)",
+   "name": "Stairs: flat / reversed / cliff jumps (53 outdoor maps)",
    "value": "0 / 0 / 0",
    "target": "0 / 0 / 0",
-   "asof": "2026-10-18",
-   "source": "tools/elevation/stairs_audit.py, session 5"
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/elevation/stairs_audit.py"
   },
   {
    "name": "Ledges that do not drop (of 401)",
    "value": "0",
    "target": "0",
-   "asof": "2026-10-18",
-   "source": "ledge check, session 4; ledge geometry being redone 2026-10-19"
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); stairs_audit.py ledge check"
   },
   {
    "name": "Slowest map to 3D",
-   "value": "0.9-1.2 s (Rustboro, load-dependent)",
+   "value": "17.35 s (GRANITE_CAVE_B2F); median 434 ms, 22 of 158 over 1 s, load avg 23.6",
    "target": "under 1 s",
-   "asof": "2026-10-18",
-   "source": "docs/FIRST-PERSON-GATE-HANDOFF-2026-10-18.md"
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/em_times_driver_all.lua"
   },
   {
    "name": "Buildings flagged by the defect scan",
-   "value": "0 after Ranking Hall fix (earlier 3)",
+   "value": "0 of 122 bakes ",
    "target": "0",
-   "asof": "2026-10-18",
-   "source": "tools/buildings/defect_scan.py, gate-final-pass handoff"
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/buildings/defect_scan.py"
   },
   {
    "name": "Outdoor first-person survey (4 yaws)",
@@ -44,31 +44,38 @@
   },
   {
    "name": "Floating rock masses",
-   "value": "3 (Mossdeep 45,7; Route 112 19,42; Route 103 24,14)",
+   "value": "0 (4471 masses audited in 158 maps)",
    "target": "0",
-   "asof": "2026-10-19",
-   "source": "docs/BETA-NOTES-2026-10-19.md"
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); Gen3Rock.audit"
   },
   {
    "name": "Fallbacks to 2D / Lua errors over outdoor + cave sweep",
-   "value": "0 fallbacks, 1 old error line",
+   "value": "0 fallbacks, 0 Lua errors (632 shots)",
    "target": "0 / 0",
-   "asof": "2026-10-19",
-   "source": "docs/BETA-NOTES-2026-10-19.md"
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/qa_tryp.sh sweep levels 4+7"
   },
   {
    "name": "Scene-cache key narrowed: builds per map entry / build CPU (stock to fixed)",
-   "value": "3 builds (was 3-9); CPU Littleroot boot 2120→1340 ms (-37%), Route 111 3200→2255 (-30%), Rustboro 4950→4208 (-15%), Mauville 2650→2233 (-16%), Mossdeep -2%, Oldale 0; pixel diffs equal stock-vs-stock noise (0.8-1.0% vs 0.7-1.0%, 38 pairs, 0 fallbacks); cold neighbour edges identical",
+   "value": "3 builds (was 3-9); CPU Littleroot boot 2120\u21921340 ms (-37%), Route 111 3200\u21922255 (-30%), Rustboro 4950\u21924208 (-15%), Mauville 2650\u21922233 (-16%), Mossdeep -2%, Oldale 0; pixel diffs equal stock-vs-stock noise (0.8-1.0% vs 0.7-1.0%, 38 pairs, 0 fallbacks); cold neighbour edges identical",
    "target": "one build chain per entry, pixels unchanged",
    "asof": "2026-10-19",
    "source": "docs/BAKE-SPIKE.md stage A2; installed ee0da2f"
   },
   {
-   "name": "Cell dump repeatability (53 outdoor maps, two runs, same code)",
-   "value": "0 of 156,063 cells differ (was 176 before the F025 fix; 190 with the driver pinned)",
+   "name": "Cell dump repeatability (two runs, same code) and cells differing from the baseline",
+   "value": "1 of 156063 cells differ between runs; 100 differ from heights-2026-10-20-fix-F025.txt",
    "target": "0",
    "asof": "2026-10-20",
-   "source": "docs/HEIGHT-PATH.md; tools/heights_compare.py"
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/heights_compare.py"
+  },
+  {
+   "name": "Magenta holes in the lower 45% of the frame (probe frames)",
+   "value": "15 of 632 frames (level 7; level 4 shown as info)",
+   "target": "0",
+   "asof": "2026-10-20",
+   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/magenta_score.py"
   }
  ]
 }

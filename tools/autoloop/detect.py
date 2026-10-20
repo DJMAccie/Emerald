@@ -228,7 +228,14 @@ def detect_air(path, min_gap=3.0, min_area=8.0, box=None, libdir=None, verbose=F
                 continue
             if b == b:
                 base[(cx - cx0) * vx:(cx - cx0 + 1) * vx, (cy - cz0) * vz:(cy - cz0 + 1) * vz] = b
-    gapall[(gapall > 0) & (topall <= base + 1.0)] = 0
+    # ...but only where the cell's floor IS its drawn surface (flat ground, grass, water). A cliff/rock cell is drawn
+    # ABOVE its base, so air under its top is the fault class, not underground: the F039 verifier showed a 48 px open drop
+    # under shoreline rock cells at base 48 being discarded here (a false negative).
+    groundkinds = np.ones((GW, GH), bool)
+    for (cx, cy), c in cells.items():
+        if cx0 <= cx < cx1 and cz0 <= cy < cz1 and c.get('kind') in ('cliff', 'rock'):
+            groundkinds[(cx - cx0) * vx:(cx - cx0 + 1) * vx, (cy - cz0) * vz:(cy - cz0 + 1) * vz] = False
+    gapall[(gapall > 0) & (topall <= base + 1.0) & groundkinds] = 0
     # cells that are meant to have air under parts of them
     for (cx, cy), c in cells.items():
         # awnings are cloth on four posts and bridges are decks on legs (judged 2026-10-21: not faults; the awning cells

@@ -214,3 +214,37 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   row at base 0; F039 Route 123 margin water plate), 1 parked (F030), 6 fixed (F005, F006, F007, F025, F029, F031).
   Next: F039 fixer started; F032/F035/F038 are the same plate family; ledges need a dedicated fixer or the other session's
   work; magenta needs the baseline answer before anyone chases it.
+- 2026-10-21 23:20 Magenta gate resolved as PRE-EXISTING: the same gate on the installed tree gives 207 of 632 frames with
+  magenta and 16 "low" frames; the candidate gives 207 and 15. So the world has always had these holes (map edges, probe
+  tree) and the candidate removes one. Recorded in the release doc; nobody should chase it as a regression.
+  Blast radius verified: both trees rebuilt headless with the SAME driver and payload (the earlier 30-map/57-map diff was
+  confounded by driver 27e232e vs 33dc73a and payload 0.3.91 vs 0.3.92 - rebuilt as clean-e6a02ab / clean-1d04b0e). Result:
+  cells differ on 29 maps, triangles on 56, all in terrain meshes (under/over) only, never plants/roofs/canopies/water/
+  civic. Visual A/B at Mt Pyre summit, Ever Grande, Jagged Pass: identical silhouettes, rock faces crisp vs smeared.
+  F040 logged (foliage art printed on rock faces); F032's real cause found (Gen3Canopy walk-under slab for the ash-bush
+  tile 0x210, lifted 32 px with no trunk - fixer making it a solid bush; it refuted the earlier F032 attempt 9ce350a with a
+  byte-identical dump comparison). Gate now has a visibility floor (regions under 32 px2 at the fault box do not fail).
+- 2026-10-22 00:30 Three fixers landed commits; their gates died at the dump phase (quota), so I finished the gates from their
+  dumps: F038 FAIL (144 px2 region left at the box, 20 cells changed on Route 111 - attempt 1 recorded), F039 FAIL on one
+  68 px2 phantom region but all three fault regions (388/384/384 px2, gap 37) went to 0; verifier asked to confirm the look
+  and to answer the water-level design question. F039's cause is a two-word bug in Gen3Scene's "blocked shore-water" passes
+  (`collision~=0` matched every surfable sea tile, collision 41): the whole sea beyond the north edge was dragged down to the
+  lake beside it, leaving pits under the sea rocks' skirts open to the sky. Fix tests `collision==7`.
+  F032b: gate PASS with kind=none (the air rule never covered this fault), commit c0a4b23; the earlier attempt 9ce350a was
+  refuted by a byte-identical dump comparison. Its level-7 frames are unusable (the orbit camera ends up inside the new solid
+  bush), so the verifier is judging levels 4/6 and whether a player can clip into a bush.
+  DESIGN QUESTION for the user (F039): the north water beyond Route 123's edge is Route 122's sea at 48 while the lake beside
+  it is at 0. Keep them as they are (the fix, seam reads as a water step) or unify them (raising the lake moves 224 cells,
+  leaves a 48 px pit at the shore and opens a 384 px2 region inside a sea-rock shell)?
+- 2026-10-22 01:10 Both new fixes REJECTED by their verifiers, both for real reasons, both now on attempt 2:
+  * F032: the standing bush removes the floating plate (plate bboxes gone at both orbit yaws) but its top and side faces
+    stretch a 0.5-px art strip across 4 px depth (8x) - it reads as a dark, flat-topped, striped table beside the bright
+    round bushes in the player camera. Attempt 2 must repeat art rows/columns 1:1 (the verifier's own prescription).
+  * F039: the collision==7 fix genuinely restores the dragged sea (3 regions gone, 40 cells back to 48, +60 tris) but two
+    static enclosed sky holes remain under the shoreline CLIFF cells (110,-1)/(111,-1) and (116,-1)/(117,-1), each with a
+    boulder silhouetted, because the new walls stop at the water cells. Attempt 2 closes those faces with rock art.
+  DETECTOR FIX: the "at or below its cell's floor = underground" filter discarded exactly this class - a rock cell is drawn
+  above its base, so air under its top is the fault, not underground. It now applies only to non-cliff/rock cells, and the
+  F039 residual region (784 px2 at 111..116 x -3..0, gap 47) is visible to the gate again. Lesson recorded: capture from a
+  clean tree commit, never from a worktree a fixer is editing (one of my judge frames did not reproduce - the verifier
+  caught it and reproduced the gate frame four times instead).

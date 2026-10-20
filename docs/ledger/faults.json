@@ -394,7 +394,9 @@
   "text": "Thin green plates hang in mid-air beside the red rock walls of the terrace area (autoloop D1 box -2..26 x 21..26; shot .autoloop/runs/cal1/shotsA_y08/b012.png); the back wall also shows grass texture striped down vertical rock",
   "status": "open",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE112  12,21  h39  cam7/0.8"
+  "source": "tour: EM_ROUTE112  12,21  h39  cam7/0.8",
+  "attempts": 1,
+  "evidence": "Attempt 1 (fix/F032b c0a4b23: crown built as a solid standing bush) removes the floating plate (verifier: base plate at (803,508)-(1018,617) and (442,422)-(598,549) gone, no camera can clip into the bush) but was REJECTED: the bush is a 4-px box whose top and side faces stretch a 0.5-px art strip across 4 px (8x) - it reads as a dark, flat-topped, striped table beside the bright round bushes in the player camera. Attempt 2 (fix/F032c) must repeat art rows/columns 1:1 instead of stretching. Evidence: .autoloop/gates/F032/verify/REGRESSION_lvl4y08_bush_base_vs_fix.png"
  },
  {
   "id": "F033",
@@ -431,7 +433,7 @@
   "status": "open",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  9,40  h75  cam7/0.8",
-  "evidence": "The visible plate in the calibration frame (.autoloop/runs/cal1/shotsB_y08/b022.png, top left) was ray-cast by the F030 fixer to canopy meshes at y~75 in Route 112 cells 9..10 x 40..41 (base 48) and cells 26,39 / 28..30 x 33..35: the detector does not read canopy meshes, so neither gate nor detector covers it. Needs a trunk/support check or a canopy-aware region rule."
+  "evidence": "Likely cured by the F032 canopy fix (branch fix/F032b, commit c0a4b23): headless canopy geometry at the plate cells (9..10 x 40..41, y 74-76 in rc main) is absent from that tree, and the crowns now stand at ground height on their own cells (9..10 x 38, y 48.3-63.0). Confirm on the merged candidate with a capture and then close."
  },
  {
   "id": "F036",
@@ -467,7 +469,9 @@
   "text": "West boundary fill: cells -5..-3 x 53 are roof tiles (0x010-0x012, col=y) with base 0 beside neighbours at base 32, and the building's roof geometry stands at 63..83: a roof row floating over ground drawn at 0 (found by fixer F030b, pre-existing in rc main e6a02ab and 1d04b0e; the F030 family on 'roof' shape kinds, which 0fd360b left alone)",
   "status": "open",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE112  -4,53  h74  cam7/0.8"
+  "source": "tour: EM_ROUTE112  -4,53  h74  cam7/0.8",
+  "attempts": 1,
+  "evidence": "Attempt 1 (fix/F038, commit 317e33d: a house seen from another map kept the map floor offset) fails the gate: one air region of 144 px2 (over the 32 px2 visibility floor) still at the box, and 20 cell lines changed on Route 111 plus 3 on Route 112 (class risk). Branch kept for a second attempt. Dumps: .autoloop/gates/F038/fix_a|fix_b vs .autoloop/geo-cache/h-1d04b0e/{a,b}."
  },
  {
   "id": "F039",
@@ -479,6 +483,20 @@
   "text": "The margin water plate beyond the map's north edge (cells 104..114 x -3..-1, base 48) hangs over open air: a 40-60 px band of pure sky shows between its lip and the lake below (level-4 frame .autoloop/runs/disc-main/batch02/b001.png, box 640,70,990,190; found by the discovery judge, who calibrated the camera against the dumped geometry). Rocks on the lip are silhouetted against the sky gap; nothing closes the 48 px drop",
   "status": "open",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE123  104,-2  h48  cam4/0"
+  "source": "tour: EM_ROUTE123  104,-2  h48  cam4/0",
+  "attempts": 1,
+  "evidence": "Attempt 1 (fix/F039 e491240: the two blocked shore-water passes now test collision==7 instead of collision~=0, so the surfable sea is no longer dragged down to the lake) fixes the water drag (3 detector regions gone, sea back at 48 on 40 Route 123 cells, +60 tris) but was REJECTED: two static enclosed sky holes remain inside the box - 2317 px2 at (754,97)-(863,164) under shoreline cliff cells (110,-1)/(111,-1) and 2622 px2 at (875,103)-(971,181) under (116,-1)/(117,-1), each with a boulder silhouetted against sky, because the new water walls stop at the water cells and those ridge cells have no face down to the lake. Attempt 2 (fix/F039b) closes those faces with rock art at 1:1. Evidence: .autoloop/gates/F039/verify/F039_sky_fix_box3x.png"
+ },
+ {
+  "id": "F040",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "rock",
+  "cell": "21,20",
+  "text": "Foliage art printed on rock: green bush/grass texture on the vertical rock faces and a green lid on the rock wall top (Gen3Rock samples the foliage-drawn cells 0x210/0x218/0x21A as rock art); same frame as F032, screen area of the red terrace walls (fixer F032b, 2026-10-21). Separate class from the floating canopy plates",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  21,20  h26  cam7/0.8"
  }
 ]
