@@ -5,7 +5,9 @@ Inputs (all in docs/ledger/):
   maps.json     every map: id, kind, w, h. Refresh with --refresh-maps (reads world.json from the modwork folder).
   status.json   review state per map and area; kind defaults for everything not listed.
   faults.json   the one list of known faults (id, map, area, tier, class, cell, text, status).
-  audits.json   global audit numbers with their source and date.
+  audits.json   global audit numbers with their source and date. --audit-from results.json (tools/release_check.sh)
+                replaces the numbers of the gates that ran to completion; a subset run is refused unless --audits-file
+                points at another file (or --force-partial).
 Output: docs/LEDGER.md (--write). --check exits 1 if the file is stale or the data disagree.
 
 States (the weights are Emerald 3DS's scale, so the percentages compare):
@@ -164,15 +166,91 @@ def render(maps, status, faults, audits):
     return '\n'.join(out), errors
 
 
+def audit_rows(res):
+    """results.json gates -> [(match prefix, new name, value, target, source)]; only gates that finished (pass/fail/info)"""
+    g = res['gates']
+    rid = 'tools/release_check.sh run %s (%s scope, mod %s)' % (res['run_id'], res['scope'], res['mod_hash'])
+    rows = []
+
+    def done(k):
+        return g.get(k, {}).get('status') in ('pass', 'fail', 'info')
+    if done('stairs'):
+        m = g['stairs']['metrics']
+        rows.append(('Stairs:', 'Stairs: flat / reversed / cliff jumps (%d outdoor maps)' % m['maps'],
+                     '%d / %d / %d' % (m['flat'], m['reversed'], m['cliff_jumps']), '0 / 0 / 0', rid + '; tools/elevation/stairs_audit.py'))
+        rows.append(('Ledges that do not drop', 'Ledges that do not drop (of %d)' % m['ledges_checked'], str(m['ledges_bad']), '0',
+                     rid + '; stairs_audit.py ledge check'))
+    if done('load'):
+        m = g['load']['metrics']
+        rows.append(('Slowest map to 3D', 'Slowest map to 3D', '%.2f s (%s); median %d ms, %d of %d over 1 s, load avg %s' % (
+            m['max_ms'] / 1000.0, m['slowest'].replace('EM_', ''), m['median_ms'], m['over_1000ms'], m['maps'], m['load_avg_1m']),
+            'under 1 s', rid + '; tools/em_times_driver_all.lua'))
+    if done('defects'):
+        m = g['defects']['metrics']
+        rows.append(('Buildings flagged by the defect scan', 'Buildings flagged by the defect scan', '%d of %d bakes %s' % (
+            m['flagged_bakes'], m['bakes'], m['by_class'] or ''), '0', rid + '; tools/buildings/defect_scan.py'))
+    if done('floats'):
+        m = g['floats']['metrics']
+        rows.append(('Floating rock masses', 'Floating rock masses', '%d (%d masses audited in %d maps)' % (m['floats'], m['masses_audited'], m['maps']),
+                     '0', rid + '; Gen3Rock.audit'))
+    if done('sweep'):
+        m = g['sweep']['metrics']
+        rows.append(('Fallbacks to 2D', 'Fallbacks to 2D / Lua errors over outdoor + cave sweep', '%d fallbacks, %d Lua errors (%d shots)' % (
+            m['fallbacks'], m['lua_errors'], m['shots']), '0 / 0', rid + '; tools/qa_tryp.sh sweep levels 4+7'))
+    if done('magenta'):
+        m = g['magenta']['metrics']
+        rows.append(('Magenta holes', 'Magenta holes in the lower 45% of the frame (probe frames)', '%d of %d frames (level 7; level 4 shown as info)' % (m['frames_low'], m['frames']),
+                     '0', rid + '; tools/magenta_score.py'))
+    if done('repeat'):
+        m = g['repeat']['metrics']
+        rows.append(('Cell dump repeatability', 'Cell dump repeatability (two runs, same code) and cells differing from the baseline',
+                     '%d of %d cells differ between runs; %d differ from %s' % (m['unstable_between_runs'], m['cells'], m['differ_from_baseline'], m['baseline']),
+                     '0', rid + '; tools/heights_compare.py'))
+    return rows
+
+
+def audit_from(path, audits_path, force):
+    res = json.load(open(path))
+    if res['scope'] != 'full' and audits_path == os.path.join(LED, 'audits.json') and not force:
+        print('ERROR: %s is a subset run; it would put a few maps\' numbers over whole-scope audits. Use --audits-file or --force-partial.' % path, file=sys.stderr)
+        return 2
+    audits = json.load(open(audits_path))
+    items = audits['items']
+    for k, g in res['gates'].items():
+        if g['status'] in ('incomplete',):
+            print('skipped gate %s: incomplete, audits keep their old numbers' % k, file=sys.stderr)
+    for prefix, name, value, target, source in audit_rows(res):
+        it = next((i for i in items if i['name'].startswith(prefix)), None)
+        if it is None:
+            it = {}
+            items.append(it)
+        it.update(name=name, value=value, target=target, asof=res['date'], source=source)
+        print('audit:', name, '=', value)
+    with open(audits_path, 'w') as f:
+        json.dump(audits, f, indent=1)
+        f.write('\n')
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--audit-from', metavar='RESULTS_JSON', help='write the numbers of a tools/release_check.sh run into audits.json, then regenerate')
+    ap.add_argument('--audits-file', help='with --audit-from: read and write this audits file instead of docs/ledger/audits.json (and render LEDGER from it)')
+    ap.add_argument('--force-partial', action='store_true', help='with --audit-from: accept a subset run into docs/ledger/audits.json')
     ap.add_argument('--refresh-maps', action='store_true')
     ap.add_argument('--write', action='store_true')
     ap.add_argument('--check', action='store_true')
     a = ap.parse_args()
     if a.refresh_maps:
         refresh_maps()
-    maps, status, faults, audits = load('maps.json'), load('status.json'), load('faults.json'), load('audits.json')
+    audits_path = os.path.abspath(a.audits_file) if a.audits_file else os.path.join(LED, 'audits.json')
+    if a.audit_from:
+        rc = audit_from(a.audit_from, audits_path, a.force_partial)
+        if rc:
+            return rc
+        if not a.write and not a.check:
+            return 0
+    maps, status, faults, audits = load('maps.json'), load('status.json'), load('faults.json'), json.load(open(audits_path))
     text, errors = render(maps, status, faults, audits)
     for e in errors:
         print('ERROR', e, file=sys.stderr)

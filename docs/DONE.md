@@ -26,3 +26,6 @@ A Tier 2 fault is logged in `docs/ledger/faults.json` (tier 2) and stays there. 
 3. The audits and scanners stay strict. "Known faults listed" is a ledger state, not an exemption in a scanner: do not change a scanner's calibration to hide a fault.
 4. New fault classes come from the user's tour (screenshots, see `tools/tour_note.sh`); the automated audits guard against regressions after a fix.
 5. A ledger row moves to ✅ only when the user has reviewed it in game and `faults.json` has no open fault for it.
+
+## Running the Tier 1 gates
+`tools/release_check.sh [--out DIR] [--maps FILE] [--gates ...]` runs them all (about 1.5-2 h for every outdoor map and cave; 10-15 min for 5 maps) and writes `results.json`; `tools/ledger.py --audit-from results.json --write` puts the numbers in the ledger (a subset run is refused unless `--audits-file` is given). Not scripted: your yes on the sheet, frame time (no baseline), buried props. Level-4 magenta near a map edge is the world's edge, so the magenta gate counts level 7.

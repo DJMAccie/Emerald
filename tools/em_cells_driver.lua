@@ -12,6 +12,13 @@ return function(game)
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
  local Scene=game.mods.exports.BATTLE_ART_VOXEL_FORK.lib.require('Gen3Scene')
+ -- Two dumps of one build must be identical (the gate for any height change). Two things in the game itself
+ -- change from run to run, so pin them: Route 111's Mirage Tower shows on a coin flip taken when the map
+ -- loads (mirage_tower.c SetMirageTowerVisibility: its 18 cells are a different tile and collision each
+ -- time), and the tilesets' animated tiles are repainted as the game runs while the scene reads their
+ -- pixels to tell rock from ground (Route 118's boulder rim, Lilycove 74,9).
+ require('src.core.game3.rng').Random=function()return 0 end   -- an even draw: the tower is hidden
+ if os.getenv('EM_ANIM')~='1' then require('src.core.game3.tileset_anim')._enabled=false end   -- EM_ANIM=1: animation runs (the classification must not care)
  local Map=require('src.core.game3.map')
  local f=assert(io.open(os.getenv('EM_DUMP'),'w'))
  -- Scene's own DECK_FAMILY (local there): fortree's walkway tiles and rope bridge
@@ -57,6 +64,7 @@ return function(game)
    end
    end
   end
+  f:flush()   -- a watchdog stop keeps the maps done so far
  end
  f:close();love.event.quit()
 end

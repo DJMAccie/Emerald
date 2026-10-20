@@ -6,7 +6,7 @@
   "tier": 1,
   "class": "ledges",
   "cell": "29,67",
-  "text": "Jump ledges: jagged teeth, blocky stubs, odd tops; corner/end tiles (session owns Gen3Outdoor.lua)",
+  "text": "Jump ledges: jagged teeth, blocky stubs, odd tops; corner/end tiles (session owns Gen3Outdoor.lua) [ledge lip method to compare: docs/COMPARE-3DS-v0.4.0.md section 4]",
   "status": "open",
   "found": "2026-10-19",
   "source": "handoff"
@@ -18,7 +18,7 @@
   "tier": 1,
   "class": "mini-stairs",
   "cell": "22,71-73",
-  "text": "Quantised ramp beside the ledges reads as mini stairs (Gen3StairTerraces/Elevation pins)",
+  "text": "Quantised ramp beside the ledges reads as mini stairs (Gen3StairTerraces/Elevation pins) [in Emerald 3DS counting this ground is one flat level (Route 115 x16-33 y60-77): docs/COMPARE-3DS-v0.4.0.md section 4]",
   "status": "open",
   "found": "2026-10-19",
   "source": "handoff"
@@ -42,7 +42,7 @@
   "tier": 1,
   "class": "ledges",
   "cell": "20-25,6",
-  "text": "Ledge run and end tiles to check with the ledge rewrite",
+  "text": "Ledge run and end tiles to check with the ledge rewrite [same lip method as F001: docs/COMPARE-3DS-v0.4.0.md section 4]",
   "status": "open",
   "found": "2026-10-19",
   "source": "handoff"
@@ -295,8 +295,58 @@
   "class": "determinism",
   "cell": "",
   "text": "Border/boundary heights differ between runs (about 0.1% of vertices, e.g. y 0 vs 8 north of the map); seen by the mesh probe on 2026-10-19, likely on other maps too",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-19",
-  "source": "docs/BAKE-SPIKE.md stage A"
+  "source": "docs/BAKE-SPIKE.md stage A",
+  "fixed": "2026-10-20"
+ },
+ {
+  "id": "F026",
+  "map": "EM_RUSTBORO_CITY",
+  "area": "Props",
+  "tier": 2,
+  "class": "props",
+  "cell": "27,38",
+  "text": "Suspected from code, not seen in game: the fountain is one extruded slab 10 px high (Gen3Scene extrude), no pool inset, dish or jet; Emerald 3DS builds basin, pool, dish on a stem and a jet card (compare doc 3.5)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "docs/COMPARE-3DS-v0.4.0.md"
+ },
+ {
+  "id": "F027",
+  "map": "EM_SLATEPORT_CITY",
+  "area": "Props",
+  "tier": 2,
+  "class": "props",
+  "cell": "34,44",
+  "text": "Suspected from code, not seen in game: moored sailboats have a flat deck behind a 7 px face and a thin sail card, no rounded hull plan or sheer; lantern, bollards and bush are not turned (compare doc 3.1)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "docs/COMPARE-3DS-v0.4.0.md"
+ },
+ {
+  "id": "F028",
+  "map": "EM_ROUTE109",
+  "area": "Props",
+  "tier": 2,
+  "class": "props",
+  "cell": "9,6",
+  "text": "Suspected from code, not seen in game: beach parasol is a disc canopy, deck chair two boxes, air mattress a 3 px slab (Gen3PixelFurnitureB); Emerald 3DS has a cone canopy on a turned pole, a hinged lounger back, a tube mattress (compare doc 3.4)",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "docs/COMPARE-3DS-v0.4.0.md"
+ },
+ {
+  "id": "F029",
+  "map": "EM_MOSSDEEP_CITY",
+  "area": "Terrain",
+  "tier": 2,
+  "class": "determinism",
+  "cell": "36..42,27..30",
+  "text": "Tree grove block was a rock bank in the near and upgrade builds (group cut at the window edge, segmentTrees rejected the half tree at the cut) and trees in the full build; a dump flipped by which build it read. segmentTrees now skips a highlight at the drawing's edge instead of failing the lattice test, so all three builds give the same trees. Checked: 53-map dump differs from the unfixed one only in these cells; 6 Mossdeep dumps (3 with tile animation on) identical",
+  "status": "fixed",
+  "found": "2026-10-20",
+  "source": "docs/HEIGHT-PATH.md",
+  "fixed": "2026-10-20"
  }
 ]

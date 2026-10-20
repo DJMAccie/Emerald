@@ -18,7 +18,32 @@ Read-only survey for the finish-line plan, item 4. Call sites are `~/Documents/b
 - Fix (no behaviour change): `tools/elevation/height_overrides.json` holds those 12 rows; `gen_stair_terraces.py` applies it. Check: `GEN_OUT=/tmp/x.lua python3 tools/elevation/gen_stair_terraces.py && python3 tools/elevation/height_overrides.py check /tmp/x.lua` prints `IDENTICAL` (luajit deep comparison of the generated table and the installed one). The installed file was not touched.
 - To change a stair height by hand, edit the row in `height_overrides.json` (keep its `why`), regenerate to a scratch path, `check`, then install the output with the usual install protocol.
 
+## Call order of the rock-side height sources (traced 2026-10-19)
+1. `Gen3Scene` build sets `Gen3Rock.mapId` and calls `Gen3Rock.cave(def)` (~1095), after `Elevation.bind` fixed the floors.
+2. `Gen3Mass.prepare` (~1138) groups blocked rock cells into masses.
+3. For each mass, `Gen3Mass` asks `Gen3Rock.handles(mass, cells)` (Gen3Mass.lua:874). Inside it the claim order is **`Gen3Relief.claims` first, then `Gen3Hills.claims`**, then Rock's own rules (Gen3Rock.lua:154-155). So a mass claimed by Relief is never a hill.
+4. Drawing: `Gen3Mass.append` calls `Gen3Rock.append`, which dispatches **relief, then hill, then plain rock** (Gen3Rock.lua:791-792). Gen3Relief itself looks at Gen3Hills (Gen3Relief.lua:87, 307) for the cells next to a hill.
+5. `Gen3Terrain` skips a mass cell when `Gen3Rock.flat(c, cells)` says it stays flat (Gen3Terrain.lua:31).
+Consequence: a height change for a rock cell belongs to exactly one of Relief (tables in `Gen3ReliefData`), Hills (its own tables) or Rock (rules); find out which claimed the mass first (`Gen3Rock.handles`), then edit that source only.
+
+## Reproducibility of the generated tables (checked 2026-10-19; installed files not touched)
+Compare with `luajit tools/lua_deepcmp.lua generated.lua installed.lua` (prints IDENTICAL or the first difference).
+| Table | Generator | Result |
+|---|---|---|
+| `Gen3StairTerraces` | `tools/elevation/gen_stair_terraces.py` + `height_overrides.json` (12 rows) | IDENTICAL (since 744b814) |
+| `Gen3EmeraldAuto` | `python3 tools/gen_emerald_tables.py ~/Documents/gen1recomp-modwork out.lua` | IDENTICAL as is, no overrides needed |
+| `Gen3ReliefData` | `python3 tools/relief/bake_lua.py out.lua Route111 Route114 FallarborTown Route112 MtChimney Route113` | IDENTICAL as is |
+| `Gen3RockTables` | hand-authored; `tools/relief/rock_tables.py` mirrors it; `tests/gen3_relief_test.lua` checks they agree | test PASS (144 cells, 2645 quads) |
+| `Gen3EmeraldTerraces` | none (authored rows) | n/a |
+Only `Gen3StairTerraces` had drifted.
+
+## Baseline of resolved heights (the gate for any height change)
+- 53 outdoor maps from `docs/ledger/outdoor_spots.txt`, whole-map dumps by `tools/em_cells_driver.lua` (6 batches through `tools/qa_tryp.sh "Gen3Waterfall.lua"`, `EM_DUMP_WAIT=300`), 156,063 cells. Files are ROM-derived, so they live OUTSIDE git: `~/Documents/gen1recomp-modwork/baselines/heights-2026-10-19.txt` (run 1), `...-run2.txt` (second run of the same code), `...flips.txt` (cells that differ between the two runs).
+- **Fixed 2026-10-20 (F025).** The dump was not repeatable (176 cells in 14 maps between two old runs): `pairs()` walks a string-keyed table in a different order each LuaJIT process, and `Gen3Elevation.bind` paired ANY two neighbouring trees and passed the taller height on, so a tall half spread along a row or not (Oldale's margin 0 or 8, Lilycove row 12, Routes 113/116). Trees are now paired by tile (left half = even mid, ash forest 0x26B-0x276 odd, right = next tile), and Slateport's sea-edge tiles turn in passes. The dump driver also pins what changes without any code change: Route 111's Mirage Tower (a coin flip at map load) and the animated tiles (their pixels decide rock vs ground on Route 118, Lilycove 74,9).
+- Evidence (53 maps, 156,063 cells): old code run 1 vs run 2 = 190 unstable cells; fixed code run 1 vs run 2 = **0**. The fix moves 178 tree cells outside the old unstable list, all lower (old runs spread a tall half along the row). A probe that walked every cell loop of Elevation, Scene, Decks, CyclingRoad and TerrainLevels in row order gave the same cells as the fixed code on the 14 affected maps, so no other order dependence is left there.
+- New baseline (outside git, `~/Documents/gen1recomp-modwork/baselines/`): `heights-2026-10-20-fix-F025.txt` (fixed code, pinned driver) is the reference from now on; `heights-2026-10-20-oldcode-pinned.txt` is the old code under the same driver. Identical code must now give identical dumps: `python3 -I tools/heights_compare.py flips RUN1 RUN2 OUT` prints `unstable 0`.
+- Gate: `python3 -I tools/heights_compare.py diff BASELINE NEW FLIPS` exits 0 when no cell outside the unstable list differs. A height change that should be invisible elsewhere must pass this; a change that should move some cells must list exactly those.
+
 ## Still to do (item 4)
-1. Same regenerate-and-compare for the other generated tables: `Gen3EmeraldAuto` (`tools/gen_emerald_tables.py`), `Gen3RockTables`, `Gen3ReliefData`. `Gen3EmeraldTerraces` has no generator.
-2. A resolved heightfield dump per map (final base, slope, kind after all modules) from `tools/em_cells_driver.lua` (`EM_MAPS`, `EM_DUMP`); keep the dump of all 55 outdoor maps as the "before" for any height change. Gate for every height change: identical dumps where no change is intended.
-3. Trace the Relief/Hills/Rock call order inside Gen3Mass and Gen3Rock and add it to this table.
+1. (done, F025) the dump is repeatable; compare any change against `heights-2026-10-20-fix-F025.txt`.
+2. Only six maps have counted relief (`Gen3ReliefData`); every other rock mass takes its heights from `Gen3Hills` or `Gen3Rock` rules.

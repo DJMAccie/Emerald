@@ -1,12 +1,74 @@
 {
-  "items": [
-    {"name": "Stairs: flat / reversed / cliff jumps (55 outdoor maps)", "value": "0 / 0 / 0", "target": "0 / 0 / 0", "asof": "2026-10-18", "source": "tools/elevation/stairs_audit.py, session 5"},
-    {"name": "Ledges that do not drop (of 401)", "value": "0", "target": "0", "asof": "2026-10-18", "source": "ledge check, session 4; ledge geometry being redone 2026-10-19"},
-    {"name": "Slowest map to 3D", "value": "0.9-1.2 s (Rustboro, load-dependent)", "target": "under 1 s", "asof": "2026-10-18", "source": "docs/FIRST-PERSON-GATE-HANDOFF-2026-10-18.md"},
-    {"name": "Buildings flagged by the defect scan", "value": "0 after Ranking Hall fix (earlier 3)", "target": "0", "asof": "2026-10-18", "source": "tools/buildings/defect_scan.py, gate-final-pass handoff"},
-    {"name": "Outdoor first-person survey (4 yaws)", "value": "53 of 53 maps", "target": "all", "asof": "2026-10-18", "source": "gate handoff"},
-    {"name": "Room survey reviewed by eye", "value": "unknown, 12 of 159 at last count", "target": "tier 2", "asof": "2026-10-18", "source": "gate handoff; later review not recorded"},
-    {"name": "Floating rock masses", "value": "3 (Mossdeep 45,7; Route 112 19,42; Route 103 24,14)", "target": "0", "asof": "2026-10-19", "source": "docs/BETA-NOTES-2026-10-19.md"},
-    {"name": "Fallbacks to 2D / Lua errors over outdoor + cave sweep", "value": "0 fallbacks, 1 old error line", "target": "0 / 0", "asof": "2026-10-19", "source": "docs/BETA-NOTES-2026-10-19.md"}
-  ]
+ "items": [
+  {
+   "name": "Stairs: flat / reversed / cliff jumps (55 outdoor maps)",
+   "value": "0 / 0 / 0",
+   "target": "0 / 0 / 0",
+   "asof": "2026-10-18",
+   "source": "tools/elevation/stairs_audit.py, session 5"
+  },
+  {
+   "name": "Ledges that do not drop (of 401)",
+   "value": "0",
+   "target": "0",
+   "asof": "2026-10-18",
+   "source": "ledge check, session 4; ledge geometry being redone 2026-10-19"
+  },
+  {
+   "name": "Slowest map to 3D",
+   "value": "0.9-1.2 s (Rustboro, load-dependent)",
+   "target": "under 1 s",
+   "asof": "2026-10-18",
+   "source": "docs/FIRST-PERSON-GATE-HANDOFF-2026-10-18.md"
+  },
+  {
+   "name": "Buildings flagged by the defect scan",
+   "value": "0 after Ranking Hall fix (earlier 3)",
+   "target": "0",
+   "asof": "2026-10-18",
+   "source": "tools/buildings/defect_scan.py, gate-final-pass handoff"
+  },
+  {
+   "name": "Outdoor first-person survey (4 yaws)",
+   "value": "53 of 53 maps",
+   "target": "all",
+   "asof": "2026-10-18",
+   "source": "gate handoff"
+  },
+  {
+   "name": "Room survey reviewed by eye",
+   "value": "unknown, 12 of 159 at last count",
+   "target": "tier 2",
+   "asof": "2026-10-18",
+   "source": "gate handoff; later review not recorded"
+  },
+  {
+   "name": "Floating rock masses",
+   "value": "3 (Mossdeep 45,7; Route 112 19,42; Route 103 24,14)",
+   "target": "0",
+   "asof": "2026-10-19",
+   "source": "docs/BETA-NOTES-2026-10-19.md"
+  },
+  {
+   "name": "Fallbacks to 2D / Lua errors over outdoor + cave sweep",
+   "value": "0 fallbacks, 1 old error line",
+   "target": "0 / 0",
+   "asof": "2026-10-19",
+   "source": "docs/BETA-NOTES-2026-10-19.md"
+  },
+  {
+   "name": "Scene-cache key narrowed: builds per map entry / build CPU (stock to fixed)",
+   "value": "3 builds (was 3-9); CPU Littleroot boot 2120→1340 ms (-37%), Route 111 3200→2255 (-30%), Rustboro 4950→4208 (-15%), Mauville 2650→2233 (-16%), Mossdeep -2%, Oldale 0; pixel diffs equal stock-vs-stock noise (0.8-1.0% vs 0.7-1.0%, 38 pairs, 0 fallbacks); cold neighbour edges identical",
+   "target": "one build chain per entry, pixels unchanged",
+   "asof": "2026-10-19",
+   "source": "docs/BAKE-SPIKE.md stage A2; installed ee0da2f"
+  },
+  {
+   "name": "Cell dump repeatability (53 outdoor maps, two runs, same code)",
+   "value": "0 of 156,063 cells differ (was 176 before the F025 fix; 190 with the driver pinned)",
+   "target": "0",
+   "asof": "2026-10-20",
+   "source": "docs/HEIGHT-PATH.md; tools/heights_compare.py"
+  }
+ ]
 }
