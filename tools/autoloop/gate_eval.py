@@ -48,20 +48,33 @@ def main(argv):
     ap.add_argument('--kind', default='air', choices=['air', 'steps', 'none'])
     ap.add_argument('--lib-base', default=os.path.join(ROOT, '.autoloop', 'rc', 'lib'))
     ap.add_argument('--lib-fix', default=os.path.join(ROOT, '.autoloop', 'rc', 'lib'))
+    ap.add_argument('--base2', help='second build of the base (builder noise: pairs() order varies run to run)')
+    ap.add_argument('--fix2', help='second build of the fix')
     ap.add_argument('--out')
     o = ap.parse_args(argv)
     box = [int(v) for v in o.box.split(',')]
-    maps = sorted(f[:-7] for f in os.listdir(o.base) if f.endswith('.geo.gz'))
+    # the maps this gate dumped (the fix dir); the base dir is the shared per-commit cache and may hold many more
+    maps = sorted(f[:-7] for f in os.listdir(o.fix) if f.endswith('.geo.gz'))
+    if o.map not in maps:
+        maps.insert(0, o.map)
     v = {'map': o.map, 'box': box, 'kind': o.kind, 'maps': maps, 'reasons': [], 'new': [], 'cells_changed': {}, 'fault_before': [], 'fault_after': [], 'review_spots': []}
     review = False
     ok = True
     for m in maps:
-        if not os.path.exists(os.path.join(o.fix, m + '.geo.gz')):
-            v['reasons'].append('missing fix dump: ' + m)
+        if not os.path.exists(os.path.join(o.fix, m + '.geo.gz')) or not os.path.exists(os.path.join(o.base, m + '.geo.gz')):
+            v['reasons'].append('missing dump: ' + m)
             ok = False
             continue
         ab, sb = regions(o.base, m, o.lib_base)
         af, sf = regions(o.fix, m, o.lib_fix)
+        # builder noise: a region counts only if both fix builds have it; base regions = either base build
+        if o.base2 and os.path.exists(os.path.join(o.base2, m + '.geo.gz')):
+            ab2, sb2 = regions(o.base2, m, o.lib_base)
+            ab, sb = ab + ab2, sb + sb2
+        if o.fix2 and os.path.exists(os.path.join(o.fix2, m + '.geo.gz')):
+            af2, sf2 = regions(o.fix2, m, o.lib_fix)
+            af = [r for r in af if any(overlap(r['box'], q['box']) for q in af2)]
+            sf = [r for r in sf if any(overlap(r['box'], q['box']) for q in sf2)]
         if m == o.map and o.kind != 'none':
             rb = ab if o.kind == 'air' else sb
             rf = af if o.kind == 'air' else sf
@@ -84,10 +97,13 @@ def main(argv):
                     if big:
                         ok = False
         cb, cf = cells(o.base, m), cells(o.fix, m)
+        cb2 = cells(o.base2, m) if o.base2 and os.path.exists(os.path.join(o.base2, m + '.cells')) else cb
+        cf2 = cells(o.fix2, m) if o.fix2 and os.path.exists(os.path.join(o.fix2, m + '.cells')) else cf
         grown = [box[0] - 2, box[1] - 2, box[2] + 2, box[3] + 2]
         changed = []
         for k in sorted(set(cb) | set(cf)):
-            if cb.get(k) != cf.get(k):
+            # a real change: both fix builds agree and differ from both base builds
+            if cf.get(k) == cf2.get(k) and cf.get(k) != cb.get(k) and cf.get(k) != cb2.get(k):
                 inside = m == o.map and grown[0] <= k[0] <= grown[2] and grown[1] <= k[1] <= grown[3]
                 if not inside:
                     changed.append([k[0], k[1]])

@@ -53,7 +53,10 @@ return function(game)
   local n=0
   repeat U.wait(1);n=n+1 until (C.active) or n>900
   local last,stable=-1,0
-  for _=1,3600 do
+  local p0=Scene.prepares or 0
+  for i=1,3600 do
+   -- nothing started within 300 frames: this load builds nothing new (same window), stop waiting
+   if i==300 and (Scene.prepares or 0)==p0 and (Scene.builds or 0)==b0 then return false end
    local b=Scene.builds or 0
    if b==last then stable=stable+1 else stable=0;last=b end
    if b>b0 and stable>=SETTLE then return true end
@@ -72,6 +75,8 @@ return function(game)
    pcall(Map.load,nil,game,id=='EM_ROUTE101' and 'EM_OLDALE_TOWN' or 'EM_ROUTE101',{x=10,y=10,facing='down'})
    settle()
   end
+  -- dark caves (Granite Cave B1F/B2F...) draw flat without Flash: light them so their 3D is dumped (engine E1 note)
+  if game.session then game.session.flashLevel=0 end
   local ok=pcall(Map.load,nil,game,id,{x=m[2],y=m[3],facing='down'})
   C.setLevel(4,game)
   local def=Map.currentDef()
@@ -93,17 +98,22 @@ return function(game)
      pcall(Map.load,nil,game,id,{x=math.min(W-1,mx+24),y=math.min(H-1,my+24),facing='down'})
      C.setLevel(4,game)
     else groups,order={},{} end
-    if not settle() then allSettled=false end
+    local bBefore=Scene.builds or 0
+    local settledOk=settle()
+    -- a reload that starts no build (maps with black padding cells that are never built: Abandoned Ship, New Mauville)
+    -- adds nothing: stop walking spots instead of waiting a full settle per spot (engine E1 note)
+    if spot>1 and (Scene.builds or 0)==bBefore then break end
+    if not settledOk then allSettled=false end
     spots=spot
     -- cells built in this spot and not written before (margin round the map included)
     local mine={}
     -- Own only cells well inside this spot's build window (INNER cells from its edge, unless that edge is the end of
     -- the dumped area): at a window edge the builders round or drop geometry toward the missing cells (F031 finding:
     -- Route 103's rock lost its closing wall at a spot seam and a 2 px crack opened the whole interior to the sky).
-    local wx0,wx1,wy0,wy1=1e9,-1e9,1e9,-1e9
-    for cy=-MARGIN-40,H-1+MARGIN+40 do for cx=-MARGIN-40,W-1+MARGIN+40 do
-     if Scene.debugCell(cx,cy) then wx0,wx1,wy0,wy1=math.min(wx0,cx),math.max(wx1,cx),math.min(wy0,cy),math.max(wy1,cy) end
-    end end
+    -- (engine E1 proposal: the REQUEST window, not the built cells: nothing is built outside a cave, so its
+    -- built extent is the map edge and the edge rows were never owned)
+    local b=Scene.distance and Scene.distance.bounds or {-1e9,-1e9,1e9,1e9}
+    local wx0,wy0,wx1,wy1=b[1],b[2],b[3],b[4]
     local INNER=6
     local ix0=(wx0<=-MARGIN) and -1e9 or wx0+INNER
     local ix1=(wx1>=W-1+MARGIN) and 1e9 or wx1-INNER

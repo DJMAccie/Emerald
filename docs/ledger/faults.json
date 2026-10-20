@@ -69,9 +69,11 @@
   "class": "floating-props",
   "cell": "19,42",
   "text": "Floating rock mass, about 10 px up",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-19",
-  "source": "handoff"
+  "source": "handoff",
+  "fixed": "2026-10-20",
+  "evidence": "Fixed on branch fix/F006, merged into rc main e3011de. Air at the box 2716 px2 -> 28 px2 (three sub-visible slivers of 8-12 px2); 0 fallbacks. Verifier (full-resolution before/after, levels 4/6/7, two yaws): the two enclosed-sky holes at (378,406) 120 px2 and (415,465) 270 px2 in the orbit frame are gone, no visible regression in 10 review frames on other maps; only detector dust remains. Sheets: .autoloop/gates/F006/sheet.png, sheet_review.png, verify/."
  },
  {
   "id": "F007",
@@ -373,9 +375,11 @@
   "class": "rock",
   "cell": "46,1",
   "text": "Rock terraces on the north edge have holes you see into: dark hollow with the inside faces showing, 'melted' look (autoloop D1 box 46..61 x 0..6, gap up to 47; shot .autoloop/runs/cal1/shotsA_y08/b002.png)",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE103  46,1  h23  cam7/0.8"
+  "source": "tour: EM_ROUTE103  46,1  h23  cam7/0.8",
+  "fixed": "2026-10-20",
+  "evidence": "Fixed on fix/F031, merged into rc main 1d04b0e (3-way merge keeps main's Route 104 SOFT_ROUND_MAP/CLEAN_TOPS). Gate PASS: no new detector regions on 8 regression maps, zero cell changes, 0 fallbacks. Verifier KEEP on six full-resolution pairs: the smeared E/W bands and crest teeth are gone, art 1:1, no new sky/void pixel, silhouette unchanged. Crops: .autoloop/gates/F031/verify/. Note: the 56,2 and 62,2-3 pockets remain real recesses (geometry unchanged by this fix) - a separate height question."
  },
  {
   "id": "F032",
@@ -436,5 +440,17 @@
   "status": "open",
   "found": "2026-10-20",
   "source": "tour: EM_ROUTE112  22,10  h0  cam4/0"
+ },
+ {
+  "id": "F037",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 2,
+  "class": "determinism",
+  "cell": "0,0",
+  "text": "Builder output varies between identical builds on about 12 maps (Fortree, Mauville, Routes 108/110/112/113/114/115 among them; Route 112: 156 triangles, 39 cells), from pairs() iteration order (engine E1, two headless sweeps of the same code). Also one unreproduced crash, Route 113 Gen3Rock.lua:956 'arithmetic on local m (a function value)'. The gate builds twice and filters this noise",
+  "status": "open",
+  "found": "2026-10-20",
+  "source": "tour: EM_ROUTE112  0,0  h0  cam4/0"
  }
 ]

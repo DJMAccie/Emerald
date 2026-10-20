@@ -149,3 +149,21 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   a trunk check); F036 logged (Route 112 22,10 door flips cliff/flat between identical builds). F006 fixer: flank heights
   come from TerrainLevels' support BFS using flight cells as donors; fix in TerrainLevels + flightTreads closes sides,
   gate running. Sweep of e6a02ab running slowly (QA slots shared with three fixers' gates).
+- 2026-10-20 20:00 Round 3/4 (after the three fixers died mid-work; their branches kept). The headless builder replaced the
+  in-game dump everywhere: whole scope (158 maps) in 9m47s wall at 6 jobs, and the gate now builds base and fix TWICE each
+  headless and ignores builder noise (`gate_eval --base2/--fix2`: a region counts only if both fix builds have it and no
+  base build; a cell change only if both fix builds differ from both base builds). Three fixes were gated:
+  * F006 (Route 112 stair flanks): base 9 air regions at the box (max 1308 px2, gap 47) -> 3 slivers of 8-12 px2; cells
+    changed on Mossdeep 8 / Route 111 4 / Route 115 19 (class effect, REVIEW), 1 new 48 px2 region on Route 115; 0
+    fallbacks. Verifier running on sheet.png + sheet_review.png.
+  * F030 (Route 112 west boundary): the 66 px plate is gone; a 3320 px2 region at gap 34 remains in [-6,40,-1,42]; new
+    fixer F030b started on top of fix/F030.
+  * F031 (Route 103 teeth/streaks in Gen3Rock): gate running. Reminder from its work: the earlier big Route 103 "hollow"
+    region was a dump seam (fixed in the driver), the visible fault is art streaking + zigzag course cuts.
+  Calibration of the world sweep: D1 air does NOT apply to caves (Gen3 draws no cave ceiling, so the sky flood reaches
+  every cave interior: 9101 cave regions vs 3059 outdoor). The outdoor queue at the user's taste bound (gap >= 4 px, area
+  >= 200 px2; rounding up to 3 px is wanted) is 369 regions -> 147 clusters (`tools/autoloop/triage.py`, ranked by
+  area x gap). Top clusters are the hollow-cliff class (Route 115 21..42 x 26..60 area 69916 gap 83; Route 114;
+  Southern Island; Battle Frontier East/West; Mt Pyre summit; Route 119): the same class F031 is fixing, so re-sweep after
+  F031 lands and expect the queue to shrink. F003 (Route 104 mini-stairs) cannot be located: D3 finds no mini-stairs
+  anywhere on Route 104 at any step limit; it needs the user's screenshot.

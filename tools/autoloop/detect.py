@@ -21,6 +21,8 @@ from scipy import ndimage
 SX, SY, SZ = 2.0, 1.0, 2.0          # voxel size in px (x, y up, z)
 CORE, OVER = 16, 4                  # tile core and overlap, in cells
 STEP = 0.6                          # surface sample spacing in px (below the smallest voxel side)
+LOOK = 24.0                         # cells' worth of px searched beside a plate for lower ground (1.5 cells)
+LOOK_DROP = 4.0                     # how far below the plate that lower ground must be (px)
 
 # Mesh origins that are terrain. Tags look like 'Gen3Scene.lua:2571<Gen3Scene.lua:2589': the second line is the
 # upload('<kind>', ...) call. Filled from a smoke dump: see TERRAIN_KINDS and tag_kind().
@@ -147,6 +149,9 @@ def air_columns(tris, x0, z0, nx, nz, min_gap_vox):
     sky = np.unique(lab[:, ny - 1, :])
     sky = sky[sky > 0]
     O = np.isin(lab, sky)
+    # (tried 2026-10-20 and rejected: eroding the open air to demand an "aperture" removed the real, verified holes too -
+    #  the visible ones are slits a few pixels wide - so it cannot separate a visible hole from a mountain's inside.
+    #  The air rule stays a HINT: it ranked F006 correctly; judging a region needs captures, see triage_shots.sh)
     # highest solid voxel at or below each y, per column
     yi = np.arange(ny)[None, :, None]
     last = np.maximum.accumulate(np.where(S, yi, -1), axis=1)
@@ -159,6 +164,17 @@ def air_columns(tris, x0, z0, nx, nz, min_gap_vox):
     gap = np.where(gap >= min_gap_vox, gap, 0)
     g = gap.max(axis=1)
     top = np.where(g > 0, (np.argmax(gap, axis=1) * SY + y0), 0).astype(np.float32)
+    # SEEN-FROM-BESIDE: a plate only reads as floating if lower open ground lies beside it (within `look`, in voxels):
+    # you look across a drop and see under it. The hollow inside a mountain is flagged too (its air reaches the sky
+    # through a distant opening) but nothing lower stands next to those columns, so it is not a visible fault
+    # (calibration 2026-10-20: the four biggest clusters - Ever Grande, Route 111, Sootopolis, Route 115 - look correct
+    # in game; this test removes them).
+    surf = np.max(np.where(S, yi, -1), axis=1).astype(np.float32) * SY + y0   # highest solid per column
+    look = int(max(1, round(LOOK / SX)))
+    k = np.ones((2 * look + 1, 2 * look + 1), bool)
+    lowest = ndimage.minimum_filter(surf, footprint=k, mode='nearest')
+    keep = np.isfinite(lowest) & (lowest < top - max(2.0, LOOK_DROP))
+    g = np.where(keep, g, 0)
     return g.astype(np.int32), top
 
 

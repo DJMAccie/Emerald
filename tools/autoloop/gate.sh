@@ -22,25 +22,19 @@ echo "[gate] $NAME  map $MAP box $BOX kind $KIND  base $BASEH  fix $FIXH ($(git 
 ML=$G/maps.txt; : > "$ML"
 for m in $MAP $REGRESSION; do grep -h "^$m " "$ROOT/docs/ledger/outdoor_spots.txt" "$ROOT/docs/ledger/cave_spots.txt" | head -1 >> "$ML"; done
 awk '!seen[$1]++' "$ML" > "$ML.u" && mv "$ML.u" "$ML"
-dump(){ # dump TREE GEO_DIR LOGDIR : missing maps only, in batches of 3, two at a time
-  local tree=$1 geo=$2 log=$3; mkdir -p "$geo" "$log"
-  local todo=$log/todo.txt; : > "$todo"
-  while read -r m x y; do [ -f "$geo/$m.geo.gz" ] || echo "$m $x $y" >> "$todo"; done < "$ML"
-  [ -s "$todo" ] || return 0
-  split -l 3 "$todo" "$log/b_"
-  local n=0
-  for b in "$log"/b_*; do
-    AUTOLOOP_RC=$tree "$ROOT/tools/autoloop/geo_batch.sh" "$b" "$b.out" "$geo" &
-    n=$((n+1)); sleep 20; [ $((n % 2)) -eq 0 ] && wait
-  done; wait
+# Geometry: the headless builder (engine E1: same triangles as the game, no game boot, 8 at once). Each side is built
+# twice, because the builder itself varies run to run on some maps (pairs() order); gate_eval counts only changes that
+# hold in both fix builds and differ from both base builds. In-game captures below stay for the look.
+hdump(){ # hdump TREE OUT : the gate's maps, headless
+  mkdir -p "$2"; "$ROOT/engine/geo.sh" --tree "$1" --maps "$ML" --out "$2" -j 4 > "$2/geo.out" 2>&1
 }
-dump "$BT" "$ROOT/.autoloop/geo-cache/$BASEH" "$G/base_runs" &
-sleep 10
-dump "$RC" "$G/fix_geo" "$G/fix_runs" &
-wait
-FB=$(cat "$G"/base_runs/b_*.out/run.log "$G"/fix_runs/b_*.out/run.log 2>/dev/null | grep -c fallback)
-echo "[gate] fallbacks in dump runs: $FB"
-python3 -I "$ROOT/tools/autoloop/gate_eval.py" "$ROOT/.autoloop/geo-cache/$BASEH" "$G/fix_geo" --map "$MAP" --box "$BOX" --kind "$KIND" \
+BC=$ROOT/.autoloop/geo-cache/h-$BASEH
+[ -f "$BC/a/done" ] && [ "$(cat "$BC/a/done")" = "$(md5 -q "$ML")" ] || { hdump "$BT" "$BC/a" && md5 -q "$ML" > "$BC/a/done"; }
+[ -f "$BC/b/done" ] && [ "$(cat "$BC/b/done")" = "$(md5 -q "$ML")" ] || { hdump "$BT" "$BC/b" && md5 -q "$ML" > "$BC/b/done"; }
+rm -rf "$G/fix_a" "$G/fix_b"; hdump "$RC" "$G/fix_a"; hdump "$RC" "$G/fix_b"
+FB=$(cat "$BC"/a/headless.log "$BC"/b/headless.log "$G"/fix_a/headless.log "$G"/fix_b/headless.log 2>/dev/null | grep -ci "fallback\|unsettled\|error")
+echo "[gate] fallback/unsettled/error lines in headless builds: $FB"
+python3 -I "$ROOT/tools/autoloop/gate_eval.py" "$BC/a" "$G/fix_a" --base2 "$BC/b" --fix2 "$G/fix_b" --map "$MAP" --box "$BOX" --kind "$KIND" \
   --lib-base "$BT/lib" --lib-fix "$RC/lib" --out "$G/verdict.json"; EV=$?
 # captures for the verifier: the spot at levels 4,6,7, two yaws, both trees
 X=${SPOT%,*}; Y=${SPOT#*,}; CASE="{'$MAP',$X,$Y}"
