@@ -1,5 +1,21 @@
 # Release candidate 2026-10-24 (live document, updated by each autoloop round)
 
+## In plain words: what this candidate changes in the game
+- **Route 112's stair:** the rock plates that jutted beside the stair flight (with sky showing through under them) now stand on
+  their own ground, and the stair's sides are closed.
+- **Route 103's rock terraces:** the faces no longer smear along their length and the crests no longer grow pale "teeth"; the rock
+  shows its drawing 1:1.
+- **Rock beside Route 112's ash plain:** walls had green bush art printed on them (long green stripes and green lids). They now
+  show rock, and the ash bushes on the plain are untouched.
+- **Route 123's north edge:** a 40-60 px band of sky under the raised sea is closed; the sea keeps its own level and the drop
+  reads as a water/rock face.
+- **Buildings standing in a neighbouring map's fill (Route 112 west, Route 113):** the herb shops, the gym, the Poke Center, the
+  battle tent and the Cozmo house no longer sit 32-56 px too low with their facades buried.
+- **A few small rock holes** where a plate stood over the mountain's own top (Route 112's terrace rim) are closed.
+Everything else in the world is unchanged: the height map, the walkable floors, the doors and warps, and 156,063 cell lines were
+compared before and after.
+
+
 Everything here is in the **release-candidate tree** `~/Documents/Emerald/.autoloop/rc` (git, branch `main`), never in
 your game or in `~/Documents/battle-art-notquiteog`. `upstream` in that repo is a copy of your installed game at the
 moment the loop synced; the diff `upstream..main` is exactly what this candidate changes.
@@ -46,8 +62,19 @@ backup of game, QA and mod source before copying.
 ## Parked, with what a future attempt needs
 | Ledger | Map | Why parked | What is known |
 |---|---|---|---|
+| F001 + F004 (ledges, mini-ramps) | Route 115, Route 102 | Attempt 1 (`fix/F001` 6f31bd2) cures both and makes the lip one straight 1:1 face with fewer triangles than base, and its gate passes - but the render is not reproducible: 1 capture in 4 opened new sky (61 px + 162 px on Route 115 level 7, six 1-2 px lines along the ledge feet at level 4, a 212 px hole on Route 102 level 7) because the new closure reads the streaming cell table, so a partial build decides differently. Prescription: decide from data that is always present, default to closed when a neighbour is not built, keep a 1-px foot skirt, and prove determinism with two captures of the same frames |
 | F032 (+F042) | Route 112 | Two attempts removed the floating plates but the replacements broke the taste rules: attempt 1's standing bush had 8x-stretched top/side faces (chunky tables), attempt 2's lathe still reads as a dark striped block where the crown's foot cell is on a relief slope (the bush is built at the cell base while the relief ramps 48->59.3, so it sinks ~11 px), and at the low camera one bush fills 40% of the frame | What works: the crowns whose south cell is 0x218/0x21A convert cleanly (bright leafy bushes). What is left: the 11 crowns with a 0x203/0x3B8 south neighbour (logged as F042) and the relief-slope foot case. A third attempt should build at the drawn relief height and settle those 11 cells |
 | F030 | Route 112 west fill | Two attempts each passed their 8-map gate but opened ~30 small air regions elsewhere | The cause chain (building-claimed cliff cells at absolute 0; a hill ending at the build window standing open) is understood and the patches are kept on their branches |
+
+## Does anything break for the player? (audit, 2026-10-21)
+Both trees (the installed game's own state, and the candidate) were built headless for all 158 maps and their cell tables compared:
+- **1,553 cell lines differ, and every one of them is the solved floor (`base`) of a BLOCKED cell.** Not one walkable cell's floor
+  changed on any map, so no path, step, ledge drop or door can differ.
+- The biggest movers are Ever Grande City (467 blocked cells), Shoal Cave's high-tide inner room (261), Magma Hideout 2F/3R (129),
+  Meteor Falls 1F/1R (122) and Route 121 (106) - all stairs-heavy maps, which is exactly where F006's rule acts: the rock beside a
+  stair flight takes the nearest real floor instead of the flight's tread height.
+- Visual spot check on the largest mover (Ever Grande, levels 4 and 7, two spots): the terraces, stairs, buildings and rock faces are
+  structurally identical between the two trees; the frame differences are flowers, water animation and NPCs.
 
 ## Closed without a code change
 - **F005** (Mossdeep 45,7 floating rock): not reproducible on the installed build; the bluff stands on its floor (fixed

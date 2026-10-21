@@ -374,3 +374,63 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   Route 113 as a class effect); a verifier is judging the lip, the ends, the drop and the Route 113/Route 102 class effect.
   F002 attempt 3 (fix/F002c) has started from the reviewer's prescription (keep the corner-mean change, close the two seams:
   Route 113 64,5 level 4 sky slits and Route 115 29,73's 2,185 px band at the ledge-wall foot).
+- 2026-10-22 06:45 Release-doc work while the agents run: added a plain-words section (what this candidate changes in the game,
+  fix by fix) and scanned the release run's 24 contact sheets of all 158 maps at level 4: towns, routes, caves and the world
+  edge render normally - no gross artifacts, no missing buildings, no flat fallbacks. F001's verifier is working through the
+  lip/ends/drop and the Route 113 class effect; F002's third attempt has the reviewer's prescription and is closing the two
+  seams before it gates.
+- 2026-10-22 07:10 PLAYER-SAFETY AUDIT (the strongest evidence in the release doc): built BOTH trees headless for all 158 maps and
+  compared the cell tables. 1,553 cell lines differ, and every one is the solved floor (`base`) of a BLOCKED cell - not one
+  walkable cell's floor changed on any map, so no path, step, ledge drop or door can differ. Biggest movers: Ever Grande 467,
+  Shoal Cave high-tide inner 261, Magma Hideout 2F/3R 129, Meteor Falls 1F/1R 122, Route 121 106 - all stairs-heavy maps, which is
+  where F006's rule acts (rock beside a flight takes the nearest real floor instead of the tread height). Spot check of Ever
+  Grande at levels 4/7, two spots: structurally identical, differences are flowers/water/NPCs.
+  F001's fixer corrected a stale premise of mine: rc main no longer contains F002 (reverted), so its REVIEW cells were F040's, not
+  F001's; rebased onto 79bcbd6 its gate is PASS with zero cell changes and it cures F004 on Route 102 by the same change (the lip
+  now stands on the cell's own edge as one straight face; the ground under corner/end tiles runs to that edge instead of leaving a
+  light-blue sky slit). Final optimised gate running, with FEWER triangles than base on Route 115 (276,958 vs 278,026).
+- 2026-10-22 07:40 F001/F004 ATTEMPT 1 NOT MERGED (narrow reject by their reviewer). The change is strictly better in the steady
+  state (base's 16 px end stub and 60 px end sky slit gone, lip on the cell's own edge as one straight 1:1 face, FEWER triangles:
+  Route 115 278,026 -> 276,958; it also cures F004 on Route 102), and its gate PASSes - but the same code is NOT reproducible run
+  to run: 1 of 4 captures opened new sky (Route 115 L7 61 px + 162/32/79 px, L4 six 1-2 px lines along the ledge feet, Route 102
+  L7 a 212 px hole), while base is stable. Mechanism: the new closure reads the STREAMING `cells` table, so a partial build has
+  no neighbours and the closure differs; the old front ground strip that masked 1-px mismatches was removed.
+  SYSTEMIC LESSON (now in F002c's brief): any fix whose geometry decision reads the streaming cells table inherits the build
+  window's partial state - F002's "ground pulled away from the wall foot" and F001's foot slits are the same symptom. Prescription
+  for both: decide the closure from data always present (or default to closed when the neighbour is not built), keep a 1-px foot
+  skirt under a ground line, and PROVE determinism (capture the same frames twice and compare run-to-run spread with base's) -
+  a single clean capture is not evidence. Also: the reviewer showed the 8 Route-113 "changed cells" were an off-map boundary-tree
+  base flip (56<->64) and therefore builder noise, not F040's doing; gate re-run says PASS with no changed cells.
+- 2026-10-22 08:05 GATE NOW CHECKS DETERMINISM (`tools/autoloop/gate_determinism.py`, wired into gate.sh): every gate captures the
+  fix's own frames a second time and compares them pixel-wise; more than 1.5 % difference in any frame = FAIL, because a fix
+  whose render is not reproducible is not a fix. Calibrated on real data: two runs of the same case from the candidate give
+  0.06-0.85 % (sprites and animated water), while the F001 tree - whose closure read the streaming cell table - gave 1.17/5.27/
+  1.23 %. This is the check that would have caught F001 before its reviewer had to. Cost: one extra capture batch per gate.
+- 2026-10-22 08:20 Two small fixers started on the code already in the candidate: F041 (the 224 px2 residual at Route 112
+  12..13 x 40..41 that F006b could not cure because those cells have all-level neighbours - the rule never fires) and F043
+  (F006b's new closure faces: one 16x16 tile mapped over 8-48 px heights, adjacent cells' walls coplanar, and the 65x4 px dark
+  strip in the 14,44 free camera). Both briefs carry the new determinism rule and the "default to closed / 1-px skirt" rule.
+  F002's third attempt is still in flight.
+- 2026-10-22 08:40 Install safety: `install_rc.sh --rollback-dry <backup>` added and tested (prints the exact files it would
+  restore into the game, QA and mod source, writes nothing). The real rollback path still has NOT been exercised against a real
+  backup - it must be tested the first time a backup exists, before anyone relies on it. F002's third attempt committed its seam
+  closure (489604a, lib/Gen3Scene.lua +69/-2: the wall feet the smoothed tops exposed are closed) and is gating under the new
+  determinism check. F041 and F043 fixers have their worktrees but no commits yet.
+- 2026-10-22 09:00 Fresh world sweep of the candidate as it now stands (79bcbd6, 158 maps, 111 s, 0 unsettled): the outdoor
+  air queue is 157 clusters from 417 regions (was 136/351 before the fixes - same order, so the detector's noise floor dominates
+  and the fixes are not what swells it). The top four clusters were captured (Battle Frontier East flat 16,516 px2 gap 103;
+  Mossdeep roof 7,804 gap 175; Route 119 flat 6,672 gap 120; Mt Chimney flat 37,140 over 30 regions gap 21) and the first one
+  checked by eye at level 4: clean - buildings, rock walls, water and plaza all correct, so it is another hollow interior, not a
+  visible fault. Conclusion recorded for the next session: the air rule's remaining hits are interiors and need the capture
+  judge (or the user's tour screenshots, which DONE.md already names as the best discovery source); do not spend fixer hours on
+  the raw queue without a judged REAL first.
+  Queue files: .autoloop/runs/queue-final.json / queue-final_cases.txt; sweep under .autoloop/geo-cache/h-79bcbd6/full.
+- 2026-10-22 09:30 F002 MERGED (023709c) on its THIRD attempt - the first fix in the loop's history to pass the determinism check
+  and the visibility floor at the same time. Attempt 3 keeps attempt 2's corner rule and adds foot skirts where a smoothed top
+  meets a jump ledge face or a cliff skirt (1:1 in the wall's own bottom rows), curing exactly the two seams that got attempt 2
+  reverted. Gate: fault 8 / 9,728 px2 -> 0, 0 new regions, 0 cells changed, 0 fallbacks, step regions still cured on all seven
+  maps. My own independent sky-pixel count at the former seams: Route 113 64,5 base 0 / fix 2 px in the edge zone (was 41 px in
+  attempt 2), Route 115 29,73 identical to base (44/44). Determinism 1.20 % worst vs base's own 8.38 %.
+  Known residual, below the floor: a 26 px2 sliver at Route 115 27,68 - inherited from the corner rule (present in attempt 2 too),
+  and the hypothesis for a fourth attempt is the tree cell's canopyBottom ground beside a ledge's inset face.
+  Candidate now: SEVEN fixes (F002, F006+F006b, F031, F038, F039, F040) plus F005/F007 closed as not reproducible.

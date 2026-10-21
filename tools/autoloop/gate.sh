@@ -81,8 +81,17 @@ if [ $EV -eq 2 ]; then
     wait; python3 "$ROOT/tools/autoloop/review_sheet.py" "$G"
   fi
 fi
+# DETERMINISM: capture the same frames a second time from the fix tree and compare. A fix whose own render is not
+# reproducible is not a fix (F001 looked strictly better and still opened fresh sky in 1 of 4 captures because its closure
+# read the streaming cell table - docs/AUTOLOOP.md 2026-10-22).
+for Y8 in 0.8 3.9; do
+  AUTOLOOP_RC=$RC "$ROOT/tools/autoloop/shots.sh" "$G/shots_fix2_y$Y8" "$CASE" 4,6,7 "$Y8" 150 > /dev/null 2>&1
+done
+DET=$(python3 "$ROOT/tools/autoloop/gate_determinism.py" "$G/shots_fix_y0.8" "$G/shots_fix2_y0.8" --json "$G/determinism.json" 2>&1 | tail -1); echo "[gate] $DET"
+case "$DET" in *STABLE*) DETOK=0;; *) DETOK=1;; esac
 SF=$(cat "$G"/shots_*/run.log "$G"/review_*/run.log 2>/dev/null | grep -c fallback)
 echo "[gate] fallbacks in capture runs: $SF"
+[ $DETOK -ne 0 ] && { echo "[gate] FAIL: the fix's own capture is not reproducible (see determinism.json) - that is the F001/F002 class"; exit 1; }
 [ "$FB" -eq 0 ] && [ "$SF" -eq 0 ] && [ $EV -eq 0 ] && { echo "[gate] PASS (pending verifier)"; exit 0; }
 [ "$FB" -eq 0 ] && [ "$SF" -eq 0 ] && [ $EV -eq 2 ] && { echo "[gate] REVIEW: fault fixed, cells changed elsewhere; the verifier judges sheet_review.png too"; exit 2; }
 echo "[gate] FAIL"; exit 1

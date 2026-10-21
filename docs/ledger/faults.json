@@ -9,7 +9,9 @@
   "text": "Jump ledges: jagged teeth, blocky stubs, odd tops; corner/end tiles (session owns Gen3Outdoor.lua) [ledge lip method to compare: docs/COMPARE-3DS-v0.4.0.md section 4]",
   "status": "open",
   "found": "2026-10-19",
-  "source": "handoff"
+  "source": "handoff",
+  "attempts": 1,
+  "evidence": "ATTEMPT 1 (fix/F001 6f31bd2, Gen3Outdoor +84/-46 + one line in Gen3Scene) is NOT merged. It cures the fault in the steady state and is strictly better than base (base's 16 px square end stub and 60 px end sky slit gone, lip on the cell's own edge as one straight face, art 1 row per pixel, FEWER triangles: Route 115 278,026 -> 276,958) and it cures F004 on Route 102 by the same change; its gate PASSes (0 new regions, 0 cells changed, 0 fallbacks). REJECTED by an independent verifier because the same code is NOT reproducible run to run: in 1 of 4 captures it opens new sky holes - Route 115 level 7 61 px at (923,559)-(944,566) plus 162/32/79 px, level 4 six 1-2 px sky lines along the ledge feet, and Route 102 level 7 a 212 px hole at (205,631)-(231,645) - while base is stable (5 captures, 0.08-0.29% frame noise vs the fix's 1.17-5.27%). Mechanism: the new closure decision reads the STREAMING cells table (a 4th argument through M.append), so during a partial build neighbouring cells are absent and the closure differs; the old front ground strip that masked 1-px mismatches was removed. Prescription: decide the closure from data that is always present (or default to closed when a neighbour is not built yet), keep a 1-px foot skirt under the ground line, and prove determinism by capturing the same frames twice and showing run-to-run difference no worse than base. Evidence: .autoloop/gates/F001_verify/NOTES.md, crops/ (clean_* and reject_*), raw/ and raw2/."
  },
  {
   "id": "F002",
@@ -19,11 +21,12 @@
   "class": "mini-stairs",
   "cell": "22,71-73",
   "text": "Quantised ramp beside the ledges reads as mini stairs (Gen3StairTerraces/Elevation pins) [in Emerald 3DS counting this ground is one flat level (Route 115 x16-33 y60-77): docs/COMPARE-3DS-v0.4.0.md section 4]",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-19",
   "source": "handoff",
-  "attempts": 2,
-  "evidence": "ATTEMPT 2 (fix/F002 cc5729c) was merged (e374f99) and then REVERTED (79bcbd6) after its class-effect reviewer found two reproducible new sky-through-terrain seams, live on the candidate: (1) Route 113 64,5 at level 4 - exact sky colour inside the ash ground at (366,432)-(382,435) 26 px and (337,437)-(345,440) 15 px, absent in two base runs and identical in two fix runs with the camera pixel-identical (Route 113 has no water cells); (2) Route 115 29,73 at levels 6/7 - a new flat sky band at the ledge-wall foot, 2185 px at (0,390)-(171,417) plus 118 px, camera verified identical by template match. The fix DOES cure the fault (step regions: Route 115 16->1, Route 113 12->0, Route 111 10->0, Route 103 5->0, Route 112 2->0, Oldale 2->0, Rustboro 5->0, base and fix A/Bs identical), so a third attempt should keep the corner-mean change and add the seam closure where a smoothed top meets a wall or a ledge foot. Evidence: .autoloop/gates/F002_verify/NOTES.md, diffstats.txt, 68 crops."
+  "attempts": 3,
+  "evidence": "Fixed on attempt 3 (fix/F002c 489604a, merged 023709c, lib/Gen3Scene.lua +69/-2). Attempt 1 (e15cd30) left brown shards; attempt 2 (cc5729c) cured the fault but was REVERTED (79bcbd6) for two reproducible sky seams; attempt 3 keeps attempt 2's corner rule (a corner averages only the open floor cells that share it, a corner the mean would put under a ledge lip by <=3 px is raised onto the lip, two sloped tops at the same base are closed) and adds foot skirts where a smoothed top meets a jump ledge face or a cliff skirt, 1:1 in the wall's own bottom rows. Heights untouched. Gate: fault regions 8 / 9,728 px2 -> 0 (cured 8, survived 0), 0 new regions on 10 maps, 0 cells changed, 0 fallbacks; step regions stay cured (Route 115 15->1, Route 113 12->0, Route 111 10->0, Route 103 5->0, Route 112 2->0, Oldale 2->0, Rustboro 5->0). Both former seams verified: Route 113 64,5's 26+15 px slits gone (horizon-sky count base 0 / fix 2 px in the edge zone), Route 115 29,73 identical to base (44/44). Determinism: two runs differ 1.20 % worst vs base's own 8.38 %. Residual below the visibility floor: 26 px2 sliver at Route 115 27,68 (inherited from the corner rule; hypothesis for a fourth attempt is the tree cell's canopyBottom ground beside a ledge's inset face).",
+  "fixed": "2026-10-21"
  },
  {
   "id": "F003",
@@ -47,7 +50,9 @@
   "text": "Ledge run and end tiles to check with the ledge rewrite [same lip method as F001: docs/COMPARE-3DS-v0.4.0.md section 4]",
   "status": "open",
   "found": "2026-10-19",
-  "source": "handoff"
+  "source": "handoff",
+  "attempts": 1,
+  "evidence": "ATTEMPT 1 (same code as F001, branch fix/F001 6f31bd2) cures it in the steady state - Route 102's run at 20..25 x 6 loses the notch and the pale sky sliver at its east end (0x0D6) and its brick face becomes 1:1 (own A/B .autoloop/f001/F004-route102-before-after.png, spots 22,7 and 21,5, levels 4/6/7, 0 fallbacks; headless cells identical) - but it shares F001's streaming dependence: 1 of 2 captures opened a 212 px sky hole at (205,631)-(231,645). Not merged; same prescription as F001."
  },
  {
   "id": "F005",
