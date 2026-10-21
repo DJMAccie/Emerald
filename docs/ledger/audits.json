@@ -4,15 +4,15 @@
    "name": "Stairs: flat / reversed / cliff jumps (53 outdoor maps)",
    "value": "0 / 0 / 0",
    "target": "0 / 0 / 0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/elevation/stairs_audit.py"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); tools/elevation/stairs_audit.py"
   },
   {
    "name": "Ledges that do not drop (of 401)",
    "value": "0",
    "target": "0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); stairs_audit.py ledge check"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); stairs_audit.py ledge check"
   },
   {
    "name": "Slowest map to 3D",
@@ -25,8 +25,8 @@
    "name": "Buildings flagged by the defect scan",
    "value": "0 of 122 bakes ",
    "target": "0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/buildings/defect_scan.py"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); tools/buildings/defect_scan.py"
   },
   {
    "name": "Outdoor first-person survey (4 yaws)",
@@ -44,17 +44,17 @@
   },
   {
    "name": "Floating rock masses",
-   "value": "0 (4471 masses audited in 158 maps)",
+   "value": "0 (4609 masses audited in 158 maps)",
    "target": "0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); Gen3Rock.audit"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); Gen3Rock.audit"
   },
   {
    "name": "Fallbacks to 2D / Lua errors over outdoor + cave sweep",
    "value": "0 fallbacks, 0 Lua errors (632 shots)",
    "target": "0 / 0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/qa_tryp.sh sweep levels 4+7"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); tools/qa_tryp.sh sweep levels 4+7"
   },
   {
    "name": "Scene-cache key narrowed: builds per map entry / build CPU (stock to fixed)",
@@ -65,17 +65,17 @@
   },
   {
    "name": "Cell dump repeatability (two runs, same code) and cells differing from the baseline",
-   "value": "1 of 156063 cells differ between runs; 100 differ from heights-2026-10-20-fix-F025.txt",
+   "value": "2 of 156063 cells differ between runs; 101 differ from heights-2026-10-20-fix-F025.txt",
    "target": "0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/heights_compare.py"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); tools/heights_compare.py"
   },
   {
    "name": "Magenta holes in the lower 45% of the frame (probe frames)",
-   "value": "15 of 632 frames (level 7; level 4 shown as info)",
+   "value": "13 of 632 frames (level 7; level 4 shown as info)",
    "target": "0",
-   "asof": "2026-10-20",
-   "source": "tools/release_check.sh run 20261020-213330 (full scope, mod 0212a345949a); tools/magenta_score.py"
+   "asof": "2026-10-21",
+   "source": "tools/release_check.sh run 20261021-011533 (subset scope, mod 74d392da89f0); tools/magenta_score.py"
   }
  ]
 }

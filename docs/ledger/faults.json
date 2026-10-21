@@ -21,7 +21,9 @@
   "text": "Quantised ramp beside the ledges reads as mini stairs (Gen3StairTerraces/Elevation pins) [in Emerald 3DS counting this ground is one flat level (Route 115 x16-33 y60-77): docs/COMPARE-3DS-v0.4.0.md section 4]",
   "status": "open",
   "found": "2026-10-19",
-  "source": "handoff"
+  "source": "handoff",
+  "attempts": 2,
+  "evidence": "ATTEMPT 2 (fix/F002 cc5729c) was merged (e374f99) and then REVERTED (79bcbd6) after its class-effect reviewer found two reproducible new sky-through-terrain seams, live on the candidate: (1) Route 113 64,5 at level 4 - exact sky colour inside the ash ground at (366,432)-(382,435) 26 px and (337,437)-(345,440) 15 px, absent in two base runs and identical in two fix runs with the camera pixel-identical (Route 113 has no water cells); (2) Route 115 29,73 at levels 6/7 - a new flat sky band at the ledge-wall foot, 2185 px at (0,390)-(171,417) plus 118 px, camera verified identical by template match. The fix DOES cure the fault (step regions: Route 115 16->1, Route 113 12->0, Route 111 10->0, Route 103 5->0, Route 112 2->0, Oldale 2->0, Rustboro 5->0, base and fix A/Bs identical), so a third attempt should keep the corner-mean change and add the seam closure where a smoothed top meets a wall or a ledge foot. Evidence: .autoloop/gates/F002_verify/NOTES.md, diffstats.txt, 68 crops."
  },
  {
   "id": "F003",
@@ -73,7 +75,7 @@
   "found": "2026-10-19",
   "source": "handoff",
   "fixed": "2026-10-20",
-  "evidence": "Fixed on branch fix/F006, merged into rc main e3011de. Air at the box 2716 px2 -> 28 px2 (three sub-visible slivers of 8-12 px2); 0 fallbacks. Verifier (full-resolution before/after, levels 4/6/7, two yaws): the two enclosed-sky holes at (378,406) 120 px2 and (415,465) 270 px2 in the orbit frame are gone, no visible regression in 10 review frames on other maps; only detector dust remains. Sheets: .autoloop/gates/F006/sheet.png, sheet_review.png, verify/. RE-GATE on the newer base 987b75e (after rc.sh sync, which merged another session's Gen3Rock/terrain install): the fault's own regions are all gone (1700, 224, 224, 228 px2 -> none) but a 292 px2 region at 15..18 x 43 (tile 0x2EF, base 8) survives with a 7 px gap where before it had 23 - so the newer base reopened a small part of the stair-side gap. Needs a short attempt 2 on the new base."
+  "evidence": "Fixed on branch fix/F006, merged into rc main e3011de. Air at the box 2716 px2 -> 28 px2 (three sub-visible slivers of 8-12 px2); 0 fallbacks. Verifier (full-resolution before/after, levels 4/6/7, two yaws): the two enclosed-sky holes at (378,406) 120 px2 and (415,465) 270 px2 in the orbit frame are gone, no visible regression in 10 review frames on other maps; only detector dust remains. Sheets: .autoloop/gates/F006/sheet.png, sheet_review.png, verify/. RE-GATE on the newer base 987b75e (after rc.sh sync, which merged another session's Gen3Rock/terrain install): the fault's own regions are all gone (1700, 224, 224, 228 px2 -> none) but a 292 px2 region at 15..18 x 43 (tile 0x2EF, base 8) survives with a 7 px gap where before it had 23 - so the newer base reopened a small part of the stair-side gap. Needs a short attempt 2 on the new base. ATTEMPT 2 (fix/F006b 95ad58b, merged e2a3b04): the 8 px sky slit at 15..18 x 43 that the newer base had reopened is closed - against the fix's own parent the region goes 292 px2 -> 0 and cell 16,42 goes 676 -> 8, leaving 72 px2 of sub-floor slivers; 0 new detector regions on 10 regression maps, 0 fallbacks, and this commit changes zero cell lines. Reviewer: UNSURE only because the follow-on claims were partly wrong (see F041, F043); the gated fault itself is cured and the visible band at 16,45 level 7 becomes red rock with no sky."
  },
  {
   "id": "F007",
@@ -498,9 +500,11 @@
   "class": "rock",
   "cell": "21,20",
   "text": "Foliage art printed on rock: green bush/grass texture on the vertical rock faces and a green lid on the rock wall top (Gen3Rock samples the foliage-drawn cells 0x210/0x218/0x21A as rock art); same frame as F032, screen area of the red terrace walls (fixer F032b, 2026-10-21). Separate class from the floating canopy plates",
-  "status": "open",
+  "status": "fixed",
   "found": "2026-10-20",
-  "source": "tour: EM_ROUTE112  21,20  h26  cam7/0.8"
+  "source": "tour: EM_ROUTE112  21,20  h26  cam7/0.8",
+  "fixed": "2026-10-21",
+  "evidence": "Fixed on fix/F040 (commit 193662a, merged 9199b05): a rock cell whose drawing is foliage now shows a rock cell of its own mass (nearest face tile for walls, nearest lid for the top), and a bush cell lying at its own floor keeps its drawing, so the ash-bush rows on the plain stay scenery. The cause was not Gen3Rock alone: Route 112's red terraces are counted-relief masses (Gen3Relief) and relief/hill rock lays each member cell's own drawing on its facets, so the foliage-drawn cells' green became the wall texture (a 4 px skirt column repeating the drawing rows every course) and their tops capped the terraces with a green lid; Gen3Rock's block path had the same sampling. Gate PASS with a freshly stamped base: no new detector regions on 10 regression maps, no cell changes, 0 fallbacks. My own check of the level-7 frame: the green wall stripes and lids are gone, walls show rock 1:1, ground bushes unchanged."
  },
  {
   "id": "F041",
@@ -513,7 +517,7 @@
   "status": "open",
   "found": "2026-10-21",
   "source": "tour: EM_ROUTE112  16,42  h48  cam4/0",
-  "evidence": "Cured by the F006b fix (fix/F006b 95ad58b: a cliff mass cell's footprint is closed from the lowest floor beside it up to the plate, and that floor laid under it): the class is \"a flat plate at the solved floor over the mass's own top below it, open along a side whose neighbour is level\". Gate at F006b: the 12..20 x 40..42 region goes away with the 15..18 x 43 one (5068 -> 72 px2 of sub-floor slivers). Pending that fix's merge."
+  "evidence": "F006b (fix/F006b 95ad58b, merged e2a3b04) cures most of it: 1384 px2 -> 224 px2 (84%), leaving a 224 px2 region at cells 12..13 x 40..41 (gap 7 px, y_top 47) - that hollow is untouched because those cells have all-level neighbours, so the fix's rule does not fire there. Still open: the residual needs the same closure or a level change; the reviewer confirmed the residual is terrain, not a model artifact."
  },
  {
   "id": "F042",
@@ -526,5 +530,17 @@
   "status": "open",
   "found": "2026-10-21",
   "source": "tour: EM_ROUTE112  21,27  h26  cam7/0.8"
+ },
+ {
+  "id": "F043",
+  "map": "EM_ROUTE112",
+  "area": "Terrain",
+  "tier": 1,
+  "class": "rock",
+  "cell": "14,44",
+  "text": "The F006b rock closure maps one 16x16 tile over heights of 8-48 px (a vertical stretch, not 1:1) and adjacent cells' new walls overlap coplanar (e.g. x=256, y 8..48 and 16..48); in the free camera at 14,44 a new 65x4 px dark gray-blue strip appears at (900..965, 412..416) between the pink terrace top and the red rim (crops .autoloop/gates/F006b_verify/signview_west_{before,after}_10x.png). Found by the F006b reviewer",
+  "status": "open",
+  "found": "2026-10-21",
+  "source": "tour: EM_ROUTE112  14,44  h48  cam7/5.8"
  }
 ]

@@ -27,7 +27,8 @@ if [ "$MODE" = "--rollback" ]; then
 fi
 FILES=$(git -C "$RC" diff --name-only upstream main)
 [ -z "$FILES" ] && { echo "nothing to install: rc main has no loop commits over upstream"; exit 0; }
-echo "loop commits:"; git -C "$RC" log --oneline upstream..main | sed 's/^/  /'
+echo "loop commits (history; reverted ones included):"; git -C "$RC" log --oneline upstream..main | sed 's/^/  /'
+echo "net change to install (upstream..main):"; git -C "$RC" diff --stat upstream main | tail -12 | sed 's/^/  /'
 echo "files:"; echo "$FILES" | sed 's/^/  /'
 # rc must be synced: the real install equals rc upstream for every file
 STALE=0

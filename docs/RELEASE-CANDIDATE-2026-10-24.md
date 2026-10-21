@@ -30,6 +30,19 @@ regenerated with `OWN_LIB_EXTRA="<files>" bash tools/props/make_patch.sh` and co
 | F039 | Route 123 north edge | A 40-60 px band of sky under the raised sea margin, with boulders silhouetted in it | `Gen3Scene.lua`: the two blocked shore-water passes tested `collision~=0`, which matches every surfable sea tile, so the sea was dragged down to the lake's level; now `collision==7`. Then the sea surface is drawn at the bank's own height, and margin rock cells over lower water get a face down to it in 16 px courses | Attempt 1 fixed the cause but left two sky holes; attempt 2 (reviewer) measured the band 11,551 px2 -> 23 px2 at level 4 both yaws, no regression over levels 4/6/7 plus six extra yaws and shore/lake spots, 0 fallbacks; it also closes a pre-existing 1,147 px2 hole on Route 103 |
 | F032 | Route 112 | Thin green plates hanging beside the red rock walls | **Parked after two attempts** (see the parked table) | Both attempts removed the plates but the replacements failed the taste bar |
 
+## The install delta (what actually changes in your game)
+Six files, +276 / -39 lines:
+```
+lib/BuildingModels.lua |  12 +++++-      F038 sunk building models
+lib/Gen3Hills.lua      |  71 +++++++-    F040 rock art (hill masses), F039 margin faces
+lib/Gen3Relief.lua     |  30 +++++---    F040 rock art (relief masses)
+lib/Gen3Rock.lua       |  77 ++++++----   F031 rock art 1:1, F040 rock/foliage art choice
+lib/Gen3Scene.lua      | 100 +++++++---   F006 stair flanks, F006b plate closure, F039 margin faces
+lib/TerrainLevels.lua  |  25 +++++--     F006 stair flights hand no height to rock
+```
+`tools/autoloop/install_rc.sh` prints exactly this, refuses if the game changed since the loop last synced, and writes a
+backup of game, QA and mod source before copying.
+
 ## Parked, with what a future attempt needs
 | Ledger | Map | Why parked | What is known |
 |---|---|---|---|
@@ -57,18 +70,21 @@ regenerated with `OWN_LIB_EXTRA="<files>" bash tools/props/make_patch.sh` and co
   order), and Route 112's rock/shore triangles follow the water animation frame. The gate builds twice and filters this;
   fixing it is a separate job.
 
-## Tier 1 gates on this candidate (158 maps, all gates, 2026-10-21)
+## Tier 1 gates on this candidate (158 maps, full scope, 2026-10-21 01:15)
 | Gate | Result | Numbers | Against the installed game |
 |---|---|---|---|
 | 2D fallbacks / Lua errors | **pass** | 632 of 632 captures, 0 fallbacks, 0 errors, 0 watchdogs | same |
 | Stairs and ledges | **pass** | 113 stairs ok, 0 flat, 0 reversed, 0 cliff jumps; 0 of 401 ledges bad | same |
-| Floating rock audit | **pass** | 4,471 masses, 0 floats | same |
+| Floating rock audit | **pass** | 4,609 masses, 0 floats | same |
 | Building defect scan | **pass** | 122 bakes, 0 flagged | same |
-| Magenta holes | *fails its target, but not ours* | 15 of 632 level-7 frames have magenta in the lower 45% | **the installed game has 16 of 632** - it is pre-existing, and this candidate removes one |
-| Height repeatability | *fails as expected* | 1 of 156,063 cells differs between two runs of the same code (the builder's `pairs()` noise, F037); 100 cells differ from the October baseline | those 100 are the fixes (F006) plus other sessions' installs |
-| Load time | *unmeasured* | median 434 ms, but the machine was at load 23.6 and 9 runs timed out | needs a quiet rerun |
+| Magenta holes | *fails its target, not ours* | 13 of 632 level-7 frames have magenta in the lower 45% | **the installed game has 16 of 632** - pre-existing, and this candidate removes three |
+| Height repeatability | *fails as expected* | 2 of 156,063 cells differ between two runs of the same code (the builder's `pairs()` noise, F037); 101 cells differ from the October baseline | the 101 are the fixes plus other sessions' installs |
+| Load time | *half measured* | median **308 ms** per map (target under 1,000 ms), but 11 maps over 1 s and 9 timeouts, measured at load average 16.6 while macOS Spotlight was indexing the loop's own 5 GB of dumps | needs one rerun on an idle machine |
 
-## Blast radius of the two fixes (checked, not assumed)
+This run covers the candidate up to F006's second pass; F002 landed while it was running and passed its own gate (Route 115's
+step regions 16 -> 1). A final run over the complete candidate is the last step before you install.
+
+## Blast radius of the fixes (checked, not assumed)## Blast radius of the two fixes (checked, not assumed)
 Built both trees headless with the same driver and engine payload and compared all 158 maps: cells changed on 29 maps,
 triangle counts on 56, and **every** difference is in the terrain meshes (`under`/`over`) - never in plants, roofs,
 canopies, water or civic geometry. The biggest movers are Mt Pyre summit (-9.7% terrain triangles), Ever Grande (-5.8%),

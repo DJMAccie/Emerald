@@ -28,9 +28,17 @@ awk '!seen[$1]++' "$ML" > "$ML.u" && mv "$ML.u" "$ML"
 hdump(){ # hdump TREE OUT : the gate's maps, headless
   mkdir -p "$2"; "$ROOT/engine/geo.sh" --tree "$1" --maps "$ML" --out "$2" -j 4 > "$2/geo.out" 2>&1
 }
+# Base dumps are cached per commit, but a cache entry is only valid for the SAME driver and payload that made it (the
+# engine app updates its payload on its own, and the driver keeps changing): a stale entry made the two "independent" base
+# builds non-independent and turned builder noise into "new detector regions" (found by the F040 fixer 2026-10-22).
 BC=$ROOT/.autoloop/geo-cache/h-$BASEH
-[ -f "$BC/a/done" ] && [ "$(cat "$BC/a/done")" = "$(md5 -q "$ML")" ] || { hdump "$BT" "$BC/a" && md5 -q "$ML" > "$BC/a/done"; }
-[ -f "$BC/b/done" ] && [ "$(cat "$BC/b/done")" = "$(md5 -q "$ML")" ] || { hdump "$BT" "$BC/b" && md5 -q "$ML" > "$BC/b/done"; }
+STAMP="$(md5 -q "$ML") $(git -C "$ROOT" log -1 --format=%h -- tools/autoloop/em_geo_driver.lua) $(sed -n 's/.*payload \([^ ]*\).*/\1/p' "$BC/a/headless.log" 2>/dev/null | head -1)"
+for side in a b; do
+  want=$(printf '%s' "$STAMP" | md5 -q)
+  if [ ! -f "$BC/$side/done" ] || [ "$(cat "$BC/$side/done")" != "$want" ]; then
+    rm -rf "$BC/$side"; hdump "$BT" "$BC/$side"; printf '%s' "$want" > "$BC/$side/done"
+  fi
+done
 rm -rf "$G/fix_a" "$G/fix_b"; hdump "$RC" "$G/fix_a"; hdump "$RC" "$G/fix_b"
 FB=$(cat "$BC"/a/headless.log "$BC"/b/headless.log "$G"/fix_a/headless.log "$G"/fix_b/headless.log 2>/dev/null | grep -ci "fallback\|unsettled\|error")
 echo "[gate] fallback/unsettled/error lines in headless builds: $FB"

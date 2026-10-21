@@ -389,7 +389,11 @@ def detect_steps(cells_path, max_step=8.0, min_run=2, faces=None):
         xs = [p[0] for e in g for p in e[:2]]
         ys = [p[1] for e in g for p in e[:2]]
         inside = [e for e in g if 0 <= e[0][0] <= W - 8 and 0 <= e[0][1] <= H - 8]
+        # area_px: gate_eval's visibility floor and "cured" list need a size for every region; a step edge is one cell
+        # edge, so count each as a cell's worth. Without this every steps verdict came out "not fixed" (found by the F002
+        # fixer 2026-10-22: the detector regions had no area at all, so the gate could never pass a steps fix).
         regions.append({'box': [min(xs), min(ys), max(xs), max(ys)], 'steps': len(g), 'run': best,
+                        'area_px': len(g) * 256, 'gap_max': float(best * 3),
                         'heights': sorted(set(round(base(cl[p]), 1) for e in g for p in e[:2])),
                         'cell': list(g[0][0]), 'score': len(g) * best})
     regions.sort(key=lambda r: -r['score'])

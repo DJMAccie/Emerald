@@ -105,6 +105,10 @@ def main(argv):
                 ok = False
                 v['reasons'].append('not fixed: %d region(s) over the visibility floor survive at the box (matched to base)'
                                     % len(survived))
+            elif not v['fault_before']:
+                # nothing measurable at the box in BASE: the detector does not see this fault (the gate cannot pass or
+                # fail it) - say so instead of blaming the fix
+                v['reasons'].append('note: no %s region at the box in BASE - this fault needs captures, not the detector' % o.kind)
             elif not cured and v['fault_before']:
                 ok = False
                 v['reasons'].append('not fixed: none of the base regions at the box went away')

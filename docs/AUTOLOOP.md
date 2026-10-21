@@ -314,3 +314,63 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   not a sunk building; Sootopolis' rim terraces are ambiguous from one frame. So D5 is proven as a GATE for a fix (base vs
   candidate on F038) but its world list needs the same calibration the air rule needed (reference choice for models standing
   on decks/platforms). Not logged as faults; calibration set = those three spots.
+- 2026-10-22 03:40 F006b MERGED (e2a3b04). Its reviewer isolated it properly (base = the fix's own parent 1cc366f, not the
+  older e6a02ab the gate used) and found: the gated slit is cured (292 -> 0 px2 at 17,43; 16,42 676 -> 8; 72 px2 of
+  sub-floor slivers left), 0 new regions on 10 maps, 0 fallbacks, and the commit changes ZERO cell lines (the review cells
+  were F006's and F031's against an older base). Two of its claims did not survive: F041 is improved (1384 -> 224 px2) but
+  NOT cured - cells 12,41/13,41 have all-level neighbours so the rule never fires - and the new faces are not 1:1 (one 16x16
+  tile mapped over 8-48 px heights) while adjacent cells' walls overlap coplanar, which also shows as a 65x4 px dark strip in
+  the 14,44 free camera. F041 re-opened with the residual numbers and F043 logged for the face scale/coplanar issue.
+  Lesson for the gate: it compares against the base it is told, and a fixer's "cured" claim must be re-measured against the
+  fix's own parent - the reviewer caught a 5,068 px2 "before" that was really F006+F031.
+- 2026-10-22 04:00 F002 (Route 115's quantised ramp) has a first fix (e15cd30, Gen3Scene) that removes the litmus-of-stairs
+  along the ledge run, but I found a REGRESSION on its own sheet: in the level-7 yaw-3.9 frame the meadow gains many small
+  brown sliver WEDGES (crops /tmp/f002_before_zoom.png vs /tmp/f002_after_zoom.png) - terrace/ledge face quads left standing
+  after the floors around them became one slope. Sent back with that evidence. Also: the `steps` detector sees no region at
+  the fault box in the BASE build, so the gate was blind to this fault and printed a misleading "not fixed: none of the base
+  regions went away"; gate_eval now says "no region at the box in BASE - this fault needs captures" in that case.
+- 2026-10-22 04:20 Two tool bugs found by fixers, both fixed: (1) `detect.py steps` regions carried no `area_px`, so gate_eval's
+  visibility floor and "cured" list were always empty - EVERY steps verdict read "not fixed", even for an unchanged tree
+  (F002 fixer). Steps regions now carry area_px (one cell edge each) and F002 re-evaluates PASS. (2) gate.sh cached base dumps
+  per commit only, so a stale pair (made worse by one `cp -r` of mine earlier) could look like one build and turn builder noise
+  into "new detector regions" (F040 fixer). The cache is now stamped with map-set + driver commit + payload version and
+  rebuilt when any differs.
+  F002 MERGED (e374f99). Its reviewer-free merge is an exception: the gate PASSes with the repaired metric, the step count
+  collapses 16 -> 1 on Route 115 and ~52 -> 1 over 10 maps, and my own A/B shows the brown relief shards in the meadow in BOTH
+  trees - my earlier "regression" call compared against a stale before-frame, which I have recorded as a correction.
+  F040's fixer refuted the cause I gave it: Route 112's red terraces are counted-relief masses (Gen3Relief), not Gen3Rock, and
+  the fix makes a foliage-drawn cell show rock from its own mass. Its gate now re-runs against a freshly stamped base.
+- 2026-10-22 04:45 F040 MERGED (9199b05). Its fixer refuted my cause (the red terraces are counted-relief masses, Gen3Relief,
+  not Gen3Rock) and the fix makes a foliage-drawn cell show rock from its own mass while a bush cell at its own floor keeps
+  its drawing. Gate PASS with a freshly stamped base (no new regions on 10 maps, no cells changed, 0 fallbacks); my check of
+  the level-7 frame shows the green wall stripes/lids gone, rock 1:1, ground bushes unchanged.
+  FULL RELEASE RUN on the candidate (up to F006b): sweep PASS (632 shots, 0 fallbacks/errors/watchdogs), stairs+ledges PASS
+  (0/0/0, 0 of 401 ledges bad), defects PASS (122 bakes, 0 flagged), floats PASS (4609 masses, 0 floats), magenta 13 low of 632
+  frames vs the INSTALLED game's 16 (pre-existing, and better with the fixes), repeat 2 of 156,063 cells differ between runs
+  (builder pairs() noise) and 101 from the October baseline (the fixes plus other sessions' installs). Load gate still
+  unmeasured (machine load 12-25 from other work). Recorded in the release doc and fed to the ledger audits.
+- 2026-10-22 05:10 LOAD GATE measured for the first time: median 308 ms per map (the target is under 1,000), so the typical
+  map is well inside budget - but 11 maps went over 1 s and 9 timed out, on a machine at load average 16.6. The load was not
+  games: it is macOS Spotlight indexing .autoloop (5.1 GB of dumps and captures the loop itself wrote). Added
+  .autoloop/.metadata_never_index; the gate needs one rerun on an idle machine to settle the tail. Recorded in the release doc.
+  F040's fixer confirmed its PASS with the stamped cache and gave the full cause (Gen3Relief/Gen3Hills lay each member cell's
+  own drawing on their facets, so foliage cells printed green on the rock walls as 4 px repeating skirt columns; Gen3Rock's
+  block path sampled the same way twice). Its caveat: Gen3Mass's picture/dome builder still takes each cell's own art - no
+  instance of that class was found, left alone.
+- 2026-10-22 05:40 F002 REVERTED from the candidate (79bcbd6). Its class-effect reviewer found two REPRODUCIBLE new sky-through-
+  terrain seams (Route 113 64,5 at level 4: 26+15 px of exact sky colour inside the ash ground, two base runs 0 px and two fix
+  runs identical with the camera pixel-identical; Route 115 29,73 at levels 6/7: a 2,185 px + 118 px flat sky band at the
+  ledge-wall foot, camera verified by template match dx=dy=0). Both were live on rc main. The fix does cure the fault (step
+  regions 16->1 on Route 115 and 12/10/5/2/2/5 -> 0 on the six other maps), so F002 is back to open with attempts=2 and the
+  prescription: keep the corner-mean change, add the seam closure where a smoothed top meets a wall or a ledge foot. This is
+  the rule working as written - a fix that regresses elsewhere is reverted, not tuned.
+  Candidate after the revert: F006+F006b, F031, F038, F039, F040 (six code fixes; F005/F007 closed as not reproducible).
+- 2026-10-22 06:20 Candidate integrity and install path checked after the F002 revert: the tree still builds (3 maps, 0 failed
+  headless) and `install_rc.sh` lists a net delta of SIX files, +276/-39 lines (BuildingModels, Gen3Hills, Gen3Relief,
+  Gen3Rock, Gen3Scene, TerrainLevels) - that is what would land in the game. The script now prints the net diff instead of
+  only the commit history (which still lists the reverted F002 commits), and the release doc carries the per-file map of which
+  fix touches which file.
+  F001 (jump ledges) has a fix (5bc4cc1, Gen3Outdoor +76/-43): gate REVIEW (no new regions, 0 fallbacks, 8 cell lines changed on
+  Route 113 as a class effect); a verifier is judging the lip, the ends, the drop and the Route 113/Route 102 class effect.
+  F002 attempt 3 (fix/F002c) has started from the reviewer's prescription (keep the corner-mean change, close the two seams:
+  Route 113 64,5 level 4 sky slits and Route 115 29,73's 2,185 px band at the ledge-wall foot).
