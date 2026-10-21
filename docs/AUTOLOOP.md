@@ -434,3 +434,15 @@ The engine track is worked by a background subagent; it never edits rc, the mod 
   Known residual, below the floor: a 26 px2 sliver at Route 115 27,68 - inherited from the corner rule (present in attempt 2 too),
   and the hypothesis for a fourth attempt is the tree cell's canopyBottom ground beside a ledge's inset face.
   Candidate now: SEVEN fixes (F002, F006+F006b, F031, F038, F039, F040) plus F005/F007 closed as not reproducible.
+- 2026-10-22 09:45 F001/F004 retry started (fix/F001b) using F002's successful pattern: keep attempt 1's straight-lip 1:1 face,
+  make the closure default to CLOSED when a neighbouring cell may not be built yet, and add a 1-px foot skirt under the ground
+  line. The brief requires the fixer to prove it with sky-pixel counts at the four known-bad frames, captured twice, on top of
+  the gate's automatic determinism check. F041 and F043 fixers are still diagnosing (no commits).
+- 2026-10-22 10:00 TOOL GUARD: gate.sh now REFUSES (exit 4) when the fix tree does not contain the base commit. A worktree
+  created before the last few merges silently loses those fixes, and the gate then reports the base's own cures as "new regions":
+  F043's first run showed ~80 phantom regions (all Route 115/113/111 step regions that F002 cures) and 8.6 % "instability",
+  purely because its tree predated F002's merge. Both open fixers were told to rebase; their briefs now include the rule.
+- 2026-10-22 10:15 F043 rebased correctly (its branch contains main 023709c now) and its pre-rebase verdict archived as
+  verdict.stale-prerebase.json - the file had kept the 80 phantom regions and the 8.6 % "instability" from the stale-tree run,
+  which is exactly the kind of number that gets quoted months later, so it is out of the way and the fixer re-runs. F041 has a
+  commit (b80a2b2) but no verdict yet; F001b still carries attempt 1's code and must be made deterministic.

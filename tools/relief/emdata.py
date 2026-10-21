@@ -106,7 +106,8 @@ def manifest():
 
 def em_name(map_id):
     """'MtChimney' -> 'EM_MT_CHIMNEY'."""
-    return 'EM_' + re.sub(r'(?<!^)(?=[A-Z])', '_', map_id).upper()
+    # ('MtPyre_Exterior' -> 'EM_MT_PYRE_EXTERIOR': an id that already has an underscore must not get two)
+    return 'EM_' + re.sub(r'(?<!^)(?<!_)(?=[A-Z])', '_', map_id).upper()
 
 
 def find_map(name):

@@ -649,10 +649,17 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
         inside, B = volume_inside(v), v['B']
         r0, r1 = v.get('rows', (0, H))
         mat = pack(img[v['mat'][1], v['mat'][0], :3])
+        roofc = pack(img[v['roof'][1], v['roof'][0], :3]) if v.get('roof') else mat
         side, wrap = v.get('side'), v.get('wrap')
         corner = v.get('corner') if v.get('poly') else None
+        # repeat=P: a tower taller than its drawing. A drawing row above the top (row < 0) is the row
+        # P rows below it, so the drawing's facade module (window row + plain row) runs on up the front
+        # and the hidden walls; the flat top of the solid takes `roof` (default `mat`).
+        rep = v.get('repeat')
 
         def art(x, row):
+            if rep and row < 0:
+                row %= rep
             if not (r0 <= row < r1 and 0 <= row < H and 0 <= x < W):
                 return -1
             q = img[row, x]
@@ -672,6 +679,15 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
                 cells.difference_update(gone)
         if not cells:
             continue
+        # recess=[(xa, xb, ra, rb, k)]: the drawing's pixels x in xa..xb-1, rows ra..rb-1 (rows above the top
+        # count, with `repeat`) sit k voxels back from a front plane at depth 0 -- a window in its wall.
+        # The set-back face keeps its pixel at the height it is drawn at (painted below); the notch's sides
+        # and sill are the usual hidden-face paint.
+        for (xa, xb, ra, rb, k) in v.get('recess', []):
+            for row in range(ra, rb):
+                for x in range(xa, xb):
+                    for d in range(k):
+                        cells.discard((x, d, B - row))
         front = {}                                   # the front plane's depth at each height
         tops = {}                                    # the top cell of each column (x, d)
         for (x, d, h) in cells:
@@ -727,6 +743,8 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
             if side:
                 u0, u1 = side[0], side[1]
                 row = B - h - front[h]
+                if rep and row < 0:
+                    row %= rep
                 if len(side) == 4:                   # (u0, u1, r0, r1): rows kept inside the clean wall band,
                     row = min(max(row, side[2]), side[3] - 1)   # not the ground shadow drawn at its foot
                 if wall and corner:
@@ -760,11 +778,19 @@ def apply_volumes(img, vols, occ, colS, colT, colE, colN, solid):
                 colS[x, h, di] = c if c >= 0 else hidden(x, d, h)
             if (x, d, h + 1) not in cells:           # seen from above: the drawing at its own row
                 c = mat if top_ else -1 if fr else art(x, B - h - d)
+                if rep and tops[(x, d)] == h and B - h - d < 0:
+                    c = roofc                        # the top of a repeated tower is its roof, not a facade row
                 colT[x, h, di] = c if c >= 0 else hidden(x, d, h)
             if (x - 1, d, h) not in cells or (x + 1, d, h) not in cells:
                 colE[x, h, di] = hidden(x, d, h, True)
             if (x, d + 1, h) not in cells:
                 colN[x, h, di] = hidden(x, d, h, True)
+        for (xa, xb, ra, rb, k) in v.get('recess', []):
+            for row in range(ra, rb):
+                for x in range(xa, xb):
+                    c = art(x, row)
+                    if c >= 0 and (x, k, B - row) in cells and (x, k - 1, B - row) not in cells:
+                        colS[x, B - row, k + PAD] = c
 
 
 def apply_relief(img, rects, pix, occ, colS, colT, solid):

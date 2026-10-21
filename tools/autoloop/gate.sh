@@ -17,6 +17,14 @@ BASEH=$(git -C "$RC" rev-parse --short "$BASEC"); FIXH=$(git -C "$RC" rev-parse 
 [ "$BASEH" = "$FIXH" ] && { echo "fix tree HEAD equals base ($BASEH): nothing to gate"; exit 3; }
 BT=$ROOT/.autoloop/trees/$BASEH
 [ -d "$BT" ] || git -C "$RC" worktree add -q --detach "$BT" "$BASEH"
+# The fix tree must contain the base: a worktree created before the last few merges silently LOSES the fixes merged since,
+# and the gate then reports the base's own cures as "new regions" (F043's first run, 2026-10-22: 80 phantom regions because
+# its tree predated F002). Refuse instead of producing a misleading verdict.
+if ! git -C "$RC" merge-base --is-ancestor "$BASEH" HEAD 2>/dev/null; then
+  echo "[gate] REFUSING: $FIXH does not contain the base $BASEH - rebase the fix tree onto current rc main first"
+  echo "[gate]          (git -C $RC rebase main   inside the fix worktree)"
+  exit 4
+fi
 echo "[gate] $NAME  map $MAP box $BOX kind $KIND  base $BASEH  fix $FIXH ($(git -C "$RC" diff --stat "$BASEH" HEAD | tail -1))"
 # map list: fault map first, then the regression set; spots from the ledger's outdoor/cave lists
 ML=$G/maps.txt; : > "$ML"

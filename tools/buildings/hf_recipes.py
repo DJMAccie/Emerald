@@ -746,3 +746,40 @@ PALACE_LOBBY = _palace_lobby()
 RECIPES = {'frontier_gate': FRONTIER_GATE, 'ferry_birth_island': _ferry('EM_BIRTH_ISLAND_EXTERIOR', 12, 24), 'ferry_navel_rock': _ferry('EM_NAVEL_ROCK_EXTERIOR', 7, 18),
            'trainer_hill_penthouse': TRAINER_HILL_PENTHOUSE, 'abandoned_ship_wreck': WRECK, 'b064_mossdeepcity_spacecenter': SPACE_CENTER,
            **{k: _mossdeep_house(*v) for k, v in MOSSDEEP_HOUSE_BOXES.items()}, 'pacifidlog_hut': HUT, 'soot_box2': SOOT_BOX2, 'soot_cone': SOOT_CONE, 'frontier_dome': FRONTIER_DOME, 'frontier_factory': FRONTIER_FACTORY, 'frontier_pyramid': FRONTIER_PYRAMID, 'frontier_pike': FRONTIER_PIKE, **FRONTIER_HOUSES, 'soot_box': SOOT_BOX, 'treehouse': TREEHOUSE, 'weather': WEATHER, 'museum2': MUSEUM2, 'devon2': DEVON2, 'birch_lab': BIRCH_LAB, 'mart2': MART2, 'center2': CENTER2, 'littleroot_house': LITTLEROOT_HOUSE, 'littleroot_house_may': LITTLEROOT_HOUSE_MAY, 'center': CENTER, 'devon': DEVON, 'dept': DEPT, 'museum': MUSEUM, 'b152_battlefrontier_battlepalacelobby': PALACE_LOBBY}
+
+
+# The Sky Pillar (EM_SKY_PILLAR_OUTSIDE, cells x12..16 y0..5; drawing 80x96): the drawing shows only the
+# tower's foot -- three window rows, the door with the emblem, the map's top edge cutting the rest. The
+# user: "sky pillar itself isnt a pillar atm. make it a tall building". So the facade's own module (a window
+# row and a plain row, 32 px) runs up past the drawing (hf `repeat`), the windows are set back 2 px, the
+# door porch and the pilasters stand 2 px proud on every module, and the top is a flat pink roof.
+# SKY_PILLAR_H is the whole tower in px (96 + 32 per extra module); the plan is 80 x 80, so its back wall
+# stands at depth 80 (the map's cells leave 96 behind the front).
+SKY_PILLAR_H = 320
+
+
+def _sky_pillar(height=SKY_PILLAR_H, depth=80, crown=24):
+    K = (height - 96) // 32                       # extra modules above the drawing's top
+    top = 96 + 32 * K
+    mat = (40, 20)                                # the plain wall
+    recess = [(xa, xb, 1 + 32 * j, 8 + 32 * j, 2) for j in range(-K, 3) for xa, xb in ((18, 30), (50, 62))]
+    body = dict(shape='plan', poly=[(0, 0), (80, 0), (80, depth), (0, depth)], h=(0, top), B=95, mat=mat,
+                roof=(3, 20), side=(16, 48, 0, 73), corner=(0, 8), repeat=32, recess=recess)
+
+    def proud(x, rows0):
+        """a strip the full height: the drawing's rows 0..95 once, then its top module again K times"""
+        out = [_proud(x, (0, 96), 2, mat, 95)]
+        for m in range(1, K + 1):
+            out.append(_proud(x, (0, 32), 2, mat, 95 + 32 * m))
+        return out
+    prisms = proud((0, 8), None) + proud((72, 80), None) + [_proud((30, 50), (72, 96), 2, mat, 95)]
+    vols = [body]
+    if crown:       # a set-back crown (8 px in, `crown` high) wearing the same facade module, under its own flat roof
+        vols.append(dict(shape='plan', poly=[(8, 8), (72, 8), (72, depth - 8), (8, depth - 8)], h=(top, top + crown), B=95,
+                         mat=mat, roof=(3, 20), side=(16, 48, 0, 73), corner=(0, 8), repeat=32))
+    return dict(src=('general__pacifidlog', 'EM_SKY_PILLAR_OUTSIDE', 12, 0, 16, 5), trim=False, keys=[],
+                volumes=vols, prisms=prisms)
+
+
+SKY_PILLAR = _sky_pillar()
+RECIPES['x_skypillar_tower'] = SKY_PILLAR
