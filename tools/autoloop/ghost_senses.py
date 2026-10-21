@@ -11,6 +11,7 @@ Senses (no model):
             striped walls). Foreshortened ground gives a floor of this number, so compare frames of the same level.
   void      share of magenta / fill-coloured pixels (a hole showing the clear colour).
   dialog    share of the text box's cyan frame colour (an NPC dialogue covers the frame: the frame is not judged).
+            Batches b3/b4 are reruns of the dialogue spots with trainer sight off (em_ghost_driver.lua); they replace the old frames.
   skyfloor  share of sky-coloured pixels in the lower half of a level-4/6 frame (ground missing under the camera's view).
 The detector sense (detect.py air) is read from <dir>/air.json by the caller: it is empty for Route 112 on the real install.
 """
@@ -74,6 +75,11 @@ def main():
                 s, v, k, dlg = metrics(f, lv)
                 rows.append(dict(map=mp, x=int(x), y=int(y), yaw=tag, level=lv, stretch=round(s, 4), void=round(v, 4),
                                  skyfloor=round(k, 4), dialog=round(dlg, 4), frame=os.path.relpath(f, G)))
+    # batches >= 3 are reruns of the spots whose first frames carried an NPC dialogue box (tools/em_ghost_driver.lua, trainer
+    # sight off): a rerun frame replaces the first-walk frame of the same spot, level and yaw when that one had a dialogue
+    new = {(r['x'], r['y'], r['yaw'], r['level']) for r in rows if int(re.search(r'_b(\d+)', r['frame']).group(1)) >= 3}
+    rows = [r for r in rows if not (int(re.search(r'_b(\d+)', r['frame']).group(1)) < 3 and r['dialog'] > .003
+                                    and (r['x'], r['y'], r['yaw'], r['level']) in new)]
     with open(os.path.join(G, 'senses.csv'), 'w', newline='') as fh:
         wr = csv.DictWriter(fh, fieldnames=list(rows[0]))
         wr.writeheader(); wr.writerows(rows)
