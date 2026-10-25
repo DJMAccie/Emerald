@@ -73,9 +73,12 @@ function M.claim(cells)
   local g=M.FAMILIES[c.secondary] and M.GENERAL[c.secondary]
   if g then
    if c.shape and c.shape.general then
-    -- the crown above the tree is the crown tile drawn over the cell north of it
+    -- the crown above the tree is the crown tile drawn over the cell north of it; when that cell is walkable
+    -- the tree stands under the floor the player walks on and takes its height (crownFloor, Gen3Elevation.bind)
     local north=cells[c.cx..':'..(c.cy-1)]
-    if north and (north.collision or 0)==0 and north.mid==g.top then c.shape.art={{north.mid},{c.mid}} end
+    if north and (north.collision or 0)==0 and north.mid==g.top then
+     c.shape.art={{north.mid},{c.mid}};c.shape.crownFloor=true
+    end
    end
    for _,o in ipairs(g.over)do
     if c.mid==o then
