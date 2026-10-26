@@ -1,0 +1,10 @@
+{
+  "_doc": "Fly users (HM02, Emerald) by national dex number -> where their flight sheet comes from. follow = follower mod followsprites (4x4, real flying poses); pmd = PMD Collab walk cycle (flying for these); drawn = tools/flysprites/drawn/<nat>.py (made for this mod; until it exists the follower sheet stands in). Change a source here and re-run bake_flyers.py.",
+  "6": "pmd", "16": "drawn", "17": "follow", "18": "follow", "21": "drawn", "22": "follow",
+  "83": "drawn", "84": "drawn", "85": "drawn", "142": "follow", "144": "follow", "145": "follow",
+  "146": "follow", "149": "drawn", "151": "follow", "163": "drawn", "164": "follow", "169": "follow",
+  "176": "drawn", "178": "drawn", "198": "pmd", "225": "drawn", "227": "follow", "249": "follow",
+  "250": "follow", "276": "drawn", "277": "follow", "278": "follow", "279": "follow", "329": "follow",
+  "330": "follow", "333": "follow", "334": "follow", "357": "drawn", "373": "drawn", "380": "follow",
+  "381": "follow", "384": "follow"
+}

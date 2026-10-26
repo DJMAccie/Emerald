@@ -7,6 +7,8 @@ return function(game)
  love.window.setMode(1280,720,{resizable=true})
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
+ -- (QA only: EM_SETVARS="VAR_SKY_PILLAR_STATE=2,..." story variables set before the first map load)
+ for k,v in (os.getenv('EM_SETVARS') or ''):gmatch('([%w_]+)=(%d+)') do require('src.core.game3.rse.init').setVar(k,tonumber(v)) end
  local ex=game.mods.exports.BATTLE_ART_VOXEL_FORK
  local C=(ex.gen3 or ex.firered).camera
  local Scene=ex.lib.require('Gen3Scene')

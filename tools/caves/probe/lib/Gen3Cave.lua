@@ -153,6 +153,10 @@ end
 -- (their dark drawing is the pit); boulder tiles are boulders on the floor, like the round rocks of Granite Cave.
 M.PIT={general__pacifidlog={[0x238]=1,[0x239]=1,[0x23A]=1,[0x240]=1,[0x241]=1,[0x242]=1,[0x248]=1,[0x249]=1,[0x24A]=1,[0x24B]=1,[0x24D]=1}}
 M.BOULDER={general__pacifidlog={[0x207]=1,[0x20F]=1,[0x217]=1,[0x21F]=1}}
+-- (the arch cap over a stair alcove of the pillar's wall: a cave-wall piece of its own that cut the wall into separate
+-- masses, and the 2x2 end piece beyond the last alcove, too small for the course builder, stood as a tall dome: a cap is
+-- cliff like the wall beside it, so the whole wall row is one mass)
+M.CAP={general__pacifidlog={[0x23C]=1}}
 M.BOULDER_FLOOR={general__pacifidlog={[0x207]=0x235,[0x20F]=0x234,[0x217]=0x234,[0x21F]=0x234}}
 -- (the ridge along a dive lane is a thin lip, not a wall: it stands UNDERWATER_MAXH over the lane floor)
 M.UNDERWATER_MAXH=16
@@ -169,6 +173,12 @@ function M.settle(def,cells)
  end
  -- (one lake, one level: the floor solver rated each lava cell from its own neighbours, so a lake lay at 0 on one side
  -- and 32 on the other; it takes the lowest level of the lake)
+ for _,c in pairs(cells)do
+  local cap=M.CAP[c.pair]
+  if cap and cap[c.mid] and c.shape and c.shape.kind=='caveWall' and c.collision==7 and not (c.prop or c.stairs or c.object or c.objectTop) then
+   c.shape={kind='cliff',cap=c.mid,side=c.mid,ground=1,height=32}
+  end
+ end
  local done={}
  for _,c in pairs(cells)do
   if c.caveLava and not done[c] then
@@ -187,10 +197,13 @@ function M.settle(def,cells)
  end
  for _,c in pairs(cells)do
   local k=c.shape and c.shape.kind
-  if (k=='caveWall' or k=='cliff') and c.collision==7 and not (c.prop or c.stairs or c.object or c.objectTop) then
+  if (k=='caveWall' or k=='cliff' or k=='flat') and c.collision==7 and not (c.prop or c.stairs or c.object or c.objectTop) then
    local pit,boulder=M.PIT[c.pair],M.BOULDER[c.pair]
    if pit and pit[c.mid] then c.shape={kind='flat',ground=c.shape.ground,reviewedSurface=true};c.noFurniture=true
-   elseif boulder and boulder[c.mid] then c.shape={kind='rock',ground=M.BOULDER_FLOOR[c.pair][c.mid],floorTile=M.BOULDER_FLOOR[c.pair][c.mid],height=14};c.noFurniture=true end
+   elseif boulder and boulder[c.mid] then c.shape={kind='rock',ground=M.BOULDER_FLOOR[c.pair][c.mid],floorTile=M.BOULDER_FLOOR[c.pair][c.mid],height=14};c.noFurniture=true
+    -- (a boulder is not wall for the rock behind it: with collision 7 the course builder counted its cell as solid rock and
+    -- raised the wall behind every boulder one CAVE_RISE; it still blocks the player through the engine's own collision)
+    c.collision=43 end
   end
  end
  if underwater(def) then
