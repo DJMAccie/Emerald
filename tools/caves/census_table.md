@@ -1,0 +1,146 @@
+| map | type | family | size | rock cells | rock | dome | relief | top tiles |
+|---|---|---|---|---|---|---|---|---|
+| EM_UNDERWATER_ROUTE124 | 5 | underwater | 80x80 | 5731 | 5731 | 0 | 0 | 213:4985 28E:86 284:83 28D:81 |
+| EM_UNDERWATER_ROUTE126 | 5 | underwater | 80x80 | 5504 | 5504 | 0 | 0 | 213:4021 217:152 21E:99 20B:93 |
+| EM_UNDERWATER_ROUTE127 | 5 | underwater | 80x80 | 5770 | 5770 | 0 | 0 | 213:2947 217:844 215:548 207:140 |
+| EM_UNDERWATER_ROUTE128 | 5 | underwater | 120x40 | 4536 | 4536 | 0 | 0 | 213:2985 217:347 21E:329 20E:102 |
+| EM_UNDERWATER_ROUTE129 | 5 | underwater | 80x40 | 3035 | 3035 | 0 | 0 | 213:1894 215:279 21E:174 217:121 |
+| EM_UNDERWATER_ROUTE105 | 5 | underwater | 40x80 | 2979 | 2979 | 0 | 0 | 213:1150 215:552 21B:388 217:174 |
+| EM_UNDERWATER_ROUTE125 | 5 | underwater | 80x40 | 2488 | 2480 | 8 | 0 | 213:930 215:606 217:476 284:73 |
+| EM_ROUTE114_FOSSIL_MANIACS_HOUSE | 8 | generic_building | 10x8 | 0 | 0 | 0 | 0 |  |
+| EM_ROUTE114_FOSSIL_MANIACS_TUNNEL | 8 | fallarbor | 13x26 | 0 | 0 | 0 | 0 |  |
+| EM_METEOR_FALLS_1F_1R | 4 | meteor_falls | 30x42 | 599 | 595 | 4 | 0 | 244:127 23C:42 234:41 231:32 |
+| EM_METEOR_FALLS_1F_2R | 4 | meteor_falls | 30x32 | 564 | 562 | 2 | 0 | 201:98 231:75 228:51 23E:42 |
+| EM_METEOR_FALLS_B1F_1R | 4 | meteor_falls | 29x38 | 623 | 623 | 0 | 0 | 201:170 210:53 228:52 212:50 |
+| EM_METEOR_FALLS_B1F_2R | 4 | meteor_falls | 11x18 | 130 | 130 | 0 | 0 | 22A:28 228:28 234:16 23C:16 |
+| EM_RUSTURF_TUNNEL | 4 | rusturf_tunnel | 36x24 | 643 | 643 | 0 | 0 | 211:229 209:99 219:82 212:53 |
+| EM_UNDERWATER_SOOTOPOLIS_CITY | 5 | underwater | 20x10 | 167 | 167 | 0 | 0 | 21E:37 213:36 207:16 206:14 |
+| EM_DESERT_RUINS | 4 | cave | 17x33 | 264 | 258 | 6 | 0 | 2E1:36 308:36 309:20 2DA:20 |
+| EM_GRANITE_CAVE_1F | 4 | cave | 42x15 | 411 | 410 | 1 | 0 | 211:122 219:92 209:59 210:32 |
+| EM_GRANITE_CAVE_B1F | 4 | cave | 32x26 | 347 | 346 | 1 | 0 | 211:112 219:81 209:54 212:20 |
+| EM_GRANITE_CAVE_B2F | 4 | cave | 32x26 | 347 | 346 | 1 | 0 | 211:112 219:81 209:54 212:20 |
+| EM_GRANITE_CAVE_STEVENS_ROOM | 4 | cave | 15x14 | 175 | 175 | 0 | 0 | 211:50 210:24 221:24 212:22 |
+| EM_FIERY_PATH | 4 | lavaridge | 35x38 | 1053 | 971 | 82 | 0 | 271:577 272:85 270:64 274:62 |
+| EM_MT_PYRE_1F | 8 | facility | 22x19 | 0 | 0 | 0 | 0 |  |
+| EM_MT_PYRE_2F | 8 | facility | 13x13 | 0 | 0 | 0 | 0 |  |
+| EM_MT_PYRE_3F | 8 | facility | 13x13 | 0 | 0 | 0 | 0 |  |
+| EM_MT_PYRE_4F | 8 | facility | 13x13 | 0 | 0 | 0 | 0 |  |
+| EM_MT_PYRE_5F | 8 | facility | 13x13 | 0 | 0 | 0 | 0 |  |
+| EM_MT_PYRE_6F | 8 | facility | 13x13 | 0 | 0 | 0 | 0 |  |
+| EM_AQUA_HIDEOUT_1F | 8 | facility | 28x30 | 0 | 0 | 0 | 0 |  |
+| EM_AQUA_HIDEOUT_B1F | 8 | facility | 51x24 | 0 | 0 | 0 | 0 |  |
+| EM_AQUA_HIDEOUT_B2F | 8 | facility | 34x24 | 0 | 0 | 0 | 0 |  |
+| EM_UNDERWATER_SEAFLOOR_CAVERN | 5 | underwater | 14x9 | 103 | 103 | 0 | 0 | 213:25 21E:12 206:10 207:10 |
+| EM_SEAFLOOR_CAVERN_ENTRANCE | 4 | cave | 20x20 | 190 | 190 | 0 | 0 | 2F1:72 390:15 2F9:14 30B:12 |
+| EM_SEAFLOOR_CAVERN_ROOM1 | 4 | cave | 20x21 | 215 | 215 | 0 | 0 | 2F1:53 2F2:34 2E9:27 2F0:25 |
+| EM_SEAFLOOR_CAVERN_ROOM2 | 4 | cave | 18x12 | 158 | 150 | 8 | 0 | 2F1:57 2E9:15 30B:9 2F2:9 |
+| EM_SEAFLOOR_CAVERN_ROOM3 | 4 | cave | 16x17 | 162 | 162 | 0 | 0 | 2F1:46 2F2:28 2F0:25 2F9:13 |
+| EM_SEAFLOOR_CAVERN_ROOM4 | 4 | cave | 18x19 | 218 | 218 | 0 | 0 | 2F1:66 2F0:32 2F2:30 2E9:22 |
+| EM_SEAFLOOR_CAVERN_ROOM5 | 4 | cave | 20x20 | 256 | 256 | 0 | 0 | 2F1:79 2F2:33 2F0:33 2F9:32 |
+| EM_SEAFLOOR_CAVERN_ROOM6 | 4 | pacifidlog | 24x23 | 203 | 196 | 7 | 0 | 27A:40 281:37 278:36 27E:33 |
+| EM_SEAFLOOR_CAVERN_ROOM7 | 4 | pacifidlog | 23x25 | 177 | 172 | 5 | 0 | 278:44 27A:43 281:33 27E:18 |
+| EM_SEAFLOOR_CAVERN_ROOM8 | 4 | cave | 11x14 | 100 | 100 | 0 | 0 | 2F1:37 2F2:20 2F0:20 2F9:4 |
+| EM_SEAFLOOR_CAVERN_ROOM9 | 4 | cave | 27x46 | 930 | 927 | 3 | 0 | 2F1:313 2F9:74 211:73 2F0:72 |
+| EM_CAVE_OF_ORIGIN_ENTRANCE | 4 | cave | 19x26 | 415 | 415 | 0 | 0 | 333:156 322:68 320:67 332:36 |
+| EM_CAVE_OF_ORIGIN_1F | 4 | cave | 23x23 | 436 | 436 | 0 | 0 | 333:127 329:68 322:58 332:57 |
+| EM_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1 | 4 | cave | 23x23 | 415 | 415 | 0 | 0 | 333:156 322:68 320:67 332:36 |
+| EM_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2 | 4 | cave | 21x21 | 396 | 396 | 0 | 0 | 333:153 322:68 320:67 329:27 |
+| EM_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3 | 4 | cave | 19x21 | 396 | 396 | 0 | 0 | 333:153 322:68 320:67 329:27 |
+| EM_CAVE_OF_ORIGIN_B1F | 4 | cave | 19x19 | 275 | 267 | 8 | 0 | 333:58 329:39 332:33 322:29 |
+| EM_VICTORY_ROAD_1F | 4 | cave | 46x45 | 1364 | 1364 | 0 | 0 | 211:477 219:185 209:172 212:160 |
+| EM_VICTORY_ROAD_B1F | 4 | cave | 46x31 | 1055 | 1055 | 0 | 0 | 211:412 219:173 210:138 212:131 |
+| EM_VICTORY_ROAD_B2F | 4 | cave | 46x31 | 1055 | 1055 | 0 | 0 | 211:412 219:173 210:138 212:131 |
+| EM_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM | 4 | cave | 35x35 | 794 | 794 | 0 | 0 | 210:141 212:139 219:137 209:124 |
+| EM_SHOAL_CAVE_LOW_TIDE_INNER_ROOM | 4 | cave | 46x38 | 952 | 949 | 3 | 0 | 219:211 210:185 212:182 209:134 |
+| EM_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM | 4 | cave | 21x15 | 255 | 253 | 2 | 0 | 219:84 201:41 209:34 211:20 |
+| EM_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM | 4 | cave | 31x14 | 323 | 322 | 1 | 0 | 211:134 219:51 209:45 210:34 |
+| EM_SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM | 4 | cave | 35x35 | 569 | 565 | 4 | 0 | 209:99 211:94 212:90 210:89 |
+| EM_SHOAL_CAVE_HIGH_TIDE_INNER_ROOM | 4 | cave | 46x38 | 759 | 755 | 4 | 0 | 219:124 211:119 210:112 212:108 |
+| EM_ISLAND_CAVE | 4 | cave | 17x33 | 264 | 258 | 6 | 0 | 2E1:36 308:36 309:20 2DA:20 |
+| EM_ANCIENT_TOMB | 4 | cave | 17x33 | 264 | 258 | 6 | 0 | 2E1:36 308:36 309:20 2DA:20 |
+| EM_UNDERWATER_ROUTE134 | 5 | underwater | 18x10 | 158 | 158 | 0 | 0 | 213:42 21E:25 207:16 206:14 |
+| EM_UNDERWATER_SEALED_CHAMBER | 5 | underwater | 22x48 | 740 | 740 | 0 | 0 | 213:466 212:40 210:40 211:40 |
+| EM_SEALED_CHAMBER_OUTER_ROOM | 4 | cave | 21x23 | 320 | 320 | 0 | 0 | 209:60 212:57 210:57 219:41 |
+| EM_SEALED_CHAMBER_INNER_ROOM | 4 | cave | 21x23 | 297 | 297 | 0 | 0 | 2F2:58 2F0:58 2E9:48 2F9:40 |
+| EM_SCORCHED_SLAB | 4 | cave | 15x20 | 189 | 189 | 0 | 0 | 211:81 212:27 210:27 219:14 |
+| EM_AQUA_HIDEOUT_UNUSED_RUBY_MAP1 | 4 | facility | 28x30 | 299 | 272 | 27 | 0 | 20A:56 379:40 07C:25 06C:22 |
+| EM_AQUA_HIDEOUT_UNUSED_RUBY_MAP2 | 4 | facility | 62x24 | 420 | 418 | 2 | 0 | 2E0:108 221:95 20A:93 079:21 |
+| EM_AQUA_HIDEOUT_UNUSED_RUBY_MAP3 | 4 | facility | 34x24 | 214 | 206 | 8 | 0 | 20A:47 221:38 2E0:34 210:9 |
+| EM_SKY_PILLAR_ENTRANCE | 4 | cave | 18x18 | 247 | 247 | 0 | 0 | 211:96 212:42 210:41 219:28 |
+| EM_SKY_PILLAR_1F | 4 | pacifidlog | 14x14 | 63 | 62 | 1 | 0 | 241:22 227:11 22F:11 239:4 |
+| EM_SKY_PILLAR_2F | 4 | pacifidlog | 14x14 | 62 | 60 | 2 | 0 | 241:22 227:8 22F:8 239:4 |
+| EM_SKY_PILLAR_3F | 4 | pacifidlog | 14x14 | 65 | 57 | 8 | 0 | 241:23 227:5 22F:5 239:4 |
+| EM_SKY_PILLAR_4F | 4 | pacifidlog | 14x14 | 72 | 62 | 10 | 0 | 241:22 21F:6 227:5 22F:5 |
+| EM_SHOAL_CAVE_LOW_TIDE_ICE_ROOM | 4 | cave | 20x30 | 284 | 263 | 21 | 0 | 380:61 382:58 381:48 389:38 |
+| EM_SKY_PILLAR_5F | 4 | pacifidlog | 14x14 | 91 | 89 | 2 | 0 | 241:46 227:8 22F:8 239:6 |
+| EM_MAGMA_HIDEOUT_1F | 4 | lavaridge | 37x38 | 1007 | 917 | 90 | 0 | 271:429 272:99 274:96 270:87 |
+| EM_MAGMA_HIDEOUT_2F_1R | 4 | lavaridge | 33x39 | 888 | 842 | 46 | 0 | 271:248 272:207 306:186 274:151 |
+| EM_MAGMA_HIDEOUT_2F_2R | 4 | lavaridge | 49x28 | 1090 | 980 | 110 | 0 | 271:618 274:96 270:67 30C:51 |
+| EM_MAGMA_HIDEOUT_3F_1R | 4 | lavaridge | 28x24 | 484 | 425 | 59 | 0 | 306:81 274:78 272:72 271:51 |
+| EM_MAGMA_HIDEOUT_3F_2R | 4 | lavaridge | 24x17 | 183 | 160 | 23 | 0 | 271:76 272:21 274:18 306:15 |
+| EM_MAGMA_HIDEOUT_4F | 4 | lavaridge | 59x28 | 1243 | 1106 | 137 | 0 | 271:306 274:176 270:149 272:99 |
+| EM_MAGMA_HIDEOUT_3F_3R | 4 | lavaridge | 33x24 | 691 | 619 | 72 | 0 | 274:173 306:173 272:163 271:30 |
+| EM_MAGMA_HIDEOUT_2F_3R | 4 | lavaridge | 60x19 | 1011 | 928 | 83 | 0 | 274:312 271:245 272:150 306:111 |
+| EM_MIRAGE_TOWER_1F | 4 | mirage_tower | 21x17 | 202 | 200 | 2 | 0 | 209:44 219:41 212:32 210:32 |
+| EM_MIRAGE_TOWER_2F | 4 | mirage_tower | 21x17 | 206 | 204 | 2 | 0 | 209:45 219:42 212:32 210:32 |
+| EM_MIRAGE_TOWER_3F | 4 | mirage_tower | 21x17 | 202 | 202 | 0 | 0 | 209:45 219:41 210:32 212:31 |
+| EM_MIRAGE_TOWER_4F | 4 | mirage_tower | 13x10 | 63 | 63 | 0 | 0 | 209:13 219:12 210:9 212:8 |
+| EM_DESERT_UNDERPASS | 4 | cave | 139x23 | 2517 | 2510 | 7 | 0 | 211:506 223:455 219:433 222:155 |
+| EM_ARTISAN_CAVE_B1F | 4 | cave | 46x54 | 1674 | 1673 | 1 | 0 | 211:452 210:300 219:253 212:226 |
+| EM_ARTISAN_CAVE_1F | 4 | cave | 21x22 | 416 | 416 | 0 | 0 | 211:223 212:58 210:58 219:25 |
+| EM_UNDERWATER_MARINE_CAVE | 5 | underwater | 20x10 | 191 | 191 | 0 | 0 | 213:102 21E:26 214:19 212:19 |
+| EM_MARINE_CAVE_ENTRANCE | 4 | cave | 20x20 | 224 | 224 | 0 | 0 | 2F1:106 390:15 2F9:14 304:13 |
+| EM_MARINE_CAVE_END | 4 | cave | 27x30 | 520 | 517 | 3 | 0 | 2F1:134 2F3:50 2F9:44 2F0:33 |
+| EM_TERRA_CAVE_ENTRANCE | 4 | cave | 20x20 | 276 | 276 | 0 | 0 | 2F1:99 30B:42 30A:32 2EB:18 |
+| EM_TERRA_CAVE_END | 4 | cave | 27x30 | 625 | 625 | 0 | 0 | 2F1:140 2F3:50 2F9:45 2F0:41 |
+| EM_ALTERING_CAVE | 4 | cave | 32x24 | 492 | 492 | 0 | 0 | 211:293 223:42 219:34 210:24 |
+| EM_METEOR_FALLS_STEVENS_CAVE | 4 | meteor_falls | 30x32 | 806 | 806 | 0 | 0 | 228:145 212:133 209:124 231:118 |
+| EM_SECRET_BASE_RED_CAVE1 | 9 | secret_base_red_cave | 11x9 | 43 | 43 | 0 | 0 | 210:8 202:7 209:5 212:4 |
+| EM_SECRET_BASE_BROWN_CAVE1 | 9 | secret_base_brown_cave | 11x9 | 41 | 41 | 0 | 0 | 202:8 210:7 20B:6 209:5 |
+| EM_SECRET_BASE_BLUE_CAVE1 | 9 | secret_base_blue_cave | 11x9 | 45 | 45 | 0 | 0 | 210:9 202:8 20B:5 209:5 |
+| EM_SECRET_BASE_YELLOW_CAVE1 | 9 | secret_base_yellow_cave | 11x9 | 38 | 38 | 0 | 0 | 202:8 209:6 20B:5 212:5 |
+| EM_SECRET_BASE_TREE1 | 9 | secret_base_tree | 11x9 | 39 | 39 | 0 | 0 | 202:8 20B:6 210:5 209:5 |
+| EM_SECRET_BASE_SHRUB1 | 9 | secret_base_shrub | 11x9 | 42 | 42 | 0 | 0 | 202:7 210:6 209:6 20B:6 |
+| EM_SECRET_BASE_RED_CAVE2 | 9 | secret_base_red_cave | 7x16 | 65 | 65 | 0 | 0 | 210:25 209:11 20B:11 202:3 |
+| EM_SECRET_BASE_BROWN_CAVE2 | 9 | secret_base_brown_cave | 14x9 | 66 | 66 | 0 | 0 | 210:14 202:11 209:11 20B:10 |
+| EM_SECRET_BASE_BLUE_CAVE2 | 9 | secret_base_blue_cave | 15x7 | 44 | 44 | 0 | 0 | 202:13 212:9 20B:4 210:4 |
+| EM_SECRET_BASE_YELLOW_CAVE2 | 9 | secret_base_yellow_cave | 14x9 | 65 | 65 | 0 | 0 | 202:12 210:12 209:11 20B:11 |
+| EM_SECRET_BASE_TREE2 | 9 | secret_base_tree | 7x16 | 60 | 60 | 0 | 0 | 210:20 209:12 20B:11 202:4 |
+| EM_SECRET_BASE_SHRUB2 | 9 | secret_base_shrub | 15x7 | 44 | 44 | 0 | 0 | 202:12 212:8 210:6 209:4 |
+| EM_SECRET_BASE_RED_CAVE3 | 9 | secret_base_red_cave | 15x8 | 66 | 66 | 0 | 0 | 210:18 202:11 20B:8 209:7 |
+| EM_SECRET_BASE_BROWN_CAVE3 | 9 | secret_base_brown_cave | 15x11 | 92 | 92 | 0 | 0 | 210:28 20B:15 209:14 202:12 |
+| EM_SECRET_BASE_BLUE_CAVE3 | 9 | secret_base_blue_cave | 10x17 | 110 | 110 | 0 | 0 | 210:34 202:18 212:16 209:12 |
+| EM_SECRET_BASE_YELLOW_CAVE3 | 9 | secret_base_yellow_cave | 12x11 | 65 | 65 | 0 | 0 | 210:20 209:10 20B:10 202:8 |
+| EM_SECRET_BASE_TREE3 | 9 | secret_base_tree | 17x8 | 69 | 69 | 0 | 0 | 202:14 20B:13 209:11 212:7 |
+| EM_SECRET_BASE_SHRUB3 | 9 | secret_base_shrub | 13x11 | 74 | 74 | 0 | 0 | 202:18 212:15 210:12 209:6 |
+| EM_SECRET_BASE_RED_CAVE4 | 9 | secret_base_red_cave | 9x15 | 74 | 74 | 0 | 0 | 210:20 20B:11 202:10 209:10 |
+| EM_SECRET_BASE_BROWN_CAVE4 | 9 | secret_base_brown_cave | 14x12 | 93 | 93 | 0 | 0 | 210:23 202:16 20B:15 209:14 |
+| EM_SECRET_BASE_BLUE_CAVE4 | 9 | secret_base_blue_cave | 9x17 | 90 | 90 | 0 | 0 | 210:38 209:12 20B:12 202:6 |
+| EM_SECRET_BASE_YELLOW_CAVE4 | 9 | secret_base_yellow_cave | 13x14 | 98 | 98 | 0 | 0 | 210:30 202:17 209:12 20B:11 |
+| EM_SECRET_BASE_TREE4 | 9 | secret_base_tree | 14x14 | 113 | 113 | 0 | 0 | 210:36 202:15 209:15 20B:15 |
+| EM_SECRET_BASE_SHRUB4 | 9 | secret_base_shrub | 14x11 | 79 | 79 | 0 | 0 | 202:14 210:14 20B:13 209:12 |
+| EM_FARAWAY_ISLAND_ENTRANCE | 8 | rustboro | 34x46 | 0 | 0 | 0 | 0 |  |
+| EM_FARAWAY_ISLAND_INTERIOR | 8 | fortree | 29x26 | 0 | 0 | 0 | 0 |  |
+| EM_NAVEL_ROCK_EXTERIOR | 8 | dewford | 21x24 | 0 | 0 | 0 | 0 |  |
+| EM_NAVEL_ROCK_HARBOR | 8 | island_harbor | 17x13 | 0 | 0 | 0 | 0 |  |
+| EM_NAVEL_ROCK_ENTRANCE | 4 | navel_rock | 21x32 | 168 | 168 | 0 | 0 | 212:49 210:49 219:32 247:22 |
+| EM_NAVEL_ROCK_B1F | 4 | navel_rock | 23x11 | 88 | 88 | 0 | 0 | 219:35 247:18 212:15 210:15 |
+| EM_NAVEL_ROCK_FORK | 4 | navel_rock | 27x86 | 667 | 667 | 0 | 0 | 210:248 212:247 219:75 247:56 |
+| EM_NAVEL_ROCK_UP1 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_UP2 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_UP3 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_UP4 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_TOP | 4 | navel_rock | 25x28 | 663 | 663 | 0 | 0 | 33C:417 34C:64 35C:25 347:15 |
+| EM_NAVEL_ROCK_DOWN01 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_DOWN02 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_DOWN03 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_DOWN04 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_DOWN05 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_DOWN06 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_DOWN07 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_DOWN08 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_DOWN09 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_DOWN10 | 4 | navel_rock | 9x8 | 38 | 38 | 0 | 0 | 247:9 219:8 210:8 212:7 |
+| EM_NAVEL_ROCK_DOWN11 | 4 | navel_rock | 9x8 | 36 | 36 | 0 | 0 | 247:9 210:8 219:7 212:7 |
+| EM_NAVEL_ROCK_BOTTOM | 4 | navel_rock | 22x22 | 417 | 417 | 0 | 0 | 365:54 212:42 3A2:42 3A0:42 |
+SKIPS ['EM_METEOR_FALLS_1_F_1_R', 'EM_METEOR_FALLS_1_F_2_R', 'EM_METEOR_FALLS_B1_F_1_R', 'EM_METEOR_FALLS_B1_F_2_R', 'EM_GRANITE_CAVE_1_F', 'EM_GRANITE_CAVE_B1_F', 'EM_GRANITE_CAVE_B2_F', 'EM_AQUA_HIDEOUT_1_F', 'EM_AQUA_HIDEOUT_B1_F', 'EM_AQUA_HIDEOUT_B2_F', 'EM_CAVE_OF_ORIGIN_1_F', 'EM_CAVE_OF_ORIGIN_B1_F', 'EM_VICTORY_ROAD_1_F', 'EM_VICTORY_ROAD_B1_F', 'EM_VICTORY_ROAD_B2_F', 'EM_SKY_PILLAR_1_F', 'EM_SKY_PILLAR_2_F', 'EM_SKY_PILLAR_3_F', 'EM_SKY_PILLAR_4_F', 'EM_SKY_PILLAR_5_F', 'EM_MAGMA_HIDEOUT_1_F', 'EM_MAGMA_HIDEOUT_2_F_1_R', 'EM_MAGMA_HIDEOUT_2_F_2_R', 'EM_MAGMA_HIDEOUT_3_F_1_R', 'EM_MAGMA_HIDEOUT_3_F_2_R', 'EM_MAGMA_HIDEOUT_4_F', 'EM_MAGMA_HIDEOUT_3_F_3_R', 'EM_MAGMA_HIDEOUT_2_F_3_R', 'EM_MIRAGE_TOWER_1_F', 'EM_MIRAGE_TOWER_2_F', 'EM_MIRAGE_TOWER_3_F', 'EM_MIRAGE_TOWER_4_F', 'EM_ARTISAN_CAVE_B1_F', 'EM_ARTISAN_CAVE_1_F', 'EM_NAVEL_ROCK_B1_F']
