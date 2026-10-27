@@ -10,7 +10,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'relief'))
 from emdata import Layout
 CROP = os.path.join(ROOT, 'skills', 'emerald-terrain', 'scripts', 'crop2d.py')
-S, H0 = 48, 40
+S, H0 = 48, 40  # H0 is re-derived per map in the loop
 font = ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial Bold.ttf', 22)
 for m in sys.argv[1:]:
     L = Layout(m)
@@ -18,6 +18,7 @@ for m in sys.argv[1:]:
     subprocess.run(['python3', CROP, L.slot, L.pair, '0', '0', str(L.w-1), str(L.h-1), tmp, str(S//16)], check=True, capture_output=True)
     clean = np.asarray(Image.open(tmp).convert('RGB')).astype(int); os.unlink(tmp)
     drawn = Image.open(os.path.join(ROOT, 'docs', 'elevation', 'draw', m + '.png')).convert('RGB')
+    H0 = 0 if drawn.height == clean.shape[0] else 40   # a resave that lost the header strip has no offset
     d = np.asarray(drawn).astype(int)[H0:H0+clean.shape[0], :clean.shape[1]]
     diff = (np.abs(d - clean).sum(axis=2) > 60)
     diff = ndimage.binary_opening(diff, iterations=1)

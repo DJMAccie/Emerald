@@ -1,0 +1,4 @@
+# EM_SAFARI_ZONE_SOUTH  PROPOSED heights from the stair/cliff/ledge/shore graph (tools/elevation/learn/propose.py); not the user's drawing
+# x y height [? = unsure]
+19 20 0
+30 7 0

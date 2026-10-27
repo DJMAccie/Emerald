@@ -1,0 +1,26 @@
+# EM_ROUTE116  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet (tools/elevation/find_marks.py)
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0; water = 0 always)
+# (71,3): half-drawn 3, read 3 (fits the 5-3-2-1 descent); to confirm
+20 3 0
+42 3 1
+43 0 2
+44 3 2
+48 4 3
+60 2 4
+71 3 3
+73 0 5
+8 5 0
+33 6 0
+44 6 1
+53 9 1
+59 8 4
+67 6 3
+71 7 2
+71 9 1
+17 13 0
+32 14 0
+42 11 0
+51 14 0
+61 13 2
+66 12 0
+58 15 1

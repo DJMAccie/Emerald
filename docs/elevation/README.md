@@ -19,6 +19,9 @@ beside it shows the reading for the user's check. Tools: `tools/elevation/draw_p
 - A number tagged `top` is the top of a rock / ledge mass, not a walkable plateau (Mt Pyre (21,7): ledge tops one
   course above the 20 path, like the big rocks).
 - `^ up` = an arrow the user drew (stairs / ramp going up).
+- A comma between two digits is a DECIMAL (`0,5` = 0.5, as for the Pacifidlog platforms); it is one mark, not two numbers.
+- A number with a diagonal stroke through it: a 2 struck by a diagonal is a 7. A loop / scribbled circle is always 0.
+- A 0.5 platform sits just above the water/ground it stands in (Route 121 (31,16): a hair above the sea, not a half-step of its own surroundings).
 
 ## Course height: DECIDED 16 px (user 2026-10-27: "if a tile is 16x16px lets do 16px height as well")
 One course = 16 px everywhere; no A/B needed. Gen3Relief.LEVEL=24 must come down to 16 so the counted-relief maps match.

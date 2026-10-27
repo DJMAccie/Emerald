@@ -1,0 +1,6 @@
+# EM_SOUTHERN_ISLAND_EXTERIOR  PROPOSED heights from the stair/cliff/ledge/shore graph (tools/elevation/learn/propose.py); not the user's drawing
+# x y height [? = unsure]
+18 9 3
+25 12 2 ?
+19 16 1 ?
+14 21 0 ?

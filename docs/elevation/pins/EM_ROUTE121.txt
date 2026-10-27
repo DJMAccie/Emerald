@@ -1,0 +1,25 @@
+# EM_ROUTE121  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet (tools/elevation/find_marks.py)
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0; water = 0 always)
+# skipped: (11,1) a heart
+2 2 5
+27 2 3
+61 2 1
+77 1 1
+11 7 3
+26 7 3
+37 6 3
+42 9 2
+47 9 1
+77 6 1
+22 13 1
+41 13 1
+60 10 1
+73 12 1
+1 16 2
+4 18 1
+11 16 1
+20 18 0
+31 16 0.5   # drawn "0,5" (decimal comma) across cells 30-32: one half-course platform, coordinator 2026-10-27
+34 18 0
+46 17 0
+75 18 0
