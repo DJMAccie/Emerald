@@ -7,7 +7,7 @@ SRC=$HOME/Documents/battle-art-notquiteog
 AS="$HOME/Library/Application Support"
 GAME="$AS/pokemon-love2d/mods/BATTLE_ART_VOXEL_FORK"
 QA="$AS/pokemon-love2d-rseqa/mods/BATTLE_ART_VOXEL_FORK"
-B=$HOME/Documents/gen1recomp-modwork/backups/pins-trees-20261027
+B=${B_OVERRIDE:-$HOME/Documents/gen1recomp-modwork/backups/pins-trees-20261027}
 [ -z "$(pgrep -f 'MacOS/love' || true)" ] || { echo "REFUSING: a game is running"; exit 2; }
 mkdir -p "$B"
 f=Gen3Elevation.lua

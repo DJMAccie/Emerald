@@ -5,7 +5,7 @@
 14 1 6
 17 1 5
 18 3 4
-21 0 0
+21 0 6   # small loop on the top terrace = a 6 (user confirmed 2026-10-27; was read as 0)
 24 2 5
 32 0 6
 38 0 8

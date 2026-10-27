@@ -15,6 +15,11 @@ beside it shows the reading for the user's check. Tools: `tools/elevation/draw_p
   is the slope, however many bands it shows (the 2D art is inconsistent about course counts, the pins win).
 - WATERFALLS go straight up, 90 degrees, never on a slant (user 2026-10-27): the fall is a vertical face from the
   upper pool's level to the foot's level, the water tiles of the fall are that vertical sheet, not a ramp.
+- ROCK TOPS ARE FLAT (user 2026-10-27): "the tops of all those rocks are flat! so its really built like plateaus stacked on
+  top of each other." A numbered rock is a flat-topped block at its number; its sides are faces. No rounded, ridged,
+  lathed or spiky rock tops on a pinned map. NOT A CUBE (user 2026-10-27): the faces are slightly slanted, about 5 percent
+  off vertical (the top is a little narrower than the foot), and the top edge is slightly rounded (a small fillet where
+  the face meets the flat top); the top itself stays flat.
 - BRIDGES (user 2026-10-27): a number on a bridge is the DECK's height. The area UNDER a bridge is water and stands at
   the same height as the water around it (0); the deck spans over it, flat from bank to bank, with no dip at either end.
 - UNNUMBERED ROCK = A FACE, NOT A MASS (user 2026-10-27, Route 119 weather station): a cliff band with no number on it
