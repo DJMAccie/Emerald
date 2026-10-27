@@ -1,5 +1,7 @@
 # Hand-drawn elevation pins
 
+The rules below are mirrored with ids in `docs/knowledge/rules.md` (R-10..R-14 heights and reading, R-01..R-06 world shape); that file is the index and gets every new correction first (`tools/knowledge/learn.py`).
+
 `draw/<MAP>.png`: gridded 2D sheets (48 px per cell, coordinates every 5 cells) that the user draws heights on, in place
 (gitignored images). `pins/<MAP>.txt`: Claude's reading of those marks, `x y height`, one line per mark; `_read.png`
 beside it shows the reading for the user's check. Tools: `tools/elevation/draw_pack.py`, `overlay_pins.py`.
@@ -22,6 +24,19 @@ beside it shows the reading for the user's check. Tools: `tools/elevation/draw_p
   the face meets the flat top); the top itself stays flat.
 - BRIDGES (user 2026-10-27): a number on a bridge is the DECK's height. The area UNDER a bridge is water and stands at
   the same height as the water around it (0); the deck spans over it, flat from bank to bank, with no dip at either end.
+- RIDGES ARE SLOPES (user 2026-10-27, Safari Zone Southeast with yellow arrows): the dark brown band tiles are RIDGES that span
+  from one side of the tile to the other in three dimensions: a slope of about 40-45 degrees that climbs across the whole tile from
+  the lower plateau to the upper plateau. They never go up at 90 degrees. The arrow on the sheet points up the ridge. This replaces
+  "band flat at the lower plateau with a wall at its upper edge": the band IS the ramp between the two plateaus.
+  CLARIFIED (user 2026-10-27, Route 114 panel): the band's rows on the sheet are the slope's FOOTPRINT; the slope climbs
+  across them toward the upper plateau (northward for a south-facing band, sideways for a vertical band), so the ground moves
+  up AND over, "an angle and not a straight upward thing". A multi-row band is one ramp over all its rows; keep the angle near
+  40-45 degrees and let the footprint, not the steepness, absorb a bigger rise (knob for the builder, judged on low-cam shots).
+  WEDGES STACK (user 2026-10-27, cube-with-diagonal sketch + Safari Zone North arrows): each band tile is a WEDGE, the cube cut by
+  its diagonal from the bottom of its lower side to the top of its upper side (one tile = one course of rise at 45 degrees).
+  Consecutive band tiles in the climb direction STACK: the next wedge starts where the previous one ends, so N band rows make
+  one continuous slant N courses high. Where the pins ask for a different rise than the rows give, keep the continuous diagonal
+  and scale it (builder knob, judged on low-cam + ortho).
 - UNNUMBERED ROCK = A FACE, NOT A MASS (user 2026-10-27, Route 119 weather station): a cliff band with no number on it
   is where the rock moves up or down vertically (slightly slanted) between the two numbered plateaus beside it: its top
   is the upper plateau's level, its foot the lower one's. It never stands as its own tall rock above the plateaus.
