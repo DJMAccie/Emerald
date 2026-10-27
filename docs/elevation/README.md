@@ -15,6 +15,12 @@ beside it shows the reading for the user's check. Tools: `tools/elevation/draw_p
   is the slope, however many bands it shows (the 2D art is inconsistent about course counts, the pins win).
 - WATERFALLS go straight up, 90 degrees, never on a slant (user 2026-10-27): the fall is a vertical face from the
   upper pool's level to the foot's level, the water tiles of the fall are that vertical sheet, not a ramp.
+- BRIDGES (user 2026-10-27): a number on a bridge is the DECK's height. The area UNDER a bridge is water and stands at
+  the same height as the water around it (0); the deck spans over it, flat from bank to bank, with no dip at either end.
+- UNNUMBERED ROCK = A FACE, NOT A MASS (user 2026-10-27, Route 119 weather station): a cliff band with no number on it
+  is where the rock moves up or down vertically (slightly slanted) between the two numbered plateaus beside it: its top
+  is the upper plateau's level, its foot the lower one's. It never stands as its own tall rock above the plateaus.
+  Only a rock with a number on it is a mass, and that number is its top.
 - Numbers mark the GROUND height, never a tree or prop standing on it (a number under a tree = the ground there).
 - A number tagged `top` is the top of a rock / ledge mass, not a walkable plateau (Mt Pyre (21,7): ledge tops one
   course above the 20 path, like the big rocks).

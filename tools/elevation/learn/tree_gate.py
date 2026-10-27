@@ -30,6 +30,7 @@ for m, cs in sorted(cells.items()):
         if not rim: continue
         lo, hi = min(rim), max(rim); common = rim.most_common(1)[0][0]
         for a in cl:
+            if cs[a][1] == 'nil': continue   # off-map border cell: no pin, no meaning
             ba = cs[a][2]; n += 1
             if ba < lo - 2: sunk += 1; ex.append((a, ba, lo, hi, 'sunk'))
             elif ba > hi + 2: float_ += 1; ex.append((a, ba, lo, hi, 'float'))

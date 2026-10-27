@@ -41,3 +41,4 @@
 33 89 2
 9 96 2
 33 96 1
+7 15 2   # added by the user at 16:04 (re-read of the resaved sheet; the other 40 marks unchanged)
