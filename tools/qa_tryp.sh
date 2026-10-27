@@ -100,7 +100,7 @@ while :; do
 done
 # 3. the files under test
 echo "$FILES" > "$QI/.tryp_swapped"
-for f in $FILES; do cp "$M/$(rel "$f")" "$QI/mods/BATTLE_ART_VOXEL_FORK/$(rel "$f")"; done
+for f in $FILES; do mkdir -p "$(dirname "$QI/mods/BATTLE_ART_VOXEL_FORK/$(rel "$f")")"; cp "$M/$(rel "$f")" "$QI/mods/BATTLE_ART_VOXEL_FORK/$(rel "$f")"; done
 # 4. room for one more game, then boot under the setup lock
 while :; do
   until mkdir /tmp/emerald-qa.setup 2>/dev/null; do stale /tmp/emerald-qa.setup; sleep 1; done; SETUP=1

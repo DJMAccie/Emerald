@@ -4,6 +4,9 @@
 -- Sootopolis), isofrom (Sootopolis -> Mauville), home (Littleroot: its fly spot is a bedroom, so the original Fly).
 -- EM_FLIGHT_OFF=1: 3D off, the original Fly must still end on the destination. EM_FLIGHT_OVERHEAD=1: north-up camera.
 -- EM_FLIGHT_B=1: press B in the air (skip to the landing).
+-- long (Rustboro -> Ever Grande): the whole-world ground (Gen3FlyGround). The Battle Frontier is no fly spot here.
+-- EM_FLIGHT2=<name>: a second flight to that one's destination from where the first landed (the ground is laid).
+-- EM_FLY_TOPDOWN=<dist>: one extra shot mid-flight straight down from <dist> px up, the haze pushed out (QA view).
 -- Prints [fly dbg] lines (phase, progress, altitude, frame ms) and grep-able [FlyOver] lines from the module.
 -- Level 4 = the overview camera, 7 = orbit, 6 = first person (qa_tryp's 4th argument).
 return function(game)
@@ -19,6 +22,7 @@ return function(game)
   iso={'MAPSEC_LILYCOVE_CITY','MAPSEC_SOOTOPOLIS_CITY'},
   isofrom={'MAPSEC_SOOTOPOLIS_CITY','MAPSEC_MAUVILLE_CITY'},
   home={'MAPSEC_RUSTBORO_CITY','MAPSEC_LITTLEROOT_TOWN'},
+  long={'MAPSEC_RUSTBORO_CITY','MAPSEC_EVER_GRANDE_CITY'},
  }
  local name=os.getenv('EM_FLIGHT') or 'short'
  local spec=assert(FLIGHTS[name],'unknown flight '..name)
@@ -55,12 +59,26 @@ return function(game)
   print('[fly dbg] rider sprite',okR,tostring(gid))
  end
  U.shot(game,dir..'/'..name..'_00_before.png')
+ local Ground=lib.require('Gen3FlyGround')
+ Fly.qaGround=true
+ local function flight(destSec,name)
  local dest=assert(Field.flyDestination(destSec),'no destination '..destSec)
  print('[fly dbg] destination',dest.map,dest.x,dest.y)
  local t0=love.timer.getTime()
+ -- EM_FLY_MAPWAIT=<frames>: the Fly town map is open that long first (the world's tilesets load behind it)
+ local mapWait=tonumber(os.getenv('EM_FLY_MAPWAIT') or 0) or 0
+ if mapWait>0 then
+  local RM=require('src.ui.game3.rse.region_map')
+  RM.show({session=game.session,mode='fly',onPick=function()end,onClose=function()end})
+  for _=1,mapWait do U.wait(1) end
+  print('[fly dbg] town map open for',mapWait,'frames, active',tostring(RM.active()~=nil))
+  RM.reset()
+  U.wait(2)
+ end
  Field.flyTo(destSec,mon,{dest=dest})
  -- the cut-in and the fade-in come first (the engine's own); then the flight starts
  local shots={{'mount',.55,'01_mount'},{'fly',.04,'02_liftoff'},{'fly',.30,'03_30'},{'fly',.50,'04_50'},{'fly',.70,'05_70'},{'fly',.90,'06_90'},{'dismount',.45,'07_landing'}}
+ if os.getenv('EM_FLY_TOPDOWN') then table.insert(shots,5,{'fly',.52,'04t_topdown',true}) end
  local took={}
  local started,frames,last=false,0,love.timer.getTime()
  local worst,worstAt=0,''
@@ -109,7 +127,14 @@ return function(game)
     if not took[k] and s.phase==m[1] and s.t>=m[2]*total[m[1]] then
      took[k]=true
      if hist[s.phase] then hist[s.phase][#hist[s.phase]]=nil end
+     if m[4] then   -- the QA overview: straight down from far up, the haze pushed out past the world
+      Fly.qaView={pitch=1.5,dist=tonumber(os.getenv('EM_FLY_TOPDOWN')) or 9000,reach=30000}
+      U.wait(2)
+     end
      U.shot(game,dir..'/'..name..'_'..m[3]..'.png')
+     Fly.qaView=nil
+     local G=Ground.state()
+     print(string.format('[fly dbg] ground at %s: %s, %d quads in %d meshes, %d parts drawn',m[3],G and (G.allLive and 'all laid' or 'laying') or 'off',G and G.quads or 0,G and G.meshes or 0,s.groundDrawn or -1))
      print('[fly dbg] shot',m[3],'t',string.format('%.2f',s.t),'h',string.format('%.0f',s.h or 0),'map',Map.current)
      last=love.timer.getTime()
     end
@@ -135,6 +160,15 @@ return function(game)
  U.shot(game,dir..'/'..name..'_08_landed.png')
  U.wait(90)
  U.shot(game,dir..'/'..name..'_09_after.png')
+ end
+ flight(destSec,name)
+ -- EM_FLIGHT2=<name>: a second flight from where the first landed (the ground is laid by then)
+ local second=os.getenv('EM_FLIGHT2')
+ if second then
+  local spec2=assert(FLIGHTS[second],'unknown flight '..second)
+  U.wait(60)
+  flight(spec2[2],name..'_2'..second)
+ end
  print('[fly dbg] done')
  love.event.quit()
 end

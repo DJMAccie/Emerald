@@ -29,3 +29,6 @@ backups/
 .dsh/
 .cleanup/
 *.bundle
+
+# world fill: copies of the user's reference maps (third-party art) and outputs traced from them
+tools/worldfill/ref/

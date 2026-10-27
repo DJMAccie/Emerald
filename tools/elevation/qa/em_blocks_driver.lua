@@ -44,7 +44,7 @@ return function(game)
       if raw and raw.coll==7 then uncl=uncl+1 end
      end
     end end
-    f:write(('CLS %s PLATEAU=%d FACE=%d MASS=%d WATER=%d DECK=%d OTHER=%d rock=%d unclassified=%d faceHigh=%d massNotFlat=%d treeFix=%d rockFar=%d size=%dx%d\n'):format(id,cnt.PLATEAU or -1,cnt.FACE or -1,cnt.MASS or -1,cnt.WATER or -1,cnt.DECK or -1,cnt.OTHER or -1,rock,uncl,faceHigh,massDiff,cnt.TREE_FIX or -1,cnt.ROCK_FAR or -1,W,H))
+    f:write(('CLS %s PLATEAU=%d FACE=%d MASS=%d WATER=%d DECK=%d OTHER=%d rock=%d unclassified=%d faceHigh=%d massNotFlat=%d treeFix=%d rockFar=%d size=%dx%d otherFix=%d pocketFix=%d\n'):format(id,cnt.PLATEAU or -1,cnt.FACE or -1,cnt.MASS or -1,cnt.WATER or -1,cnt.DECK or -1,cnt.OTHER or -1,rock,uncl,faceHigh,massDiff,cnt.TREE_FIX or -1,cnt.ROCK_FAR or -1,W,H,cnt.OTHER_FIX or -1,cnt.POCKET_FIX or -1))
     for yy=0,H-1 do
      local row={}
      for xx=0,W-1 do local c=fld.cells[Levels.key(xx,yy)];local h=c and c.height
