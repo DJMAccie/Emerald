@@ -1,4 +1,5 @@
 # ALL ROCKS: caves and interiors (task 28)
+> REVIEWED 2026-10-27 (task 30): every map below marked "open: round 2" was recaptured on the installed game and judged; see docs/rock-gates/REVIEW-2026-10-26.md.
 
 Per-map ledger. Counts: tools/caves/census_table.md (143 maps, census 2026-10-26, game lib, QA copy). Done = the user has looked at the sheet.
 Type 8 maps (Mt Pyre, Aqua Hideout and other building interiors) mostly have 0 rock cells: no rock to fix.

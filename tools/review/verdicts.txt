@@ -1,0 +1,110 @@
+EM_BATTLE_FRONTIER_OUTSIDE_EAST|38,40|ok|NOW=OLD, sea walls/hedges read as 2D
+EM_BATTLE_FRONTIER_OUTSIDE_EAST|16,60|ok|NOW=OLD, sea wall low brown, fine
+EM_BATTLE_FRONTIER_OUTSIDE_EAST|63,53|left|two tall spires on the thin ridge (L6 right), NOW=OLD; card
+EM_BATTLE_FRONTIER_OUTSIDE_WEST|11,63|ok|NOW=OLD, sea-edge walls and hedge terrace read as 2D
+EM_BATTLE_FRONTIER_OUTSIDE_WEST|13,38|ok|NOW=OLD; striped tower is a stepped building block, not a flat dome; no rock fault
+EM_BATTLE_FRONTIER_OUTSIDE_WEST|28,33|ok|NOW=OLD, walls and ledges read as 2D
+EM_DEWFORD_TOWN|18,16|ok|NOW=OLD, small boulders read as 2D lumps
+EM_EVER_GRANDE_CITY|18,55|ok|NOW=OLD counted relief, hatched mass with steps reads as 2D
+EM_EVER_GRANDE_CITY|24,54|ok?|NOW=OLD; right-hand sloped ridge shows a row of thin teeth against the sky at L4 (small); mass otherwise right
+EM_FALLARBOR_TOWN|16,1|ok|NOW=OLD, low dirt terraces read as 2D, trees are another task
+EM_FORTREE_CITY|31,3|ok|NOW=OLD, no rock to speak of (tree houses; L6 camera inside a house)
+EM_JAGGED_PASS|14,38|ok?|class C: red terraces stepped like the 2D at L4/L7; L6 close to a ledge shows a leaning wedge slab at left (camera next to a cell edge), small
+EM_LAVARIDGE_TOWN|8,18|ok|NOW=OLD, west band low (2 courses), no stray chunk
+EM_LILYCOVE_CITY|42,37|ok|NOW=OLD, ledges and lump rocks read as 2D
+EM_LILYCOVE_CITY|66,3|left|NOW=OLD; the NE rock with the cave mouth stands as a row of stepped blocks where the 2D is one rounded mass; offshore egg boulder striped; class A tried on Lilycove = flat, not adopted
+EM_LILYCOVE_CITY|45,33|ok|NOW=OLD, ledges read as 2D
+EM_MOSSDEEP_CITY|15,37|ok|fixed f1af2f7/6966aff; south pink mass now a rolling body (was spiky fins), reads flat-ish but user confirmed Mossdeep
+EM_MOSSDEEP_CITY|18,26|ok|fixed f1af2f7/6966aff; west cliff slopes smooth, shoal at sea level; user confirmed
+EM_MT_CHIMNEY|16,37|ok|NOW=OLD, low red ridges and ash pines read as 2D
+EM_MT_CHIMNEY|16,42|ok?|NOW=OLD; rock fine at L4/L7; L6 here sits inside dark red geometry (camera inside a ridge/pine, camera collision, not a rock height)
+EM_MT_PYRE_EXTERIOR|13,45|ok|NOW=OLD counted relief reads as the 2D hatched cliff; the leaning slab at the left map edge in L4 is outside the map
+EM_MT_PYRE_SUMMIT|20,34|ok|NOW=OLD counted relief, ridges and mounds read as 2D
+EM_MT_PYRE_SUMMIT|37,35|ok|NOW=OLD, ridges and cliff wall read as 2D
+EM_PACIFIDLOG_TOWN|11,14|ok|NOW=OLD; north rock is a two-tier mesa like the 2D's plateau with hatched south face; offshore boulders fine
+EM_ROUTE103|21,8|ok|NOW=OLD, NE rock mass and sea stones read as 2D; L6 camera inside a tree not rock
+EM_ROUTE104|22,71|ok|NOW=OLD, sand-to-grass ledge reads as 2D
+EM_ROUTE104|5,55|ok?|NOW=OLD; sea islet is a lumpy pyramid with one spire where the 2D has three rounded cones (small, class A not adopted: thin ribbons)
+EM_ROUTE105|32,44|suspect|NOW=OLD; long N-S sea ridge stands as boxy pillars with gaps (L4/L7), 2D is one continuous 3-cell rounded ridge; islets fine
+EM_ROUTE105|33,24|wrong|NOW=OLD at L4: the ridge is a row of thin hollow-looking box walls with gaps (2D = solid 3-cell rounded ridge); L6 NOW camera differs but also blocky; class A on Route 105 tried and rejected (thin ribbons) -> candidate for a fix
+EM_ROUTE105|32,45|suspect|NOW=OLD; same ridge: boxy pillars with gaps, L6 shows hard-edged slabs; 2D one rounded ridge
+EM_ROUTE106|57,18|ok|NOW=OLD; W rock mass is a rounded mesa with the cave mouth, like the 2D
+EM_ROUTE107|31,16|ok?|NOW=OLD; sea cones read as islets; the 3-cone cluster at (30,15) is one boulder dome plus a thin dark slab post (L7) where the 2D has three rounded cones (small)
+EM_ROUTE108|26,5|ok|NOW=OLD; cone rocks around the ship read as 2D cones
+EM_ROUTE108|3,2|ok|NOW=OLD, sea cones on shoal read as 2D cones
+EM_ROUTE108|10,3|ok|NOW=OLD, sea cones read as 2D cones
+EM_ROUTE109|37,25|ok|NOW=OLD; sea cone and ledge pieces read as 2D cone group
+EM_ROUTE110|3,67|ok|NOW=OLD; small W ledge mass reads like the 2D, rest is trees
+EM_ROUTE111|29,96|ok?|NOW=OLD; desert cones fine; the cave-mouth hill (30,85) is a stepped pyramid where the 2D is a rounded bell (small)
+EM_ROUTE111|18,97|ok|NOW=OLD counted relief; cliff terraces read as 2D
+EM_ROUTE112|35,45|ok|NOW=OLD; red walls 1-2 courses, pink hatched slope reads as 2D; L6 = camera inside trees
+EM_ROUTE112|24,52|ok|NOW=OLD; red ledges and stairs read as 2D
+EM_ROUTE112|18,44|ok|NOW=OLD; red terraces + stairs, no mini steps; L6 camera on a wall face
+EM_ROUTE113|12,6|ok|NOW=OLD at L6/L7 (brown ledge walls two courses, like the 2D); L4 frame caught mid-build (vignette), rock same as OLD; recapture not needed
+EM_ROUTE114|13,44|ok|NOW=OLD counted relief; tan hatched terraces read as 2D
+EM_ROUTE114|19,16|ok|NOW=OLD; brown stepped cliff + waterfall read as 2D
+EM_ROUTE114|13,67|ok|NOW=OLD counted relief; tan terraces read as 2D
+EM_ROUTE115|25,49|ok|NOW=OLD; tan hatched terraces + stairs read as 2D
+EM_ROUTE115|26,16|ok?|NOW=OLD; terraces read right at L4/L6; L7 camera sits inside the plateau (camera collision, not rock height; same as OLD)
+EM_ROUTE115|21,19|ok|NOW=OLD; plateau terraces + stairs read as 2D
+EM_ROUTE116|52,16|ok|NOW=OLD counted relief; hatched pink slope reads as 2D
+EM_ROUTE118|31,7|ok?|NOW=OLD; cave-mouth mound at (30,5) is a smooth faceted dome (L6) and a stepped pyramid from L7, 2D is one rounded mound with the door; acceptable, hard-edged facets; NE block reads as 2D plateau
+EM_ROUTE119|32,95|ok|NOW=OLD counted relief; pink plateau + ridge read as 2D
+EM_ROUTE120|13,15|ok|NOW=OLD; brown cliff wall around the pond reads as 2D
+EM_ROUTE119|33,91|ok|NOW=OLD; west pink cliff, stairs and posts read as 2D
+EM_ROUTE119|30,98|ok|NOW=OLD; pink plateau + stairs read as 2D
+EM_ROUTE120|24,15|ok|NOW=OLD; pond rock island with cave is a rounded brown mass like the 2D
+EM_ROUTE120|7,56|ok|NOW=OLD; cones + cave mound read as 2D cones (mound is a lumpy box with a hump, acceptable); east brown wall fine
+EM_ROUTE121|18,14|ok?|class A fixed: OLD was white-capped stepped blocks, NOW is one smooth cliff body (L4/L7 read as the 2D's two brown tiers); L6 close-up shows the cave-door art stretched on the slope (small)
+EM_ROUTE121|43,12|ok|class A fixed: ledges are one smooth low wall, no pillars; the sea boulder is a round mound like the 2D
+EM_ROUTE121|51,14|ok|class A fixed: shore ledge row now one continuous wall (OLD sawtooth)
+EM_ROUTE122|22,31|ok|NOW=OLD counted relief; big brown/pink mountain with cave mouth reads as the 2D's stepped hatched mountain
+EM_ROUTE123|79,2|ok|NOW=OLD; no rock of note (trees); stones fine
+EM_ROUTE124|50,16|wrong|(round 3 cap probes overshoot to spikes, see ROUND3_cap_heights.png) class B round 3: islands are low flat striped plates barely over the sea (L4/L6/L7); 2D = tall rounded domes/cones 3-4 cells wide; OLD was tall spiky fins, NOW overshoots to flat; knob: Gen3Hills PARAMS for Route 124 (RISE/HMAX)
+EM_ROUTE124|50,21|wrong|class B r3: big island group (50,15..21) is flat striped plates 8-16 px high with no dome shape (L6 looks like a paved floor); 2D = 3 big rounded domes with rounded outline
+EM_ROUTE124|72,44|wrong|class B r3: NE mountain mass (68..76,35..42) is a flat low plateau with one curled striped sheet (L6); 2D = tall hatched mass; too low
+EM_ROUTE125|8,20|ok|NOW=OLD; sea islands read as low rounded rocks; big NE rock fine
+EM_ROUTE126|12,14|wrong|class A r1: pink sea mass is a ring of low flat terraced plates (L6 = flat planks, L4 = nested rectangles); 2D = one tall hatched mass with rounded back; OLD was spiky; too low and too boxy
+EM_ROUTE126|43,58|ok?|NOW=OLD white terraced crater island reads as the 2D plateau with pit; steps are course-like rather than the 2D's rounded hatch bands (small)
+EM_ROUTE126|5,54|ok|NOW=OLD; white sea domes read as 2D domes
+EM_ROUTE127|52,25|ok|class B r3: big island is one rolling rounded body, much better than OLD blocks; reads like the 2D mass (slightly low)
+EM_ROUTE127|53,54|wrong|class B r3: long diagonal pink ridge (3-4 cells wide in 2D) is a thin flat sand-coloured path with plank edges, ~8 px high (L6/L7); 2D = tall hatched ridge; too low/thin
+EM_ROUTE127|7,73|wrong|class B r3: same long ridge as a flat band with ribbon planks; boulder domes (right) read well; ridge too low
+EM_ROUTE128|55,3|wrong|class B r3: long sea wall is low flat plates (L6 sits on a paved plain with two loose blocks, L4 two-tier band); 2D = tall hatched pink wall 4-5 cells deep with scalloped top; too low
+EM_ROUTE128|64,34|wrong|class B r3: sea ridge is a low sloped pink plate, no body/hatch faces (L7); 2D = tall rounded ridge; too low
+EM_ROUTE129|33,29|wrong|class A r1: SW mass is a low flat-topped plate (L6/L7 flat plain with a few stray brown posts); 2D = tall rounded pink mass; cone stones OK; too low
+EM_ROUTE129|57,11|wrong|class A r1: big mass reads as a flat low plank band with water slots (L6), 2D = tall solid rounded body; too low/thin
+EM_ROUTE130|68,13|wrong|class A r1: island is a low sand-coloured slab with blue channel gaps (L6/L7), 2D = one tall rounded island; too low; small cones fine
+EM_ROUTE131|36,7|ok?|class B r3: the cave-mouth mound is two rounded hills with the door; the door stands as a dark post/slot (known); 2D crop here is outside sheet range (map top)
+EM_ROUTE131|5,10|ok|class B r3: long plateau is one rolling body with tan top and hatched face, reads as the 2D shelf (OLD was jagged); fine
+EM_ROUTE131|9,31|ok?|class B r3: terraced plateau reads as the 2D flat-top shelf, steps are broad; sea cones fine; slightly low
+EM_ROUTE132|45,32|ok|class B r3: cones and the near boulder read as 2D cones/domes
+EM_ROUTE133|36,17|ok|class B r3: crater fan gone; the long shelf is a rolling body with a hatched face above the sand, like the 2D; slightly low
+EM_ROUTE134|62,16|wrong|class B r3: the diagonal sea ridge is a low flat band (L6/L7), the 2D is a tall rounded ridge; too low; same family as 127/128
+EM_ROUTE133|43,29|ok|class B r3: shelf and sea cones read as 2D (shelf slightly low, hatched face ok); crater discs gone
+EM_ROUTE134|67,8|ok?|class B r3: two sea humps are low flat-topped slabs (2D = rounded domes); diagonal ridge low; sea cones fine
+EM_ROUTE132|72,10|ok|class B r3: NE shelf is one rolling hatched body, reads as the 2D shelf (OLD was boxy fins); cones fine
+EM_SKY_PILLAR_OUTSIDE|15,21|ok?|class A r1: ridges are one continuous rolling body (pillars/slits gone), two-floor formation with the cave door in place; reads softer/lower than the 2D's hatched ridges but cohesive; user kept ridge height 48
+EM_SOOTOPOLIS_CITY|13,48|ok?|class C: crater is a smooth white slope (flat slab gone), pink fins gone; a few small standing posts on the slope remain (known, hatch cells)
+EM_SOUTHERN_ISLAND_EXTERIOR|15,20|ok|NOW=OLD; terraced island with stairs reads as the 2D
+EM_SAFARI_ZONE_NORTH|16,36|ok|NOW=OLD; low brown ledges, boulder, fences read as 2D
+EM_SAFARI_ZONE_NORTHWEST|21,15|ok?|NOW=OLD; the lone strength boulder is a faceted pink dome at L6 close range (reads rounded at L4/L7); small, class D, facets only
+EM_SKY_PILLAR_TOP|8,17|ok|NOW=OLD; top-floor walls are plain slabs like the 2D bands
+EM_SAFARI_ZONE_NORTHEAST|19,34|ok|NOW=OLD; thin brown ledge walls read as 2D
+EM_SAFARI_ZONE_NORTHWEST|13,37|ok|NOW=OLD; ledges and stairs read as 2D (L6/L7 are inside a ledge/tree, camera not rock)
+EM_SAFARI_ZONE_SOUTH|21,7|ok|NOW=OLD; ledge walls, boulders read as 2D
+EM_VERDANTURF_TOWN|19,2|ok|NOW=OLD; rock cliff behind the Mart reads as 2D; L6 camera against a bush
+EM_ROUTE128|25,9|ok?|class B r3: islet is one rounded hump, good; the west ridge strip beside is low
+EM_ROUTE132|9,16|ok|class B r3: sea domes and cones read as the 2D (dialogue box in frame is the ghost-driver NPC, not rock)
+EM_ROUTE133|12,12|ok|class B r3: long sea shelf now one rolling body (OLD boxy), cones fine; slightly low
+EM_ROUTE134|30,14|ok|class B r3: dome islet is rounded like the 2D, cones fine
+EM_SAFARI_ZONE_SOUTH|10,10|ok|NOW=OLD; ledges and boulders read as 2D
+EM_SAFARI_ZONE_SOUTHEAST|12,32|ok|NOW=OLD; brown ledge walls and the tall rock column read as 2D
+EM_SAFARI_ZONE_SOUTHWEST|9,4|ok|NOW=OLD; ledge with stairs reads as 2D
+EM_SAFARI_ZONE_SOUTH|31,11|ok|NOW=OLD; brick-hatched ledge walls and tall grass read as 2D
+EM_SAFARI_ZONE_SOUTHEAST|6,31|ok|NOW=OLD; tall rock column at right reads as 2D hatched cliff
+EM_SAFARI_ZONE_SOUTHEAST|30,19|ok|NOW=OLD, pixel diff <1% vs the viewed neighbours at 12,32, same ledge class
+EM_SAFARI_ZONE_SOUTHWEST|0,5|ok|NOW=OLD, pixel diff <0.3%; same ledge class as 9,4
+EM_SKY_PILLAR_TOP|21,15|ok|NOW=OLD, pixel-identical to the viewed 8,17
+EM_SOUTHERN_ISLAND_EXTERIOR|21,16|ok|NOW=OLD, pixel-identical to the viewed 15,20
+EM_ROUTE117|34,6|fixed|was wrong (thin fin with a spiky peak at L6/L7); class A (Gen3Hills CLASS_A += EM_ROUTE117), installed this pass: the fin/spiky peak is now one soft rounded mound; yaws 0/90/180, 0 fallbacks

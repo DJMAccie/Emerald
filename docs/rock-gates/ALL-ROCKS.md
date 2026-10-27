@@ -1,4 +1,5 @@
 # ALL-ROCKS: census of every outdoor rock (2026-10-25, task 27)
+> REVIEWED 2026-10-27 (task 30): the per-map verdicts below are the pre-fix census; the signed, current ledger is docs/rock-gates/REVIEW-2026-10-26.md.
 
 Source: per-cell builder census of the INSTALLED game build (tools/relief/stage3/allrocks, game1/), 59 outdoor maps with rock cells, 110 capture spots (docs/rock-gates/general-rollout/allrocks1). One sheet per map: docs/rock-gates/ALL-ROCKS/maps/<MAP>.png, columns = 2D original | 3D level 4 | level 6 | level 7.
 Builders: relief = Gen3Relief counted heights (the new method); rock = Gen3Rock course-built (the OLD rock); dome = Gen3Mass dome (stones, boulders, Frontier/Sootopolis tiles); sea = sea boulders (not part of this pass).

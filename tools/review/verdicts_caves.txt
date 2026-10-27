@@ -1,0 +1,79 @@
+EM_METEOR_FALLS_1F_2R|20,13|ok|walls in rows with lilac bands + purple floor strips read as the 2D
+EM_METEOR_FALLS_B1F_2R|7,14|ok|pool room walls read as 2D
+EM_RUSTURF_TUNNEL|17,20|ok|green rock walls blocks read as 2D, two-level floor
+EM_DESERT_RUINS|9,13|ok|room walls and boulders read as 2D
+EM_GRANITE_CAVE_1F|10,11|ok|brown walls in courses read as 2D
+EM_GRANITE_CAVE_B2F|9,22|ok?|walls fine; L6 a bent plank/stair piece by the ledge looks loose (small)
+EM_GRANITE_CAVE_STEVENS_ROOM|9,10|ok|spiral of hatched ridges reads as 2D
+EM_FIERY_PATH|9,32|ok|red hatched walls, stepped like the 2D
+EM_SEAFLOOR_CAVERN_ENTRANCE|10,13|ok|cavern shore walls read as 2D
+EM_SEAFLOOR_CAVERN_ROOM2|9,7|ok|wall shapes and boulders read as 2D (L6 camera against a wall)
+EM_SEAFLOOR_CAVERN_ROOM3|9,13|ok|walls + boulder cluster read as 2D
+EM_SEAFLOOR_CAVERN_ROOM4|9,15|ok|walls, door arch and ledges read as 2D
+EM_SEAFLOOR_CAVERN_ROOM5|9,16|ok|ledge walls and corridors read as 2D (L6 camera against a wall)
+EM_SEAFLOOR_CAVERN_ROOM8|7,12|ok|boulder row + side walls read as 2D
+EM_SEAFLOOR_CAVERN_ROOM9|14,20|ok|stepped walls + stairs read as 2D
+EM_CAVE_OF_ORIGIN_ENTRANCE|9,13|ok|hatched pillars along the nave read as 2D
+EM_CAVE_OF_ORIGIN_1F|13,17|ok|ledge walls in courses read as 2D
+EM_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP1|13,17|ok|pillar rows read as 2D
+EM_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2|11,15|ok|pillar rows and ledges read as 2D
+EM_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3|9,15|ok|pillar rows read as 2D
+EM_CAVE_OF_ORIGIN_B1F|9,14|ok|crystals + ledges read as 2D (L6 is an NPC close-up)
+EM_VICTORY_ROAD_1F|17,13|ok|terraced ledges read as 2D
+EM_VICTORY_ROAD_B2F|9,26|ok|ledge walls two courses like the 2D; water ledges fine
+EM_SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM|11,13|ok|stepped terraces + stairs read as 2D
+EM_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM|19,11|ok|ridge corridor walls read as 2D
+EM_SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM|25,30|ok|ledge walls around the tidal pool read as 2D
+EM_ISLAND_CAVE|9,13|ok|room walls with boulders read as 2D
+EM_SEALED_CHAMBER_OUTER_ROOM|11,13|ok|terraced wall rows read as 2D
+EM_SEALED_CHAMBER_INNER_ROOM|11,19|ok|corner alcove walls read as 2D
+EM_SCORCHED_SLAB|9,16|ok|pool room walls read as 2D
+EM_AQUA_HIDEOUT_UNUSED_RUBY_MAP1|9,13|ok|the pink hump walls read as 2D mounds; rest is building interior
+EM_AQUA_HIDEOUT_UNUSED_RUBY_MAP2|52,13|ok|three pink slabs with white pads read as 2D
+EM_AQUA_HIDEOUT_UNUSED_RUBY_MAP3|9,13|ok|no rock of note (lab interior)
+EM_SKY_PILLAR_ENTRANCE|7,14|ok|hatched ledge corridors with stairs read as 2D
+EM_SHOAL_CAVE_LOW_TIDE_ICE_ROOM|9,13|ok|ice walls read as 2D
+EM_MAGMA_HIDEOUT_2F_1R|12,33|ok?|terraced hatched walls stepped like the 2D, but the faces carry tall vertical streaks (Gen3Rock face builder, known, user's eye)
+EM_MAGMA_HIDEOUT_3F_2R|9,13|ok|machines on pink floor; red ridges at the left edge read as 2D
+EM_MIRAGE_TOWER_1F|11,13|ok|sand terraced mound with arched slope faces reads as 2D; black void outside is the dark cave edge, as in the 2D
+EM_MIRAGE_TOWER_2F|11,13|ok|same terraced mound as 1F
+EM_MIRAGE_TOWER_3F|11,13|ok|same terraced mound as 1F
+EM_MIRAGE_TOWER_4F|9,8|ok?|rock walls and sand read as 2D; stray black gaps in the floor at the room edge (L7) are the cave void/holes of the 2D layout
+EM_DESERT_UNDERPASS|9,12|ok|brown ledge maze reads as 2D
+EM_ARTISAN_CAVE_1F|11,17|ok|ridge columns read as 2D
+EM_MARINE_CAVE_ENTRANCE|10,13|ok|shore ledges and door read as 2D
+EM_MARINE_CAVE_END|9,26|ok|pool room walls and posts read as 2D
+EM_TERRA_CAVE_ENTRANCE|10,13|ok|zigzag hatched walls read as 2D
+EM_ALTERING_CAVE|22,13|ok|low ledges read as 2D
+EM_METEOR_FALLS_STEVENS_CAVE|16,13|ok|blue-grey hatched ledge maze reads as 2D
+EM_SECRET_BASE_RED_CAVE1|8,7|ok|small cave room with the rim wall reads as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BROWN_CAVE1|8,7|ok|same room, brown; reads as 2D
+EM_SECRET_BASE_BLUE_CAVE1|8,7|ok|same room, blue; reads as 2D
+EM_SECRET_BASE_YELLOW_CAVE1|9,6|ok|same room, yellow; reads as 2D
+EM_SECRET_BASE_TREE1|9,5|ok|hedge-rim room, not rock
+EM_SECRET_BASE_SHRUB1|8,7|ok|hedge-rim room, not rock
+EM_SECRET_BASE_RED_CAVE2|3,13|ok|small secret-base room: rim walls, ridges and ledges read as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BROWN_CAVE2|9,7|ok|small secret-base room: rim walls, ridges and ledges read as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BLUE_CAVE2|9,5|ok|same layout as the viewed red/brown room of this size, other palette (not individually viewed)
+EM_SECRET_BASE_YELLOW_CAVE2|8,7|ok|same layout as the viewed red/brown room of this size, other palette (not individually viewed)
+EM_SECRET_BASE_TREE2|3,13|ok|hedge/tree room, not rock; same layout class as the viewed room
+EM_SECRET_BASE_SHRUB2|9,5|ok|hedge/tree room, not rock; same layout class as the viewed room
+EM_SECRET_BASE_RED_CAVE3|9,4|ok|small secret-base room: rim walls, ridges and ledges read as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BROWN_CAVE3|10,9|ok|small secret-base room: rim walls, ridges and ledges read as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BLUE_CAVE3|4,13|ok|same layout as the viewed red/brown room of this size, other palette (not individually viewed)
+EM_SECRET_BASE_YELLOW_CAVE3|9,9|ok|same layout as the viewed red/brown room of this size, other palette (not individually viewed)
+EM_SECRET_BASE_TREE3|8,6|ok|hedge/tree room, not rock; same layout class as the viewed room
+EM_SECRET_BASE_SHRUB3|9,9|ok|hedge/tree room, not rock; same layout class as the viewed room
+EM_SECRET_BASE_RED_CAVE4|7,13|ok|small secret-base room: rim walls, ridges and ledges read as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BROWN_CAVE4|9,10|ok|small secret-base room: rim walls, ridges and ledges read as 2D (frames carry the secret-base prompt)
+EM_SECRET_BASE_BLUE_CAVE4|5,13|ok|same layout as the viewed red/brown room of this size, other palette (not individually viewed)
+EM_SECRET_BASE_YELLOW_CAVE4|9,12|ok|same layout as the viewed red/brown room of this size, other palette (not individually viewed)
+EM_SECRET_BASE_TREE4|9,12|ok|hedge/tree room, not rock; same layout class as the viewed room
+EM_SECRET_BASE_SHRUB4|9,7|ok|hedge/tree room, not rock; same layout class as the viewed room
+EM_NAVEL_ROCK_ENTRANCE|10,14|ok|low ledge rims + stripe bands read as 2D
+EM_NAVEL_ROCK_B1F|12,9|ok|plain room with a rim wall, as the 2D
+EM_NAVEL_ROCK_FORK|10,43|ok|long ledge corridors read as 2D
+EM_NAVEL_ROCK_UP1|8,7|ok|small room with ledge, reads as 2D
+EM_NAVEL_ROCK_UP2|8,7|ok|same as UP1
+EM_NAVEL_ROCK_TOP|12,13|left|summit (the 2D is a small rounded peak in blue sky) stands as a tall stepped pyramid whose upper tiers are a hollow lattice of thin ridge lines at L4 and a trench between hatched walls at L6; hard (own tileset, Gen3Rock course/ridge builder = task 27's file): card
+EM_NAVEL_ROCK_BOTTOM|12,13|ok?|dark hatched walls + waterfall channel read like the 2D bands; walls slightly spiky at L6
