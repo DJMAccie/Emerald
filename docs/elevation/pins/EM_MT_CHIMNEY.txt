@@ -75,4 +75,4 @@
 9 45 3
 30 43 4
 35 42 3
-37 44 2 # drawn as "| 2" at the SE corner: read as 2, could be 12? unlikely (beside a 3)
+37 44 2 # CONFIRMED by the user: the ground under the tree is 2 (numbers always mark the ground, never the tree)

@@ -12,7 +12,7 @@
 29 6 18
 31 5 17
 20 7 20
-21 7 21 # faint "21" beside the 20 at the summit strip; unsure
+21 7 21 top # user: the two ledges against each other beside the summit path have TOPS one higher (21), like the big rocks; not a walkable plateau, the path stays 20
 20 13 19
 8 12 17
 4 14 15

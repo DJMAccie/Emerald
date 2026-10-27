@@ -1,0 +1,31 @@
+# EM_MT_PYRE_SUMMIT  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet
+# x y height  (cell of the mark; height in 16 px courses)
+# SEAM: the user counted this map as a continuation of EM_MT_PYRE_EXTERIOR (base 20 = the exterior's summit strip 20),
+# so the two maps share one frame: offset 0 between them.
+# Numbers on rock masses = that mass's top (one course above the floor beside it, as the user said for the exterior).
+25 0 25
+14 2 24
+31 2 24
+32 4 23
+10 4 23 # user: symmetrical with the right garden
+34 6 24
+23 6 24
+19 7 23
+23 12 23
+19 12 24
+27 12 24
+16 15 23
+23 15 22
+29 15 23
+17 19 22
+27 21 22
+31 21 22
+34 23 21
+23 25 21
+15 27 22
+31 26 22
+13 30 21
+33 30 21
+11 33 20
+30 33 20
+22 35 20
