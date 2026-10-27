@@ -1,0 +1,42 @@
+# EM_MT_PYRE_EXTERIOR  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0; water = 0 always)
+# no water on this map; lowest mark 2 at the south entrance
+5 1 15
+12 2 19
+15 2 20
+36 0 4
+34 2 15
+8 5 17
+34 4 17
+25 6 20
+29 6 18
+31 5 17
+20 7 20
+21 7 21 # faint "21" beside the 20 at the summit strip; unsure
+20 13 19
+8 12 17
+4 14 15
+27 16 18
+16 18 17
+25 20 17
+16 20 18
+5 20 15
+15 23 17
+26 24 14
+9 27 14
+21 27 14
+5 28 13
+18 31 12
+16 32 11
+13 33 10
+11 35 9
+25 36 9
+7 38 7
+11 38 8
+5 42 6
+9 44 5
+27 43 5
+5 46 4
+17 47 4
+11 48 3
+9 49 2

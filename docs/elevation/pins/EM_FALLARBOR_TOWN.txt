@@ -1,0 +1,4 @@
+# EM_FALLARBOR_TOWN  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet
+# x y height  (cell of the mark; height in 16 px courses above ground 0; water = 0 always)
+16 0 3
+11 9 0
