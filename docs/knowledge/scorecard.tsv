@@ -12,3 +12,14 @@ date	commit	label	maps	pins	exact	diff	unclassified	faceHigh	massNotFlat	treeSun
 2026-10-28	cf5eb30	stairs2	64	1596	1595	1	0	54	0	3	44	0	run_gates.sh stairs2 on the mod source lib	
 2026-10-28	cf5eb30	jag1	64	1611	1610	1	0	54	0	3	44	0	run_gates.sh jag1 on the mod source lib	
 2026-10-28	95cdf02	stairs_rb	64	1611	1610	1	0	54	0	3	44	0	run_gates.sh stairs_rb on the mod source lib	
+2026-10-28	5073a99	stairs_f1	64	1611	1610	1	0	54	0	0	44	0	run_gates.sh stairs_f1 on the mod source lib	
+2026-10-28	e79b41c	pinfix1	64	1612	1611	1	0	54	0	3	44	0	run_gates.sh pinfix1 on the mod source lib	
+2026-10-28	867e432	finding1	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh finding1 on the mod source lib	
+2026-10-28	15b5362	rampedge1	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh rampedge1 on the mod source lib	
+2026-10-28	13d569e	b12ramp1	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh b12ramp1 on the mod source lib	
+2026-10-28	13d569e	b12lake1	64	1612	1611	1	0	51	0	0	44	0	run_gates.sh b12lake1 on the mod source lib	
+2026-10-28	13d569e	b12lake2	64	1612	1611	1	0	51	0	0	44	0	run_gates.sh b12lake2 on the mod source lib	
+2026-10-28	13d569e	pyretri1	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh pyretri1 on the mod source lib	
+2026-10-28	f3db746	b12lake3	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh b12lake3 on the mod source lib	
+2026-10-28	87582ec	b13lake1	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh b13lake1 on the mod source lib	
+2026-10-28	4b00b70	r119lake1	64	1612	1611	1	0	54	0	0	44	0	run_gates.sh r119lake1 on the mod source lib	

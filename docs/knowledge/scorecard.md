@@ -22,6 +22,17 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | 2026-10-28 | cf5eb30 | stairs2 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 | 2026-10-28 | cf5eb30 | jag1 | 64 | 1611 | 1610 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 | 2026-10-28 | 95cdf02 | stairs_rb | 64 | 1611 | 1610 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 5073a99 | stairs_f1 | 64 | 1611 | 1610 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | e79b41c | pinfix1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 867e432 | finding1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 15b5362 | rampedge1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 13d569e | b12ramp1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 13d569e | b12lake1 | 64 | 1612 | 1611 | 1 | 0 | 51 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 13d569e | b12lake2 | 64 | 1612 | 1611 | 1 | 0 | 51 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 13d569e | pyretri1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | f3db746 | b12lake3 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 87582ec | b13lake1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
+| 2026-10-28 | 4b00b70 | r119lake1 | 64 | 1612 | 1611 | 1 | 0 | 54 | 0 | 0 | 44 | 0 |
 
 ## Sources and notes
 
@@ -38,8 +49,19 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 - 2026-10-28 stairs2: run_gates.sh stairs2 on the mod source lib 
 - 2026-10-28 jag1: run_gates.sh jag1 on the mod source lib 
 - 2026-10-28 stairs_rb: run_gates.sh stairs_rb on the mod source lib 
+- 2026-10-28 stairs_f1: run_gates.sh stairs_f1 on the mod source lib 
+- 2026-10-28 pinfix1: run_gates.sh pinfix1 on the mod source lib 
+- 2026-10-28 finding1: run_gates.sh finding1 on the mod source lib 
+- 2026-10-28 rampedge1: run_gates.sh rampedge1 on the mod source lib 
+- 2026-10-28 b12ramp1: run_gates.sh b12ramp1 on the mod source lib 
+- 2026-10-28 b12lake1: run_gates.sh b12lake1 on the mod source lib 
+- 2026-10-28 b12lake2: run_gates.sh b12lake2 on the mod source lib 
+- 2026-10-28 pyretri1: run_gates.sh pyretri1 on the mod source lib 
+- 2026-10-28 b12lake3: run_gates.sh b12lake3 on the mod source lib 
+- 2026-10-28 b13lake1: run_gates.sh b13lake1 on the mod source lib 
+- 2026-10-28 r119lake1: run_gates.sh r119lake1 on the mod source lib 
 
-## Per map, latest run (stairs_rb, 95cdf02)
+## Per map, latest run (r119lake1, 4b00b70)
 
 | map | pins | exact | diff | unclassified | faceHigh | massNotFlat | rock cells |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -104,6 +126,6 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | EM_SAFARI_ZONE_SOUTHEAST | 17 | 17 | 0 | 0 | 0 | 0 | 157 |
 | EM_SKY_PILLAR_OUTSIDE | 18 | 18 | 0 | 0 | 0 | 0 | 256 |
 | EM_SLATEPORT_CITY | 22 | 22 | 0 | 0 | 0 | 0 | 4 |
-| EM_SOOTOPOLIS_CITY | 84 | 84 | 0 | 0 | 4 | 0 | 224 |
+| EM_SOOTOPOLIS_CITY | 85 | 85 | 0 | 0 | 4 | 0 | 224 |
 | EM_SOUTHERN_ISLAND_EXTERIOR | 19 | 19 | 0 | 0 | 0 | 0 | 246 |
 | EM_VERDANTURF_TOWN | 4 | 4 | 0 | 0 | 0 | 0 | 29 |

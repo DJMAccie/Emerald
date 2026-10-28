@@ -289,7 +289,7 @@ Rule: A stair run between two levels is the same wedge as a ridge band tile: abo
 Source: user 2026-10-28: "stairs also adhere to the 45 degree principle"
 Gate: none yet
 Applied: see R-35 (hidden ledges) and the stairs builder (R-34), 2026-10-28
-Lessons: L-32
+Lessons: L-32, L-33
 Status: active
 
 
