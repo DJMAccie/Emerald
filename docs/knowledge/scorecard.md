@@ -17,6 +17,11 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | 2026-10-28 | 1322faa | ledges1 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 | 2026-10-28 | 5734f42 | ledge1 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 | 2026-10-28 | 5be0e45 | ledges2 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 1757c98 | stairs1 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 8527740 | pinq1 | 64 | 1601 | 1600 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | cf5eb30 | stairs2 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | cf5eb30 | jag1 | 64 | 1611 | 1610 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 95cdf02 | stairs_rb | 64 | 1611 | 1610 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 
 ## Sources and notes
 
@@ -28,25 +33,30 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 - 2026-10-28 ledges1: run_gates.sh ledges1 on the mod source lib 
 - 2026-10-28 ledge1: run_gates.sh ledge1 on the mod source lib 
 - 2026-10-28 ledges2: run_gates.sh ledges2 on the mod source lib 
+- 2026-10-28 stairs1: run_gates.sh stairs1 on the mod source lib 
+- 2026-10-28 pinq1: run_gates.sh pinq1 on the mod source lib 
+- 2026-10-28 stairs2: run_gates.sh stairs2 on the mod source lib 
+- 2026-10-28 jag1: run_gates.sh jag1 on the mod source lib 
+- 2026-10-28 stairs_rb: run_gates.sh stairs_rb on the mod source lib 
 
-## Per map, latest run (ledges2, 5be0e45)
+## Per map, latest run (stairs_rb, 95cdf02)
 
 | map | pins | exact | diff | unclassified | faceHigh | massNotFlat | rock cells |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| EM_BATTLE_FRONTIER_OUTSIDE_EAST | 27 | 27 | 0 | 0 | 0 | 0 | 807 |
+| EM_BATTLE_FRONTIER_OUTSIDE_EAST | 32 | 32 | 0 | 0 | 0 | 0 | 807 |
 | EM_BATTLE_FRONTIER_OUTSIDE_WEST | 17 | 17 | 0 | 0 | 0 | 0 | 648 |
 | EM_DEWFORD_TOWN | 3 | 3 | 0 | 0 | 0 | 0 | 11 |
 | EM_EVER_GRANDE_CITY | 36 | 36 | 0 | 0 | 0 | 0 | 1722 |
 | EM_FALLARBOR_TOWN | 2 | 2 | 0 | 0 | 0 | 0 | 65 |
 | EM_FORTREE_CITY | 10 | 10 | 0 | 0 | 0 | 0 | 24 |
-| EM_JAGGED_PASS | 23 | 23 | 0 | 0 | 0 | 0 | 464 |
+| EM_JAGGED_PASS | 33 | 33 | 0 | 0 | 0 | 0 | 464 |
 | EM_LAVARIDGE_TOWN | 7 | 7 | 0 | 0 | 0 | 0 | 96 |
 | EM_LILYCOVE_CITY | 22 | 22 | 0 | 0 | 0 | 0 | 388 |
 | EM_LITTLEROOT_TOWN | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | EM_MAUVILLE_CITY | 5 | 5 | 0 | 0 | 0 | 0 | 0 |
 | EM_MOSSDEEP_CITY | 37 | 37 | 0 | 0 | 0 | 0 | 582 |
 | EM_MT_CHIMNEY | 75 | 75 | 0 | 0 | 0 | 0 | 1071 |
-| EM_MT_PYRE_EXTERIOR | 39 | 38 | 1 | 0 | 0 | 0 | 1410 |
+| EM_MT_PYRE_EXTERIOR | 39 | 39 | 0 | 0 | 0 | 0 | 1410 |
 | EM_MT_PYRE_SUMMIT | 26 | 26 | 0 | 0 | 0 | 0 | 1041 |
 | EM_OLDALE_TOWN | 2 | 2 | 0 | 0 | 0 | 0 | 0 |
 | EM_PACIFIDLOG_TOWN | 14 | 14 | 0 | 0 | 44 | 0 | 324 |
@@ -61,7 +71,7 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | EM_ROUTE107 | 11 | 11 | 0 | 0 | 0 | 0 | 39 |
 | EM_ROUTE108 | 6 | 6 | 0 | 0 | 0 | 0 | 42 |
 | EM_ROUTE109 | 12 | 12 | 0 | 0 | 0 | 0 | 28 |
-| EM_ROUTE110 | 24 | 24 | 0 | 0 | 0 | 0 | 60 |
+| EM_ROUTE110 | 24 | 23 | 1 | 0 | 0 | 0 | 60 |
 | EM_ROUTE111 | 67 | 67 | 0 | 0 | 0 | 0 | 2420 |
 | EM_ROUTE112 | 51 | 51 | 0 | 0 | 1 | 0 | 943 |
 | EM_ROUTE113 | 27 | 27 | 0 | 0 | 0 | 0 | 541 |

@@ -85,3 +85,4 @@
 14 57 2
 17 56 1
 50 56 4
+9 7 10   # (coordinator 4, 2026-10-28: the walkway in front of the Pokemon Center + the top of its 2-tile stairs; the user wrote 10 left of the Center (7,6) and 10 under the west building (1,9), the 11 at (3,5) is the terrace north of it; without this pin the 11 flooded row 7 down the hatched walkway (5..7,4..6) and the stairs (9,8..9) climbed 3 courses on 2 tiles)

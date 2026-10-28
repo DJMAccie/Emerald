@@ -251,3 +251,19 @@ Cause: The builder edited the source directly, then tested from a /tmp copy, and
 Fix: cmp every lib file the install script copies against the game copy BEFORE any install or gate on the source (one loop, see the coordinator 3 handoff); design work happens in a private copy (QA_SRC / SRC_OVERRIDE) and is copied into the source only right before its own install; the stray files were restored from the game and saved in backups/b9-ledge-proto-20261028
 Proof: cmp loop 2026-10-28 13:00: all five terrain files src=game yes after the restore
 Rules: R-26
+
+### L-32 The flight stretch rewrote the grass below a stair
+Symptom: 205 of 315 stair runs started 8-10.7 px above their lower floor; Mossdeep (25,26) had pin 0 but height 10.67 and grew a bogus hidden ledge at (25,27)
+Wrong model: the stair profile was only stale after the pin passes moved the floors
+Cause: TerrainLevels stretched every flight steeper than 0.9 into the floor at its foot and set c.height of that grass cell; later passes never recomputed it; rock FACE heights then followed the falsely lifted cells
+Fix: Gen3Elevation stairProfile pass from the final end-floor heights (early before the classifier, late with the foot extension); Levels.stretch=false on pinned maps; TerrainLevels.at reads c.stairUp
+Proof: census: foot riser 0 on 255 climbing runs, mismatches 0 (was 248), steep 19 to 9; gates stairs_rb pins 1611/1610 faceHigh 54 trees 3/44 0 fallbacks
+Rules: R-34
+
+### L-33 steep stair is not always a stair
+Symptom: the stairs census lists 1-tile runs climbing 2..9 courses (Route 119 (9,16), (23,33), (5..8,52))
+Wrong model: treating them as pin questions for the user or as flights to extend
+Cause: the cells are plain grass with layout elevation 0 (the any-level transition tile between elev 4 and 3 areas) or sit beside the 0x206 lake tile classed OTHER at grass height; none is stair art
+Fix: check the metatile and the layout elevation (tools/relief emdata Layout.metatile/elevation) and the field dump GRID rows before asking anyone; read the draw sheet at 4x for a misread digit (Mt Chimney (24,23) 10 read as 9)
+Proof: coordinator 4, 2026-10-28, notes coordinator4_stairs_findings.md
+Rules: R-34

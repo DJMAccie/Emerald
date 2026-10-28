@@ -279,8 +279,8 @@ Status: active
 Rule: Grass and sand are always flat: never a 45 degree ridge and never a plateau step on them. A level change between plateaus happens only through a rock ledge (band tile = ridge wedge, or a rock face with the 5 percent lean) or a stair run. No ramp pass on plain ground; a bare drop between grass cells in the pins is a rock ledge face, or the pins are wrong.
 Source: user 2026-10-28: "there are never 45 degree ridges or plateau differences on grass or sand! never. only rock ledges or stairs do that"
 Gate: none yet
-Applied: see R-35 (hidden ledges) and the stairs builder (R-34), 2026-10-28
-Lessons: none
+Applied: census tools/elevation/qa/em_stairs45_driver.lua + stairs45_analyze.py (foot riser 0, mismatches 0, steep = listed runs only); Gen3Elevation stairProfile pass (M.STAIR_PROFILE, M.STAIR_EXT, early + late call), TerrainLevels.at stairUp + Levels.stretch=false on pinned maps, Gen3Scene.flightTreads stepMid; installed 2026-10-28 (backup stairs-20261028)
+Lessons: L-32
 Status: active
 
 
@@ -289,7 +289,7 @@ Rule: A stair run between two levels is the same wedge as a ridge band tile: abo
 Source: user 2026-10-28: "stairs also adhere to the 45 degree principle"
 Gate: none yet
 Applied: see R-35 (hidden ledges) and the stairs builder (R-34), 2026-10-28
-Lessons: none
+Lessons: L-32
 Status: active
 
 

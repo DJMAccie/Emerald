@@ -43,7 +43,7 @@
 1 21 7
 8 22 8
 6 23 7
-24 23 9
+24 23 10   # (coordinator 4, 2026-10-28: the mark at (23..24,23) reads 10 (bar + loop), same floor as the 10 at (21,23); with 9 the 1-tile stair (25,22) climbed 2 courses and the band row 24 was flat)
 11 25 8
 25 25 9
 19 26 9

@@ -7,3 +7,8 @@ date	commit	label	maps	pins	exact	diff	unclassified	faceHigh	massNotFlat	treeSun
 2026-10-28	1322faa	ledges1	64	1596	1595	1	0	54	0	3	44	0	run_gates.sh ledges1 on the mod source lib	
 2026-10-28	5734f42	ledge1	64	1596	1595	1	0	54	0	3	44	0	run_gates.sh ledge1 on the mod source lib	
 2026-10-28	5be0e45	ledges2	64	1596	1595	1	0	54	0	3	44	0	run_gates.sh ledges2 on the mod source lib	
+2026-10-28	1757c98	stairs1	64	1596	1595	1	0	54	0	3	44	0	run_gates.sh stairs1 on the mod source lib	
+2026-10-28	8527740	pinq1	64	1601	1600	1	0	54	0	3	44	0	run_gates.sh pinq1 on the mod source lib	
+2026-10-28	cf5eb30	stairs2	64	1596	1595	1	0	54	0	3	44	0	run_gates.sh stairs2 on the mod source lib	
+2026-10-28	cf5eb30	jag1	64	1611	1610	1	0	54	0	3	44	0	run_gates.sh jag1 on the mod source lib	
+2026-10-28	95cdf02	stairs_rb	64	1611	1610	1	0	54	0	3	44	0	run_gates.sh stairs_rb on the mod source lib	
