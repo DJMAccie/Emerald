@@ -1,0 +1,38 @@
+STAIR FLIGHT CENSUS (R-34), 64 pinned maps, installed game (ridge r3): 315 vertical runs of step cells
+R = height of the floor north of the run minus the floor south of it (px, 16 px = one course); n = tiles in the run; 45 degrees = R <= 16 n.
+  ok (<= 45 degrees)                             231
+  STEEP (> 45 degrees: rise per tile > 16 px)     15
+  flat (equal heights both ends)                  63
+  south higher (stairs climb southward)            6
+
+rise per tile (px): 2.1 x1, 8.0 x13, 12.0 x1, 12.8 x8, 13.3 x3, 13.7 x1, 16.0 x204, 21.3 x5, 24.0 x1, 32.0 x7, 48.0 x1, 96.0 x1
+FOOT RISER: the stair cells Gen3Elevation hands to groundAt (c.low .. c.high) start above the lower floor: lowest tread of the run minus the lower floor, px: 8.0 x148, 10.7 x57, 0 x15, 9.6 x8, -16.0 x4, 16.0 x3, 10.0 x3, -56.0 x2
+  (a vertical step of that size at the foot of the flight, in the player ground; the rendered treads are Gen3Scene.flightTreads, which may differ)
+
+== STEEP (> 45 degrees: rise per tile > 16 px)
+BATTLE_FRONTIER_OUTSIDE_WEST run x=31 y=28 n=1 north=48 south=0 R=48 R/n=48.0 cells(low,high)=[(36.0, 48.0)]
+JAGGED_PASS run x=21 y=14 n=1 north=64 south=42.6667 R=21.3333 R/n=21.3 cells(low,high)=[(53.3, 64.0)]
+MOSSDEEP_CITY run x=25 y=25 n=1 north=32 south=10.6667 R=21.3333 R/n=21.3 cells(low,high)=[(21.3, 32.0)]
+MOSSDEEP_CITY run x=26 y=25 n=1 north=32 south=10.6667 R=21.3333 R/n=21.3 cells(low,high)=[(21.3, 32.0)]
+MOSSDEEP_CITY run x=57 y=27 n=1 north=64 south=32 R=32 R/n=32.0 cells(low,high)=[(48.0, 64.0)]
+MOSSDEEP_CITY run x=58 y=27 n=1 north=64 south=32 R=32 R/n=32.0 cells(low,high)=[(48.0, 64.0)]
+MT_CHIMNEY run x=25 y=22 n=1 north=176 south=144 R=32 R/n=32.0 cells(low,high)=[(160.0, 176.0)]
+ROUTE114 run x=13 y=69 n=1 north=80 south=58.6667 R=21.3333 R/n=21.3 cells(low,high)=[(69.3, 80.0)]
+ROUTE114 run x=14 y=69 n=1 north=80 south=58.6667 R=21.3333 R/n=21.3 cells(low,high)=[(69.3, 80.0)]
+ROUTE119 run x=5 y=52 n=1 north=96 south=64 R=32 R/n=32.0 cells(low,high)=[(48.0, 96.0)]
+ROUTE119 run x=6 y=52 n=1 north=96 south=64 R=32 R/n=32.0 cells(low,high)=[(48.0, 96.0)]
+ROUTE119 run x=7 y=52 n=1 north=96 south=64 R=32 R/n=32.0 cells(low,high)=[(48.0, 96.0)]
+ROUTE119 run x=8 y=52 n=1 north=96 south=64 R=32 R/n=32.0 cells(low,high)=[(48.0, 96.0)]
+ROUTE119 run x=9 y=16 n=1 north=144 south=48 R=96 R/n=96.0 cells(low,high)=[(96.0, 144.0)]
+SOOTOPOLIS_CITY run x=9 y=8 n=2 north=176 south=128 R=48 R/n=24.0 cells(low,high)=[(134.0, 140.0), (128.0, 134.0)]
+
+== south higher (stairs climb southward)
+LILYCOVE_CITY run x=30 y=32 n=1 north=16 south=32 R=-16 R/n=-16.0 cells(low,high)=[(32.0, 32.0)]
+LILYCOVE_CITY run x=31 y=32 n=1 north=16 south=32 R=-16 R/n=-16.0 cells(low,high)=[(32.0, 32.0)]
+LILYCOVE_CITY run x=32 y=32 n=1 north=16 south=32 R=-16 R/n=-16.0 cells(low,high)=[(32.0, 32.0)]
+LILYCOVE_CITY run x=33 y=32 n=1 north=16 south=32 R=-16 R/n=-16.0 cells(low,high)=[(32.0, 32.0)]
+ROUTE114 run x=13 y=67 n=1 north=64 south=80 R=-16 R/n=-16.0 cells(low,high)=[(80.0, 80.0)]
+ROUTE114 run x=14 y=67 n=1 north=64 south=80 R=-16 R/n=-16.0 cells(low,high)=[(80.0, 80.0)]
+
+== flat runs (equal heights): 63, by map
+ROUTE109 35, ROUTE119 10, ROUTE120 6, LAVARIDGE_TOWN 5, SAFARI_ZONE_NORTHEAST 3, ROUTE115 2, ROUTE104 1, ROUTE116 1

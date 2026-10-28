@@ -12,14 +12,24 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | 2026-10-27 | 223ef91 | baseline-20261027 | 64 | 1597 | 1596 | 1 | 4485 | 50 | 0 | 3 | 8 | 0 |
 | 2026-10-27 | ce1f17a | ks1 | 64 | 1597 | 1596 | 1 | 0 | 50 | 0 | 12 | 8 | 0 |
 | 2026-10-28 | 5d09d91 | ext_final | 64 | 1597 | 1596 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 1726af9 | rampoff1 | 64 | 1597 | 1596 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 50d443e | b8gate1 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 1322faa | ledges1 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 5734f42 | ledge1 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
+| 2026-10-28 | 5be0e45 | ledges2 | 64 | 1596 | 1595 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 
 ## Sources and notes
 
 - 2026-10-27 baseline-20261027: dumps on disk: field gate /tmp/pg_b (install B, 19:45), class table /tmp/bg9 (round 2 source, 18:58; Battle Frontier E/W were still PIN_SKIP there, hence their unclassified count), tree gate from the PLAN.md Log after 223ef91 (sunk 3, floating 8), fallbacks from the pg_b tryp logs (baseline, not a fresh run)
 - 2026-10-27 ks1: run_gates.sh ks1 on the mod source lib 
 - 2026-10-28 ext_final: ridge ramp extension installed (RAMP_EXT_TREES=false): pins+cls dumps from ext_new (trees=true), tree dump ext_nt (installed config) 
+- 2026-10-28 rampoff1: run_gates.sh rampoff1 on the mod source lib 
+- 2026-10-28 b8gate1: run_gates.sh b8gate1 on the mod source lib 
+- 2026-10-28 ledges1: run_gates.sh ledges1 on the mod source lib 
+- 2026-10-28 ledge1: run_gates.sh ledge1 on the mod source lib 
+- 2026-10-28 ledges2: run_gates.sh ledges2 on the mod source lib 
 
-## Per map, latest run (ext_final, 5d09d91)
+## Per map, latest run (ledges2, 5be0e45)
 
 | map | pins | exact | diff | unclassified | faceHigh | massNotFlat | rock cells |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -52,7 +62,7 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | EM_ROUTE108 | 6 | 6 | 0 | 0 | 0 | 0 | 42 |
 | EM_ROUTE109 | 12 | 12 | 0 | 0 | 0 | 0 | 28 |
 | EM_ROUTE110 | 24 | 24 | 0 | 0 | 0 | 0 | 60 |
-| EM_ROUTE111 | 68 | 68 | 0 | 0 | 0 | 0 | 2420 |
+| EM_ROUTE111 | 67 | 67 | 0 | 0 | 0 | 0 | 2420 |
 | EM_ROUTE112 | 51 | 51 | 0 | 0 | 1 | 0 | 943 |
 | EM_ROUTE113 | 27 | 27 | 0 | 0 | 0 | 0 | 541 |
 | EM_ROUTE114 | 63 | 63 | 0 | 0 | 0 | 0 | 1422 |

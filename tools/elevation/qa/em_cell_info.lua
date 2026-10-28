@@ -18,8 +18,8 @@ return function(game)
   local def=Map.currentDef();local l=def.midLayout
   local fld=E.field(def)
   local n=l:cellAt(x,y);local c=fld.cells[Levels.key(x,y)]
-  f:write(string.format('%s %d %d mid=%03X coll=%s elev=%s | floor=%s step=%s kind=%s height=%s high=%s low=%s connector=%s zone=%s pin=%s\n',id,x,y,n and n.mid or 0,tostring(n and n.coll),tostring(n and n.elev),
-   tostring(c and c.floor),tostring(c and c.step),tostring(c and c.kind),tostring(c and c.height),tostring(c and c.high),tostring(c and c.low),tostring(c and c.connector),tostring(c and c.zone),tostring(c and c.pin)))
+  f:write(string.format('%s %d %d mid=%03X coll=%s elev=%s | floor=%s step=%s kind=%s height=%s high=%s low=%s connector=%s zone=%s pin=%s cls=%s ledge=%s bare=%s ext=%s\n',id,x,y,n and n.mid or 0,tostring(n and n.coll),tostring(n and n.elev),
+   tostring(c and c.floor),tostring(c and c.step),tostring(c and c.kind),tostring(c and c.height),tostring(c and c.high),tostring(c and c.low),tostring(c and c.connector),tostring(c and c.zone),tostring(c and c.pin),tostring(c and c.cls),tostring(c and c.ledge~=nil),tostring(c and c.bareDrop),tostring(c and c.stepExt)))
  end
  f:close();love.event.quit()
 end

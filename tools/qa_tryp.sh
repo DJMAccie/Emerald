@@ -127,7 +127,7 @@ cd ~/Documents/gen1recomp || exit 1
 echo "[qa_tryp] identity $ID files $FILES" > "$OUT/run.log"
 EM_YAW=$YAW EM_LEVELS="$OUT/levels.lua" \
   POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/gen1recomp-modwork/tools/em_views_driver.lua} \
-  POKEPORT_BACKGROUND=${QA_BACKGROUND:-1} POKEPORT_IDENTITY=$ID POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
+  SDL_MAC_BACKGROUND_APP=${QA_SDL_BG:-1} POKEPORT_BACKGROUND=${QA_BACKGROUND:-1} POKEPORT_IDENTITY=$ID POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   EM_CASES="$OUT/cases.lua" EM_WAIT=$WAIT /Applications/gen1recomp.app/Contents/MacOS/love . >> "$OUT/run.log" 2>&1 &
 G=$!
 for _ in $(seq 1 60); do grep -q "loaded mod BATTLE_ART\|EM QA\]" "$OUT/run.log" 2>/dev/null && break; kill -0 $G 2>/dev/null || break; sleep 1; done

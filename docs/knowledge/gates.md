@@ -73,3 +73,10 @@ Command: `EM_DRIVER=tools/elevation/qa/em_cell_info.lua` with the cells, or a sc
 Reads: the per-cell lines.
 Target: equal on every cell checked.
 Rules: R-16, R-17
+
+### G-11 Hidden-ledge census
+Checks: every plateau edge over a lower plain cell with no band tile has a wedge (LEDGE cells) or a face-art riser (BARE); no grass riser is left; tall edges counted
+Command: QA_SRC=<src> EM_DRIVER=tools/elevation/qa/em_ledge_driver.lua EM_MAPS=<maps_all.txt> EM_DUMP=<out> bash tools/qa_tryp.sh "Gen3Elevation.lua Gen3PinData.lua Gen3Blocks.lua Gen3Scene.lua TerrainLevels.lua" <outdir> - 4 0 60
+Reads: LEDGE lines per map, TOTAL line
+Target: edges + bare cover every bare drop of the 2026-10-28 census (class A2 111 edges); old|new at Safari North (16,15) yaw 180 shows a rock slope, no green wall
+Rules: R-35

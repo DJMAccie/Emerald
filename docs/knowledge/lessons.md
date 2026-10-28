@@ -243,3 +243,11 @@ Cause: lone sea rocks have no plateau above them; the fix-up moved them to the n
 Fix: Gen3Elevation kindAt='seaRock' excluded from OTHER_FIX (round 2).
 Proof: class gate otherFix counts per map; Route 126 L4 sheet.
 Rules: R-02
+
+### L-31 A probe copy must stay a copy
+Symptom: The mod source's Gen3Blocks.lua and Gen3Scene.lua differed from the installed game (a 140-line LEDGES block and a scene hook) while the builder reported its prototype lived only in /tmp/ledge_src; a later install_blocks.sh would have carried the abandoned prototype into the game
+Wrong model: A builder's report of what is in the source was trusted; source = game was assumed between installs
+Cause: The builder edited the source directly, then tested from a /tmp copy, and reported the copy
+Fix: cmp every lib file the install script copies against the game copy BEFORE any install or gate on the source (one loop, see the coordinator 3 handoff); design work happens in a private copy (QA_SRC / SRC_OVERRIDE) and is copied into the source only right before its own install; the stray files were restored from the game and saved in backups/b9-ledge-proto-20261028
+Proof: cmp loop 2026-10-28 13:00: all five terrain files src=game yes after the restore
+Rules: R-26

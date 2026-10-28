@@ -95,22 +95,6 @@ Applied: Gen3Elevation pin flood + FACE class.
 Lessons: L-29
 Status: active
 
-### R-33 NEVER ON GRASS OR SAND
-Rule: Grass and sand are always flat: never a 45 degree ridge and never a plateau step on them. A level change between plateaus happens only through a rock ledge (band tile = ridge wedge, or a rock face with the 5 percent lean) or a stair run. No ramp pass on plain ground; a bare drop between grass cells in the pins is a rock ledge face, or the pins are wrong.
-Source: user 2026-10-28: "there are never 45 degree ridges or plateau differences on grass or sand! never. only rock ledges or stairs do that"
-Gate: none yet
-Applied: not yet
-Lessons: none
-Status: active
-
-### R-34 STAIRS FOLLOW THE 45 DEGREE PRINCIPLE
-Rule: A stair run between two levels is the same wedge as a ridge band tile: about 45 degrees, one course of rise per tile, consecutive stair tiles stacking into one continuous slant. Never a vertical step and never a flat deck with a riser at one end. Equal pins at both ends still mean flat (DECK).
-Source: user 2026-10-28: "stairs also adhere to the 45 degree principle"
-Gate: none yet
-Applied: not yet
-Lessons: none
-Status: active
-
 ## Heights from the user's sheets (reading rules)
 
 ### R-12 How to read the user's marks
@@ -238,7 +222,7 @@ Rule: install only with the game closed (pgrep -fl MacOS/love), backup under ~/D
 Source: user 2026-10-05: "we also need to push once in a while"; "you can install your work, we can always refine".
 Gate: G-05
 Applied: tools/elevation/install_pins.sh, install_blocks.sh, install_trees.sh.
-Lessons: L-15, L-17
+Lessons: L-15, L-17, L-31
 Status: active
 
 ### R-27 QA runs are batched and never started by hand
@@ -288,6 +272,35 @@ Gate: G-08
 Applied: tools/release_check.sh, tools/ledger.py, tools/tour_note.sh.
 Lessons: none
 Status: active
+
+## World shape, continued (rules given 2026-10-28)
+
+### R-33 NEVER ON GRASS OR SAND
+Rule: Grass and sand are always flat: never a 45 degree ridge and never a plateau step on them. A level change between plateaus happens only through a rock ledge (band tile = ridge wedge, or a rock face with the 5 percent lean) or a stair run. No ramp pass on plain ground; a bare drop between grass cells in the pins is a rock ledge face, or the pins are wrong.
+Source: user 2026-10-28: "there are never 45 degree ridges or plateau differences on grass or sand! never. only rock ledges or stairs do that"
+Gate: none yet
+Applied: see R-35 (hidden ledges) and the stairs builder (R-34), 2026-10-28
+Lessons: none
+Status: active
+
+
+### R-34 STAIRS FOLLOW THE 45 DEGREE PRINCIPLE
+Rule: A stair run between two levels is the same wedge as a ridge band tile: about 45 degrees, one course of rise per tile, consecutive stair tiles stacking into one continuous slant. Never a vertical step and never a flat deck with a riser at one end. Equal pins at both ends still mean flat (DECK).
+Source: user 2026-10-28: "stairs also adhere to the 45 degree principle"
+Gate: none yet
+Applied: see R-35 (hidden ledges) and the stairs builder (R-34), 2026-10-28
+Lessons: none
+Status: active
+
+
+### R-35 Rock ledges ring the whole platform, hidden faces included
+Rule: Every edge of a plateau is a 45 degree rock ledge, also the edges the top-down art hides (north-facing rims drawn as a line only, the edge behind a boulder, the edge under a tree row). Where the 2D has no band tile, the lower plain cell beside the edge becomes the ledge: a wedge in the face art of the nearest band from the rim down to the lower level, one course per row, convex corners rounded. The grass itself never slopes (R-33): the cell is rock there. Where the lower cell cannot take a wedge (a tree, tall grass, a stair, a mark) the riser is rock face art, never the rim's grass stretched down.
+Source: user 2026-10-28: "elevating rocks are on a 45 degree angle, they are all around the platform"; on the Safari NW crops: "the ledge behind that rock is the same type ledge of 45 degrees", "there is also a ledge in the top left against the trees. this is also a 45 degree rock ledge"
+Gate: G-11
+Applied: Gen3Elevation HIDDEN LEDGES pass (M.LEDGES, LEDGE_MIN 8, LEDGE_MAX 3), Gen3Scene ledge slope + ledgeUV, Gen3Blocks.ledgeFaceUV (coordinator 3, 2026-10-28)
+Lessons: none
+Status: active
+
 
 ## R-ridge-slope: RIDGES ARE SLOPES
 - Source: user 2026-10-27, Safari Zone SE sheet with yellow arrows: "the dark brown tiles are ridges that span from the one side of the tile to the other side of the tile but in 3 dimensions ... almost 45 degrees until the top (maybe 40?) ... They dont go up 90 degrees at all."

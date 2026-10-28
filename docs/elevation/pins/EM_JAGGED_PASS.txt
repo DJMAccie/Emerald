@@ -14,7 +14,7 @@
 16 16 5
 12 17 4
 25 17 2
-21 20 2
+22 22 2
 11 20 3
 1 21 3
 25 21 2
@@ -23,3 +23,4 @@
 5 29 2
 13 34 1
 14 39 0
+# coordinator 3b 2026-10-28: the "2" drawn at (21,20) north of the stairs (21-22,21) labels the strip at the stairs' FOOT (east of the band x=20, rows 22-23): moved to (22,22). At (21,20) it split the open floor (rows 19-23) with the (11,20)=3 mark mid-floor (ledge wedge column at x=16); floor 3 keeps both flights one course (west stairs 4->3, east stairs 3->2, R-34).

@@ -26,7 +26,7 @@
 17 49 2
 35 47 3
 7 53 5
-19 53 5
+# 19 53 5   (user mark on the Mirage Tower top: the tower is its own baked building, not a plateau; as a flood it raised 254 sand cells to 5, as `top` it left a 1-cell pillar under the tower; removed 2026-10-28 builder 8, the sand is one plain at the desert 2)
 2 56 5
 8 58 4
 7 61 3
