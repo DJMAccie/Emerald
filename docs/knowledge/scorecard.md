@@ -11,13 +11,15 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2026-10-27 | 223ef91 | baseline-20261027 | 64 | 1597 | 1596 | 1 | 4485 | 50 | 0 | 3 | 8 | 0 |
 | 2026-10-27 | ce1f17a | ks1 | 64 | 1597 | 1596 | 1 | 0 | 50 | 0 | 12 | 8 | 0 |
+| 2026-10-28 | 5d09d91 | ext_final | 64 | 1597 | 1596 | 1 | 0 | 54 | 0 | 3 | 44 | 0 |
 
 ## Sources and notes
 
 - 2026-10-27 baseline-20261027: dumps on disk: field gate /tmp/pg_b (install B, 19:45), class table /tmp/bg9 (round 2 source, 18:58; Battle Frontier E/W were still PIN_SKIP there, hence their unclassified count), tree gate from the PLAN.md Log after 223ef91 (sunk 3, floating 8), fallbacks from the pg_b tryp logs (baseline, not a fresh run)
 - 2026-10-27 ks1: run_gates.sh ks1 on the mod source lib 
+- 2026-10-28 ext_final: ridge ramp extension installed (RAMP_EXT_TREES=false): pins+cls dumps from ext_new (trees=true), tree dump ext_nt (installed config) 
 
-## Per map, latest run (ks1, ce1f17a)
+## Per map, latest run (ext_final, 5d09d91)
 
 | map | pins | exact | diff | unclassified | faceHigh | massNotFlat | rock cells |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -82,6 +84,6 @@ treeSunk 0, fallbacks 0, faceHigh falling with every remaining cell explained. `
 | EM_SAFARI_ZONE_SOUTHEAST | 17 | 17 | 0 | 0 | 0 | 0 | 157 |
 | EM_SKY_PILLAR_OUTSIDE | 18 | 18 | 0 | 0 | 0 | 0 | 256 |
 | EM_SLATEPORT_CITY | 22 | 22 | 0 | 0 | 0 | 0 | 4 |
-| EM_SOOTOPOLIS_CITY | 84 | 84 | 0 | 0 | 0 | 0 | 224 |
+| EM_SOOTOPOLIS_CITY | 84 | 84 | 0 | 0 | 4 | 0 | 224 |
 | EM_SOUTHERN_ISLAND_EXTERIOR | 19 | 19 | 0 | 0 | 0 | 0 | 246 |
 | EM_VERDANTURF_TOWN | 4 | 4 | 0 | 0 | 0 | 0 | 29 |

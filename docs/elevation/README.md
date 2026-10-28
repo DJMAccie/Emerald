@@ -37,6 +37,14 @@ beside it shows the reading for the user's check. Tools: `tools/elevation/draw_p
   Consecutive band tiles in the climb direction STACK: the next wedge starts where the previous one ends, so N band rows make
   one continuous slant N courses high. Where the pins ask for a different rise than the rows give, keep the continuous diagonal
   and scale it (builder knob, judged on low-cam + ortho).
+- NEVER ON GRASS OR SAND (user 2026-10-28): "there are never 45 degree ridges or plateau differences on grass or sand! never.
+  only rock ledges or stairs do that." Grass and sand are always flat. A level change between two plateaus happens ONLY through
+  a rock ledge (the band tiles = ridges, or a rock face) or a stair run. So: no sloped grass or sand anywhere (no ramp pass on
+  plain ground, option A of 2026-10-28 is cancelled), and a "bare drop" in the pins (grass next to lower grass with no band tile)
+  is never a grass riser: the step there is a rock ledge (face with the ~5 percent lean and rounded top edge), or the pins are wrong.
+  STAIRS TOO (user 2026-10-28: "stairs also adhere to the 45 degree principle"): a stair run is the same wedge as a band
+  tile, one course of rise per tile at about 45 degrees, consecutive stair tiles stacking into one continuous slant; never a
+  vertical step and never flat with a riser at one end.
 - UNNUMBERED ROCK = A FACE, NOT A MASS (user 2026-10-27, Route 119 weather station): a cliff band with no number on it
   is where the rock moves up or down vertically (slightly slanted) between the two numbered plateaus beside it: its top
   is the upper plateau's level, its foot the lower one's. It never stands as its own tall rock above the plateaus.

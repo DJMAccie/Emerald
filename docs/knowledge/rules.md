@@ -95,6 +95,22 @@ Applied: Gen3Elevation pin flood + FACE class.
 Lessons: L-29
 Status: active
 
+### R-33 NEVER ON GRASS OR SAND
+Rule: Grass and sand are always flat: never a 45 degree ridge and never a plateau step on them. A level change between plateaus happens only through a rock ledge (band tile = ridge wedge, or a rock face with the 5 percent lean) or a stair run. No ramp pass on plain ground; a bare drop between grass cells in the pins is a rock ledge face, or the pins are wrong.
+Source: user 2026-10-28: "there are never 45 degree ridges or plateau differences on grass or sand! never. only rock ledges or stairs do that"
+Gate: none yet
+Applied: not yet
+Lessons: none
+Status: active
+
+### R-34 STAIRS FOLLOW THE 45 DEGREE PRINCIPLE
+Rule: A stair run between two levels is the same wedge as a ridge band tile: about 45 degrees, one course of rise per tile, consecutive stair tiles stacking into one continuous slant. Never a vertical step and never a flat deck with a riser at one end. Equal pins at both ends still mean flat (DECK).
+Source: user 2026-10-28: "stairs also adhere to the 45 degree principle"
+Gate: none yet
+Applied: not yet
+Lessons: none
+Status: active
+
 ## Heights from the user's sheets (reading rules)
 
 ### R-12 How to read the user's marks
@@ -279,4 +295,4 @@ Status: active
 - Gate: ortho-45 overlay placement unchanged; a slope gate = band cells rise monotonically from their lower to their upper plateau across the band width.
 - Clarified (user 2026-10-27, Route 114 panel): the band rows are the slope's footprint; the slope climbs across them toward the upper plateau, up AND over ("an angle and not a straight upward thing"); a multi-row band is one ramp over all its rows.
 - WEDGES STACK (user 2026-10-27, cube-with-diagonal sketch + Safari N arrows): each band tile is a wedge, the cube cut by its diagonal (foot at the lower side, top at the upper side: one course per tile at 45 degrees); consecutive band tiles in the climb direction stack into one continuous slant, N rows = N courses.
-- Applied by: (pending, builder 6+)
+- Applied by: Gen3Blocks.RAMPS (r1 aa14ea6, r2 022561d), Gen3Elevation RAMP_EXT ramp extension (2026-10-28); open: stair-side slit, tall bands left steep
