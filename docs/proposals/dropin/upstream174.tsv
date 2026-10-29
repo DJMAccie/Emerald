@@ -1,0 +1,173 @@
+same	data/animated_battle_backs_gen3.lua	1168	
+same	data/animated_battle_sprites_gen2.lua	754	
+same	data/animated_battle_sprites_gen2_shiny.lua	1557	
+same	data/animated_battle_sprites_gen3.lua	1168	
+same	data/animated_battle_sprites_gen3_shiny.lua	1548	
+same	data/animated_battle_sprites_gen4.lua	1162	
+same	data/animated_battle_sprites_gen4_shiny.lua	1162	
+same	data/animated_battle_sprites_gen5.lua	1548	
+same	data/animated_battle_sprites_gen5_shiny.lua	1572	
+same	data/animated_player_trainers.lua	28	
+same	data/battle_species_dex_386.lua	390	
+same	data/boss_battle_backgrounds.lua	43	
+same	data/bundled_bw_fronts.lua	775	
+same	data/crystal_full_body.lua	504	
+same	data/gen3_exteriors.lua	254	
+modified	data/gen3_stairs.lua	69	
+same	data/gen6_battle_backgrounds.lua	239	
+same	data/world_fill_biomes.lua	91	
+same	lib/ActorContact.lua	26	
+same	lib/AnimatedBattleArt.lua	604	
+same	lib/AntiAlias.lua	252	
+same	lib/AtmosphereCamera.lua	37	
+modified	lib/Backdrop.lua	407	
+same	lib/BackdropImage.lua	30	
+same	lib/BattleArena.lua	368	
+modified	lib/BattleArt.lua	916	Gen3StadiumModels
+same	lib/BattleBillboard.lua	137	
+modified	lib/BattleCam.lua	752	BattleShots
+same	lib/BattleDOF.lua	187	
+same	lib/BattleHud.lua	636	
+same	lib/BattleOcclusion.lua	41	
+same	lib/BattlePics.lua	344	
+same	lib/BattlePresentation.lua	122	
+modified	lib/BattleScene.lua	1691	
+same	lib/BattleTheme.lua	96	
+same	lib/BossBackdrop.lua	39	
+same	lib/BoundaryScenery.lua	48	
+same	lib/BuildBudget.lua	66	BuildingModels,BuildingVoxels,FlatMesh,Gen3Hills,Gen3VoxelBuildings,SpriteVoxel
+same	lib/Buildings.lua	1827	
+same	lib/CacheTrace.lua	72	
+same	lib/CamControl.lua	395	TourMode
+same	lib/CameraEye.lua	11	
+same	lib/CameraSettings.lua	4	
+same	lib/CanopyBillboard.lua	45	
+same	lib/CaveAtmosphere3D.lua	944	
+same	lib/CavePerimeter.lua	239	
+same	lib/CaveSconces.lua	602	
+same	lib/CharacterRenderers.lua	229	
+same	lib/ChunkMesher.lua	4748	
+modified	lib/CommunityFlora.lua	7869	
+same	lib/CommunityVisuals.lua	344	
+modified	lib/DayNight.lua	508	
+same	lib/DrawUniforms.lua	15	
+same	lib/EmberLegacyAudio.lua	191	
+same	lib/FirstPerson.lua	1034	
+same	lib/FlyMotion.lua	60	
+same	lib/ForestAtmos.lua	872	
+same	lib/ForestDressing.lua	320	
+same	lib/Gen2DepthTrees.lua	47	
+same	lib/Gen2FruitTrees.lua	38	
+same	lib/Gen2Rocks.lua	207	
+same	lib/Gen2Trees.lua	182	
+same	lib/Gen3AdditionalFurniture.lua	46	
+same	lib/Gen3AdditionalInteriors.lua	55	
+modified	lib/Gen3Battle.lua	450	
+same	lib/Gen3BattleBackdrop.lua	60	
+same	lib/Gen3BattleClear.lua	26	Gen3BattleStage
+modified	lib/Gen3BattleHud.lua	259	
+same	lib/Gen3BattleOptions.lua	59	
+modified	lib/Gen3Boundary.lua	107	
+same	lib/Gen3Buildings.lua	118	
+modified	lib/Gen3Cave.lua	218	
+same	lib/Gen3CenterFurniture.lua	131	
+modified	lib/Gen3Civic.lua	312	
+same	lib/Gen3DesignedFurniture.lua	91	
+modified	lib/Gen3Elevation.lua	1418	Gen3Blocks
+same	lib/Gen3Forest.lua	20	
+modified	lib/Gen3Furniture.lua	530	
+same	lib/Gen3InstitutionFurniture.lua	60	
+modified	lib/Gen3Integration.lua	274	Gen3FlyOver
+modified	lib/Gen3InteriorProfiles.lua	32	
+modified	lib/Gen3Outdoor.lua	796	
+same	lib/Gen3Recap.lua	65	
+modified	lib/Gen3RoofDetails.lua	190	
+modified	lib/Gen3Scene.lua	3481	Gen3BattleStage,Gen3FlyOver,Gen3Objects,TourMode
+modified	lib/Gen3SceneCache.lua	36	
+modified	lib/Gen3SceneOptions.lua	153	
+same	lib/Gen3SpriteAnchor.lua	67	
+same	lib/Gen3SpriteLight.lua	32	
+modified	lib/Gen3Stairs.lua	147	
+modified	lib/Gen3Terrain.lua	194	
+modified	lib/Gen3TileShape.lua	450	
+modified	lib/Gen3Tilesets.lua	119	Gen3FlyOver
+same	lib/Gen3TrainerArt.lua	82	
+modified	lib/Gen6Backdrop.lua	101	
+same	lib/Generation.lua	162	
+modified	lib/GlassMask.lua	559	
+same	lib/GranitePillars.lua	364	
+same	lib/HouseCladding.lua	26	
+same	lib/InGameOptions.lua	89	
+same	lib/InterfaceSprites.lua	735	
+modified	lib/InteriorDiorama.lua	612	
+same	lib/InteriorFurniture.lua	696	
+same	lib/ItemPokeballs.lua	86	
+same	lib/LegendaryTowerExterior.lua	236	
+same	lib/LegendaryTreeCache.lua	200	
+same	lib/LoadTimings.lua	286	
+same	lib/Mat4.lua	165	Gen3FlyGround,Gen3FlyOver,Gen3StadiumModels
+same	lib/ModSetting.lua	136	BattleShots
+modified	lib/ModelInstances.lua	37	
+same	lib/ModernBattleUI.lua	6	
+modified	lib/NativeAtmosphere.lua	108	
+same	lib/NativeBattleArt.lua	122	
+same	lib/NativeInterfaceArt.lua	69	
+modified	lib/NativeTreeArt.lua	415	Gen3Objects
+same	lib/NativeTreeModels.lua	56	
+modified	lib/OptionSupport.lua	95	
+modified	lib/OverworldBattle.lua	2103	
+same	lib/PixelCanvas.lua	17	
+same	lib/Pokeball.lua	1168	
+same	lib/PokeballSettings.lua	87	
+modified	lib/RenderDistance.lua	102	
+same	lib/RenderRecovery.lua	17	
+same	lib/RoofEaves.lua	29	
+same	lib/SafariFoliage.lua	153	
+same	lib/SafariStatues.lua	209	
+modified	lib/SceneStream.lua	103	
+same	lib/SceneryMask.lua	25	
+modified	lib/SettingsCatalog.lua	97	
+same	lib/ShadowMap.lua	663	
+same	lib/Shadows.lua	26	Gen3StadiumModels
+same	lib/ShipHull.lua	107	
+same	lib/Sky.lua	852	
+modified	lib/SkyLayer.lua	1300	
+same	lib/SpatialUpscale.lua	119	
+same	lib/SpriteBillboards.lua	192	
+same	lib/SpriteHeadBounds.lua	27	
+modified	lib/StadiumModels.lua	654	Gen3StadiumModels
+modified	lib/StaticGeometry.lua	251	
+modified	lib/Structures.lua	5148	
+same	lib/SuccessStars.lua	47	
+same	lib/TerrainAtlas.lua	1777	
+modified	lib/TerrainLevels.lua	484	
+same	lib/TextboxStyle.lua	195	
+same	lib/ThirdPerson.lua	442	
+same	lib/TileShape.lua	882	
+modified	lib/TiltShift.lua	191	
+same	lib/TowerFogSettings.lua	68	
+modified	lib/TowerGraveMist.lua	476	
+same	lib/TowerLobbyDetails.lua	135	
+same	lib/TreeIllustrations.lua	44	
+modified	lib/TreePresentation.lua	31	Gen3Objects
+modified	lib/UiBackplates.lua	191	
+modified	lib/Voxel3D.lua	2168	BuildingVoxels,FlatMesh,Gen3FlyGround,Gen3FlyOver,Gen3Lamp,Gen3RockSprites,Gen3StadiumModels,SpriteVoxel
+same	lib/VoxelGrid.lua	84	
+modified	lib/VoxelHull.lua	430	Gen3Objects
+same	lib/VoxelMeshDisk.lua	1822	
+modified	lib/VoxelScene.lua	1831	
+same	lib/VoxelState.lua	264	Gen3FlyOver
+same	lib/VoxelVisualObjects.lua	733	
+same	lib/Water.lua	1513	
+same	lib/WaterSurfacePass.lua	42	
+same	lib/Weather.lua	402	
+same	lib/WorldCurve.lua	101	Gen3FlyOver
+same	lib/WorldFillProps.lua	270	
+modified	lib/WorldUnderlay.lua	186	
+same	lib/q57/Adapter.lua	96	
+same	lib/q57/Ballistics.lua	42	
+same	lib/q57/Breakout.lua	160	
+same	lib/q57/Material.lua	235	
+same	lib/q57/Plasma.lua	192	
+same	lib/q57/Release.lua	112	
+same	lib/q58/SuccessStars.lua	101	
