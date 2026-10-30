@@ -2,7 +2,8 @@
 -- Same walk and output as tools/relief/stage3/ab/h3_geo_driver.lua, but it reads the scene ONLY through the probe of
 -- emerald3d docs/specs/ProbeContract.md (exports.<mod>.gen3.probe), so it measures the old mod and the rewrite alike.
 -- For the old mod the probe comes from EM_PROBE_ADAPTER (default tools/rewrite/probe/old_adapter.lua).
---   EM_MAPS=<file of "MAP x y" lines>  EM_GEO_DIR=<absolute output dir>  [EM_SETTLE=240]  [EM_MARGIN=8]
+--   EM_MAPS=<file of "MAP x y" lines>  EM_GEO_DIR=<absolute output dir>  [EM_SETTLE=240]  [EM_MARGIN=8]  [EM_IDLE=300]
+--   EM_IDLE: frames without a new build before a spot counts as unsettled; big cave maps need more than 300.
 -- Out per map: <dir>/<MAP>.geo.gz (TAG lines carry the probe layer name instead of a source line) and <dir>/<MAP>.cells.
 -- QA identity only.
 return function(game)
@@ -24,6 +25,7 @@ return function(game)
  local Map=require('src.core.game3.map')
  local DIR=assert(os.getenv('EM_GEO_DIR'),'EM_GEO_DIR')
  local SETTLE=tonumber(os.getenv('EM_SETTLE') or '240')
+ local IDLE=tonumber(os.getenv('EM_IDLE') or '300')
  local MARGIN=tonumber(os.getenv('EM_MARGIN') or '8')
  local FIELD={ground=true,roof=true,canopy=true,over=true,plants=true}
  local groups,order={},{}
@@ -41,7 +43,7 @@ return function(game)
   local last,stable=-1,0
   local p0=key()
   for i=1,3600 do
-   if i==300 and key()==p0 and probe.builds()==b0 then return false end
+   if i==IDLE and key()==p0 and probe.builds()==b0 then return false end
    local b=probe.builds()
    if b==last then stable=stable+1 else stable=0;last=b end
    if b>b0 and stable>=SETTLE then return true end

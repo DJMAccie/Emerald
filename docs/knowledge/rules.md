@@ -76,7 +76,7 @@ Rule: the 3D does not have to match the 2D pixel for pixel; it must read as the 
 Source: user 2026-10-13: "it doesnt need to be exactly like the og but it does [need] to be aesthetically in the same world as the og but in 3d"
 Gate: G-06
 Applied: tools/ortho45 (diff.py), docs/ortho45.
-Lessons: L-01
+Lessons: L-01, L-34
 Status: active
 
 ### R-10 Terrain heights are hand-drawn by the user, per map, relative to that map, water 0
@@ -188,7 +188,7 @@ Rule: before installing, look at the play camera (L4, zoom -2), the low camera (
 Source: user 2026-10-05 and 2026-10-13: "Make sure to really look at the original pixel art carefully, and check in 3D from all angles, also the back."
 Gate: G-06, G-07
 Applied: cap_pins.sh + ab_sheet2.py (L4 + L6), em_shape_driver clay views, tools/em_ortho_driver.lua.
-Lessons: L-01, L-05, L-07, L-08
+Lessons: L-01, L-05, L-07, L-08, L-34
 Status: active
 
 ### R-23 QA must match the user's game
@@ -309,3 +309,13 @@ Status: active
 - Clarified (user 2026-10-27, Route 114 panel): the band rows are the slope's footprint; the slope climbs across them toward the upper plateau, up AND over ("an angle and not a straight upward thing"); a multi-row band is one ramp over all its rows.
 - WEDGES STACK (user 2026-10-27, cube-with-diagonal sketch + Safari N arrows): each band tile is a wedge, the cube cut by its diagonal (foot at the lower side, top at the upper side: one course per tile at 45 degrees); consecutive band tiles in the climb direction stack into one continuous slant, N rows = N courses.
 - Applied by: Gen3Blocks.RAMPS (r1 aa14ea6, r2 022561d), Gen3Elevation RAMP_EXT ramp extension (2026-10-28); open: stair-side slit, tall bands left steep
+
+## Rewrite (own-code drop-in)
+
+### R-36 The rewrite keeps the look exactly
+Rule: EMERALD_3D is a drop-in replacement: it must reproduce the installed mod's look exactly, at every camera and every spot. The tiles, heights, faces, props, trees, water, fog, sky, shading and camera are outputs to match, not to redesign. A visible difference in an old|new capture is a fault, not an improvement; the only intended differences are the ones Petya explicitly asks for, listed one by one. Parity is proven by the M0 golden baseline (cells + geometry dumps, 450 captures at 75 spots) plus old|new sheets read against each other.
+Source: user 2026-10-29: "one thing i want to make sure is that we dont change anything about the look we have now! we are really close to the desired look of the game"
+Gate: G-12
+Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec
+Lessons: none
+Status: active

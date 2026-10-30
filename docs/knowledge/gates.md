@@ -80,3 +80,10 @@ Command: QA_SRC=<src> EM_DRIVER=tools/elevation/qa/em_ledge_driver.lua EM_MAPS=<
 Reads: LEDGE lines per map, TOTAL line
 Target: edges + bare cover every bare drop of the 2026-10-28 census (class A2 111 edges); old|new at Safari North (16,15) yaw 180 shows a rock slope, no green wall
 Rules: R-35
+
+### G-12 Rewrite parity with the installed look
+Checks: Old mod vs EMERALD_3D at the same spot, same camera: per-cell dump (base, height, class, flags) diff, geometry triangle set diff with each difference explained, and L4/L6/L7 captures side by side. No visible difference.
+Command: EM_DRIVER=tools/rewrite/probe/geo_driver.lua ... (QA old vs QA new, clean_try.sh); tools/rewrite/probe/compare.py old new; old|new capture sheets
+Reads: .cells/.geo.gz per map, capture PNGs, the old|new sheet
+Target: cells diff 0 on the 18 M0 maps; every geometry difference explained; captures indistinguishable except the listed intended differences (Petya's explicit yes per item); fallback 0
+Rules: R-36

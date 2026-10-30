@@ -267,3 +267,11 @@ Cause: the cells are plain grass with layout elevation 0 (the any-level transiti
 Fix: check the metatile and the layout elevation (tools/relief emdata Layout.metatile/elevation) and the field dump GRID rows before asking anyone; read the draw sheet at 4x for a misread digit (Mt Chimney (24,23) 10 read as 9)
 Proof: coordinator 4, 2026-10-28, notes coordinator4_stairs_findings.md
 Rules: R-34
+
+### L-34 The 3D pass drew a vertically mirrored world
+Symptom: In the new mod's first textured 3D captures north was at the bottom and buildings extruded downward (the user: "uhm why is the world upside down?"); the lab stood north of the houses it is south of in the 2D art and every metatile's roof sat under its wall
+Wrong model: The P1 gate judged the 3D image alone (a diorama on sky) and its author read the picture as correct; nothing was compared against the engine's own flat field, and Camera3D:proj() was taken as standard GL clip space
+Cause: Mat4.perspective emits textbook GL clip space (+Y up), but our shader bypasses LOVE's transform_projection and LOVE's canvas coordinates run Y down, so the whole scene composites vertically mirrored; the old mod had already learned this and multiplies proj by scale(1,-1,1) (battle-art-notquiteog lib/Voxel3D.lua:1120), the new module did not
+Fix: Camera3D:proj() multiplies the perspective by Mat4.scale(1,-1,1) and Camera3D:project() reads NDC Y as down-positive; a capture gate now also takes the ENGINE's own flat field at the same spot (mod hook disabled for 20 frames, tools/rewrite/probe/p1_driver.lua) so the 3D image is judged against the 2D art and not against itself
+Proof: P1.2 recapture after the fix: the lab is south of the houses as in the 2D reference, roofs above walls; docs/shots/P1.2_littleroot_L4.png beside the same-spot 2D capture
+Rules: R-09,R-22

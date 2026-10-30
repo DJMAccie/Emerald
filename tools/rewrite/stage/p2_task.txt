@@ -1,0 +1,38 @@
+P2 IMPLEMENTER TASK (EMERALD_3D clean repo).
+
+You are the implementer for milestone P2 of this mod. Work only in this repo (/Users/user/Documents/emerald3d).
+Read CLAUDE.md first and obey it: this repo is clean-room; never open ~/Documents/battle-art-notquiteog, the
+installed mod folder, or any copy of the old mod. Build only from the specs here, the engine reference in .ref/
+(engine 0.3.95), and our own code in docs/own/.
+
+READ, in order:
+1. docs/specs/HeightField.md - your task; every hole id in it.
+2. docs/specs/ProbeContract.md - the probe table you must extend.
+3. docs/own/HOLES.md and docs/own/Gen3Elevation.lua, docs/own/TerrainLevels.lua - our own lifted code. Copy it
+   into lib/, fill each --@HOLE line in place with the behaviour the spec gives for that hole id, and do not
+   move, reorder, re-indent or rewrite the lifted code between holes.
+4. docs/own/modules/*.lua - our own data/dependency modules; copy them into lib/ unchanged, minus the two
+   provenance header lines at the top.
+
+DELIVERABLES:
+- lib/TerrainLevels.lua and lib/Gen3Elevation.lua: from docs/own, holes filled per the spec.
+- lib/BuildBudget.lua, lib/Gen3Tilesets.lua, lib/Gen3TileShape.lua, lib/Gen3Decks.lua (stub: MAPS={}) per spec §7.
+- the six modules from docs/own/modules/ copied into lib/.
+- lib/Probe.lua: implement field(mapId) exactly as spec §2.3 and §8 (rows[y][x] with mid, collision, cls,
+  height, kind, pin). Leave the rest of the probe as it is.
+- main.lua: make sure the modules Probe.field needs are loaded (Gen3Elevation is required by Probe.field). Do
+  not add new exports.
+- tests/heightfield_test.lua: the pure-Lua test of spec §9, run with luajit.
+
+HARD RULES:
+- P2 changes NO pixels: do not touch lib/Scene.lua, lib/CellSource.lua, lib/MeshBatch.lua, lib/Camera3D.lua or
+  lib/TileAtlas.lua. The drawn ground stays the flat P1.2 ground. The current look of the game is the target
+  (spec §0); this milestone is data only.
+- No io/os/ffi/debug/loadfile; use V.require, V.mod, V.data only. Do not require src.world.*, src.core.Game or
+  src.battle.BattleState.
+- The lifted constants block is behaviour: do not tune or rename a constant.
+- Syntax-check every file you write: luajit -e "assert(loadfile('lib/X.lua'))" (or equivalent), and run
+  luajit tests/heightfield_test.lua. Fix every error before committing.
+- Commit at the end (git add -A && git commit) with a message starting "M1 P2:".
+- At the end report: files written, the test output, the list of holes filled, and anything you could not
+  complete and why. Keep the report short.
