@@ -1,0 +1,1 @@
+return {{'EM_SOOTOPOLIS_CITY_GYM_B1F',11,23}}

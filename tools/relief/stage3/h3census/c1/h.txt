@@ -1,0 +1,1 @@
+[EM h3stats]	EM_VERDANTURF_TOWN	144	0	0	true

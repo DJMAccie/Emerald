@@ -1,0 +1,1 @@
+return {{'EM_GRANITE_CAVE_STEVENS_ROOM',9,10}}

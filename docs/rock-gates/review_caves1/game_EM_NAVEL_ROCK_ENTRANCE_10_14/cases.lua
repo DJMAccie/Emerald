@@ -1,0 +1,1 @@
+return {{'EM_NAVEL_ROCK_ENTRANCE',10,14}}

@@ -1,0 +1,7 @@
+[EM float]	EM_PACIFIDLOG_TOWN	83	true
+[EM float]	EM_ROUTE103	22	true
+[EM float]	EM_ROUTE117	8	true
+[EM float]	EM_SKY_PILLAR_OUTSIDE	50	true
+[EM float]	EM_SOUTHERN_ISLAND_EXTERIOR	6	true
+[EM float]	EM_VERDANTURF_TOWN	12	true
+[RK1 float] EM_ROUTE103 mass cells=2 bottom=4.0 ground=0.0 lowest=24,14 path=Gen3Mass.emitMass

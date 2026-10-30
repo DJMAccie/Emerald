@@ -1,0 +1,10 @@
+#DONE EM_BATTLE_FRONTIER_BATTLE_DOME_BATTLE_ROOM
+#DONE EM_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY
+#DONE EM_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR
+#DONE EM_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM
+EM_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY 7 8 224 pair=building__battle_pyramid kind=deckRamp coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY 7 9 224 pair=building__battle_pyramid kind=deckRamp coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY 7 10 224 pair=building__battle_pyramid kind=deckRamp coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY 7 11 224 pair=building__battle_pyramid kind=deckRamp coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY 7 12 224 pair=building__battle_pyramid kind=deckRamp coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+#DONE EM_BATTLE_FRONTIER_BATTLE_PYRAMID_LOBBY

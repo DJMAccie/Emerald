@@ -1,0 +1,1 @@
+return {{'EM_RUSTBORO_CITY_DEVON_CORP_1F',14,3}}

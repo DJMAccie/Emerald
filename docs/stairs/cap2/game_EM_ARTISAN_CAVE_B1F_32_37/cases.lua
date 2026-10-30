@@ -1,0 +1,1 @@
+return {{'EM_ARTISAN_CAVE_B1F',32,37}}

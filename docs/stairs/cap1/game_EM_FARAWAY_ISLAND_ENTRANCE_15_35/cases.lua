@@ -1,0 +1,1 @@
+return {{'EM_FARAWAY_ISLAND_ENTRANCE',15,35}}

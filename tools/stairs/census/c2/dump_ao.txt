@@ -1,0 +1,84 @@
+#DONE EM_BATTLE_PYRAMID_SQUARE03
+#DONE EM_BATTLE_PYRAMID_SQUARE04
+#DONE EM_BATTLE_PYRAMID_SQUARE05
+#DONE EM_BATTLE_PYRAMID_SQUARE06
+#DONE EM_BATTLE_PYRAMID_SQUARE07
+EM_BATTLE_PYRAMID_SQUARE08 6 7 28D pair=building__battle_pyramid kind=flat coll=0 base=10 builder=stepcell-noflight step=1 up=- rise=-
+#DONE EM_BATTLE_PYRAMID_SQUARE08
+#DONE EM_BATTLE_PYRAMID_SQUARE09
+#DONE EM_BATTLE_PYRAMID_SQUARE10
+#DONE EM_BATTLE_PYRAMID_SQUARE11
+#DONE EM_BATTLE_PYRAMID_SQUARE12
+#DONE EM_BATTLE_PYRAMID_SQUARE13
+#DONE EM_BATTLE_PYRAMID_SQUARE14
+#DONE EM_BATTLE_PYRAMID_SQUARE15
+#DONE EM_BATTLE_PYRAMID_SQUARE16
+#DONE EM_UNION_ROOM
+EM_SAFARI_ZONE_NORTHWEST 13 14 0AF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_NORTHWEST 14 14 0CF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_NORTHWEST 13 31 0AF pair=general__lilycove kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHWEST 14 31 0CF pair=general__lilycove kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHWEST 21 35 0AF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_NORTHWEST 22 35 0CF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_NORTHWEST 8 42 0E8 pair=general__lilycove kind=steps coll=0 base=61.333333333333 builder=steps step=1 up=- rise=-
+#DONE EM_SAFARI_ZONE_NORTHWEST
+EM_SAFARI_ZONE_NORTH 22 23 323 pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_NORTH 9 24 0AF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_NORTH 10 24 0CF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+#DONE EM_SAFARI_ZONE_NORTH
+EM_SAFARI_ZONE_SOUTHWEST 8 2 0E8 pair=general__lilycove kind=steps coll=0 base=69.333333333333 builder=steps step=1 up=- rise=-
+EM_SAFARI_ZONE_SOUTHWEST 8 3 0E8 pair=general__lilycove kind=steps coll=0 base=58.666666666667 builder=steps step=1 up=- rise=-
+EM_SAFARI_ZONE_SOUTHWEST 7 6 001 pair=general__lilycove kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_SAFARI_ZONE_SOUTHWEST 8 6 001 pair=general__lilycove kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_SAFARI_ZONE_SOUTHWEST 9 6 001 pair=general__lilycove kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_SAFARI_ZONE_SOUTHWEST 19 22 0AF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_SOUTHWEST 20 22 0CF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_SOUTHWEST 19 23 0AF pair=general__lilycove kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_SOUTHWEST 20 23 0CF pair=general__lilycove kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+#DONE EM_SAFARI_ZONE_SOUTHWEST
+EM_SAFARI_ZONE_SOUTH 13 9 0AF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_SAFARI_ZONE_SOUTH 14 9 0CF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+#DONE EM_SAFARI_ZONE_SOUTH
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 17 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 18 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 19 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 20 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 21 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 22 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 23 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 24 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 25 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 26 23 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 17 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 18 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 19 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 20 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 21 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 22 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 23 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 24 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 25 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 26 24 0CF pair=general__battle_frontier_outside_west kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_BATTLE_FRONTIER_OUTSIDE_WEST 31 28 0AF pair=general__battle_frontier_outside_west kind=flat coll=0 base=-8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_BATTLE_FRONTIER_OUTSIDE_WEST
+#DONE EM_BATTLE_FRONTIER_BATTLE_TOWER_LOBBY
+#DONE EM_BATTLE_FRONTIER_BATTLE_TOWER_ELEVATOR
+#DONE EM_BATTLE_FRONTIER_BATTLE_TOWER_CORRIDOR
+#DONE EM_BATTLE_FRONTIER_BATTLE_TOWER_BATTLE_ROOM
+EM_SOUTHERN_ISLAND_EXTERIOR 24 11 0AF pair=general__rustboro kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_SOUTHERN_ISLAND_EXTERIOR 25 11 0CF pair=general__rustboro kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_SOUTHERN_ISLAND_EXTERIOR 24 13 0AF pair=general__rustboro kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_SOUTHERN_ISLAND_EXTERIOR 25 13 0CF pair=general__rustboro kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_SOUTHERN_ISLAND_EXTERIOR 15 18 0AF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SOUTHERN_ISLAND_EXTERIOR 16 18 0CF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_SOUTHERN_ISLAND_EXTERIOR
+#DONE EM_SOUTHERN_ISLAND_INTERIOR
+#DONE EM_SAFARI_ZONE_REST_HOUSE
+EM_SAFARI_ZONE_NORTHEAST 30 9 0AF pair=general__lilycove kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHEAST 31 9 0CF pair=general__lilycove kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHEAST 26 13 0AF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHEAST 27 13 0CF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHEAST 20 22 0AF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHEAST 21 22 0CF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SAFARI_ZONE_NORTHEAST 22 22 0CF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_SAFARI_ZONE_NORTHEAST

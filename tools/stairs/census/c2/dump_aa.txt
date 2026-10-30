@@ -1,0 +1,234 @@
+#DONE EM_PETALBURG_CITY
+EM_SLATEPORT_CITY 17 58 0AF pair=general__slateport kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SLATEPORT_CITY 18 58 0CF pair=general__slateport kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SLATEPORT_CITY 19 58 0CF pair=general__slateport kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SLATEPORT_CITY 32 58 0AF pair=general__slateport kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_SLATEPORT_CITY 33 58 0CF pair=general__slateport kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_SLATEPORT_CITY
+#DONE EM_MAUVILLE_CITY
+#DONE EM_RUSTBORO_CITY
+EM_FORTREE_CITY 10 5 245 pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 25 5 245 pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 32 5 245 pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 10 6 24D pair=general__fortree kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 25 6 24D pair=general__fortree kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 32 6 24D pair=general__fortree kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 12 15 245 pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 37 15 245 pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 12 16 24D pair=general__fortree kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_FORTREE_CITY 37 16 24D pair=general__fortree kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+#DONE EM_FORTREE_CITY
+EM_LILYCOVE_CITY 31 11 0AF pair=general__lilycove kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 32 11 0CF pair=general__lilycove kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 31 12 0AF pair=general__lilycove kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 32 12 0CF pair=general__lilycove kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 55 20 0AF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 56 20 0CF pair=general__lilycove kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 55 21 0AF pair=general__lilycove kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 56 21 0CF pair=general__lilycove kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_LILYCOVE_CITY 30 32 001 pair=general__lilycove kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_LILYCOVE_CITY 31 32 001 pair=general__lilycove kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_LILYCOVE_CITY 32 32 001 pair=general__lilycove kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_LILYCOVE_CITY 33 32 001 pair=general__lilycove kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+#DONE EM_LILYCOVE_CITY
+EM_MOSSDEEP_CITY 25 25 0AF pair=general__mossdeep kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 26 25 0CF pair=general__mossdeep kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 32 27 0AF pair=general__mossdeep kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 33 27 0CF pair=general__mossdeep kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 32 28 0AF pair=general__mossdeep kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 33 28 0CF pair=general__mossdeep kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 63 18 0AF pair=general__mossdeep kind=flat coll=0 base=101.33333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 64 18 0CF pair=general__mossdeep kind=flat coll=0 base=101.33333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 65 18 0CF pair=general__mossdeep kind=flat coll=0 base=101.33333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 63 19 0AF pair=general__mossdeep kind=flat coll=0 base=90.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 64 19 0CF pair=general__mossdeep kind=flat coll=0 base=90.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 65 19 0CF pair=general__mossdeep kind=flat coll=0 base=90.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 63 21 0AF pair=general__mossdeep kind=flat coll=0 base=69.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 64 21 0CF pair=general__mossdeep kind=flat coll=0 base=69.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 65 21 0CF pair=general__mossdeep kind=flat coll=0 base=69.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 63 22 0AF pair=general__mossdeep kind=flat coll=0 base=58.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 64 22 0CF pair=general__mossdeep kind=flat coll=0 base=58.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 65 22 0CF pair=general__mossdeep kind=flat coll=0 base=58.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_MOSSDEEP_CITY 57 27 0AF pair=general__mossdeep kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_MOSSDEEP_CITY 58 27 0CF pair=general__mossdeep kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_MOSSDEEP_CITY 46 31 0AF pair=general__mossdeep kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_MOSSDEEP_CITY 47 31 0CF pair=general__mossdeep kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_MOSSDEEP_CITY
+EM_SOOTOPOLIS_CITY 19 6 244 pair=general__sootopolis kind=steps coll=0 base=84 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 20 6 245 pair=general__sootopolis kind=steps coll=0 base=84 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 45 7 244 pair=general__sootopolis kind=steps coll=0 base=96 builder=steps step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY 9 8 244 pair=general__sootopolis kind=steps coll=0 base=108 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 29 8 244 pair=general__sootopolis kind=steps coll=0 base=72 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 30 8 245 pair=general__sootopolis kind=steps coll=0 base=72 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 9 9 244 pair=general__sootopolis kind=steps coll=0 base=96 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 45 9 244 pair=general__sootopolis kind=steps coll=0 base=84 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 34 10 244 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 35 10 245 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 45 10 244 pair=general__sootopolis kind=steps coll=0 base=72 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 15 11 244 pair=general__sootopolis kind=steps coll=0 base=84 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 16 11 245 pair=general__sootopolis kind=steps coll=0 base=84 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 34 11 244 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 35 11 245 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 34 12 244 pair=general__sootopolis kind=steps coll=0 base=36 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 35 12 245 pair=general__sootopolis kind=steps coll=0 base=36 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 15 13 244 pair=general__sootopolis kind=steps coll=0 base=72 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 16 13 245 pair=general__sootopolis kind=steps coll=0 base=72 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 25 15 244 pair=general__sootopolis kind=steps coll=0 base=24 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 26 15 245 pair=general__sootopolis kind=steps coll=0 base=24 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 16 16 244 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 17 16 245 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 16 17 244 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 17 17 245 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 49 18 244 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 50 18 245 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 25 19 244 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 26 19 245 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 49 19 244 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 50 19 245 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 20 20 244 pair=general__sootopolis kind=steps coll=0 base=36 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 12 21 244 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 13 21 245 pair=general__sootopolis kind=steps coll=0 base=60 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 20 21 244 pair=general__sootopolis kind=steps coll=0 base=24 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 44 22 244 pair=general__sootopolis kind=steps coll=0 base=36 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 45 22 245 pair=general__sootopolis kind=steps coll=0 base=36 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 12 23 244 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 13 23 245 pair=general__sootopolis kind=steps coll=0 base=48 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 21 24 244 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 22 24 245 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 53 29 244 pair=general__sootopolis kind=steps coll=0 base=36 builder=steps step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY 48 31 244 pair=general__sootopolis kind=steps coll=0 base=24 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 49 31 245 pair=general__sootopolis kind=steps coll=0 base=24 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 17 32 244 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 18 32 245 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 19 35 244 pair=general__sootopolis kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 20 35 245 pair=general__sootopolis kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 43 35 244 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 44 35 245 pair=general__sootopolis kind=steps coll=0 base=12 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 43 36 244 pair=general__sootopolis kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_SOOTOPOLIS_CITY 44 36 245 pair=general__sootopolis kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_SOOTOPOLIS_CITY
+EM_EVER_GRANDE_CITY 25 26 0AF pair=general__ever_grande kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_EVER_GRANDE_CITY 26 26 0CF pair=general__ever_grande kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_EVER_GRANDE_CITY 27 26 0CF pair=general__ever_grande kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_EVER_GRANDE_CITY 19 51 0AF pair=general__ever_grande kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_EVER_GRANDE_CITY 20 51 0CF pair=general__ever_grande kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_EVER_GRANDE_CITY 19 54 0AF pair=general__ever_grande kind=flat coll=0 base=16 builder=generic step=1 up=0,-1 rise=16
+EM_EVER_GRANDE_CITY 20 54 0CF pair=general__ever_grande kind=flat coll=0 base=16 builder=generic step=1 up=0,-1 rise=16
+#DONE EM_EVER_GRANDE_CITY
+#DONE EM_LITTLEROOT_TOWN
+#DONE EM_OLDALE_TOWN
+#DONE EM_DEWFORD_TOWN
+EM_LAVARIDGE_TOWN 2 9 2A8 pair=general__lavaridge kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_LAVARIDGE_TOWN 4 9 2A8 pair=general__lavaridge kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_LAVARIDGE_TOWN 6 9 28A pair=general__lavaridge kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_LAVARIDGE_TOWN 3 10 291 pair=general__lavaridge kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_LAVARIDGE_TOWN 5 10 291 pair=general__lavaridge kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_LAVARIDGE_TOWN
+#DONE EM_FALLARBOR_TOWN
+#DONE EM_VERDANTURF_TOWN
+#DONE EM_PACIFIDLOG_TOWN
+#DONE EM_ROUTE101
+#DONE EM_ROUTE102
+#DONE EM_ROUTE103
+EM_ROUTE104 15 51 001 pair=general__rustboro kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE104 15 52 001 pair=general__rustboro kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE104 16 54 0AF pair=general__rustboro kind=steps coll=0 base=8 builder=steps step=1 up=- rise=-
+EM_ROUTE104 17 54 0CF pair=general__rustboro kind=steps coll=0 base=8 builder=steps step=1 up=- rise=-
+EM_ROUTE104 28 70 0AF pair=general__rustboro kind=steps coll=0 base=8 builder=steps step=1 up=- rise=-
+EM_ROUTE104 29 70 0CF pair=general__rustboro kind=steps coll=0 base=8 builder=steps step=1 up=- rise=-
+#DONE EM_ROUTE104
+#DONE EM_ROUTE105
+#DONE EM_ROUTE106
+#DONE EM_ROUTE107
+#DONE EM_ROUTE108
+EM_ROUTE109 17 -2 0AF pair=general__slateport kind=flat coll=0 base=8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 -2 0CF pair=general__slateport kind=flat coll=0 base=8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 -2 0CF pair=general__slateport kind=flat coll=0 base=8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 32 -2 0AF pair=general__slateport kind=flat coll=0 base=8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 33 -2 0CF pair=general__slateport kind=flat coll=0 base=8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 16 9 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 9 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 22 9 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 25 9 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 13 10 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 10 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 22 10 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 25 10 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 13 11 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 16 11 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 17 11 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 23 11 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 24 11 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 11 12 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 13 12 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 14 12 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 15 12 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 11 13 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 13 13 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 12 14 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 14 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 24 14 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 17 15 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 24 15 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 17 16 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 16 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 20 16 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 21 16 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 22 16 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 23 16 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 13 17 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 17 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 13 18 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 15 18 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 18 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 22 18 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 24 18 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 15 19 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 19 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 22 19 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 24 19 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 16 20 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 17 20 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 23 20 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 17 53 2E8 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 53 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 17 54 2F0 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 54 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 18 55 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 56 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 21 56 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 19 57 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 21 57 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE109 20 58 124 pair=general__slateport kind=flat coll=0 base=0 builder=stepcell-noflight step=1 up=- rise=-
+#DONE EM_ROUTE109
+EM_ROUTE110 21 11 2D4 pair=general__mauville kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 22 11 2D4 pair=general__mauville kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 21 12 2D4 pair=general__mauville kind=flat coll=0 base=28.8 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 22 12 2D4 pair=general__mauville kind=flat coll=0 base=28.8 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 21 13 2D4 pair=general__mauville kind=flat coll=0 base=19.2 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 22 13 2D4 pair=general__mauville kind=flat coll=0 base=19.2 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 28 89 2D4 pair=general__mauville kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 29 89 2D4 pair=general__mauville kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 28 90 2D4 pair=general__mauville kind=flat coll=0 base=28.8 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 29 90 2D4 pair=general__mauville kind=flat coll=0 base=28.8 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 28 91 2D4 pair=general__mauville kind=flat coll=0 base=19.2 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE110 29 91 2D4 pair=general__mauville kind=flat coll=0 base=19.2 builder=generic step=1 up=0,-1 rise=9.6
+#DONE EM_ROUTE110
+EM_ROUTE111 17 36 0E8 pair=general__mauville kind=steps coll=0 base=53.333333333333 builder=steps step=1 up=- rise=-
+EM_ROUTE111 17 37 0E8 pair=general__mauville kind=steps coll=0 base=42.666666666667 builder=steps step=1 up=- rise=-
+EM_ROUTE111 29 6 0E8 pair=general__mauville kind=steps coll=0 base=53.333333333333 builder=steps step=1 up=- rise=-
+EM_ROUTE111 29 7 0E8 pair=general__mauville kind=steps coll=0 base=42.666666666667 builder=steps step=1 up=- rise=-
+EM_ROUTE111 21 122 0AF pair=general__mauville kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE111 22 122 0CF pair=general__mauville kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE111 23 122 0CF pair=general__mauville kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE111 21 125 0AF pair=general__mauville kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE111 22 125 0CF pair=general__mauville kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE111 23 125 0CF pair=general__mauville kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_ROUTE111
+EM_ROUTE112 20 41 0AF pair=general__lavaridge kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE112 21 41 0CF pair=general__lavaridge kind=flat coll=0 base=38.4 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE112 20 42 0AF pair=general__lavaridge kind=flat coll=0 base=28.8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE112 21 42 0CF pair=general__lavaridge kind=flat coll=0 base=28.8 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE112 20 43 0AF pair=general__lavaridge kind=flat coll=0 base=19.2 builder=generic step=1 up=0,-1 rise=9.6
+EM_ROUTE112 21 43 0CF pair=general__lavaridge kind=flat coll=0 base=19.2 builder=generic step=1 up=0,-1 rise=9.6
+#DONE EM_ROUTE112

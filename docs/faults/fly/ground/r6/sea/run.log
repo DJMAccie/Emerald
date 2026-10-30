@@ -1,0 +1,123 @@
+[qa_tryp] identity pokemon-love2d-rseqa-p4 files Gen3FlyPath.lua Gen3FlyOver.lua Gen3FlyGround.lua assets/worldfill/fill.bin assets/worldfill/placements.lua
+[ALSOFT] (EE) Unhandled channel count (24), using Stereo
+[game3/space] script bundle events=518 fromCache=true
+[game3/pokemon] species pack ready (412)
+[game3/party_chrome] party chrome manifest ready
+[game3/encounters] loaded 348 map tables (ROM extract)
+[game3/dataset] hydrated 519 maps midLayouts=518 eventMaps=518 (start=EM_INSIDE_OF_TRUCK)
+[info] loaded save
+[game3/items] pack ready (377)
+[info] loaded mod STADIUM2_IMPORTER 0.21.0
+[warn] [BATTLE_ART_VOXEL_FORK] os.getenv was removed from the mod sandbox; the environment is hidden; home-like names answer with this mod's virtual root
+[warn] [BATTLE_ART_VOXEL_FORK] loadfile was removed from the mod sandbox; the chunk is compiled into this mod's sandbox; prefer require or mod:read
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousemoved assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousepressed assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousereleased assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[Battle Art FireRed] native field and battle background adapters installed
+[info] loaded mod BATTLE_ART_VOXEL_FORK 1.28.9
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at live-game
+[info] [animated_menu_pokemon] Pokemon menu icons v9 FRLG mobile Renderer-aligned HD path active for Gen 3 (#001-386)
+[info] [animated_menu_pokemon] FRLG bridge active with 386 National Dex HD sprite records; native FRLG UI retained
+[info] loaded mod animated_menu_pokemon 1.6.0
+[info] loaded save
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at game.ready
+[game3] ACTIVE engine=game3 map=EM_SLATEPORT_CITY pos=19,20 reason=new_game
+[game3/player] avatar ready @ 19,20 down
+[game3/collision] grid ready (native) map=EM_SLATEPORT_CITY cells=40x60 warps=11
+[game3/objects] spawned 35 objects on EM_SLATEPORT_CITY
+[game3/pokemon] species pack ready (412)
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at pokemon.reload
+[game3/party_chrome] party chrome manifest ready
+[game3/battle_chrome] battle chrome ready (v8)
+[game3/objects] reloaded 35 objects on EM_SLATEPORT_CITY (kept tracks)
+[game3/native] atlas ready pair=general__slateport mids=918 256x928 layered=true
+[game3/ow] sprites ready (239 sheets)
+[game3] warped via game3 map loader → EM_SLATEPORT_CITY
+[info] [STADIUM2_IMPORTER] stadium2 cache: state=missing code=not_found game=emerald playthrough=6ae08d39002304b81f38bc8800000001
+[game3/field] native mid atlas ON pair=general__slateport
+[game3/native] atlas ready pair=general__mauville mids=1022 256x1024 layered=true
+[game3/native] atlas ready pair=general__pacifidlog mids=715 256x720 layered=true
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[game3/frlg_font] latin_narrow ready data/generated/gba/chrome/fonts/latin_narrow_fg.rgba
+[game3/native] atlas ready pair=general__petalburg mids=656 256x656 layered=true
+[game3/frlg_font] latin_normal ready data/generated/gba/chrome/fonts/latin_normal_fg.rgba
+[game3/frlg_font] latin_small ready data/generated/gba/chrome/fonts/latin_small_fg.rgba
+[game3/frlg_font] latin_short ready data/generated/gba/chrome/fonts/latin_short_fg.rgba
+[game3/frlg_font] latin_small_narrow ready data/generated/gba/chrome/fonts/latin_small_narrow_fg.rgba
+[fly dbg] flight	sea	from	EM_SLATEPORT_CITY	19	20	to	MAPSEC_MOSSDEEP_CITY	level	4	mon	0	18
+[fly dbg] follower mod export	NO	resolveGen3Sprite	-
+[fly dbg] destination	EM_MOSSDEEP_CITY	28	17
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyOver] town map open: laying the world
+[game3/native] atlas ready pair=general__fortree mids=792 256x800 layered=true
+[game3/native] atlas ready pair=general__fallarbor mids=879 256x880 layered=true
+[game3/native] atlas ready pair=general__mossdeep mids=966 256x976 layered=true
+[game3/native] atlas ready pair=general__ever_grande mids=680 256x688 layered=true
+[game3/native] atlas ready pair=general__battle_frontier_outside_east mids=1022 256x1024 layered=true
+[game3/native] atlas ready pair=general__dewford mids=891 256x896 layered=true
+[game3/native] atlas ready pair=general__rustboro mids=862 256x864 layered=true
+[game3/native] atlas ready pair=general__lilycove mids=863 256x864 layered=true
+[game3/native] atlas ready pair=general__lavaridge mids=953 256x960 layered=true
+[game3/native] atlas ready pair=general__cave mids=926 256x928 layered=true
+[game3/native] atlas ready pair=general__battle_frontier_outside_west mids=1022 256x1024 layered=true
+[FlyGround] world laid: 177200 quads in 141 meshes, 1.4 s after the first take-off (plan 196 ms, fill 88 ms)
+[FlyOver] world laid on the town map in 1.4 s
+[fly dbg] town map open for	120	frames, active	true
+[FlyOver] warmed in 144 ms
+[FlyOver] EM_SLATEPORT_CITY -> EM_MOSSDEEP_CITY (28,17): 7643 px, 11.0 s, 420 px up, whole-world ground (laid), rider sheet 18 follow
+[fly dbg] flight started at frame	120	4.9 s
+[fly slow] 171 ms in mount t=0.00/11.00 h=0 swapped=false | scene.draw cpu 832 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] mount t=0.00/1.00 sp=0.00 h=0 ready=nil swapped=false map=EM_SLATEPORT_CITY ms=171 active=true
+[fly slow] 45 ms in mount t=0.05/11.00 h=0 swapped=false | scene.draw cpu 10 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 54 parts drawn
+[fly dbg] shot	01_mount	t	0.52	h	0	map	EM_SLATEPORT_CITY
+[fly dbg] fly t=0.07/11.00 sp=0.00 h=1 ready=nil swapped=false map=EM_SLATEPORT_CITY ms=33 active=true
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 58 parts drawn
+[fly dbg] shot	02_liftoff	t	0.45	h	21	map	EM_SLATEPORT_CITY
+[fly dbg] fly t=1.03/11.00 sp=0.02 h=98 ready=nil swapped=false map=EM_SLATEPORT_CITY ms=32 active=true
+[fly slow] 50 ms in fly t=1.37/11.00 h=156 swapped=false | scene.draw cpu 12 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] fly t=2.05/11.00 sp=0.09 h=285 ready=nil swapped=false map=EM_SLATEPORT_CITY ms=33 active=true
+[fly slow] 67 ms in fly t=2.17/11.00 h=305 swapped=false | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] fly t=2.92/11.00 sp=0.17 h=404 ready=nil swapped=false map=EM_SLATEPORT_CITY ms=16 active=true
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 88 parts drawn
+[fly dbg] shot	03_30	t	3.32	h	420	map	EM_SLATEPORT_CITY
+[fly slow] 66 ms in fly t=3.42/11.00 h=420 swapped=false | scene.draw cpu 18 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly slow] 100 ms in fly t=3.47/11.00 h=420 swapped=false | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[FlyOver] slow ground: 38 ms
+[FlyOver] slow update: 38 ms
+[fly slow] 66 ms in fly t=3.77/11.00 h=420 swapped=false | scene.draw cpu 14 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] fly t=3.95/11.00 sp=0.29 h=420 ready=nil swapped=false map=EM_SLATEPORT_CITY ms=34 active=true
+[game3/objects] reloaded 17 objects on EM_MOSSDEEP_CITY
+[FlyOver] swapped to EM_MOSSDEEP_CITY mid-air in 9 ms
+[fly slow] 183 ms in fly t=4.63/11.00 h=420 swapped=true | scene.draw cpu 137 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly slow] 133 ms in fly t=4.68/11.00 h=420 swapped=true | scene.draw cpu 124 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly slow] 133 ms in fly t=4.73/11.00 h=420 swapped=true | scene.draw cpu 125 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly slow] 133 ms in fly t=4.78/11.00 h=420 swapped=true | scene.draw cpu 126 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly slow] 117 ms in fly t=4.83/11.00 h=420 swapped=true | scene.draw cpu 101 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] fly t=5.02/11.00 sp=0.43 h=420 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=17 active=true
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 81 parts drawn
+[fly dbg] shot	04_50	t	5.52	h	420	map	EM_MOSSDEEP_CITY
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] shot	04t_topdown	t	5.73	h	420	map	EM_MOSSDEEP_CITY
+[fly dbg] fly t=5.78/11.00 sp=0.54 h=420 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=17 active=true
+[fly dbg] fly t=6.55/11.00 sp=0.64 h=420 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=16 active=true
+[fly slow] 50 ms in fly t=6.60/11.00 h=420 swapped=true | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly slow] 50 ms in fly t=6.72/11.00 h=420 swapped=true | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 153 MB
+[fly dbg] fly t=7.45/11.00 sp=0.75 h=417 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=16 active=true
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 66 parts drawn
+[fly dbg] shot	05_70	t	7.70	h	404	map	EM_MOSSDEEP_CITY
+[fly dbg] fly t=8.23/11.00 sp=0.84 h=349 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=17 active=true
+[fly dbg] fly t=8.98/11.00 sp=0.91 h=235 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=17 active=true
+[fly dbg] fly t=9.77/11.00 sp=0.97 h=107 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=17 active=true
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 40 parts drawn
+[fly dbg] shot	06_90	t	9.92	h	85	map	EM_MOSSDEEP_CITY
+[fly dbg] fly t=10.62/11.00 sp=1.00 h=12 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=17 active=true
+[fly dbg] dismount t=0.38/1.00 sp=1.00 h=0 ready=true swapped=true map=EM_MOSSDEEP_CITY ms=16 active=true
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 34 parts drawn
+[fly dbg] shot	07_landing	t	0.50	h	0	map	EM_MOSSDEEP_CITY
+[FlyOver] landed on EM_MOSSDEEP_CITY (28,17) after 15.2 s (swap 9 ms, town built after 7.0 s)
+[fly dbg] frames mount    n= 41  p50 17  p90 33  p99 171  max 171 ms  over 40 ms: 2
+[fly dbg] frames fly      n=560  p50 17  p90 33  p99 100  max 183 ms  over 40 ms: 12
+[fly dbg] frames dismount n= 64  p50 17  p90 17  p99 33  max 33 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_MOSSDEEP_CITY	cell	28	17	facing	down	locked	false	visible	true	wanted	EM_MOSSDEEP_CITY	28	17	flight wall	21.5 s	worst frame	183 ms (fly)	scene ready	true
+[fly dbg] done

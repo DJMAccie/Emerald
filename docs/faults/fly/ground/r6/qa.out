@@ -1,0 +1,82 @@
+== long: 21 shots
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyGround] world laid: 177200 quads in 141 meshes, 1.4 s after the first take-off (plan 183 ms, fill 92 ms)
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 40 parts drawn
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 40 parts drawn
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 90 parts drawn
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 84 parts drawn
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 57 parts drawn
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 30 parts drawn
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 26 parts drawn
+[FlyOver] landed on EM_EVER_GRANDE_CITY (27,49) after 15.0 s (swap 3 ms, town built after 6.8 s)
+[fly dbg] frames mount    n= 41  p50 17  p90 33  p99 67  max 67 ms  over 40 ms: 1
+[fly dbg] frames fly      n=583  p50 17  p90 32  p99 67  max 233 ms  over 40 ms: 12
+[fly dbg] frames dismount n= 65  p50 17  p90 18  p99 33  max 33 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_EVER_GRANDE_CITY	cell	27	49	facing	down	locked	false	visible	true	wanted	EM_EVER_GRANDE_CITY	27	49	flight wall	21.6 s	worst frame	233 ms (fly)	scene ready	true
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 24 parts drawn
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 26 parts drawn
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 53 parts drawn
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 84 parts drawn
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 86 parts drawn
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 61 parts drawn
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 55 parts drawn
+[FlyOver] landed on EM_LAVARIDGE_TOWN (9,7) after 15.0 s (swap 5 ms, town built after 6.9 s)
+[fly dbg] frames mount    n= 50  p50 17  p90 17  p99 52  max 52 ms  over 40 ms: 1
+[fly dbg] frames fly      n=586  p50 17  p90 19  p99 70  max 150 ms  over 40 ms: 11
+[fly dbg] frames dismount n= 56  p50 17  p90 33  p99 34  max 34 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_LAVARIDGE_TOWN	cell	9	7	facing	down	locked	false	visible	true	wanted	EM_LAVARIDGE_TOWN	9	7	flight wall	20.8 s	worst frame	150 ms (fly)	scene ready	true
+== sea: 11 shots
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyGround] world laid: 177200 quads in 141 meshes, 1.4 s after the first take-off (plan 196 ms, fill 88 ms)
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 54 parts drawn
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 58 parts drawn
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 88 parts drawn
+[FlyOver] slow ground: 38 ms
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 81 parts drawn
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 66 parts drawn
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 40 parts drawn
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 34 parts drawn
+[FlyOver] landed on EM_MOSSDEEP_CITY (28,17) after 15.2 s (swap 9 ms, town built after 7.0 s)
+[fly dbg] frames mount    n= 41  p50 17  p90 33  p99 171  max 171 ms  over 40 ms: 2
+[fly dbg] frames fly      n=560  p50 17  p90 33  p99 100  max 183 ms  over 40 ms: 12
+[fly dbg] frames dismount n= 64  p50 17  p90 17  p99 33  max 33 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_MOSSDEEP_CITY	cell	28	17	facing	down	locked	false	visible	true	wanted	EM_MOSSDEEP_CITY	28	17	flight wall	21.5 s	worst frame	183 ms (fly)	scene ready	true
+== mountain: 11 shots
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyGround] world laid: 177200 quads in 141 meshes, 1.3 s after the first take-off (plan 178 ms, fill 89 ms)
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 35 parts drawn
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 35 parts drawn
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 51 parts drawn
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 59 parts drawn
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 61 parts drawn
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 56 parts drawn
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 55 parts drawn
+[FlyOver] landed on EM_LAVARIDGE_TOWN (9,7) after 9.1 s (swap 6 ms, town built after 4.5 s)
+[fly dbg] frames mount    n= 41  p50 17  p90 33  p99 66  max 66 ms  over 40 ms: 2
+[fly dbg] frames fly      n=241  p50 17  p90 33  p99 134  max 184 ms  over 40 ms: 6
+[fly dbg] frames dismount n= 65  p50 17  p90 18  p99 33  max 33 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_LAVARIDGE_TOWN	cell	9	7	facing	down	locked	false	visible	true	wanted	EM_LAVARIDGE_TOWN	9	7	flight wall	15.2 s	worst frame	184 ms (fly)	scene ready	true
+== iso: 11 shots
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyGround] world laid: 177210 quads in 141 meshes, 1.5 s after the first take-off (plan 191 ms, fill 92 ms)
+[fly dbg] ground at 01_mount: all laid, 177210 quads in 141 meshes, 39 parts drawn
+[fly dbg] ground at 02_liftoff: all laid, 177210 quads in 141 meshes, 39 parts drawn
+[fly dbg] ground at 03_30: all laid, 177210 quads in 141 meshes, 67 parts drawn
+[fly dbg] ground at 04_50: all laid, 177210 quads in 141 meshes, 67 parts drawn
+[fly dbg] ground at 04t_topdown: all laid, 177210 quads in 141 meshes, 141 parts drawn
+[fly dbg] ground at 05_70: all laid, 177210 quads in 141 meshes, 65 parts drawn
+[fly dbg] ground at 06_90: all laid, 177210 quads in 141 meshes, 51 parts drawn
+[fly dbg] ground at 07_landing: all laid, 177210 quads in 141 meshes, 47 parts drawn
+[FlyOver] landed on EM_SOOTOPOLIS_CITY (43,32) after 10.3 s (swap 40 ms, town built after 4.7 s)
+[fly dbg] frames mount    n= 47  p50 17  p90 33  p99 101  max 101 ms  over 40 ms: 1
+[fly dbg] frames fly      n=331  p50 17  p90 32  p99 68  max 250 ms  over 40 ms: 7
+[fly dbg] frames dismount n= 66  p50 17  p90 18  p99 20  max 20 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_SOOTOPOLIS_CITY	cell	43	32	facing	down	locked	false	visible	true	wanted	EM_SOOTOPOLIS_CITY	43	32	flight wall	16.8 s	worst frame	250 ms (fly)	scene ready	true

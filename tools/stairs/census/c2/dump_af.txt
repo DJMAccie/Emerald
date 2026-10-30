@@ -1,0 +1,70 @@
+#DONE EM_RUSTBORO_CITY_MART
+#DONE EM_RUSTBORO_CITY_FLAT1_1F
+#DONE EM_RUSTBORO_CITY_FLAT1_2F
+#DONE EM_RUSTBORO_CITY_HOUSE1
+#DONE EM_RUSTBORO_CITY_CUTTERS_HOUSE
+#DONE EM_RUSTBORO_CITY_HOUSE2
+#DONE EM_RUSTBORO_CITY_FLAT2_1F
+#DONE EM_RUSTBORO_CITY_FLAT2_2F
+#DONE EM_RUSTBORO_CITY_FLAT2_3F
+#DONE EM_RUSTBORO_CITY_HOUSE3
+#DONE EM_FORTREE_CITY_HOUSE1
+#DONE EM_FORTREE_CITY_GYM
+EM_FORTREE_CITY_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_FORTREE_CITY_POKEMON_CENTER_1F
+EM_FORTREE_CITY_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_FORTREE_CITY_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_FORTREE_CITY_POKEMON_CENTER_2F
+#DONE EM_FORTREE_CITY_MART
+#DONE EM_FORTREE_CITY_HOUSE2
+#DONE EM_FORTREE_CITY_HOUSE3
+#DONE EM_FORTREE_CITY_HOUSE4
+#DONE EM_FORTREE_CITY_HOUSE5
+#DONE EM_FORTREE_CITY_DECORATION_SHOP
+#DONE EM_LILYCOVE_CITY_COVE_LILY_MOTEL_1F
+#DONE EM_LILYCOVE_CITY_COVE_LILY_MOTEL_2F
+#DONE EM_LILYCOVE_CITY_LILYCOVE_MUSEUM_1F
+#DONE EM_LILYCOVE_CITY_LILYCOVE_MUSEUM_2F
+#DONE EM_LILYCOVE_CITY_CONTEST_LOBBY
+EM_LILYCOVE_CITY_CONTEST_HALL 24 15 283 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 25 15 284 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 26 15 285 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 24 16 283 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 25 16 284 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 26 16 285 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 12 27 293 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 13 27 294 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 14 27 295 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 36 27 2B3 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 37 27 2B4 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 38 27 2B5 pair=building__contest kind=steps coll=0 base=5 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 12 28 293 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 13 28 294 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 14 28 295 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 36 28 2B3 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 37 28 2B4 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_LILYCOVE_CITY_CONTEST_HALL 38 28 2B5 pair=building__contest kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_LILYCOVE_CITY_CONTEST_HALL
+EM_LILYCOVE_CITY_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_LILYCOVE_CITY_POKEMON_CENTER_1F
+EM_LILYCOVE_CITY_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LILYCOVE_CITY_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_LILYCOVE_CITY_POKEMON_CENTER_2F

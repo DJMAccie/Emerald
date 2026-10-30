@@ -1,0 +1,1 @@
+return {{'EM_SEALED_CHAMBER_INNER_ROOM',11,19}}

@@ -1,0 +1,135 @@
+[qa_tryp] identity pokemon-love2d-rseqa-p2 files Gen3Rock.lua Gen3Mass.lua Gen3Relief.lua
+[ALSOFT] (EE) Unhandled channel count (24), using Stereo
+[worker em_pokemon_data] completed in 0.135s (res=true)
+[tutor_extract] 30 tutor moves, 372 species with a tutor bit -> data/generated/gba/pokemon/tutor.lua
+[worker data_tables] completed in 0.201s (res=true)
+[worker data_trainers] completed in 0.325s (res=true)
+[maps_native] skip layout alt_242: no tileset pair
+[egg_extract] EGG front pic 64x64, 4 hatch frames, 4 shard frames -> data/generated/gba/pokemon/egg
+[worker em_pokemon_forms] completed in 0.659s (res=true)
+[worker maps_tree] completed in 1.428s (res=true)
+[worker text_chrome] completed in 0.515s (res=true)
+[ow] extracted 239 / 239 object graphics → data/generated/gba/ow
+[worker ow_sprites] completed in 0.740s (res=true)
+[gba/field_effects] rse: 37 objects, 13 extras -> data/generated/gba/field_effects
+[worker field_fx] completed in 0.211s (res=true)
+[door_extract] rse: 53 entries, 40 tileset pairs with doors
+[battle_anim_extract] decoding 355 move scripts from ROM...
+[berry_trees] 43 trees -> data/generated/gba/berry_trees
+[rotating_gates] 8 gate sheets -> data/generated/gba/rotating_gates
+[worker field_objects] completed in 0.252s (res=true)
+[battle_anim_extract] 355 moves decoded, 193 unique tags
+[battle_anim_extract] extracting 193 sprite sheets...
+[battle_ai_extract] 32 entry scripts, 525 bodies -> data/generated/gba/battle_ai/pack.lua
+[worker em_pokemon_gfx_a] completed in 3.729s (res=true)
+[worker em_pokemon_gfx_b] completed in 3.880s (res=true)
+[battle_anim_extract] wrote 289 tag PNGs
+[worker em_boot_intro] completed in 1.162s (res=true)
+[worker scripts_bfs] completed in 6.630s (res=true)
+[worker em_boot_screens] completed in 0.346s (res=true)
+[worker audio] completed in 2.212s (res=true)
+[gba/encounters] extracted 124 headers → data/generated/gba/encounters.lua (116 game3 aliases)
+[worker ui_wild] completed in 0.085s (res=true)
+[heal_locations] 22 respawn points + 16 Fly destinations -> data/generated/gba/region_map
+[worker ui_places] completed in 0.103s (res=true)
+[worker ui_relearner] completed in 0.015s (res=true)
+[gba/battle_transition] baked rse big=240x160 slide=32x32 grid=8x120 assets=15 -> data/generated/gba/pokemon/battle_transition
+[worker battle_assets] completed in 4.025s (res=true)
+[worker rse_story] completed in 0.127s (res=true)
+[worker rse_b3] completed in 0.021s (res=true)
+[worker battle_b2] completed in 0.093s (res=true)
+[worker field_fc] completed in 0.090s (res=true)
+[worker ub_region_dex] completed in 0.205s (res=true)
+[worker rse_ui_menus] completed in 0.767s (res=true)
+[game3/storage_chrome_extract] storage chrome ready (data/generated/gba/pokemon/storage, 96 assets)
+[worker battle_anims] completed in 5.738s (res=true)
+[worker ud_pokenav] completed in 0.358s (res=true)
+[worker rse_xa] completed in 0.514s (res=true)
+[worker rse_c1a] completed in 0.091s (res=true)
+[worker rse_c1b] completed in 0.086s (res=true)
+[worker rse_sb] completed in 0.057s (res=true)
+[worker pokeblock_pb1] completed in 0.145s (res=true)
+[worker tv_shows] completed in 0.060s (res=true)
+[worker berry_blender_pb2] completed in 0.310s (res=true)
+[worker rse_misc] completed in 0.159s (res=true)
+[worker uc_screens] completed in 2.302s (res=true)
+[worker rse_gc] completed in 0.247s (res=true)
+[worker rse_f2] completed in 0.135s (res=true)
+[worker pn_pokenav_condition] completed in 0.253s (res=true)
+[worker rse_f1] completed in 0.239s (res=true)
+[worker rse_f3] completed in 0.057s (res=true)
+[worker rse_f4] completed in 0.149s (res=true)
+[berry_crush_extract] 4 layers, 4 sprite sheets -> data/generated/gba/berry_crush
+[trade_extract] console 240x524, 7 flash frames, 12 ball frames -> data/generated/gba/trade
+[dodrio_extract] 3 layers, 5 sprite sheets -> data/generated/gba/dodrio_berry_picking
+[link_art_extract] 7 wireless icon frames, chat screen 240x160, status screen 240x160 -> data/generated/gba
+[pokemon_jump_extract] 3 layers, 5 sprite sheets -> data/generated/gba/pokemon_jump
+[mystery_gift_extract] 8 wonder card and 8 wonder news backgrounds 240x160 -> data/generated/gba/mystery_gift
+[lmg_extract] countdowns, digits, 3 minigames, mystery gift -> data/generated/gba
+[worker rse_lmg] completed in 0.738s (res=true)
+[worker rse_link] completed in 0.992s (res=true)
+[maps_native] 518 maps, 34 alt layouts, 0 dropped, 75 pairs, 35116 mids, 69 anim pairs (68.6s)
+[worker maps_native] completed in 23.946s (res=true)
+[game3/space] script bundle events=518 fromCache=true
+[game3/pokemon] species pack ready (412)
+[game3/party_chrome] party chrome manifest ready
+[game3/encounters] loaded 348 map tables (ROM extract)
+[game3/dataset] hydrated 519 maps midLayouts=518 eventMaps=518 (start=EM_INSIDE_OF_TRUCK)
+[info] loaded save
+[game3/items] pack ready (377)
+[info] loaded mod STADIUM2_IMPORTER 0.21.0
+[warn] [BATTLE_ART_VOXEL_FORK] os.getenv was removed from the mod sandbox; the environment is hidden; home-like names answer with this mod's virtual root
+[warn] [BATTLE_ART_VOXEL_FORK] loadfile was removed from the mod sandbox; the chunk is compiled into this mod's sandbox; prefer require or mod:read
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousemoved assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousepressed assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousereleased assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[Battle Art FireRed] native field and battle background adapters installed
+[info] loaded mod BATTLE_ART_VOXEL_FORK 1.28.9
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at live-game
+[info] [animated_menu_pokemon] Pokemon menu icons v9 FRLG mobile Renderer-aligned HD path active for Gen 3 (#001-386)
+[info] [animated_menu_pokemon] FRLG bridge active with 386 National Dex HD sprite records; native FRLG UI retained
+[info] loaded mod animated_menu_pokemon 1.6.0
+[info] loaded save
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at game.ready
+[game3] ACTIVE engine=game3 map=EM_LITTLEROOT_TOWN pos=10,10 reason=new_game
+[game3/player] avatar ready @ 10,10 down
+[game3/collision] grid ready (native) map=EM_LITTLEROOT_TOWN cells=20x20 warps=3
+[game3/objects] spawned 8 objects on EM_LITTLEROOT_TOWN
+[game3/pokemon] species pack ready (412)
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at pokemon.reload
+[game3/party_chrome] party chrome manifest ready
+[game3/battle_chrome] battle chrome ready (v8)
+[game3/objects] reloaded 8 objects on EM_LITTLEROOT_TOWN (kept tracks)
+[game3/native] atlas ready pair=general__petalburg mids=656 256x656 layered=true
+[game3/ow] sprites ready (239 sheets)
+[game3] warped via game3 map loader → EM_LITTLEROOT_TOWN
+[info] [STADIUM2_IMPORTER] stadium2 cache: state=missing code=not_found game=emerald playthrough=6ade3a4f047e262d255030d800000001
+[game3/field] native mid atlas ON pair=general__petalburg
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[game3/frlg_font] latin_normal ready data/generated/gba/chrome/fonts/latin_normal_fg.rgba
+[game3/frlg_font] latin_small ready data/generated/gba/chrome/fonts/latin_small_fg.rgba
+[game3/frlg_font] latin_short ready data/generated/gba/chrome/fonts/latin_short_fg.rgba
+[game3/frlg_font] latin_narrow ready data/generated/gba/chrome/fonts/latin_narrow_fg.rgba
+[game3/frlg_font] latin_small_narrow ready data/generated/gba/chrome/fonts/latin_small_narrow_fg.rgba
+[game3/native] atlas ready pair=general__dewford mids=891 256x896 layered=true
+[game3/native] atlas ready pair=general__slateport mids=918 256x928 layered=true
+[game3/objects] reloaded 46 objects on EM_ROUTE111
+[game3/native] atlas ready pair=general__mauville mids=1022 256x1024 layered=true
+[game3/native] atlas ready pair=general__lavaridge mids=953 256x960 layered=true
+[game3/native] atlas ready pair=general__fortree mids=792 256x800 layered=true
+[game3/objects] reloaded 46 objects on EM_ROUTE111 (kept tracks)
+[game3/native] atlas ready pair=general__fallarbor mids=879 256x880 layered=true
+[game3/objects] reloaded 46 objects on EM_ROUTE111 (kept tracks)
+[game3/objects] reloaded 14 objects on EM_ROUTE112
+[game3/objects] reloaded 14 objects on EM_ROUTE112 (kept tracks)
+[game3/objects] reloaded 16 objects on EM_ROUTE113
+[info] [STADIUM2_IMPORTER] stadium2 importer: built 251/251 species, 26 Unown forms, Substitute; animation species=251
+[game3/objects] reloaded 16 objects on EM_ROUTE113 (kept tracks)
+[game3/objects] reloaded 16 objects on EM_ROUTE113 (kept tracks)
+[game3/objects] reloaded 27 objects on EM_ROUTE114
+[game3/objects] reloaded 27 objects on EM_ROUTE114 (kept tracks)
+[game3/native] atlas ready pair=general__rustboro mids=862 256x864 layered=true
+[game3/objects] reloaded 23 objects on EM_ROUTE115
+[game3/objects] reloaded 23 objects on EM_ROUTE115 (kept tracks)
+[game3/objects] reloaded 28 objects on EM_ROUTE116
+[game3/objects] reloaded 28 objects on EM_ROUTE116 (kept tracks)

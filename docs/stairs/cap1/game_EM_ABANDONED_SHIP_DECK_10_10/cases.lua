@@ -1,0 +1,1 @@
+return {{'EM_ABANDONED_SHIP_DECK',10,10}}

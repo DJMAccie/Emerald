@@ -1,0 +1,1 @@
+return {{'EM_SAFARI_ZONE_NORTH',16,36}}

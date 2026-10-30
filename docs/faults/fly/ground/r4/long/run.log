@@ -1,0 +1,188 @@
+[qa_tryp] identity pokemon-love2d-rseqa-p4 files Gen3FlyPath.lua Gen3FlyOver.lua Gen3FlyGround.lua assets/worldfill/fill.bin assets/worldfill/placements.lua
+[ALSOFT] (EE) Unhandled channel count (24), using Stereo
+[game3/space] script bundle events=518 fromCache=true
+[game3/pokemon] species pack ready (412)
+[game3/party_chrome] party chrome manifest ready
+[game3/encounters] loaded 348 map tables (ROM extract)
+[game3/dataset] hydrated 519 maps midLayouts=518 eventMaps=518 (start=EM_INSIDE_OF_TRUCK)
+[info] loaded save
+[game3/items] pack ready (377)
+[info] loaded mod STADIUM2_IMPORTER 0.21.0
+[warn] [BATTLE_ART_VOXEL_FORK] os.getenv was removed from the mod sandbox; the environment is hidden; home-like names answer with this mod's virtual root
+[warn] [BATTLE_ART_VOXEL_FORK] loadfile was removed from the mod sandbox; the chunk is compiled into this mod's sandbox; prefer require or mod:read
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousemoved assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousepressed assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousereleased assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[Battle Art FireRed] native field and battle background adapters installed
+[info] loaded mod BATTLE_ART_VOXEL_FORK 1.28.9
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at live-game
+[info] [animated_menu_pokemon] Pokemon menu icons v9 FRLG mobile Renderer-aligned HD path active for Gen 3 (#001-386)
+[info] [animated_menu_pokemon] FRLG bridge active with 386 National Dex HD sprite records; native FRLG UI retained
+[info] loaded mod animated_menu_pokemon 1.6.0
+[info] loaded save
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at game.ready
+[game3] ACTIVE engine=game3 map=EM_RUSTBORO_CITY pos=16,39 reason=new_game
+[game3/player] avatar ready @ 16,39 down
+[game3/collision] grid ready (native) map=EM_RUSTBORO_CITY cells=40x60 warps=12
+[game3/objects] spawned 16 objects on EM_RUSTBORO_CITY
+[game3/pokemon] species pack ready (412)
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at pokemon.reload
+[game3/party_chrome] party chrome manifest ready
+[game3/battle_chrome] battle chrome ready (v8)
+[game3/objects] reloaded 16 objects on EM_RUSTBORO_CITY (kept tracks)
+[game3/native] atlas ready pair=general__rustboro mids=862 256x864 layered=true
+[game3/ow] sprites ready (239 sheets)
+[game3] warped via game3 map loader → EM_RUSTBORO_CITY
+[info] [STADIUM2_IMPORTER] stadium2 cache: state=missing code=not_found game=emerald playthrough=6ae089e600295343209efca000000001
+[game3/field] native mid atlas ON pair=general__rustboro
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[game3/frlg_font] latin_normal ready data/generated/gba/chrome/fonts/latin_normal_fg.rgba
+[game3/frlg_font] latin_small ready data/generated/gba/chrome/fonts/latin_small_fg.rgba
+[game3/frlg_font] latin_short ready data/generated/gba/chrome/fonts/latin_short_fg.rgba
+[game3/frlg_font] latin_narrow ready data/generated/gba/chrome/fonts/latin_narrow_fg.rgba
+[game3/frlg_font] latin_small_narrow ready data/generated/gba/chrome/fonts/latin_small_narrow_fg.rgba
+[fly dbg] flight	long	from	EM_RUSTBORO_CITY	16	39	to	MAPSEC_EVER_GRANDE_CITY	level	4	mon	0	18
+[fly dbg] follower mod export	NO	resolveGen3Sprite	-
+[fly dbg] destination	EM_EVER_GRANDE_CITY	27	49
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyOver] town map open: laying the world
+[fly dbg] town map open for	240	frames, active	true
+[game3/native] atlas ready pair=general__fallarbor mids=879 256x880 layered=true
+[game3/native] atlas ready pair=general__lavaridge mids=953 256x960 layered=true
+[game3/native] atlas ready pair=general__slateport mids=918 256x928 layered=true
+[game3/native] atlas ready pair=general__mauville mids=1022 256x1024 layered=true
+[game3/native] atlas ready pair=general__petalburg mids=656 256x656 layered=true
+[game3/native] atlas ready pair=general__dewford mids=891 256x896 layered=true
+[game3/native] atlas ready pair=general__pacifidlog mids=715 256x720 layered=true
+[game3/native] atlas ready pair=general__fortree mids=792 256x800 layered=true
+[game3/native] atlas ready pair=general__lilycove mids=863 256x864 layered=true
+[game3/native] atlas ready pair=general__cave mids=926 256x928 layered=true
+[game3/native] atlas ready pair=general__battle_frontier_outside_west mids=1022 256x1024 layered=true
+[game3/native] atlas ready pair=general__mossdeep mids=966 256x976 layered=true
+[game3/native] atlas ready pair=general__battle_frontier_outside_east mids=1022 256x1024 layered=true
+[game3/native] atlas ready pair=general__ever_grande mids=680 256x688 layered=true
+[FlyOver] warmed in 69 ms
+[FlyOver] EM_RUSTBORO_CITY -> EM_EVER_GRANDE_CITY (27,49): 12384 px, 11.0 s, 420 px up, whole-world ground, rider sheet 18 follow
+[fly dbg] flight started at frame	120	6.8 s
+[fly slow] 84 ms in mount t=0.00/11.00 h=0 swapped=false | scene.draw cpu 459 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] mount t=0.00/1.00 sp=0.00 h=0 ready=nil swapped=false map=EM_RUSTBORO_CITY ms=84 active=true
+[FlyOver] ground: 0 of 8 chunks within 1500 px laid at t=0.05 (mount)
+[fly slow] 50 ms in mount t=0.12/11.00 h=0 swapped=false | scene.draw cpu 4 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 50 ms in mount t=0.17/11.00 h=0 swapped=false | scene.draw cpu 7 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[FlyOver] slow ground: 12 ms
+[fly slow] 84 ms in mount t=0.22/11.00 h=0 swapped=false | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[FlyOver] ground: all 8 chunks within reach laid at t=0.40 (mount)
+[fly slow] 50 ms in mount t=0.42/11.00 h=0 swapped=false | scene.draw cpu 6 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] ground at 01_mount: laying, 32831 quads in 20 meshes, 20 parts drawn
+[fly dbg] shot	01_mount	t	0.50	h	0	map	EM_RUSTBORO_CITY
+[fly slow] 66 ms in mount t=0.85/11.00 h=0 swapped=false | scene.draw cpu 12 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 51 ms in fly t=0.03/11.00 h=0 swapped=false | scene.draw cpu 11 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 66 ms in fly t=0.08/11.00 h=1 swapped=false | scene.draw cpu 9 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] fly t=0.40/11.00 sp=0.00 h=17 ready=nil swapped=false map=EM_RUSTBORO_CITY ms=16 active=true
+[fly dbg] ground at 02_liftoff: laying, 84373 quads in 58 meshes, 40 parts drawn
+[fly dbg] shot	02_liftoff	t	0.47	h	23	map	EM_RUSTBORO_CITY
+[fly slow] 49 ms in fly t=0.90/11.00 h=77 swapped=false | scene.draw cpu 7 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 51 ms in fly t=1.03/11.00 h=98 swapped=false | scene.draw cpu 11 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 49 ms in fly t=1.12/11.00 h=112 swapped=false | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 51 ms in fly t=1.16/11.00 h=120 swapped=false | scene.draw cpu 10 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] fly t=1.78/11.00 sp=0.07 h=235 ready=nil swapped=false map=EM_RUSTBORO_CITY ms=16 active=true
+[fly slow] 49 ms in fly t=1.91/11.00 h=260 swapped=false | scene.draw cpu 18 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[FlyGround] world laid: 177200 quads in 141 meshes, 10.2 s after the first take-off (plan 358 ms, fill 140 ms)
+[fly dbg] fly t=2.80/11.00 sp=0.16 h=394 ready=nil swapped=false map=EM_RUSTBORO_CITY ms=17 active=true
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 90 parts drawn
+[fly dbg] shot	03_30	t	3.31	h	420	map	EM_RUSTBORO_CITY
+[fly slow] 50 ms in fly t=3.33/11.00 h=420 swapped=false | scene.draw cpu 14 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] fly t=3.66/11.00 sp=0.26 h=420 ready=nil swapped=false map=EM_RUSTBORO_CITY ms=33 active=true
+[fly dbg] fly t=4.51/11.00 sp=0.37 h=420 ready=nil swapped=false map=EM_RUSTBORO_CITY ms=34 active=true
+[fly slow] 50 ms in fly t=4.55/11.00 h=420 swapped=false | scene.draw cpu 14 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[game3/objects] reloaded 0 objects on EM_EVER_GRANDE_CITY
+[FlyOver] swapped to EM_EVER_GRANDE_CITY mid-air in 7 ms
+[fly slow] 233 ms in fly t=4.63/11.00 h=420 swapped=true | scene.draw cpu 175 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 150 ms in fly t=4.68/11.00 h=420 swapped=true | scene.draw cpu 126 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 151 ms in fly t=4.73/11.00 h=420 swapped=true | scene.draw cpu 133 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly slow] 300 ms in fly t=4.78/11.00 h=420 swapped=true | scene.draw cpu 97 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] fly t=5.46/11.00 sp=0.49 h=420 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=16 active=true
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 84 parts drawn
+[fly dbg] shot	04_50	t	5.51	h	420	map	EM_EVER_GRANDE_CITY
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] shot	04t_topdown	t	5.73	h	420	map	EM_EVER_GRANDE_CITY
+[fly dbg] fly t=6.31/11.00 sp=0.61 h=420 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=16 active=true
+[fly slow] 83 ms in fly t=6.95/11.00 h=420 swapped=true | scene.draw cpu 7 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] fly t=7.11/11.00 sp=0.71 h=420 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=18 active=true
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 57 parts drawn
+[fly dbg] shot	05_70	t	7.71	h	403	map	EM_EVER_GRANDE_CITY
+[fly dbg] fly t=7.88/11.00 sp=0.80 h=389 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=17 active=true
+[fly dbg] fly t=8.63/11.00 sp=0.88 h=292 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=16 active=true
+[fly dbg] fly t=9.41/11.00 sp=0.94 h=163 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=17 active=true
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 30 parts drawn
+[fly dbg] shot	06_90	t	9.91	h	86	map	EM_EVER_GRANDE_CITY
+[fly slow] 50 ms in fly t=9.93/11.00 h=83 swapped=true | scene.draw cpu 8 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] fly t=10.26/11.00 sp=0.99 h=42 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=17 active=true
+[fly dbg] dismount t=0.02/1.00 sp=1.00 h=0 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=18 active=true
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 26 parts drawn
+[fly dbg] shot	07_landing	t	0.50	h	0	map	EM_EVER_GRANDE_CITY
+[fly dbg] dismount t=0.77/1.00 sp=1.00 h=0 ready=true swapped=true map=EM_EVER_GRANDE_CITY ms=16 active=true
+[fly slow] 67 ms in dismount t=0.88/11.00 h=0 swapped=true | scene.draw cpu 3 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[FlyOver] landed on EM_EVER_GRANDE_CITY (27,49) after 15.3 s (swap 7 ms, town built after 7.0 s)
+[fly dbg] frames mount    n= 32  p50 18  p90 50  p99 84  max 84 ms  over 40 ms: 6
+[fly dbg] frames fly      n=545  p50 17  p90 33  p99 66  max 300 ms  over 40 ms: 15
+[fly dbg] frames dismount n= 64  p50 17  p90 17  p99 67  max 67 ms  over 40 ms: 1
+[fly dbg] landed: map	EM_EVER_GRANDE_CITY	cell	27	49	facing	down	locked	false	visible	true	wanted	EM_EVER_GRANDE_CITY	27	49	flight wall	24.1 s	worst frame	300 ms (fly)	scene ready	true
+[fly dbg] destination	EM_LAVARIDGE_TOWN	9	7
+[FlyOver] town map open: laying the world
+[FlyOver] world laid on the town map in 0.0 s
+[fly dbg] town map open for	240	frames, active	true
+[FlyOver] warmed in 56 ms
+[FlyOver] EM_EVER_GRANDE_CITY -> EM_LAVARIDGE_TOWN (9,7): 10532 px, 11.0 s, 420 px up, whole-world ground (laid), rider sheet 18 follow
+[fly dbg] flight started at frame	120	6.6 s
+[fly slow] 74 ms in mount t=0.00/11.00 h=0 swapped=false | scene.draw cpu 213 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] mount t=0.00/1.00 sp=0.00 h=0 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=74 active=true
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 24 parts drawn
+[fly dbg] shot	01_mount	t	0.51	h	0	map	EM_EVER_GRANDE_CITY
+[fly slow] 66 ms in mount t=0.54/11.00 h=0 swapped=false | scene.draw cpu 43 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] mount t=0.86/1.00 sp=0.00 h=0 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=18 active=true
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 26 parts drawn
+[fly dbg] shot	02_liftoff	t	0.45	h	21	map	EM_EVER_GRANDE_CITY
+[fly slow] 66 ms in fly t=0.68/11.00 h=47 swapped=false | scene.draw cpu 4 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] fly t=0.80/11.00 sp=0.02 h=62 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=17 active=true
+[fly dbg] fly t=1.58/11.00 sp=0.06 h=198 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=16 active=true
+[fly dbg] fly t=2.33/11.00 sp=0.12 h=333 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=17 active=true
+[info] [STADIUM2_IMPORTER] stadium2 importer: built 251/251 species, 26 Unown forms, Substitute; animation species=251
+[fly slow] 67 ms in fly t=2.77/11.00 h=391 swapped=false | scene.draw cpu 3 ms, draw calls 0, canvas switches 0, tex mem 151 MB
+[fly dbg] fly t=3.13/11.00 sp=0.20 h=417 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=17 active=true
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 53 parts drawn
+[fly dbg] shot	03_30	t	3.32	h	420	map	EM_EVER_GRANDE_CITY
+[fly dbg] fly t=4.07/11.00 sp=0.31 h=420 ready=nil swapped=false map=EM_EVER_GRANDE_CITY ms=16 active=true
+[game3/objects] reloaded 9 objects on EM_LAVARIDGE_TOWN
+[FlyOver] swapped to EM_LAVARIDGE_TOWN mid-air in 7 ms
+[fly slow] 167 ms in fly t=4.63/11.00 h=420 swapped=true | scene.draw cpu 124 ms, draw calls 0, canvas switches 0, tex mem 150 MB
+[fly slow] 150 ms in fly t=4.68/11.00 h=420 swapped=true | scene.draw cpu 124 ms, draw calls 0, canvas switches 0, tex mem 150 MB
+[fly slow] 150 ms in fly t=4.73/11.00 h=420 swapped=true | scene.draw cpu 125 ms, draw calls 0, canvas switches 0, tex mem 150 MB
+[fly slow] 152 ms in fly t=4.78/11.00 h=420 swapped=true | scene.draw cpu 127 ms, draw calls 0, canvas switches 0, tex mem 150 MB
+[fly slow] 148 ms in fly t=4.83/11.00 h=420 swapped=true | scene.draw cpu 124 ms, draw calls 0, canvas switches 0, tex mem 150 MB
+[fly slow] 150 ms in fly t=4.88/11.00 h=420 swapped=true | scene.draw cpu 131 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] fly t=5.15/11.00 sp=0.45 h=420 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=33 active=true
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 84 parts drawn
+[fly dbg] shot	04_50	t	5.52	h	420	map	EM_LAVARIDGE_TOWN
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] shot	04t_topdown	t	5.75	h	420	map	EM_LAVARIDGE_TOWN
+[fly dbg] fly t=6.10/11.00 sp=0.58 h=420 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=33 active=true
+[fly dbg] fly t=7.18/11.00 sp=0.72 h=420 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=18 active=true
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 86 parts drawn
+[fly dbg] shot	05_70	t	7.70	h	404	map	EM_LAVARIDGE_TOWN
+[fly slow] 50 ms in fly t=7.72/11.00 h=403 swapped=true | scene.draw cpu 19 ms, draw calls 0, canvas switches 0, tex mem 152 MB
+[fly dbg] fly t=8.33/11.00 sp=0.85 h=336 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=17 active=true
+[fly dbg] fly t=9.18/11.00 sp=0.93 h=201 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=17 active=true
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 61 parts drawn
+[fly dbg] shot	06_90	t	9.92	h	85	map	EM_LAVARIDGE_TOWN
+[fly dbg] fly t=10.03/11.00 sp=0.98 h=70 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=17 active=true
+[fly dbg] fly t=10.87/11.00 sp=1.00 h=2 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=17 active=true
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 55 parts drawn
+[fly dbg] shot	07_landing	t	0.50	h	0	map	EM_LAVARIDGE_TOWN
+[fly dbg] dismount t=0.70/1.00 sp=1.00 h=0 ready=true swapped=true map=EM_LAVARIDGE_TOWN ms=17 active=true
+[FlyOver] landed on EM_LAVARIDGE_TOWN (9,7) after 15.1 s (swap 7 ms, town built after 7.1 s)
+[fly dbg] frames mount    n= 47  p50 17  p90 27  p99 74  max 74 ms  over 40 ms: 2
+[fly dbg] frames fly      n=539  p50 17  p90 33  p99 148  max 167 ms  over 40 ms: 9
+[fly dbg] frames dismount n= 57  p50 17  p90 33  p99 34  max 34 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_LAVARIDGE_TOWN	cell	9	7	facing	down	locked	false	visible	true	wanted	EM_LAVARIDGE_TOWN	9	7	flight wall	23.4 s	worst frame	167 ms (fly)	scene ready	true
+[fly dbg] done

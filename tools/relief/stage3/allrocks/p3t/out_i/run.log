@@ -1,0 +1,604 @@
+[qa_tryp] identity pokemon-love2d-rseqa-p2 files Gen3Rock.lua Gen3Mass.lua
+[ALSOFT] (EE) Unhandled channel count (24), using Stereo
+[game3/space] script bundle events=518 fromCache=true
+[game3/pokemon] species pack ready (412)
+[game3/party_chrome] party chrome manifest ready
+[game3/encounters] loaded 348 map tables (ROM extract)
+[game3/dataset] hydrated 519 maps midLayouts=518 eventMaps=518 (start=EM_INSIDE_OF_TRUCK)
+[info] loaded save
+[game3/items] pack ready (377)
+[info] loaded mod STADIUM2_IMPORTER 0.21.0
+[warn] [BATTLE_ART_VOXEL_FORK] os.getenv was removed from the mod sandbox; the environment is hidden; home-like names answer with this mod's virtual root
+[warn] [BATTLE_ART_VOXEL_FORK] loadfile was removed from the mod sandbox; the chunk is compiled into this mod's sandbox; prefer require or mod:read
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousemoved assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousepressed assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousereleased assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[Battle Art FireRed] native field and battle background adapters installed
+[info] loaded mod BATTLE_ART_VOXEL_FORK 1.28.9
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at live-game
+[info] [animated_menu_pokemon] Pokemon menu icons v9 FRLG mobile Renderer-aligned HD path active for Gen 3 (#001-386)
+[info] [animated_menu_pokemon] FRLG bridge active with 386 National Dex HD sprite records; native FRLG UI retained
+[info] loaded mod animated_menu_pokemon 1.6.0
+[info] loaded save
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at game.ready
+[game3] ACTIVE engine=game3 map=EM_LITTLEROOT_TOWN pos=10,10 reason=new_game
+[game3/player] avatar ready @ 10,10 down
+[game3/collision] grid ready (native) map=EM_LITTLEROOT_TOWN cells=20x20 warps=3
+[game3/objects] spawned 8 objects on EM_LITTLEROOT_TOWN
+[game3/pokemon] species pack ready (412)
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at pokemon.reload
+[game3/party_chrome] party chrome manifest ready
+[game3/battle_chrome] battle chrome ready (v8)
+[game3/objects] reloaded 8 objects on EM_LITTLEROOT_TOWN (kept tracks)
+[game3/native] atlas ready pair=general__petalburg mids=656 256x656 layered=true
+[game3/ow] sprites ready (239 sheets)
+[game3] warped via game3 map loader → EM_LITTLEROOT_TOWN
+[info] [STADIUM2_IMPORTER] stadium2 cache: state=missing code=not_found game=emerald playthrough=6ade5afb0026f5442070a6c000000001
+[game3/field] native mid atlas ON pair=general__petalburg
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[game3/frlg_font] latin_normal ready data/generated/gba/chrome/fonts/latin_normal_fg.rgba
+[game3/frlg_font] latin_small ready data/generated/gba/chrome/fonts/latin_small_fg.rgba
+[game3/frlg_font] latin_short ready data/generated/gba/chrome/fonts/latin_short_fg.rgba
+[game3/frlg_font] latin_narrow ready data/generated/gba/chrome/fonts/latin_narrow_fg.rgba
+[game3/frlg_font] latin_small_narrow ready data/generated/gba/chrome/fonts/latin_small_narrow_fg.rgba
+[game3/native] atlas ready pair=general__dewford mids=891 256x896 layered=true
+[game3/native] atlas ready pair=general__slateport mids=918 256x928 layered=true
+[game3/objects] reloaded 10 objects on EM_ROUTE128
+[game3/native] atlas ready pair=general__mossdeep mids=966 256x976 layered=true
+[TR] flank EM_ROUTE128 19,26
+[TR] flank EM_ROUTE128 22,27
+[TR] flank EM_ROUTE128 22,26
+[TR] flank EM_ROUTE128 22,23
+[TR] flank EM_ROUTE128 22,22
+[TR] flank EM_ROUTE128 22,21
+[TR] flank EM_ROUTE128 22,20
+[TR] flank EM_ROUTE128 24,36
+[TR] flank EM_ROUTE128 25,38
+[TR] flank EM_ROUTE128 25,32
+[TR] flank EM_ROUTE128 26,36
+[TR] flank EM_ROUTE128 26,35
+[TR] flank EM_ROUTE128 26,34
+[TR] flank EM_ROUTE128 27,38
+[TR] flank EM_ROUTE128 24,7
+[TR] flank EM_ROUTE128 27,7
+[TR] flank EM_ROUTE128 27,6
+[TR] flank EM_ROUTE128 16,12
+[TR] flank EM_ROUTE128 16,5
+[TR] flank EM_ROUTE128 16,4
+[TR] flank EM_ROUTE128 17,10
+[TR] flank EM_ROUTE128 17,9
+[TR] flank EM_ROUTE128 17,8
+[TR] flank EM_ROUTE128 18,5
+[TR] flank EM_ROUTE128 18,4
+[game3/native] atlas ready pair=general__cave mids=926 256x928 layered=true
+[TR] flank EM_ROUTE128 19,26
+[TR] flank EM_ROUTE128 22,27
+[TR] flank EM_ROUTE128 22,26
+[TR] flank EM_ROUTE128 22,23
+[TR] flank EM_ROUTE128 22,22
+[TR] flank EM_ROUTE128 22,21
+[TR] flank EM_ROUTE128 22,20
+[TR] flank EM_ROUTE128 24,36
+[TR] flank EM_ROUTE128 25,38
+[TR] flank EM_ROUTE128 25,32
+[TR] flank EM_ROUTE128 26,36
+[TR] flank EM_ROUTE128 26,35
+[TR] flank EM_ROUTE128 26,34
+[TR] flank EM_ROUTE128 27,38
+[TR] flank EM_ROUTE128 24,7
+[TR] flank EM_ROUTE128 27,7
+[TR] flank EM_ROUTE128 27,6
+[TR] flank EM_ROUTE128 16,12
+[TR] flank EM_ROUTE128 16,5
+[TR] flank EM_ROUTE128 16,4
+[TR] flank EM_ROUTE128 17,10
+[TR] flank EM_ROUTE128 17,9
+[TR] flank EM_ROUTE128 17,8
+[TR] flank EM_ROUTE128 18,5
+[TR] flank EM_ROUTE128 18,4
+[TR] flank EM_ROUTE128 57,20
+[TR] flank EM_ROUTE128 60,20
+[TR] flank EM_ROUTE128 14,-6
+[TR] flank EM_ROUTE128 15,1
+[TR] flank EM_ROUTE128 15,0
+[TR] flank EM_ROUTE128 15,-1
+[TR] flank EM_ROUTE128 15,-2
+[TR] flank EM_ROUTE128 15,-10
+[TR] flank EM_ROUTE128 15,-11
+[TR] flank EM_ROUTE128 15,-12
+[TR] flank EM_ROUTE128 16,-5
+[TR] flank EM_ROUTE128 20,-7
+[TR] flank EM_ROUTE128 23,-5
+[TR] flank EM_ROUTE128 23,-6
+[TR] flank EM_ROUTE128 23,-7
+[TR] flank EM_ROUTE128 23,-9
+[TR] flank EM_ROUTE128 23,-10
+[TR] flank EM_ROUTE128 23,-11
+[TR] flank EM_ROUTE128 42,-4
+[TR] flank EM_ROUTE128 43,-1
+[TR] flank EM_ROUTE128 44,2
+[TR] flank EM_ROUTE128 44,-3
+[TR] flank EM_ROUTE128 45,0
+[TR] flank EM_ROUTE128 45,-10
+[TR] flank EM_ROUTE128 45,-11
+[TR] flank EM_ROUTE128 45,-12
+[TR] flank EM_ROUTE128 46,-3
+[TR] flank EM_ROUTE128 46,-4
+[TR] flank EM_ROUTE128 46,-5
+[TR] flank EM_ROUTE128 46,-6
+[TR] flank EM_ROUTE128 46,-7
+[TR] flank EM_ROUTE128 46,-8
+[TR] flank EM_ROUTE128 47,-1
+[TR] flank EM_ROUTE128 17,10
+[TR] flank EM_ROUTE128 17,9
+[TR] flank EM_ROUTE128 17,8
+[TR] flank EM_ROUTE128 17,7
+[TR] flank EM_ROUTE128 19,26
+[TR] flank EM_ROUTE128 22,27
+[TR] flank EM_ROUTE128 22,26
+[TR] flank EM_ROUTE128 22,23
+[TR] flank EM_ROUTE128 22,22
+[TR] flank EM_ROUTE128 22,21
+[TR] flank EM_ROUTE128 22,20
+[TR] flank EM_ROUTE128 68,33
+[TR] flank EM_ROUTE128 68,29
+[TR] flank EM_ROUTE128 4,-14
+[TR] flank EM_ROUTE128 5,-10
+[TR] flank EM_ROUTE128 6,-6
+[TR] flank EM_ROUTE128 6,-11
+[TR] flank EM_ROUTE128 7,-4
+[TR] flank EM_ROUTE128 7,-8
+[TR] flank EM_ROUTE128 8,-6
+[TR] flank EM_ROUTE128 9,-8
+[TR] flank EM_ROUTE128 9,-9
+[TR] flank EM_ROUTE128 9,-10
+[TR] flank EM_ROUTE128 9,-11
+[TR] flank EM_ROUTE128 10,1
+[TR] flank EM_ROUTE128 12,6
+[TR] flank EM_ROUTE128 13,7
+[TR] flank EM_ROUTE128 13,3
+[TR] flank EM_ROUTE128 14,8
+[TR] flank EM_ROUTE128 14,5
+[TR] flank EM_ROUTE128 16,5
+[TR] flank EM_ROUTE128 16,4
+[TR] flank EM_ROUTE128 16,3
+[TR] flank EM_ROUTE128 56,-14
+[TR] flank EM_ROUTE128 61,-14
+[TR] flank EM_ROUTE128 57,-9
+[TR] flank EM_ROUTE128 60,-9
+[TR] flank EM_ROUTE128 24,36
+[TR] flank EM_ROUTE128 25,38
+[TR] flank EM_ROUTE128 25,32
+[TR] flank EM_ROUTE128 26,39
+[TR] flank EM_ROUTE128 26,36
+[TR] flank EM_ROUTE128 26,35
+[TR] flank EM_ROUTE128 26,34
+[TR] flank EM_ROUTE128 27,38
+[TR] flank EM_ROUTE128 24,7
+[TR] flank EM_ROUTE128 27,7
+[TR] flank EM_ROUTE128 27,6
+[TR] flank EM_ROUTE128 46,42
+[TR] flank EM_ROUTE128 47,44
+[TR] flank EM_ROUTE128 48,43
+[TR] flank EM_ROUTE128 51,45
+[TR] flank EM_ROUTE128 55,50
+[TR] flank EM_ROUTE128 58,51
+[TR] flank EM_ROUTE128 58,50
+[TR] flank EM_ROUTE128 58,49
+[TR] flank EM_ROUTE128 9,51
+[TR] flank EM_ROUTE128 13,51
+[TR] flank EM_ROUTE128 30,49
+[TR] flank EM_ROUTE128 31,50
+[TR] flank EM_ROUTE128 31,47
+[TR] flank EM_ROUTE128 32,49
+[game3/objects] reloaded 10 objects on EM_ROUTE128 (kept tracks)
+[game3/native] atlas ready pair=general__ever_grande mids=680 256x688 layered=true
+[TR] flank EM_ROUTE128 100,19
+[TR] flank EM_ROUTE128 113,21
+[TR] flank EM_ROUTE128 91,32
+[TR] flank EM_ROUTE128 92,31
+[TR] flank EM_ROUTE128 95,33
+[TR] flank EM_ROUTE128 58,52
+[TR] flank EM_ROUTE128 58,51
+[TR] flank EM_ROUTE128 58,50
+[TR] flank EM_ROUTE128 58,49
+[TR] flank EM_ROUTE128 120,15
+[TR] flank EM_ROUTE128 120,9
+[TR] flank EM_ROUTE128 120,1
+[TR] flank EM_ROUTE128 120,-5
+[TR] flank EM_ROUTE128 121,16
+[TR] flank EM_ROUTE128 121,14
+[TR] flank EM_ROUTE128 121,0
+[TR] flank EM_ROUTE128 121,-7
+[TR] flank EM_ROUTE128 122,20
+[TR] flank EM_ROUTE128 122,15
+[TR] flank EM_ROUTE128 122,13
+[TR] flank EM_ROUTE128 122,-2
+[TR] flank EM_ROUTE128 123,26
+[TR] flank EM_ROUTE128 123,18
+[TR] flank EM_ROUTE128 123,14
+[TR] flank EM_ROUTE128 123,12
+[TR] flank EM_ROUTE128 123,-5
+[TR] flank EM_ROUTE128 124,29
+[TR] flank EM_ROUTE128 124,25
+[TR] flank EM_ROUTE128 124,17
+[TR] flank EM_ROUTE128 124,13
+[TR] flank EM_ROUTE128 124,11
+[TR] flank EM_ROUTE128 124,-7
+[TR] flank EM_ROUTE128 125,24
+[TR] flank EM_ROUTE128 125,16
+[TR] flank EM_ROUTE128 125,12
+[TR] flank EM_ROUTE128 125,8
+[TR] flank EM_ROUTE128 126,22
+[TR] flank EM_ROUTE128 126,14
+[TR] flank EM_ROUTE128 126,11
+[TR] flank EM_ROUTE128 126,6
+[TR] flank EM_ROUTE128 127,21
+[TR] flank EM_ROUTE128 127,12
+[TR] flank EM_ROUTE128 127,10
+[TR] flank EM_ROUTE128 127,5
+[TR] flank EM_ROUTE128 127,-3
+[TR] flank EM_ROUTE128 128,23
+[TR] flank EM_ROUTE128 128,20
+[TR] flank EM_ROUTE128 128,11
+[TR] flank EM_ROUTE128 128,8
+[TR] flank EM_ROUTE128 128,4
+[TR] flank EM_ROUTE128 128,-1
+[TR] flank EM_ROUTE128 128,-5
+[TR] flank EM_ROUTE128 72,-1
+[TR] flank EM_ROUTE128 72,-2
+[TR] flank EM_ROUTE128 83,13
+[TR] flank EM_ROUTE128 83,12
+[TR] flank EM_ROUTE128 74,31
+[TR] flank EM_ROUTE128 98,18
+[TR] flank EM_ROUTE128 60,20
+[TR] flank EM_ROUTE128 89,29
+[game3/objects] reloaded 5 objects on EM_ROUTE129
+[TR] flank EM_ROUTE129 47,4
+[TR] flank EM_ROUTE129 51,5
+[TR] flank EM_ROUTE129 55,10
+[TR] flank EM_ROUTE129 56,13
+[TR] flank EM_ROUTE129 56,9
+[TR] flank EM_ROUTE129 49,19
+[TR] flank EM_ROUTE129 50,21
+[TR] flank EM_ROUTE129 51,22
+[TR] flank EM_ROUTE129 51,19
+[TR] flank EM_ROUTE129 51,18
+[TR] flank EM_ROUTE129 52,21
+[TR] flank EM_ROUTE129 52,16
+[TR] flank EM_ROUTE129 53,14
+[TR] flank EM_ROUTE129 53,13
+[TR] flank EM_ROUTE129 30,9
+[TR] flank EM_ROUTE129 31,10
+[TR] flank EM_ROUTE129 31,7
+[TR] flank EM_ROUTE129 32,9
+[TR] flank EM_ROUTE129 22,27
+[TR] flank EM_ROUTE129 35,29
+[TR] flank EM_ROUTE129 22,12
+[TR] flank EM_ROUTE129 47,4
+[TR] flank EM_ROUTE129 51,5
+[TR] flank EM_ROUTE129 55,10
+[TR] flank EM_ROUTE129 56,13
+[TR] flank EM_ROUTE129 56,9
+[TR] flank EM_ROUTE129 49,19
+[TR] flank EM_ROUTE129 50,21
+[TR] flank EM_ROUTE129 51,22
+[TR] flank EM_ROUTE129 51,19
+[TR] flank EM_ROUTE129 51,18
+[TR] flank EM_ROUTE129 52,21
+[TR] flank EM_ROUTE129 52,16
+[TR] flank EM_ROUTE129 53,14
+[TR] flank EM_ROUTE129 53,13
+[TR] flank EM_ROUTE129 30,9
+[TR] flank EM_ROUTE129 31,10
+[TR] flank EM_ROUTE129 31,7
+[TR] flank EM_ROUTE129 32,9
+[TR] flank EM_ROUTE129 22,27
+[TR] flank EM_ROUTE129 35,29
+[TR] flank EM_ROUTE129 22,12
+[TR] flank EM_ROUTE129 8,18
+[TR] flank EM_ROUTE129 9,19
+[TR] flank EM_ROUTE129 13,19
+[TR] flank EM_ROUTE129 49,19
+[TR] flank EM_ROUTE129 50,21
+[TR] flank EM_ROUTE129 51,22
+[TR] flank EM_ROUTE129 51,19
+[TR] flank EM_ROUTE129 51,18
+[TR] flank EM_ROUTE129 52,21
+[TR] flank EM_ROUTE129 52,16
+[TR] flank EM_ROUTE129 53,14
+[TR] flank EM_ROUTE129 53,13
+[TR] flank EM_ROUTE129 24,-4
+[TR] flank EM_ROUTE129 25,-2
+[TR] flank EM_ROUTE129 25,-8
+[TR] flank EM_ROUTE129 26,-1
+[TR] flank EM_ROUTE129 26,-4
+[TR] flank EM_ROUTE129 26,-5
+[TR] flank EM_ROUTE129 26,-6
+[TR] flank EM_ROUTE129 27,-2
+[TR] flank EM_ROUTE129 46,2
+[TR] flank EM_ROUTE129 47,4
+[TR] flank EM_ROUTE129 48,3
+[TR] flank EM_ROUTE129 51,5
+[TR] flank EM_ROUTE129 55,10
+[TR] flank EM_ROUTE129 74,-9
+[TR] flank EM_ROUTE129 10,30
+[TR] flank EM_ROUTE129 18,31
+[TR] flank EM_ROUTE129 20,32
+[TR] flank EM_ROUTE129 20,31
+[TR] flank EM_ROUTE129 9,11
+[TR] flank EM_ROUTE129 13,11
+[TR] flank EM_ROUTE129 19,-14
+[TR] flank EM_ROUTE129 22,-13
+[TR] flank EM_ROUTE129 22,-14
+[TR] flank EM_ROUTE129 30,9
+[TR] flank EM_ROUTE129 31,10
+[TR] flank EM_ROUTE129 31,7
+[TR] flank EM_ROUTE129 32,9
+[TR] flank EM_ROUTE129 22,27
+[TR] flank EM_ROUTE129 35,29
+[TR] flank EM_ROUTE129 58,11
+[TR] flank EM_ROUTE129 58,10
+[TR] flank EM_ROUTE129 58,9
+[TR] flank EM_ROUTE129 16,21
+[game3/objects] reloaded 5 objects on EM_ROUTE129 (kept tracks)
+[TR] flank EM_ROUTE129 8,18
+[TR] flank EM_ROUTE129 9,19
+[TR] flank EM_ROUTE129 13,19
+[TR] flank EM_ROUTE129 49,19
+[TR] flank EM_ROUTE129 50,21
+[TR] flank EM_ROUTE129 51,22
+[TR] flank EM_ROUTE129 51,19
+[TR] flank EM_ROUTE129 51,18
+[TR] flank EM_ROUTE129 52,21
+[TR] flank EM_ROUTE129 52,16
+[TR] flank EM_ROUTE129 53,14
+[TR] flank EM_ROUTE129 53,13
+[TR] flank EM_ROUTE129 24,-4
+[TR] flank EM_ROUTE129 25,-2
+[TR] flank EM_ROUTE129 25,-8
+[TR] flank EM_ROUTE129 26,-1
+[TR] flank EM_ROUTE129 26,-4
+[TR] flank EM_ROUTE129 26,-5
+[TR] flank EM_ROUTE129 26,-6
+[TR] flank EM_ROUTE129 27,-2
+[TR] flank EM_ROUTE129 46,2
+[TR] flank EM_ROUTE129 47,4
+[TR] flank EM_ROUTE129 48,3
+[TR] flank EM_ROUTE129 51,5
+[TR] flank EM_ROUTE129 55,10
+[TR] flank EM_ROUTE129 62,5
+[TR] flank EM_ROUTE129 -6,11
+[TR] flank EM_ROUTE129 -3,11
+[TR] flank EM_ROUTE129 10,30
+[TR] flank EM_ROUTE129 18,31
+[TR] flank EM_ROUTE129 20,32
+[TR] flank EM_ROUTE129 20,31
+[TR] flank EM_ROUTE129 16,21
+[TR] flank EM_ROUTE129 9,11
+[TR] flank EM_ROUTE129 13,11
+[TR] flank EM_ROUTE129 30,9
+[TR] flank EM_ROUTE129 31,10
+[TR] flank EM_ROUTE129 31,7
+[TR] flank EM_ROUTE129 32,9
+[TR] flank EM_ROUTE129 22,27
+[TR] flank EM_ROUTE129 35,29
+[TR] flank EM_ROUTE129 58,11
+[TR] flank EM_ROUTE129 58,10
+[TR] flank EM_ROUTE129 58,9
+[TR] rim nil -8,26 bw=61 bh=16 n=837
+[TR] flank EM_ROUTE129 62,-4
+[info] [STADIUM2_IMPORTER] stadium2 importer: built 251/251 species, 26 Unown forms, Substitute; animation species=251
+[game3/objects] reloaded 5 objects on EM_ROUTE129 (kept tracks)
+[TR] flank EM_ROUTE129 49,19
+[TR] flank EM_ROUTE129 50,21
+[TR] flank EM_ROUTE129 51,22
+[TR] flank EM_ROUTE129 51,19
+[TR] flank EM_ROUTE129 51,18
+[TR] flank EM_ROUTE129 52,21
+[TR] flank EM_ROUTE129 52,16
+[TR] flank EM_ROUTE129 53,14
+[TR] flank EM_ROUTE129 53,13
+[TR] flank EM_ROUTE129 46,2
+[TR] flank EM_ROUTE129 47,4
+[TR] flank EM_ROUTE129 48,3
+[TR] flank EM_ROUTE129 51,5
+[TR] flank EM_ROUTE129 55,10
+[TR] rim nil 112,-8 bw=63 bh=16 n=942
+[TR] flank EM_ROUTE129 91,-8
+[TR] flank EM_ROUTE129 95,-7
+[TR] flank EM_ROUTE129 58,11
+[TR] flank EM_ROUTE129 58,10
+[TR] flank EM_ROUTE129 58,9
+[game3/objects] reloaded 4 objects on EM_ROUTE130
+[TR] flank EM_ROUTE130 51,19
+[TR] flank EM_ROUTE130 34,28
+[TR] flank EM_ROUTE130 42,36
+[TR] rim nil 42,35 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE130 31,16
+[TR] rim nil 47,17 bw=58 bh=16 n=717
+[game3/native] atlas ready pair=general__pacifidlog mids=715 256x720 layered=true
+[TR] flank EM_ROUTE130 51,19
+[TR] flank EM_ROUTE130 34,28
+[TR] flank EM_ROUTE130 42,36
+[TR] rim nil 42,35 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE130 31,16
+[TR] rim nil 47,17 bw=58 bh=16 n=717
+[TR] rim nil 16,17 bw=58 bh=16 n=717
+[TR] rim EM_ROUTE130 72,27 bw=48 bh=16 n=717
+[TR] flank EM_ROUTE130 51,19
+[TR] flank EM_ROUTE130 60,15
+[TR] flank EM_ROUTE130 66,30
+[TR] rim nil 61,30 bw=74 bh=16 n=956
+[TR] flank EM_ROUTE130 62,33
+[TR] flank EM_ROUTE130 63,34
+[TR] rim nil 42,35 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE130 42,36
+[TR] flank EM_ROUTE130 19,35
+[TR] flank EM_ROUTE130 34,28
+[TR] flank EM_ROUTE130 23,10
+[TR] flank EM_ROUTE130 18,12
+[TR] flank EM_ROUTE130 31,16
+[TR] flank EM_ROUTE130 64,12
+[TR] flank EM_ROUTE130 68,12
+[TR] flank EM_ROUTE130 74,11
+[TR] rim EM_ROUTE130 65,9 bw=48 bh=16 n=734
+[TR] rim nil 47,17 bw=58 bh=16 n=717
+[game3/objects] reloaded 4 objects on EM_ROUTE130 (kept tracks)
+[TR] rim nil 16,17 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE130 51,19
+[TR] flank EM_ROUTE130 60,15
+[TR] flank EM_ROUTE130 3,29
+[TR] rim nil 47,17 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE130 34,28
+[TR] flank EM_ROUTE130 23,10
+[TR] flank EM_ROUTE130 18,12
+[TR] flank EM_ROUTE130 31,16
+[TR] flank EM_ROUTE130 19,35
+[TR] flank EM_ROUTE130 -8,37
+[TR] flank EM_ROUTE130 42,36
+[TR] rim nil 42,35 bw=58 bh=16 n=717
+[game3/objects] reloaded 4 objects on EM_ROUTE130 (kept tracks)
+[TR] flank EM_ROUTE130 96,21
+[TR] flank EM_ROUTE130 104,-4
+[TR] flank EM_ROUTE130 105,-2
+[TR] flank EM_ROUTE130 105,-8
+[TR] flank EM_ROUTE130 106,-1
+[TR] flank EM_ROUTE130 106,-4
+[TR] flank EM_ROUTE130 106,-5
+[TR] flank EM_ROUTE130 106,-6
+[TR] flank EM_ROUTE130 107,-2
+[TR] rim EM_ROUTE130 72,26 bw=61 bh=16 n=837
+[TR] flank EM_ROUTE130 102,27
+[TR] flank EM_ROUTE130 115,29
+[TR] flank EM_ROUTE130 116,31
+[TR] flank EM_ROUTE130 46,20
+[TR] flank EM_ROUTE130 51,19
+[TR] flank EM_ROUTE130 60,15
+[TR] flank EM_ROUTE130 66,30
+[TR] flank EM_ROUTE130 90,30
+[TR] flank EM_ROUTE130 98,31
+[TR] flank EM_ROUTE130 100,32
+[TR] flank EM_ROUTE130 100,31
+[TR] flank EM_ROUTE130 62,33
+[TR] flank EM_ROUTE130 63,34
+[TR] flank EM_ROUTE130 88,18
+[TR] flank EM_ROUTE130 89,19
+[TR] flank EM_ROUTE130 93,19
+[TR] flank EM_ROUTE130 64,12
+[TR] flank EM_ROUTE130 68,12
+[TR] flank EM_ROUTE130 74,11
+[TR] flank EM_ROUTE130 77,11
+[TR] flank EM_ROUTE130 89,11
+[TR] flank EM_ROUTE130 93,11
+[TR] flank EM_ROUTE130 110,9
+[TR] flank EM_ROUTE130 111,10
+[TR] flank EM_ROUTE130 111,7
+[TR] flank EM_ROUTE130 112,9
+[TR] rim EM_ROUTE130 65,9 bw=48 bh=16 n=734
+[TR] rim nil 61,30 bw=74 bh=16 n=956
+[TR] rim nil 47,17 bw=58 bh=16 n=717
+[game3/objects] reloaded 8 objects on EM_ROUTE131
+[TR] flank EM_ROUTE131 46,18
+[TR] flank EM_ROUTE131 46,17
+[TR] flank EM_ROUTE131 25,35
+[TR] flank EM_ROUTE131 30,5
+[TR] flank EM_ROUTE131 32,4
+[TR] flank EM_ROUTE131 42,5
+[TR] flank EM_ROUTE131 27,11
+[TR] flank EM_ROUTE131 47,9
+[TR] flank EM_ROUTE131 27,34
+[TR] flank EM_ROUTE131 41,13
+[TR] flank EM_ROUTE131 41,12
+[TR] flank EM_ROUTE131 39,21
+[TR] flank EM_ROUTE131 16,31
+[TR] rim nil 30,21 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE131 46,18
+[TR] flank EM_ROUTE131 46,17
+[TR] flank EM_ROUTE131 25,35
+[TR] flank EM_ROUTE131 30,5
+[TR] flank EM_ROUTE131 32,4
+[TR] flank EM_ROUTE131 42,5
+[TR] flank EM_ROUTE131 27,11
+[TR] flank EM_ROUTE131 47,9
+[TR] flank EM_ROUTE131 27,34
+[TR] flank EM_ROUTE131 41,13
+[TR] flank EM_ROUTE131 41,12
+[TR] flank EM_ROUTE131 39,21
+[TR] flank EM_ROUTE131 16,31
+[TR] rim nil 30,21 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE131 27,11
+[TR] flank EM_ROUTE131 27,0
+[TR] flank EM_ROUTE131 28,3
+[TR] flank EM_ROUTE131 28,1
+[TR] flank EM_ROUTE131 30,5
+[TR] flank EM_ROUTE131 30,1
+[TR] flank EM_ROUTE131 31,3
+[TR] flank EM_ROUTE131 31,0
+[TR] flank EM_ROUTE131 32,4
+[TR] flank EM_ROUTE131 32,2
+[TR] flank EM_ROUTE131 33,3
+[TR] flank EM_ROUTE131 42,5
+[TR] flank EM_ROUTE131 45,0
+[TR] flank EM_ROUTE131 12,36
+[TR] flank EM_ROUTE131 16,39
+[TR] rim nil 30,21 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE131 39,21
+[TR] flank EM_ROUTE131 47,9
+[TR] rim nil 48,9 bw=58 bh=16 n=717
+[TR] flank EM_ROUTE131 46,18
+[TR] flank EM_ROUTE131 46,17
+[TR] flank EM_ROUTE131 25,35
+[TR] flank EM_ROUTE131 6,10
+[TR] flank EM_ROUTE131 41,13
+[TR] flank EM_ROUTE131 41,12
+[TR] flank EM_ROUTE131 27,34
+[TR] flank EM_ROUTE131 63,29
+[TR] rim EM_ROUTE131 -2,30 bw=96 bh=16 n=1434
+[TR] flank EM_ROUTE131 10,31
+[TR] flank EM_ROUTE131 16,31
+[TR] flank EM_ROUTE131 16,7
+[TR] rim EM_ROUTE131 7,34 bw=48 bh=16 n=717
+[game3/objects] reloaded 10 objects on EM_ROUTE132
+[TR] flank EM_ROUTE132 52,24
+[TR] flank EM_ROUTE132 52,24
+[TR] flank EM_ROUTE132 52,24
+[TR] flank EM_ROUTE132 55,2
+[TR] flank EM_ROUTE132 18,1
+[TR] flank EM_ROUTE132 6,3
+[TR] flank EM_ROUTE132 69,2
+[TR] flank EM_ROUTE132 70,3
+[TR] flank EM_ROUTE132 70,1
+[TR] flank EM_ROUTE132 72,0
+[TR] flank EM_ROUTE132 74,5
+[TR] flank EM_ROUTE132 65,1
+[TR] flank EM_ROUTE132 54,38
+[TR] flank EM_ROUTE132 73,10
+[game3/objects] reloaded 10 objects on EM_ROUTE132 (kept tracks)
+[TR] flank EM_ROUTE132 52,24
+[TR] flank EM_ROUTE132 55,2
+[TR] flank EM_ROUTE132 18,1
+[TR] flank EM_ROUTE132 6,3
+[TR] flank EM_ROUTE132 54,38
+[game3/objects] reloaded 10 objects on EM_ROUTE132 (kept tracks)
+[TR] flank EM_ROUTE132 112,36
+[TR] flank EM_ROUTE132 116,39
+[TR] flank EM_ROUTE132 52,24
+[TR] flank EM_ROUTE132 69,2
+[TR] flank EM_ROUTE132 70,3
+[TR] flank EM_ROUTE132 70,1
+[TR] flank EM_ROUTE132 72,0
+[TR] flank EM_ROUTE132 75,2
+[TR] flank EM_ROUTE132 80,5
+[TR] flank EM_ROUTE132 82,4
+[TR] flank EM_ROUTE132 55,2
+[TR] flank EM_ROUTE132 65,1
+[TR] flank EM_ROUTE132 54,38
+[TR] flank EM_ROUTE132 73,10
+[TR] flank EM_ROUTE132 116,7
+[TR] flank EM_ROUTE132 106,10
+[TR] flank EM_ROUTE132 75,29
+[TR] flank EM_ROUTE132 110,31
+[TR] rim EM_ROUTE132 83,31 bw=192 bh=16 n=2868
+[TR] rim EM_ROUTE132 107,34 bw=48 bh=16 n=717
+[TR] rim EM_ROUTE132 79,32 bw=48 bh=16 n=717

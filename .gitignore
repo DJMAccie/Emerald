@@ -33,3 +33,7 @@ backups/
 # world fill: copies of the user's reference maps (third-party art) and outputs traced from them
 tools/worldfill/ref/
 .rewrite/
+
+# local convenience link to the clean-room rewrite repo (~/Documents/emerald3d), never repo content:
+# that repo is separate on purpose and has no remote; a committed link would point nowhere on a clone
+emerald3d

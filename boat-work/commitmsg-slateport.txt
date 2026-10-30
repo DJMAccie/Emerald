@@ -1,0 +1,23 @@
+Slateport: market stalls stand up, harbour sailboats stop being cards
+
+What you saw: the market stalls were knee-high blue slabs hovering over the paving, and the moored
+sailboats in the harbour were a flat card of sail standing on a slab of hull.
+
+Why - stalls: the awning pin gave the cloth a height of 13 px (a bench) and its hip roof rose at half a
+pixel per pixel of run, so a 32 px stall became a steep 8 px tent. Nothing carried the cloth: the
+drawing's posts were painted on the roof instead of standing under it.
+
+Why - boats: Gen3Boat built the sails as one 1x1x1 box per art pixel at a single z - a card - so from any
+angle but the front the sail vanished edge-on, and the hull's side band was 7 px, mostly below the quay.
+
+Now - stalls: the cloth stands at 18 px with its rise capped at 2.5 px (a shallow canopy, not a tent), and
+four posts at the stall's corners carry it.
+
+Now - boats: the mast is a pole, and the cloth is one continuous surface per sail: the silhouette is still
+the drawing's pixel outline, but the sheet bellies 4 px out to leeward, so a turned camera sees a sail with
+wind in it. The hull's side is 8 px, so the boat shows above the waterline.
+
+Checked in QA at the market and the harbour (level 4, 0 fallbacks). Still to do in Slateport: the market
+wares are painted into the ground tiles (they need cutting out and building as props), and the shipyard and
+fanclub models are only about half as deep as their footprints with open backs (shipyard 71 of 112 px,
+fanclub 39 of 80 px) - both are separate jobs.

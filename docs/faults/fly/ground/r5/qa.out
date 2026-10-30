@@ -1,0 +1,17 @@
+== long: 11 shots
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[FlyGround] world: 52 maps, 91 chunks of 64 cells, fill 814x429 at (-128,-304), 13 fill pairs
+[FlyGround] world laid: 177200 quads in 141 meshes, 1.5 s after the first take-off (plan 204 ms, fill 88 ms)
+[fly dbg] ground at 01_mount: all laid, 177200 quads in 141 meshes, 40 parts drawn
+[fly dbg] ground at 02_liftoff: all laid, 177200 quads in 141 meshes, 40 parts drawn
+[fly dbg] ground at 03_30: all laid, 177200 quads in 141 meshes, 90 parts drawn
+[fly dbg] ground at 04_50: all laid, 177200 quads in 141 meshes, 84 parts drawn
+[fly dbg] ground at 04t_topdown: all laid, 177200 quads in 141 meshes, 141 parts drawn
+[fly dbg] ground at 05_70: all laid, 177200 quads in 141 meshes, 57 parts drawn
+[fly dbg] ground at 06_90: all laid, 177200 quads in 141 meshes, 30 parts drawn
+[fly dbg] ground at 07_landing: all laid, 177200 quads in 141 meshes, 26 parts drawn
+[FlyOver] landed on EM_EVER_GRANDE_CITY (27,49) after 15.1 s (swap 2 ms, town built after 6.9 s)
+[fly dbg] frames mount    n= 47  p50 17  p90 30  p99 67  max 67 ms  over 40 ms: 2
+[fly dbg] frames fly      n=567  p50 17  p90 33  p99 67  max 317 ms  over 40 ms: 13
+[fly dbg] frames dismount n= 65  p50 17  p90 17  p99 18  max 18 ms  over 40 ms: 0
+[fly dbg] landed: map	EM_EVER_GRANDE_CITY	cell	27	49	facing	down	locked	false	visible	true	wanted	EM_EVER_GRANDE_CITY	27	49	flight wall	23.7 s	worst frame	317 ms (fly)	scene ready	true

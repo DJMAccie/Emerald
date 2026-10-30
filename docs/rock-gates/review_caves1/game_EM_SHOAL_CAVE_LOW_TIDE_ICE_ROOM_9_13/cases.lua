@@ -1,0 +1,1 @@
+return {{'EM_SHOAL_CAVE_LOW_TIDE_ICE_ROOM',9,13}}

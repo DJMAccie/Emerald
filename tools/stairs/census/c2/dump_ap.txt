@@ -1,0 +1,28 @@
+EM_SAFARI_ZONE_SOUTHEAST 18 17 0AF pair=general__lilycove kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_SAFARI_ZONE_SOUTHEAST 19 17 0CF pair=general__lilycove kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+#DONE EM_SAFARI_ZONE_SOUTHEAST
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 41 8 0AF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 42 8 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 43 8 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 44 8 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 14 23 0AF pair=general__battle_frontier_outside_east kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 15 23 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 16 23 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 17 23 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 18 23 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 19 23 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 14 24 0AF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 15 24 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 16 24 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 17 24 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 18 24 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 19 24 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 54 27 0AF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 55 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 56 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 57 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 58 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 59 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 60 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+EM_BATTLE_FRONTIER_OUTSIDE_EAST 61 27 0CF pair=general__battle_frontier_outside_east kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=12
+#DONE EM_BATTLE_FRONTIER_OUTSIDE_EAST

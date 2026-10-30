@@ -1,0 +1,41 @@
+#DONE EM_BATTLE_FRONTIER_LOUNGE1
+#DONE EM_BATTLE_FRONTIER_EXCHANGE_SERVICE_CORNER
+#DONE EM_BATTLE_FRONTIER_LOUNGE2
+#DONE EM_BATTLE_FRONTIER_LOUNGE3
+#DONE EM_BATTLE_FRONTIER_LOUNGE4
+#DONE EM_BATTLE_FRONTIER_SCOTTS_HOUSE
+#DONE EM_BATTLE_FRONTIER_LOUNGE5
+#DONE EM_BATTLE_FRONTIER_LOUNGE6
+#DONE EM_BATTLE_FRONTIER_LOUNGE7
+#DONE EM_BATTLE_FRONTIER_RECEPTION_GATE
+#DONE EM_BATTLE_FRONTIER_LOUNGE8
+#DONE EM_BATTLE_FRONTIER_LOUNGE9
+EM_BATTLE_FRONTIER_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_BATTLE_FRONTIER_POKEMON_CENTER_1F
+EM_BATTLE_FRONTIER_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_BATTLE_FRONTIER_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_BATTLE_FRONTIER_POKEMON_CENTER_2F
+#DONE EM_BATTLE_FRONTIER_MART
+EM_FARAWAY_ISLAND_ENTRANCE 9 17 0AF pair=general__rustboro kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_FARAWAY_ISLAND_ENTRANCE 17 21 0AF pair=general__rustboro kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_FARAWAY_ISLAND_ENTRANCE 3 23 0AF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_FARAWAY_ISLAND_ENTRANCE 11 28 0AF pair=general__rustboro kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_FARAWAY_ISLAND_ENTRANCE 15 34 0AF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_FARAWAY_ISLAND_ENTRANCE 16 34 0CF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_FARAWAY_ISLAND_ENTRANCE
+#DONE EM_FARAWAY_ISLAND_INTERIOR
+#DONE EM_BIRTH_ISLAND_EXTERIOR
+#DONE EM_BIRTH_ISLAND_HARBOR
+#DONE EM_TRAINER_HILL_ENTRANCE
+#DONE EM_TRAINER_HILL_1F
+#DONE EM_TRAINER_HILL_2F
+#DONE EM_TRAINER_HILL_3F

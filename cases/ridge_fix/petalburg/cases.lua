@@ -1,0 +1,1 @@
+return {{'EM_PETALBURG_CITY',6,22},{'EM_PETALBURG_CITY',4,5}}

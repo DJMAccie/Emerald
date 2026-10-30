@@ -1,0 +1,237 @@
+EM_SOOTOPOLIS_CITY_GYM_1F 11 22 21C pair=building__sootopolis_gym kind=ladder coll=114 base=0 builder=ladder step=0 up=- rise=-
+#DONE EM_SOOTOPOLIS_CITY_GYM_1F
+EM_SOOTOPOLIS_CITY_GYM_B1F 11 22 214 pair=building__sootopolis_gym kind=ladder coll=114 base=0 builder=ladder step=0 up=- rise=-
+#DONE EM_SOOTOPOLIS_CITY_GYM_B1F
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_SOOTOPOLIS_CITY_POKEMON_CENTER_1F
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_SOOTOPOLIS_CITY_POKEMON_CENTER_2F
+#DONE EM_SOOTOPOLIS_CITY_MART
+#DONE EM_SOOTOPOLIS_CITY_HOUSE1
+#DONE EM_SOOTOPOLIS_CITY_HOUSE2
+#DONE EM_SOOTOPOLIS_CITY_HOUSE3
+#DONE EM_SOOTOPOLIS_CITY_HOUSE4
+#DONE EM_SOOTOPOLIS_CITY_HOUSE5
+#DONE EM_SOOTOPOLIS_CITY_HOUSE6
+#DONE EM_SOOTOPOLIS_CITY_HOUSE7
+#DONE EM_SOOTOPOLIS_CITY_LOTAD_AND_SEEDOT_HOUSE
+#DONE EM_SOOTOPOLIS_CITY_MYSTERY_EVENTS_HOUSE_1F
+#DONE EM_SOOTOPOLIS_CITY_MYSTERY_EVENTS_HOUSE_B1F
+#DONE EM_EVER_GRANDE_CITY_SIDNEYS_ROOM
+#DONE EM_EVER_GRANDE_CITY_PHOEBES_ROOM
+#DONE EM_EVER_GRANDE_CITY_GLACIAS_ROOM
+#DONE EM_EVER_GRANDE_CITY_DRAKES_ROOM
+#DONE EM_EVER_GRANDE_CITY_CHAMPIONS_ROOM
+EM_EVER_GRANDE_CITY_HALL1 4 5 2D9 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 6 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 7 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 8 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 9 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 10 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 11 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 4 12 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 5 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL1 6 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_HALL1
+EM_EVER_GRANDE_CITY_HALL2 4 5 2D9 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 6 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 7 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 8 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 9 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 10 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 11 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 4 12 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 5 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL2 6 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_HALL2
+EM_EVER_GRANDE_CITY_HALL3 4 5 2D9 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 6 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 7 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 8 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 9 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 10 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 11 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 4 12 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 5 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL3 6 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_HALL3
+EM_EVER_GRANDE_CITY_HALL4 4 5 2D9 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 6 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 7 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 8 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 9 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 10 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 11 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 12 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 13 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 13 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 13 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 14 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 14 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 14 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 15 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 15 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 15 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 16 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 16 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 16 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 17 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 17 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 17 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 18 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 18 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 18 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 19 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 19 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 19 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 20 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 20 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 20 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 21 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 21 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 21 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 22 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 22 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 22 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 23 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 23 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 23 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 24 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 24 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 24 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 25 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 25 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 25 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 26 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 26 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 26 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 27 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 27 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 27 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 28 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 28 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 28 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 29 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 29 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 29 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 30 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 30 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 30 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 31 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 31 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 31 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 32 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 32 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 32 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 4 33 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 5 33 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL4 6 33 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_HALL4
+EM_EVER_GRANDE_CITY_HALL5 4 5 2D9 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 5 2DA pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 6 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 6 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 7 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 7 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 8 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 8 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 9 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 9 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 10 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 10 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 11 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 11 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 4 12 2E1 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 5 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+EM_EVER_GRANDE_CITY_HALL5 6 12 2E2 pair=building__elite_four kind=steps coll=0 base=0 builder=steps step=1 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_HALL5
+EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F 0 6 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F 1 6 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F 0 7 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F 1 7 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F 0 8 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F 1 8 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F
+#DONE EM_EVER_GRANDE_CITY_HALL_OF_FAME
+EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_EVER_GRANDE_CITY_POKEMON_CENTER_1F

@@ -1,0 +1,1 @@
+return {{'EM_TERRA_CAVE_ENTRANCE',10,13}}

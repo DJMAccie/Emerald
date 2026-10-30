@@ -1,0 +1,1 @@
+return {{'EM_SAFARI_ZONE_SOUTHEAST',30,19}}

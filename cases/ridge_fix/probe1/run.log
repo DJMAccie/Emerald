@@ -1,0 +1,224 @@
+[qa_tryp] identity pokemon-love2d-rseqa-p1 files Gen3Outdoor.lua Gen3Waterfall.lua
+[ALSOFT] (EE) Unhandled channel count (24), using Stereo
+[game3/space] script bundle events=518 fromCache=true
+[game3/pokemon] species pack ready (412)
+[game3/party_chrome] party chrome manifest ready
+[game3/encounters] loaded 348 map tables (ROM extract)
+[game3/dataset] hydrated 519 maps midLayouts=518 eventMaps=518 (start=EM_INSIDE_OF_TRUCK)
+[info] loaded save
+[game3/items] pack ready (377)
+[warn] STADIUM2_IMPORTER: the render_pipelines registry has no Gen 3 target; those registrations do not apply here
+[info] loaded mod STADIUM2_IMPORTER 0.21.0
+[warn] [BATTLE_ART_VOXEL_FORK] os.getenv was removed from the mod sandbox; the environment is hidden; home-like names answer with this mod's virtual root
+[warn] [BATTLE_ART_VOXEL_FORK] loadfile was removed from the mod sandbox; the chunk is compiled into this mod's sandbox; prefer require or mod:read
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousemoved assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousepressed assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousereleased assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[Battle Art FireRed] native field and battle background adapters installed
+[info] loaded mod BATTLE_ART_VOXEL_FORK 1.28.9
+[warn] animated_menu_pokemon: the screens registry has no Gen 3 target; those registrations do not apply here
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at live-game
+[info] [animated_menu_pokemon] Pokemon menu icons v9 FRLG mobile Renderer-aligned HD path active for Gen 3 (#001-386)
+[info] [animated_menu_pokemon] FRLG bridge active with 386 National Dex HD sprite records; native FRLG UI retained
+[info] loaded mod animated_menu_pokemon 1.6.0
+[info] loaded save
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at game.ready
+[game3] ACTIVE engine=game3 map=EM_LITTLEROOT_TOWN pos=10,10 reason=new_game
+[game3/player] avatar ready @ 10,10 down
+[game3/collision] grid ready (native) map=EM_LITTLEROOT_TOWN cells=20x20 warps=3
+[game3/objects] spawned 8 objects on EM_LITTLEROOT_TOWN
+[game3/pokemon] species pack ready (412)
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at pokemon.reload
+[game3/party_chrome] party chrome manifest ready
+[game3/battle_chrome] battle chrome ready (v8)
+[game3/objects] reloaded 8 objects on EM_LITTLEROOT_TOWN (kept tracks)
+[game3/native] atlas ready pair=general__petalburg mids=656 256x656 layered=true
+[game3/ow] sprites ready (239 sheets)
+[game3] warped via game3 map loader → EM_LITTLEROOT_TOWN
+[info] [STADIUM2_IMPORTER] stadium2 cache: state=valid code=ok game=emerald playthrough=6abcfab70028bc423b73335800000001
+[game3/field] native mid atlas ON pair=general__petalburg
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[game3/frlg_font] latin_normal ready data/generated/gba/chrome/fonts/latin_normal_fg.rgba
+[game3/frlg_font] latin_small ready data/generated/gba/chrome/fonts/latin_small_fg.rgba
+[game3/frlg_font] latin_short ready data/generated/gba/chrome/fonts/latin_short_fg.rgba
+[game3/frlg_font] latin_narrow ready data/generated/gba/chrome/fonts/latin_narrow_fg.rgba
+[game3/frlg_font] latin_small_narrow ready data/generated/gba/chrome/fonts/latin_small_narrow_fg.rgba
+[game3/native] atlas ready pair=general__dewford mids=891 256x896 layered=true
+[game3/native] atlas ready pair=general__slateport mids=918 256x928 layered=true
+[EM QA] battle art export:	yes
+[EM QA] gen3 camera:	yes
+[game3/objects] reloaded 34 objects on EM_ROUTE104
+[game3/native] atlas ready pair=general__rustboro mids=862 256x864 layered=true
+[EM view] load	EM_ROUTE104	true	
+[EM box]	25,60 y0..0 shnil	001	flat	base	16
+[EM box]	23,60 y0..0 shnil	00D	grass	base	16
+[EM box]	23,60 y0..0 sh1	00D	grass	base	16
+[EM box]	23,60 y9..0 sh0.93481382690668	00D	grass	base	16
+[EM box]	23,60 y5..0 sh0.92260517067421	00D	grass	base	16
+[EM box]	23,60 y6..0 sh0.8798661025535	00D	grass	base	16
+[EM box]	23,60 y8..0 sh0.98348725191296	00D	grass	base	16
+[EM box]	23,60 y9..0 sh0.86128741185428	00D	grass	base	16
+[EM box]	23,60 y7..0 sh0.92117141074152	00D	grass	base	16
+[EM box]	23,60 y7..0 sh0.98241806804959	00D	grass	base	16
+[EM box]	23,60 y8..0 sh0.87200167082294	00D	grass	base	16
+[EM box]	23,60 y8..0 sh0.96620113100664	00D	grass	base	16
+[EM box]	23,60 y9..0 sh0.90168083243021	00D	grass	base	16
+[EM box]	23,60 y6..0 sh0.86740205509777	00D	grass	base	16
+[EM box]	23,60 y5..0 sh0.84905055199561	00D	grass	base	16
+[EM box]	23,60 y8..0 sh0.96519312377684	00D	grass	base	16
+[EM box]	23,60 y6..0 sh0.97845273417362	00D	grass	base	16
+[EM box]	20,61 y0..0 shnil	124	flat	base	0
+[EM box]	20,61 y13..14 sh1	124	flat	base	0
+[EM box]	20,61 y0..13 sh0.7	124	flat	base	0
+[EM box]	20,61 y14..16 sh1	124	flat	base	0
+[EM box]	20,61 y16..16 sh1	124	flat	base	0
+[EM box]	21,61 y0..0 shnil	088	cliff	base	0
+[EM box]	21,61 y0..16 sh0.78	088	cliff	base	0
+[EM box]	22,61 y0..0 shnil	00D	grass	base	16
+[EM box]	22,61 y0..0 sh1	00D	grass	base	16
+[EM box]	22,61 y9..0 sh0.90045929345797	00D	grass	base	16
+[EM box]	22,61 y5..0 sh0.83599529324812	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.96637509394975	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.94708488988086	00D	grass	base	16
+[EM box]	22,61 y8..0 sh0.84094999548404	00D	grass	base	16
+[EM box]	22,61 y9..0 sh0.82823369580488	00D	grass	base	16
+[EM box]	22,61 y8..0 sh0.97368859758863	00D	grass	base	16
+[EM box]	22,61 y6..0 sh0.88807574916878	00D	grass	base	16
+[EM box]	22,61 y6..0 sh0.94068964901962	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.88145540531012	00D	grass	base	16
+[EM box]	22,61 y9..0 sh0.85927064674386	00D	grass	base	16
+[EM box]	22,61 y6..0 sh0.94032922533972	00D	grass	base	16
+[EM box]	22,61 y8..0 sh0.85647457846706	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.92879842302296	00D	grass	base	16
+[EM box]	22,61 y8..0 sh0.93390125519902	00D	grass	base	16
+[EM box]	22,61 y9..0 sh0.99665194981804	00D	grass	base	16
+[EM box]	22,61 y6..0 sh0.95335155760185	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.96241132118164	00D	grass	base	16
+[EM box]	22,61 y5..0 sh0.97626790342121	00D	grass	base	16
+[EM box]	22,61 y5..0 sh0.90197220123187	00D	grass	base	16
+[EM box]	22,61 y9..0 sh0.98498046587207	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.97547792302183	00D	grass	base	16
+[EM box]	22,61 y6..0 sh0.94259641215351	00D	grass	base	16
+[EM box]	22,61 y7..0 sh0.98006983424959	00D	grass	base	16
+[EM box]	22,61 y5..0 sh0.82789081195951	00D	grass	base	16
+[EM box]	23,61 y0..0 shnil	00D	grass	base	16
+[EM box]	23,61 y0..0 sh1	00D	grass	base	16
+[EM box]	23,61 y9..0 sh0.82700867296007	00D	grass	base	16
+[EM box]	23,61 y7..0 sh0.82580423360923	00D	grass	base	16
+[EM box]	23,61 y8..0 sh0.87059483104604	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.84785191592975	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.88872759506705	00D	grass	base	16
+[EM box]	23,61 y9..0 sh0.97468066567511	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.94245340436886	00D	grass	base	16
+[EM box]	23,61 y5..0 sh0.89013197603344	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.99945260640889	00D	grass	base	16
+[EM box]	23,61 y5..0 sh0.95265718803341	00D	grass	base	16
+[EM box]	23,61 y9..0 sh0.93252196594844	00D	grass	base	16
+[EM box]	23,61 y8..0 sh0.92047156056811	00D	grass	base	16
+[EM box]	23,61 y8..0 sh0.87711834687114	00D	grass	base	16
+[EM box]	23,61 y5..0 sh0.85867595259813	00D	grass	base	16
+[EM box]	23,61 y5..0 sh0.84591715974893	00D	grass	base	16
+[EM box]	23,61 y9..0 sh0.98059853898689	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.85537334299373	00D	grass	base	16
+[EM box]	23,61 y5..0 sh0.92605555277036	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.86403908046705	00D	grass	base	16
+[EM box]	23,61 y5..0 sh0.91081426605262	00D	grass	base	16
+[EM box]	23,61 y9..0 sh0.8526236274073	00D	grass	base	16
+[EM box]	23,61 y8..0 sh0.9914578777604	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.93481119688615	00D	grass	base	16
+[EM box]	23,61 y8..0 sh0.87226957583342	00D	grass	base	16
+[EM box]	23,61 y6..0 sh0.90943561249966	00D	grass	base	16
+[EM box]	25,61 y0..0 shnil	001	flat	base	16
+[EM box]	20,62 y0..0 shnil	124	flat	base	0
+[EM box]	20,62 y13..14 sh1	124	flat	base	0
+[EM box]	20,62 y0..13 sh0.7	124	flat	base	0
+[EM box]	20,62 y14..16 sh1	124	flat	base	0
+[EM box]	20,62 y16..16 sh1	124	flat	base	0
+[EM box]	20,62 y14..15 sh1	124	flat	base	0
+[EM box]	21,62 y0..0 shnil	090	cliff	base	0
+[EM box]	21,62 y16..16 sh1	090	cliff	base	0
+[EM box]	22,62 y15..15 shnil	079	cliff	base	16
+[EM box]	22,62 y0..16 sh0.78	079	cliff	base	16
+[EM box]	22,62 y16..16 sh1	079	cliff	base	16
+[EM box]	23,62 y15..15 shnil	089	cliff	base	16
+[EM box]	25,62 y0..0 shnil	001	flat	base	16
+[EM box]	19,60 y15..14 sh1	124	flat	base	0
+[EM box]	19,60 y16..14 sh1	124	flat	base	0
+[EM box]	19,60 y14..13 sh1	124	flat	base	0
+[EM box]	19,60 y0..13 sh0.84	124	flat	base	0
+[EM box]	20,60 y0..0 shnil	090	cliff	base	0
+[EM box]	20,60 y16..15 sh1	090	cliff	base	0
+[EM box]	20,60 y16..16 sh1	090	cliff	base	0
+[EM box]	20,60 y14..14 sh1	090	cliff	base	0
+[EM box]	20,60 y15..16 sh1	090	cliff	base	0
+[EM box]	21,60 y15..15 shnil	089	cliff	base	16
+[EM box]	21,60 y0..16 sh0.78	089	cliff	base	16
+[EM box]	22,60 y0..0 shnil	00D	grass	base	16
+[EM box]	22,60 y0..0 sh1	00D	grass	base	16
+[EM box]	22,60 y9..0 sh0.90388819482439	00D	grass	base	16
+[EM box]	22,60 y7..0 sh0.83765406955194	00D	grass	base	16
+[EM box]	22,60 y7..0 sh0.85422892328308	00D	grass	base	16
+[EM box]	22,60 y7..0 sh0.97868276837042	00D	grass	base	16
+[EM box]	22,60 y7..0 sh0.96760351272918	00D	grass	base	16
+[EM box]	22,60 y9..0 sh0.91179808072135	00D	grass	base	16
+[EM box]	22,60 y5..0 sh0.93100718781629	00D	grass	base	16
+[EM box]	22,60 y8..0 sh0.97170873751558	00D	grass	base	16
+[EM box]	22,60 y5..0 sh0.97575318446005	00D	grass	base	16
+[EM box]	22,60 y6..0 sh0.85167014242536	00D	grass	base	16
+[EM box]	22,60 y9..0 sh0.95143544589857	00D	grass	base	16
+[EM box]	22,60 y7..0 sh0.98405331833863	00D	grass	base	16
+[EM box]	22,60 y6..0 sh0.97510481501326	00D	grass	base	16
+[EM box]	22,60 y8..0 sh0.93459737348196	00D	grass	base	16
+[EM box]	22,60 y8..0 sh0.93788064989043	00D	grass	base	16
+[EM box]	24,60 y0..0 shnil	00D	grass	base	16
+[EM box]	24,60 y0..0 sh1	00D	grass	base	16
+[EM box]	24,60 y9..0 sh0.99625187800721	00D	grass	base	16
+[EM box]	24,60 y7..0 sh0.99506828512141	00D	grass	base	16
+[EM box]	24,60 y8..0 sh0.86517012933597	00D	grass	base	16
+[EM box]	24,60 y6..0 sh0.93194164613931	00D	grass	base	16
+[EM box]	24,60 y7..0 sh0.97730719573723	00D	grass	base	16
+[EM box]	24,60 y9..0 sh0.82981141058495	00D	grass	base	16
+[EM box]	24,60 y5..0 sh0.96741895138912	00D	grass	base	16
+[EM box]	24,60 y8..0 sh0.9967138312351	00D	grass	base	16
+[EM box]	24,60 y7..0 sh0.95852863998795	00D	grass	base	16
+[EM box]	24,60 y6..0 sh0.94966710189019	00D	grass	base	16
+[EM box]	24,60 y9..0 sh0.9729134016743	00D	grass	base	16
+[EM box]	24,60 y7..0 sh0.880776349355	00D	grass	base	16
+[EM box]	24,60 y7..0 sh0.92071280247284	00D	grass	base	16
+[EM box]	24,60 y5..0 sh0.92947819035282	00D	grass	base	16
+[EM box]	24,60 y7..0 sh0.90136832932396	00D	grass	base	16
+[EM box]	24,61 y0..0 shnil	00D	grass	base	16
+[EM box]	24,61 y0..0 sh1	00D	grass	base	16
+[EM box]	24,61 y9..0 sh0.94450691458143	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.8903141675888	00D	grass	base	16
+[EM box]	24,61 y5..0 sh0.93014545472784	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.84617393591012	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.83467876071154	00D	grass	base	16
+[EM box]	24,61 y9..0 sh0.97554736871883	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.84690106773574	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.89053914405682	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.95126071241561	00D	grass	base	16
+[EM box]	24,61 y8..0 sh0.87609693477203	00D	grass	base	16
+[EM box]	24,61 y9..0 sh0.92363951820204	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.95341962368868	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.86457073154481	00D	grass	base	16
+[EM box]	24,61 y8..0 sh0.93433396756081	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.87427877559094	00D	grass	base	16
+[EM box]	24,61 y9..0 sh0.97646998133587	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.87498968420745	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.95279685895031	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.93851034403458	00D	grass	base	16
+[EM box]	24,61 y8..0 sh0.9464032353845	00D	grass	base	16
+[EM box]	24,61 y9..0 sh0.95681983439383	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.83786008365612	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.98150659140483	00D	grass	base	16
+[EM box]	24,61 y6..0 sh0.93140486787266	00D	grass	base	16
+[EM box]	24,61 y7..0 sh0.92376337329668	00D	grass	base	16
+[EM box]	24,62 y0..0 shnil	001	flat	base	16
+[EM box]	26,60 y0..0 shnil	001	flat	base	16
+[EM box]	26,61 y0..0 shnil	001	flat	base	16
+[EM box]	26,62 y0..0 shnil	001	flat	base	16
+[EM view]	EM_ROUTE104	level	6	active	true	rendered	325
+[EM win]	1280	720	dpi	1	px	1280	720	scene	1280	720	display	1
+[EM cam]	6	0.16	0	zoom	2	fit	4	dist	32	player	20	66
+[EM QA] done

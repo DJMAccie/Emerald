@@ -1,0 +1,64 @@
+#DONE EM_UNDERWATER_ROUTE125
+#DONE EM_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F
+#DONE EM_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F
+#DONE EM_LITTLEROOT_TOWN_MAYS_HOUSE_1F
+#DONE EM_LITTLEROOT_TOWN_MAYS_HOUSE_2F
+#DONE EM_LITTLEROOT_TOWN_PROFESSOR_BIRCHS_LAB
+#DONE EM_OLDALE_TOWN_HOUSE1
+#DONE EM_OLDALE_TOWN_HOUSE2
+EM_OLDALE_TOWN_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_OLDALE_TOWN_POKEMON_CENTER_1F
+EM_OLDALE_TOWN_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_OLDALE_TOWN_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_OLDALE_TOWN_POKEMON_CENTER_2F
+#DONE EM_OLDALE_TOWN_MART
+#DONE EM_DEWFORD_TOWN_HOUSE1
+EM_DEWFORD_TOWN_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_DEWFORD_TOWN_POKEMON_CENTER_1F
+EM_DEWFORD_TOWN_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_DEWFORD_TOWN_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_DEWFORD_TOWN_POKEMON_CENTER_2F
+#DONE EM_DEWFORD_TOWN_GYM
+#DONE EM_DEWFORD_TOWN_HALL
+#DONE EM_DEWFORD_TOWN_HOUSE2
+#DONE EM_LAVARIDGE_TOWN_HERB_SHOP
+#DONE EM_LAVARIDGE_TOWN_GYM_1F
+#DONE EM_LAVARIDGE_TOWN_GYM_B1F
+#DONE EM_LAVARIDGE_TOWN_HOUSE
+#DONE EM_LAVARIDGE_TOWN_MART
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F 0 5 280 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F 1 5 281 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F 0 6 288 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F 1 6 289 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F 0 7 290 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F 1 7 291 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_LAVARIDGE_TOWN_POKEMON_CENTER_1F
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F 0 5 298 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center* step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F 1 5 299 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F 0 6 2A0 pair=building__pokemon_center kind=flat coll=7 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F 1 6 2A1 pair=building__pokemon_center kind=flat coll=114 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F 0 7 2A8 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F 1 7 2A9 pair=building__pokemon_center kind=flat coll=0 base=0 builder=recipe:building__pokemon_center step=0 up=- rise=-
+#DONE EM_LAVARIDGE_TOWN_POKEMON_CENTER_2F
+#DONE EM_FALLARBOR_TOWN_MART
+#DONE EM_FALLARBOR_TOWN_BATTLE_TENT_LOBBY
+#DONE EM_FALLARBOR_TOWN_BATTLE_TENT_CORRIDOR
+#DONE EM_FALLARBOR_TOWN_BATTLE_TENT_BATTLE_ROOM

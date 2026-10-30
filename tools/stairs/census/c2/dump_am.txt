@@ -1,0 +1,44 @@
+#DONE EM_DESERT_UNDERPASS
+EM_ARTISAN_CAVE_B1F 38 5 217 pair=general__cave kind=ladder coll=114 base=0 builder=ladder step=0 up=- rise=-
+EM_ARTISAN_CAVE_B1F 32 12 204 pair=general__cave kind=flat coll=0 base=36 builder=generic step=1 up=0,-1 rise=12
+EM_ARTISAN_CAVE_B1F 32 13 204 pair=general__cave kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=12
+EM_ARTISAN_CAVE_B1F 32 14 204 pair=general__cave kind=flat coll=0 base=12 builder=generic step=1 up=0,-1 rise=12
+EM_ARTISAN_CAVE_B1F 11 22 204 pair=general__cave kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ARTISAN_CAVE_B1F 10 24 204 pair=general__cave kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ARTISAN_CAVE_B1F 32 26 204 pair=general__cave kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ARTISAN_CAVE_B1F 32 27 204 pair=general__cave kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ARTISAN_CAVE_B1F 21 35 204 pair=general__cave kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ARTISAN_CAVE_B1F 32 35 204 pair=general__cave kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ARTISAN_CAVE_B1F 32 36 204 pair=general__cave kind=flat coll=0 base=26.666666666667 builder=stepcell-noflight step=1 up=- rise=-
+EM_ARTISAN_CAVE_B1F 18 37 204 pair=general__cave kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ARTISAN_CAVE_B1F 16 39 204 pair=general__cave kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_ARTISAN_CAVE_B1F
+EM_ARTISAN_CAVE_1F 6 5 23F pair=general__cave kind=ladder coll=114 base=0 builder=ladder step=0 up=- rise=-
+#DONE EM_ARTISAN_CAVE_1F
+#DONE EM_UNDERWATER_MARINE_CAVE
+#DONE EM_MARINE_CAVE_ENTRANCE
+EM_MARINE_CAVE_END 14 9 204 pair=general__cave kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_MARINE_CAVE_END
+#DONE EM_TERRA_CAVE_ENTRANCE
+EM_TERRA_CAVE_END 9 9 204 pair=general__cave kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_TERRA_CAVE_END
+#DONE EM_ALTERING_CAVE
+#DONE EM_METEOR_FALLS_STEVENS_CAVE
+#DONE EM_SECRET_BASE_RED_CAVE1
+#DONE EM_SECRET_BASE_BROWN_CAVE1
+#DONE EM_SECRET_BASE_BLUE_CAVE1
+#DONE EM_SECRET_BASE_YELLOW_CAVE1
+#DONE EM_SECRET_BASE_TREE1
+#DONE EM_SECRET_BASE_SHRUB1
+#DONE EM_SECRET_BASE_RED_CAVE2
+#DONE EM_SECRET_BASE_BROWN_CAVE2
+#DONE EM_SECRET_BASE_BLUE_CAVE2
+#DONE EM_SECRET_BASE_YELLOW_CAVE2
+#DONE EM_SECRET_BASE_TREE2
+#DONE EM_SECRET_BASE_SHRUB2
+#DONE EM_SECRET_BASE_RED_CAVE3
+#DONE EM_SECRET_BASE_BROWN_CAVE3
+#DONE EM_SECRET_BASE_BLUE_CAVE3
+#DONE EM_SECRET_BASE_YELLOW_CAVE3
+#DONE EM_SECRET_BASE_TREE3
+#DONE EM_SECRET_BASE_SHRUB3

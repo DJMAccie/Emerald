@@ -1,0 +1,131 @@
+#DONE EM_ROUTE113
+EM_ROUTE114 6 49 0AF pair=general__fallarbor kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 25 57 0AF pair=general__fallarbor kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 26 57 0CF pair=general__fallarbor kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 13 67 0AF pair=general__fallarbor kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 14 67 0CF pair=general__fallarbor kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 13 69 0AF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 14 69 0CF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 24 69 0AF pair=general__fallarbor kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 25 69 0CF pair=general__fallarbor kind=flat coll=0 base=56 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 24 71 0AF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE114 25 71 0CF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_ROUTE114
+EM_ROUTE115 28 8 0E8 pair=general__fallarbor kind=steps coll=0 base=69.333333333333 builder=steps step=1 up=- rise=-
+EM_ROUTE115 28 9 0E8 pair=general__fallarbor kind=steps coll=0 base=58.666666666667 builder=steps step=1 up=- rise=-
+EM_ROUTE115 18 12 0AF pair=general__fallarbor kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE115 19 12 0CF pair=general__fallarbor kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE115 27 12 0AF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 28 12 0CF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 18 13 0AF pair=general__fallarbor kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE115 19 13 0CF pair=general__fallarbor kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE115 11 33 0AF pair=general__fallarbor kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 12 33 0CF pair=general__fallarbor kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 24 42 0AF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 25 42 0CF pair=general__fallarbor kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 16 46 0AF pair=general__fallarbor kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 17 46 0CF pair=general__fallarbor kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 26 48 0AF pair=general__fallarbor kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 27 48 0CF pair=general__fallarbor kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 10 70 0AF pair=general__fallarbor kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 11 70 0CF pair=general__fallarbor kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 21 70 001 pair=general__fallarbor kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE115 20 71 001 pair=general__fallarbor kind=flat coll=0 base=0 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_ROUTE115
+EM_ROUTE116 53 8 0AF pair=general__rustboro kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE116 52 11 0AF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE116 72 8 0AF pair=general__rustboro kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE116 72 11 0AF pair=general__rustboro kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_ROUTE116
+#DONE EM_ROUTE117
+#DONE EM_ROUTE118
+EM_ROUTE119 6 34 119 pair=general__fortree kind=flat coll=0 base=48 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 23 34 001 pair=general__fortree kind=flat coll=0 base=32 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 24 36 0AF pair=general__fortree kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 25 36 0CF pair=general__fortree kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 25 41 0AF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 21 48 0AF pair=general__fortree kind=flat coll=0 base=43 builder=generic step=1 up=0,-1 rise=5
+EM_ROUTE119 22 48 0CF pair=general__fortree kind=flat coll=0 base=43 builder=generic step=1 up=0,-1 rise=5
+EM_ROUTE119 24 49 071 pair=general__fortree kind=flat coll=0 base=43 builder=generic step=1 up=0,1 rise=16
+EM_ROUTE119 5 52 001 pair=general__fortree kind=flat coll=0 base=48 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 6 52 001 pair=general__fortree kind=flat coll=0 base=48 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 7 52 001 pair=general__fortree kind=flat coll=0 base=48 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 8 52 001 pair=general__fortree kind=flat coll=0 base=48 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 19 53 0AF pair=general__fortree kind=flat coll=0 base=38 builder=generic step=1 up=0,-1 rise=5
+EM_ROUTE119 20 53 0CF pair=general__fortree kind=flat coll=0 base=38 builder=generic step=1 up=0,-1 rise=5
+EM_ROUTE119 6 54 0E8 pair=general__fortree kind=flat coll=0 base=43 builder=generic step=1 up=0,-1 rise=5
+EM_ROUTE119 6 55 0E8 pair=general__fortree kind=flat coll=0 base=38 builder=generic step=1 up=0,-1 rise=5
+EM_ROUTE119 5 80 0AF pair=general__fortree kind=flat coll=0 base=32 builder=generic step=1 up=0,-1 rise=6
+EM_ROUTE119 6 80 0CF pair=general__fortree kind=flat coll=0 base=32 builder=generic step=1 up=0,-1 rise=6
+EM_ROUTE119 35 89 0AF pair=general__fortree kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 36 89 0CF pair=general__fortree kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 17 91 001 pair=general__fortree kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 25 94 001 pair=general__fortree kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 30 97 0AF pair=general__fortree kind=flat coll=0 base=16 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 31 97 0CF pair=general__fortree kind=flat coll=0 base=16 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 11 103 0AF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 12 103 0CF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 30 103 0AF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 31 103 0CF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 7 4 001 pair=general__fortree kind=flat coll=0 base=16 builder=generic step=1 up=0,1 rise=16
+EM_ROUTE119 9 16 002 pair=general__fortree kind=flat coll=0 base=20 builder=generic step=1 up=0,1 rise=4
+EM_ROUTE119 14 18 001 pair=general__fortree kind=flat coll=0 base=16 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE119 13 22 0AF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 14 22 0CF pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 27 26 0AF pair=general__fortree kind=flat coll=0 base=69.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE119 28 26 0CF pair=general__fortree kind=flat coll=0 base=69.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE119 27 27 0AF pair=general__fortree kind=flat coll=0 base=58.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE119 28 27 0CF pair=general__fortree kind=flat coll=0 base=58.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE119 25 31 0AF pair=general__fortree kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 26 31 0CF pair=general__fortree kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE119 5 33 2D1 pair=general__fortree kind=flat coll=0 base=51 builder=generic step=1 up=0,-1 rise=3
+EM_ROUTE119 7 33 2D0 pair=general__fortree kind=flat coll=0 base=51 builder=generic step=1 up=0,-1 rise=3
+EM_ROUTE119 23 33 001 pair=general__fortree kind=flat coll=0 base=32 builder=stepcell-noflight step=1 up=- rise=-
+#DONE EM_ROUTE119
+EM_ROUTE120 -3 16 24D pair=general__fortree kind=flat coll=0 base=42.666666666667 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE120 7 16 001 pair=general__fortree kind=flat coll=0 base=12 builder=generic step=1 up=1,0 rise=4
+EM_ROUTE120 28 16 001 pair=general__fortree kind=flat coll=0 base=32 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE120 12 65 0AF pair=general__fortree kind=flat coll=0 base=85.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE120 12 66 0AF pair=general__fortree kind=flat coll=0 base=74.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE120 21 67 001 pair=general__fortree kind=flat coll=0 base=24 builder=generic step=1 up=-1,0 rise=8
+EM_ROUTE120 34 67 001 pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=-1,0 rise=8
+EM_ROUTE120 21 68 001 pair=general__fortree kind=flat coll=0 base=24 builder=generic step=1 up=0,1 rise=8
+EM_ROUTE120 34 68 001 pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE120 22 69 001 pair=general__fortree kind=flat coll=0 base=32 builder=generic step=1 up=0,1 rise=16
+EM_ROUTE120 33 69 001 pair=general__fortree kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE120 22 77 001 pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE120 12 86 0AF pair=general__fortree kind=flat coll=0 base=53.333333333333 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE120 20 11 0AF pair=general__fortree kind=flat coll=0 base=21.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE120 20 12 0AF pair=general__fortree kind=flat coll=0 base=10.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE120 -3 15 245 pair=general__fortree kind=flat coll=0 base=53.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE120 7 15 001 pair=general__fortree kind=flat coll=0 base=12 builder=generic step=1 up=1,0 rise=4
+EM_ROUTE120 28 15 001 pair=general__fortree kind=flat coll=0 base=32 builder=stepcell-noflight step=1 up=- rise=-
+EM_ROUTE120 12 87 0AF pair=general__fortree kind=flat coll=0 base=42.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+#DONE EM_ROUTE120
+EM_ROUTE121 37 8 0AF pair=general__lilycove kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE121 38 8 0CF pair=general__lilycove kind=flat coll=0 base=40 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE121 30 10 0AF pair=general__lilycove kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE121 31 10 0CF pair=general__lilycove kind=flat coll=0 base=37.333333333333 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE121 30 11 0AF pair=general__lilycove kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE121 31 11 0CF pair=general__lilycove kind=flat coll=0 base=26.666666666667 builder=generic step=1 up=0,-1 rise=10.666666666667
+EM_ROUTE121 42 11 0AF pair=general__lilycove kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE121 43 11 0CF pair=general__lilycove kind=flat coll=0 base=24 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE121 30 13 0AF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+EM_ROUTE121 31 13 0CF pair=general__lilycove kind=flat coll=0 base=8 builder=generic step=1 up=0,-1 rise=8
+#DONE EM_ROUTE121
+#DONE EM_ROUTE122
+#DONE EM_ROUTE123
+#DONE EM_ROUTE124
+#DONE EM_ROUTE125
+#DONE EM_ROUTE126
+#DONE EM_ROUTE127
+#DONE EM_ROUTE128
+#DONE EM_ROUTE129
+#DONE EM_ROUTE130
+#DONE EM_ROUTE131
+#DONE EM_ROUTE132
+#DONE EM_ROUTE133
+#DONE EM_ROUTE134
+#DONE EM_UNDERWATER_ROUTE124
+#DONE EM_UNDERWATER_ROUTE126
+#DONE EM_UNDERWATER_ROUTE127

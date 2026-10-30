@@ -1,0 +1,1 @@
+return {{'EM_CAVE_OF_ORIGIN_ENTRANCE',9,13}}

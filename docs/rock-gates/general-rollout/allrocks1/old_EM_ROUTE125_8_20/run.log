@@ -1,0 +1,60 @@
+[qa_tryp] identity pokemon-love2d-rseqa-p3 files Gen3Cave.lua Gen3Hills.lua Gen3Mass.lua Gen3Relief.lua Gen3ReliefData.lua
+[ALSOFT] (EE) Unhandled channel count (24), using Stereo
+[game3/space] script bundle events=518 fromCache=true
+[game3/pokemon] species pack ready (412)
+[game3/party_chrome] party chrome manifest ready
+[game3/encounters] loaded 348 map tables (ROM extract)
+[game3/dataset] hydrated 519 maps midLayouts=518 eventMaps=518 (start=EM_INSIDE_OF_TRUCK)
+[info] loaded save
+[game3/items] pack ready (377)
+[info] loaded mod STADIUM2_IMPORTER 0.21.0
+[warn] [BATTLE_ART_VOXEL_FORK] os.getenv was removed from the mod sandbox; the environment is hidden; home-like names answer with this mod's virtual root
+[warn] [BATTLE_ART_VOXEL_FORK] loadfile was removed from the mod sandbox; the chunk is compiled into this mod's sandbox; prefer require or mod:read
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousemoved assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousepressed assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[warn] [BATTLE_ART_VOXEL_FORK] love.mousereleased assignment was removed from the mod sandbox; the callback lands on the real love table the way it did before the sandbox; prefer mod.hooks and mod.events
+[Battle Art FireRed] native field and battle background adapters installed
+[info] loaded mod BATTLE_ART_VOXEL_FORK 1.28.9
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at live-game
+[info] [animated_menu_pokemon] Pokemon menu icons v9 FRLG mobile Renderer-aligned HD path active for Gen 3 (#001-386)
+[info] [animated_menu_pokemon] FRLG bridge active with 386 National Dex HD sprite records; native FRLG UI retained
+[info] loaded mod animated_menu_pokemon 1.6.0
+[info] loaded save
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at game.ready
+[game3] ACTIVE engine=game3 map=EM_LITTLEROOT_TOWN pos=10,10 reason=new_game
+[game3/player] avatar ready @ 10,10 down
+[game3/collision] grid ready (native) map=EM_LITTLEROOT_TOWN cells=20x20 warps=3
+[game3/objects] spawned 8 objects on EM_LITTLEROOT_TOWN
+[game3/pokemon] species pack ready (412)
+[info] [animated_menu_pokemon] FRLG KIM Pokemon provider installed at pokemon.reload
+[game3/party_chrome] party chrome manifest ready
+[game3/battle_chrome] battle chrome ready (v8)
+[game3/objects] reloaded 8 objects on EM_LITTLEROOT_TOWN (kept tracks)
+[game3/native] atlas ready pair=general__petalburg mids=656 256x656 layered=true
+[game3/ow] sprites ready (239 sheets)
+[game3] warped via game3 map loader → EM_LITTLEROOT_TOWN
+[info] [STADIUM2_IMPORTER] stadium2 cache: state=missing code=not_found game=emerald playthrough=6ade4378002127f920166bd000000001
+[game3/field] native mid atlas ON pair=general__petalburg
+[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
+[game3/frlg_font] latin_normal ready data/generated/gba/chrome/fonts/latin_normal_fg.rgba
+[game3/frlg_font] latin_small ready data/generated/gba/chrome/fonts/latin_small_fg.rgba
+[game3/frlg_font] latin_short ready data/generated/gba/chrome/fonts/latin_short_fg.rgba
+[game3/frlg_font] latin_narrow ready data/generated/gba/chrome/fonts/latin_narrow_fg.rgba
+[game3/frlg_font] latin_small_narrow ready data/generated/gba/chrome/fonts/latin_small_narrow_fg.rgba
+[game3/native] atlas ready pair=general__dewford mids=891 256x896 layered=true
+[game3/native] atlas ready pair=general__slateport mids=918 256x928 layered=true
+[EM QA] battle art export:	yes
+[EM QA] gen3 camera:	yes
+[game3/objects] reloaded 10 objects on EM_ROUTE125
+[game3/native] atlas ready pair=general__mossdeep mids=966 256x976 layered=true
+[EM view] load	EM_ROUTE125	true	
+[EM view]	EM_ROUTE125	level	4	active	true	rendered	406
+[EM win]	1280	720	dpi	1	px	1280	720	scene	1280	720	display	1
+[EM cam]	4	0.16	0	zoom	2	fit	4	dist	32	player	8	20
+[EM view]	EM_ROUTE125	level	6	active	true	rendered	727
+[EM win]	1280	720	dpi	1	px	1280	720	scene	1280	720	display	1
+[EM cam]	6	0.16	0	zoom	2	fit	4	dist	32	player	8	20
+[EM view]	EM_ROUTE125	level	7	active	true	rendered	1048
+[EM win]	1280	720	dpi	1	px	1280	720	scene	1280	720	display	1
+[EM cam]	7	0.16	0	zoom	2	fit	4	dist	32	player	8	20
+[EM QA] done
