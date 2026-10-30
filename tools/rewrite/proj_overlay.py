@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
-"""Overlay a cell grid on a clean-mod L4 capture (verifier tool).
+"""Overlay a cell grid on a play-camera (L4) capture (verifier tool).
 
-The clean mod's play camera is a fixed diorama (emerald3d lib/Camera3D.lua):
-eye (footX, 420, footZ+300), target (footX, 0, footZ-20), fov 35 deg,
-canvas 1280x720. `footX/footZ` are the player's feet in world px
-(cell*16 + 8, cell*16 + 16). This replicates that projection so a screenshot
-can be read cell by cell (which cell is that pale rim?).
+Replicates emerald3d lib/Camera3D.lua's play rig, which is the INSTALLED LOOK's own
+(GeometryCore.md s3.5): pitch 50 deg off vertical, distance FOCAL*vh*1.18 with
+vh = the canvas height, lens 2*atan(1/(2*FOCAL)) = 53.13 deg, focus on the player's
+cell centre AT THE MAP PLANE (y = 0, not the floor), up = (0, sin a, -cos a).
+The 1.18 is Voxel3D's depth-style factor and the y=0 focus is what Gen3Scene's
+beginScene actually draws with; both were measured with
+tools/rewrite/probe/cam_driver.lua on 2026-10-30. The same projection now works on
+the installed look's captures AND on ours (fit 1.00/0 between them), so a spot can
+be read cell by cell (which cell is that pale rim?).
 
-usage: proj_overlay.py <shot.png> <playerX> <playerY> [cell step] [out.png]
+usage: proj_overlay.py <shot.png> <playerX> <playerY> [cell step] [out.png] [groundY]
 """
 import sys
 import math
 import numpy as np
 from PIL import Image, ImageDraw
 
-EYE_UP, EYE_BACK, LOOK = 420.0, 300.0, 20.0
-FOV = math.radians(35.0)
+LADDER_DEG = 50.0
+FOCAL = 1.0
+DEPTH_STYLE = 1.18
+FOV = 2.0 * math.atan(1.0 / (2.0 * FOCAL))
 W = H = None
 
 
@@ -44,11 +50,14 @@ def perspective(fov, aspect, near, far):
 
 
 def make(px, py, w, h):
-    footX, footZ = px * 16 + 8, py * 16 + 16
-    eye = (footX, EYE_UP, footZ + EYE_BACK)
-    tgt = (footX, 0.0, footZ - LOOK)
+    a = math.radians(LADDER_DEG)
+    cx, cz = px * 16 + 8, py * 16 + 8          # the player's CELL CENTRE
+    dist = FOCAL * h * DEPTH_STYLE              # h = the canvas height = vh
+    eye = (cx, dist * math.cos(a), cz + dist * math.sin(a))
+    tgt = (cx, 0.0, cz)                         # focus on the map plane, y = 0
+    up = (0.0, math.sin(a), -math.cos(a))
     # proj() = scale(1,-1,1) @ perspective, i.e. the flip comes AFTER the projection
-    vp = perspective(FOV, w / h, 1.0, 2000.0) @ look_at(eye, tgt)
+    vp = perspective(FOV, w / h, max(1.0, dist * 0.05), dist * 4 + 4096.0) @ look_at(eye, tgt, up)
     return np.diag([1.0, -1.0, 1.0, 1.0]) @ vp
 
 
@@ -70,8 +79,10 @@ def main():
     # the mod's proj() negates clip Y, so the canvas y runs down from ndcY
     vp = make(pxx, pyy, w, h)
     d = ImageDraw.Draw(im, 'RGBA')
-    gx0, gx1 = pxx - 18, pxx + 18
-    gy0, gy1 = pyy - 24, pyy + 14
+    # the fitted camera sees ~71 cells north and ~7 south of the player, and
+    # ±63 cells at its far edge: cover that so a far rim can be read too
+    gx0, gx1 = pxx - 40, pxx + 40
+    gy0, gy1 = pyy - 46, pyy + 14
     for gy in range(gy0, gy1 + 1, step):
         pts = []
         for gx in range(gx0, gx1 + 1):

@@ -54,10 +54,14 @@ return function(game)
           tostring(H.calls), tostring(H.sceneOk), tostring(H.sceneFalse), tostring(H.lastError)))
       end
       for _, level in ipairs(levels) do
+        -- the camera rung is real now (Probe.setLevel -> Scene.level -> Camera3D):
+        -- 4 = play diorama, 6 = low eye, 7 = orbit arm (R-22)
+        if P and P.setLevel then P.setLevel(level) end
         U.wait(30)
         local path = string.format('%s/%s_L%d.png', dir, case[1], level)
-        if U.shot(game, path) then print('[P1] shot3d', path) end
+        if U.shot(game, path) then print('[P1] shot3d', path, 'level', level) end
       end
+      if P and P.setLevel then P.setLevel(4) end
       if H then
         -- The engine's own flat field for the same spot: the art reference the
         -- 3D image is judged against (R-22). Same identity, same options.

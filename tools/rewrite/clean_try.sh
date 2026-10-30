@@ -4,7 +4,10 @@
 # BATTLE_ART_VOXEL_FORK removed. Same private-copy machinery as tools/qa_tryp.sh (identities pokemon-love2d-rseqa-pN,
 # never touches the main QA copy or the real game). The pipeline is switched on in the copy's options.lua.
 # Env: QA_DRIVER  driver (default tools/rewrite/probe/p0_driver.lua), QA_ZOOM zoom, QA_LIMIT seconds,
-#      plus whatever the driver reads (EM_MAPS, EM_GEO_DIR …).
+#      QA_TILT the engine's tilt level to leave in the copy (default 0: the mod's own picture must not be
+#      bent by the engine's ground-plane tilt; QA_TILT=2 reproduces the user's game, where the mod has to
+#      zero it itself - lib/Gen3Hook.lua's present guard), plus whatever the driver reads
+#      (EM_MAPS, EM_GEO_DIR …).
 set -u
 OUT=$1; CASES=$2; LEVELS=${3:-4}; YAW=${4:-0}; WAIT=${5:-120}
 R=$HOME/Documents/Emerald
@@ -42,13 +45,13 @@ rm -rf "$QI/mods/BATTLE_ART_VOXEL_FORK"
 mkdir -p "$QI/mods/EMERALD_3D"
 rsync -a --delete --exclude '.git/' --exclude 'docs/' "$SRC/" "$QI/mods/EMERALD_3D/"
 cp "$MAIN/options.lua" "$QI/options.lua"
-QI="$QI" QZ="${QA_ZOOM:-0}" CL="${CLEAN_LEVEL:-1}" python3 - <<'PY'
+QI="$QI" QZ="${QA_ZOOM:-0}" CL="${CLEAN_LEVEL:-1}" TL="${QA_TILT:-0}" python3 - <<'PY'
 import os,re
 p=os.environ["QI"]+"/options.lua";s=open(p,'rb').read()
 s=re.sub(rb"\n  zoom = -?\d+,",b"\n  zoom = "+os.environ["QZ"].encode()+b",",s,count=1)
 s=re.sub(rb'videoMode = "\w+",',b'videoMode = "windowed",',s,count=1)
 s=re.sub(rb"pipelines = \{[^}]*\},",b"pipelines = { emerald3d = "+os.environ["CL"].encode()+b" },",s,count=1)
-s=re.sub(rb"\n  tilt = \d+,",b"\n  tilt = 0,",s,count=1)
+s=re.sub(rb"\n  tilt = \d+,",b"\n  tilt = "+os.environ["TL"].encode()+b",",s,count=1)
 s=re.sub(rb"tiltshift = \d+,",b"tiltshift = 0,",s,count=1)
 open(p,'wb').write(s)
 PY

@@ -246,7 +246,7 @@ Rule: when something is wrong and the cause is not obvious, attribute it with a 
 Source: derived from the user's time lost on 2026-10-13 ("floating object" in Petalburg Woods) and the builder sessions of 2026-10-27.
 Gate: G-07
 Applied: tools/em_probe_driver.lua, tools/elevation/qa/em_cell_info.lua, em_cells_shape.lua, em_border_info.lua.
-Lessons: L-05, L-07, L-14, L-19, L-24, L-25
+Lessons: L-05, L-07, L-14, L-19, L-24, L-25, L-35, L-36, L-37, L-38
 Status: active
 
 ### R-30 One coordinator, builders report to it, sessions only on the user's go
@@ -317,5 +317,5 @@ Rule: EMERALD_3D is a drop-in replacement: it must reproduce the installed mod's
 Source: user 2026-10-29: "one thing i want to make sure is that we dont change anything about the look we have now! we are really close to the desired look of the game"
 Gate: G-12
 Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec
-Lessons: none
+Lessons: L-36, L-37, L-38
 Status: active
