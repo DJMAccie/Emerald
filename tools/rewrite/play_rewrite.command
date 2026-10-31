@@ -5,12 +5,15 @@
 # Never touches the real game, its mods or the main QA copy. The old BATTLE_ART_VOXEL_FORK is removed from this
 # copy only. Options match the play setup: zoom -2, tilt 2, windowed.
 set -u
-SRC=$HOME/Documents/emerald3d
+SRC=${EMERALD3D_SRC:-$HOME/Documents/emerald3d-clouds}   # combined main (followers, wild spawner, flyers); emerald3d itself sits on an old branch
 AS="$HOME/Library/Application Support"; MAIN="$AS/pokemon-love2d-rseqa"; ID=pokemon-love2d-rseqa-rw; QI="$AS/$ID"
 [ -f "$SRC/manifest.json" ] || { echo "no rewrite at $SRC"; exit 2; }
 for p in $(pgrep -x love); do ps eww -p $p 2>/dev/null | grep -q "POKEPORT_IDENTITY=$ID\( \|$\)" && { echo "already running (pid $p)"; exit 0; }; done
 if [ ! -d "$QI" ]; then cp -Rc "$MAIN" "$QI" 2>/dev/null || cp -R "$MAIN" "$QI"; cp "$MAIN/options.lua" "$QI/options.lua"; fi
+[ -f "$SRC/assets/flyers/manifest.lua" ] || { echo "no assets/flyers in $SRC (Pokemon sprites would fall back to a placeholder bird)"; exit 2; }
 rm -rf "$QI/mods/BATTLE_ART_VOXEL_FORK"
+# the rewrite has its own wild spawner; the old overworld_wild_spawns mod would double-spawn, so park it (never deleted)
+if [ -d "$QI/mods/overworld_wild_spawns" ]; then B="$QI/mods-backup-$(date +%Y%m%d)"; mkdir -p "$B"; mv "$QI/mods/overworld_wild_spawns" "$B/"; fi
 mkdir -p "$QI/mods/EMERALD_3D"
 rsync -a --delete --exclude '.git/' --exclude 'docs/' --exclude 'tests/' --exclude 'tools/' "$SRC/" "$QI/mods/EMERALD_3D/"
 QI="$QI" python3 - <<'PY'

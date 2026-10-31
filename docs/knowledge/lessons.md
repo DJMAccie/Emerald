@@ -363,3 +363,11 @@ Cause: Three things in the frame are not the mod: the engine's wandering NPC/act
 Fix: tools/rewrite/probe/cap_driver.lua: p0's driver with objects.forDraw = {} and tileset_anim._enabled = false, and the player's facing re-pinned before each shot. Always run the same-build control: a pixel that differs between two runs of ONE build is not evidence about the other build.
 Proof: With the driver: same build twice = 8 of 9 identical (the 9th is the player sprite at Route 111, the same 724 px rect both times); before vs after = 8 of 9 identical, and the 9th differs on exactly the control's rect.
 Rules: R-36
+
+### L-46 The rewrite capture driver never set the camera level
+Symptom: Audit sheets showed the rewrite's L7 as a high orbit near L4 while the installed L7 was the low camera behind the player; L6 first-person shots of the rewrite were the same overview as L4.
+Wrong model: Read the old|new L6/L7 pair as a camera parity gap in the rewrite.
+Cause: tools/rewrite/probe/cap_driver.lua loops over EM_LEVELS but never calls probe.setLevel, so every rewrite shot is the default camera; it also names shots MAP_Ln, so several spots of one map overwrite each other.
+Fix: tools/hedge/cap_level_driver.lua: probe.setLevel(level) before each shot, files MAP_x_y_Ln. Use it (or patch cap_driver) for any L6/L7 or multi-spot capture of the rewrite.
+Proof: Petalburg (21,28)/(25,28)/(27,23): with setLevel the rewrite's L6 is the first-person eye and L7 the low orbit, matching the installed framing (.rewrite/hedge/HEDGE_before_after.png).
+Rules: R-36

@@ -26,6 +26,7 @@ cleanup(){ [ -n "$G" ] && kill "$G" 2>/dev/null; [ -n "$SETUP" ] && rmdir /tmp/e
 trap cleanup EXIT; trap 'exit 143' TERM INT
 [ -d "$SRC" ] || { echo "no clean tree at $SRC" >&2; exit 2; }
 [ -f "$SRC/manifest.json" ] || { echo "no manifest.json in $SRC" >&2; exit 2; }
+[ -f "$SRC/assets/flyers/manifest.lua" ] || [ -n "${QA_ALLOW_NO_FLYERS:-}" ] || { echo "FAIL: no assets/flyers/manifest.lua in $SRC (Pokemon sprites would draw as placeholders; copy ~/Documents/emerald3d/assets/flyers, or QA_ALLOW_NO_FLYERS=1)" >&2; exit 3; }
 while [ -z "$N" ]; do
   for i in $(seq 1 $COPIES); do
     d=/tmp/emerald-qa.pcopy.$i

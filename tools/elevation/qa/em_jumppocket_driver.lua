@@ -31,6 +31,7 @@ return function(game)
   if def and def.midLayout and def.id==id then
    local l=def.midLayout;local W,H=l.width,l.height
    local fld=E.field(def)
+   for _,line in ipairs((E.pocketLog or {})[id] or {})do f:write('POCKET '..line..'\n') end
    local marks=Pin.MAPS[id] or {}
    local function C(x,y)if x<0 or y<0 or x>=W or y>=H then return nil end;return fld.cells[Levels.key(x,y)] end
    local function flo(c)return c and c.floor and not c.step and c.kind~='water' and c.height~=nil end
