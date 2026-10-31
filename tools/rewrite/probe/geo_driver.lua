@@ -29,8 +29,10 @@ return function(game)
  local MARGIN=tonumber(os.getenv('EM_MARGIN') or '8')
  local FIELD={ground=true,roof=true,canopy=true,over=true,plants=true}
  local groups,order={},{}
- -- group key = builds started so far (a dropped build counts too, so this is not completed + in flight)
- local function key() return probe.started() end
+ -- group key = builds started so far (a dropped build counts too, so this is not completed + in flight).
+ -- A CHUNKED scene (probe.epoch) builds one window as many meshes over several frames, so it groups by
+ -- layout epoch instead: everything uploaded since the last map change is the current window.
+ local function key() return (probe.epoch and probe.epoch()) or probe.started() end
  probe.onMesh(function(layer,verts,map)
   local k=key()
   local g=groups[k];if not g then g={};groups[k]=g;order[#order+1]=k end
@@ -51,6 +53,13 @@ return function(game)
   end
   return false
  end
+ -- EM_CELLS_CLIP="x0,y0,x1,y1": count only cells inside that rect (default: the
+ -- whole built window). It makes two dumps of DIFFERENT window sizes comparable:
+ -- a chunked scene draws a chunk-aligned area, so a spot says nothing extra
+ -- beyond its own window and the same spot's dump can clip both sides to it.
+ local clip
+ do local c=os.getenv('EM_CELLS_CLIP');if c then local a,b,d,e=c:match('^(-?%d+),(-?%d+),(-?%d+),(-?%d+)$');if a then clip={tonumber(a),tonumber(b),tonumber(d),tonumber(e)} end end end
+ local inClip=function(x,y)return not clip or (x>=clip[1] and x<=clip[3] and y>=clip[2] and y<=clip[4])end
  local maps={}
  for l in io.lines(os.getenv('EM_MAPS'))do local m,x,y=l:match('^(%S+)%s+(%d+)%s+(%d+)');if m then maps[#maps+1]={m,tonumber(x),tonumber(y)} end end
  for _,m in ipairs(maps)do
@@ -72,7 +81,7 @@ return function(game)
    local out,cl,tags,tagN={},{},{},{}
    local written,tried={},{}
    local spots,tris,allSettled=0,0,true
-   for spot=1,20 do
+   for spot=1,tonumber(os.getenv('EM_SPOTS') or '20') do
     if spot>1 then
      local mx,my
      for cy=0,H-1 do for cx=0,W-1 do if not mx and not written[cx..':'..cy] and not tried[cx..':'..cy] then mx,my=cx,cy end end end
@@ -95,8 +104,11 @@ return function(game)
     local ix1=(wx1>=W-1+MARGIN) and 1e9 or wx1-INNER
     local iy0=(wy0<=-MARGIN) and -1e9 or wy0+INNER
     local iy1=(wy1>=H-1+MARGIN) and 1e9 or wy1-INNER
+    -- A clip is inset from ITSELF, so the two dumps of a bigger and a smaller window cover the same
+    -- interior cells and the cut edge (no cells beyond it on one side) is not compared.
+    if clip then ix0,iy0,ix1,iy1=clip[1]+INNER,clip[2]+INNER,clip[3]-INNER,clip[4]-INNER end
     for cy=-MARGIN,H-1+MARGIN do for cx=-MARGIN,W-1+MARGIN do
-     local c=not written[cx..':'..cy] and cx>=ix0 and cx<=ix1 and cy>=iy0 and cy<=iy1 and probe.cell(cx,cy)
+     local c=not written[cx..':'..cy] and inClip(cx,cy) and cx>=ix0 and cx<=ix1 and cy>=iy0 and cy<=iy1 and probe.cell(cx,cy)
      if c then written[cx..':'..cy]=true;mine[cx..':'..cy]=true
       local sk=c.kind or ''
       local g=c.stairs

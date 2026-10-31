@@ -307,3 +307,59 @@ Cause: The board is the engine's AREA-NAME POPUP (src/ui/game3/map_name_popup.lu
 Fix: Same-instant rule: two captures are compared only at the same EM_WAIT, and parity sheets use EM_WAIT >= 200 (past every engine popup/animation); a screenshot object that sits at the SAME screen rect in five different maps is an overlay, not world geometry - check that first (it is the cheap test that would have caught this twice).
 Proof: Installed look at Route 112 (20,45), EM_WAIT=20: the board is up at the same rect as ours; ours at EM_WAIT=300: gone; ours at 150: up. /tmp/camf/banner20 vs /tmp/camf/banner300; M1-PLAN slice 17 note and the task-36 handoff corrected the same evening.
 Rules: R-36,R-29
+
+### L-39 The parity capture zoom decides the camera
+Symptom: Our rewrite capture at Route 111 (6,30) looked 3x closer than the installed golden at the same spot and the far band was a flat wrong blue: tiles ~64 px against ~32 px, and no horizon haze.
+Wrong model: A camera fault or a missing fog - slice 17 had just 'proved' the camera fit at 1.00 and looked right.
+Cause: clean_try.sh defaults QA_ZOOM=0 while every parity golden is shot by cap_pins.sh, which exports QA_ZOOM=-2. The engine hands FieldView.draw its worldViewSize, and at zoom 0 that is 320x180 against 640x360 at -2; the installed camera's distance is FOCAL*vh*1.18, so half the vh is half the distance: a 15-cell frame against a 47-cell one. The camera code was right the whole time; the capture was at another zoom than the reference.
+Fix: Parity captures always run QA_ZOOM=-2 (R-23's 'QA must match the user's game'). cam_driver.lua prints worldViewSize/zoom/fieldDraw, so check that line before judging any old|new sheet; a claim that a spot 'frames more area' must name the fieldDraw size on both sides.
+Proof: 2026-10-31: same spot, same build, QA_ZOOM=0 -> fieldDraw 320x180, distance 212.4, ~15 cells across; QA_ZOOM=-2 -> fieldDraw 640x360, distance 424.8, ~47 cells across, and the (scale,dy) fit to the golden becomes 1.00. The far-field slice's before|after numbers only exist at -2.
+Rules: R-23
+
+### L-40 A cache asked after the work still costs the work
+Symptom: Each window rebuild spent 28-55 ms in the tree layer on every six walked cells - a stutter at every bucket change - while the tree cards were supposedly cached per pair.
+Wrong model: Assuming the per-tree card composition (ground palette, background flood, pixel copy, texture upload) was inherent work that only chunking could amortise.
+Cause: Trees.card computed its cache key only AFTER the expensive part: the 256-pixel ground palette, the full w*h background flood against the ink outline, the trunk-foot scan, the setPixel copy of the card into the pair's canvas and the replacePixels upload. The lookup at the end always missed on the first call and hit on the next - but by then the work was already paid again for every tree in the window.
+Fix: Ask the cache FIRST, keyed on what the result actually depends on (a card depends on the shape table and the atlas, nothing else), and store nil hits (false) so a shape that cannot compose is not re-flooded. This is the same fault class as slice 14's 'counted 421 trees and drew no pixel': the layer reports the intended work while the real cost or the real output happens somewhere else.
+Proof: 2026-10-31: trees 28-55 ms -> 1-4 ms per window; the whole rebuild 79-101 -> 52-69 ms; Route 111's L4 capture byte-identical to the previous build (0 px differ) and the geometry dump identical on Littleroot and Route 111, so it is a pure cost fix; tests/trees_test.lua 279 checks pass.
+Rules: R-29
+
+### L-41 A tree card cache keyed on the drawing's first row
+Symptom: Chunking the window (slice 20) changed Route 112's north-hill forest: 19584 px differ at L4 and 17416 at L7, all on tree crowns, on a change that was meant to be pure cost. Before the chunking the same hill was patchy green-and-pink: trees drawn with a neighbour tile's mask.
+Wrong model: Assuming a tree card is identified by its family and its top row of metatiles, so c.cards[key] could not collide, and that the only thing chunking could change was the build cost.
+Cause: Trees.card's key held table.concat(rows[1]) -- ONLY the drawing's first row of metatile ids -- plus tipRows/ground/footY. Trees whose top row matched but whose lower rows differed (528/536, 528/515, 528/529, 528/538) therefore shared one card, and whichever shape the window composed first decided the art of all of them. Measured with a logged full key: 48 + 44 + 15 + 13 colliding requests in one Route 112 window. The chunked build composes in chunk order instead of window row order, so a different card won and the forest changed with it. The old look was ALSO player-position dependent for the same reason.
+Fix: Put every row of the drawing into the key (emerald3d slice 20). Two shapes now never share a card unless their whole drawing is the same; the art stops depending on composition order. Also: a full card texture (Trees.CANVAS) now warns instead of silently dropping trees.
+Proof: Route 112 (20,45) before|after at 3x, docs/shots/P3s20_sheet.png: the hill's crowns go from patchy (pink ground showing through every tree) to one continuous canopy; the L7 diff mask shows every differing pixel on a crown. Littleroot (L4/L6/L7) and Route 111 (L4) are 0 px differ, so the chunking itself moved nothing; the clipped geometry dump is ALL SAME (ground 14984, model 11208, over 870, plants 1352).
+Rules: R-29,R-36
+
+### L-42 A local defined below its caller is a nil global, and no test sees the draw path
+Symptom: The first slice-21 build logged '[EMERALD_3D] field draw failed, flat field restored: Scene.lua:535: attempt to call global assembleLayers (a nil value)': every capture and every probe was the engine's FLAT field (windowMs -1), so a whole measurement run measured nothing.
+Wrong model: Inserted streamTrees above assembleLayers and assumed Lua's local declaration order did not matter; assumed the 11 test files would catch a broken Scene.
+Cause: assembleLayers is a 'local function' declared after streamTrees, so inside streamTrees the name is a GLOBAL lookup; it is nil at run time. The tests only load lib modules that do not need love/Scene, so the draw path has no test at all.
+Fix: Forward-declare 'local assembleLayers' above streamTrees and assign the function later ('assembleLayers = function() ... end').
+Proof: After the fix the entry window built again (147.2 / 436.7 / 93.5 ms at Littleroot/Route 112/Route 111) and the 9 3D captures were pixel-identical; the smoke test is one QA run's log line, not the unit tests.
+Rules: R-29
+
+### L-43 Measure the layer before fixing the guess, and warm the QA identity before comparing
+Symptom: The handoff said the map-entry hitch was the card uploads (Trees.card calling replacePixels per card, guessed 5-15 ms each). The instrumented in-game run showed 0.2-1 ms an upload and 200 ms of hull composition at Route 112. A first baseline run of the SAME slice-20 code read 239.8 ms where the next read 144.6 ms.
+Wrong model: Trusted a guess in the handoff as the design input, and compared a cold QA identity's numbers (first run after a reboot: layout 88 ms against 32 ms warm) with a warm run's.
+Cause: A cost guess is not a measurement: the five allocations per quad inside VoxelHull.build (and the GC of them) were the cost, not the GPU upload. And the first run of a QA copy pays cold caches/shader warm-up, so it reads ~1.6x slower across every layer.
+Fix: Instrument the layer in parts (cards, upload, models, list, meshes) and read the split before choosing a fix; for a before/after, run BOTH trees the same day, same probe, same options, and treat the first run as warm-up.
+Proof: Route 112 trees 489.9 ms = cards 6.7 + upload 0.2 + models 200.3 (of which hull build 200.3) + list 200.3 + meshes 18.3; slice-20 clone 144.6 ms against an instrumented run of the same code at 239.8 ms (cold).
+Rules: R-29, R-36
+
+### L-44 Bench two Lua modules in separate processes
+Symptom: A hull rewrite that was 1.4x faster measured 15.8 ms a build against the reference's 3.1, and a minute later 2.0 against 3.1 - the same code, both directions.
+Wrong model: The interleaved A/B in one luajit process is a fair comparison, and a slower reading means the rewrite regressed the JIT.
+Cause: Two implementations of the same hot code in one process share the trace cache and each other's exits and deopts; and this machine carries other sessions (load average 40-80), so any single reading swings 2-3x. A jit.on/jit.off test then read as 'the JIT hurts the rewrite', also an artefact of the load window.
+Fix: tools/bench_hull.sh runs ONE MODULE PER PROCESS, three times each, and keeps the best reading a case gets; the parity check stays in one process because it times nothing.
+Proof: Same module alone 2.0-2.3 ms a build, interleaved with the reference 15.8 ms. After the harness change 1.40x total, reproducible in four consecutive runs (1.23-1.56x a case).
+Rules: R-29
+
+### L-45 The look gate needs a deterministic capture
+Symptom: The nine-capture R-36 gate reported 200-2100 differing pixels on 8 of 9 frames for a change that leaves every quad identical - and the same build captured twice differed just as much.
+Wrong model: Two captures of the same spots are comparable; a pixel difference is the mod.
+Cause: Three things in the frame are not the mod: the engine's wandering NPC/actor sprites (drawn over the field, positions differ per run), the animated tileset (water, flowers), and the player sprite's facing, which a map script or a late reset can leave turned. They sit in compact 24-32 px blocks with max delta 214-255, which reads exactly like a geometry fault.
+Fix: tools/rewrite/probe/cap_driver.lua: p0's driver with objects.forDraw = {} and tileset_anim._enabled = false, and the player's facing re-pinned before each shot. Always run the same-build control: a pixel that differs between two runs of ONE build is not evidence about the other build.
+Proof: With the driver: same build twice = 8 of 9 identical (the 9th is the player sprite at Route 111, the same 724 px rect both times); before vs after = 8 of 9 identical, and the 9th differs on exactly the control's rect.
+Rules: R-36

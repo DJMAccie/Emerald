@@ -196,7 +196,7 @@ Rule: capture with QA_ZOOM=-2, sceneryProps "modeled", daytime day, tilt 2, and 
 Source: user 2026-10-14 (Routes 104-115 walk, shots did not match the game).
 Gate: G-05, G-07
 Applied: tools/qa_run.sh, qa_tryp.sh (copies main QA options.lua).
-Lessons: L-06, L-21
+Lessons: L-06, L-21, L-39
 Status: active
 
 ## Workflow
@@ -246,7 +246,7 @@ Rule: when something is wrong and the cause is not obvious, attribute it with a 
 Source: derived from the user's time lost on 2026-10-13 ("floating object" in Petalburg Woods) and the builder sessions of 2026-10-27.
 Gate: G-07
 Applied: tools/em_probe_driver.lua, tools/elevation/qa/em_cell_info.lua, em_cells_shape.lua, em_border_info.lua.
-Lessons: L-05, L-07, L-14, L-19, L-24, L-25, L-35, L-36, L-37, L-38
+Lessons: L-05, L-07, L-14, L-19, L-24, L-25, L-35, L-36, L-37, L-38, L-40, L-41, L-42, L-43, L-44
 Status: active
 
 ### R-30 One coordinator, builders report to it, sessions only on the user's go
@@ -316,6 +316,6 @@ Status: active
 Rule: EMERALD_3D is a drop-in replacement: it must reproduce the installed mod's look exactly, at every camera and every spot. The tiles, heights, faces, props, trees, water, fog, sky, shading and camera are outputs to match, not to redesign. A visible difference in an old|new capture is a fault, not an improvement; the only intended differences are the ones Petya explicitly asks for, listed one by one. Parity is proven by the M0 golden baseline (cells + geometry dumps, 450 captures at 75 spots) plus old|new sheets read against each other.
 Source: user 2026-10-29: "one thing i want to make sure is that we dont change anything about the look we have now! we are really close to the desired look of the game"
 Gate: G-12
-Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec
-Lessons: L-36, L-37, L-38
+Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec, slice 22 (VoxelHull: the hull build flattened, model pinned by digest)
+Lessons: L-36, L-37, L-38, L-41, L-43, L-44, L-45
 Status: active
