@@ -371,3 +371,11 @@ Cause: tools/rewrite/probe/cap_driver.lua loops over EM_LEVELS but never calls p
 Fix: tools/hedge/cap_level_driver.lua: probe.setLevel(level) before each shot, files MAP_x_y_Ln. Use it (or patch cap_driver) for any L6/L7 or multi-spot capture of the rewrite.
 Proof: Petalburg (21,28)/(25,28)/(27,23): with setLevel the rewrite's L6 is the first-person eye and L7 the low orbit, matching the installed framing (.rewrite/hedge/HEDGE_before_after.png).
 Rules: R-36
+
+### L-47 Builders must not end their turn on a running capture batch
+Symptom: The P1 trees builder ended its turn with 'the capture batch is still running'; the chain stalled until the coordinator nudged it
+Wrong model: Starting caps.sh in the background and ending the turn
+Cause: The brief did not say to wait for the batch and finish the gate in the same turn
+Fix: Every builder brief: wait for the capture batch (foreground or DONE markers), then sheet, controls, commit and report in ONE turn
+Proof: nudge message 2026-11-01, builder then finished and committed 1b49aaa
+Rules: none

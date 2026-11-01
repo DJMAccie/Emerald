@@ -37,7 +37,7 @@ Source: user 2026-10-27 on the Gen3Blocks round-1 install: "the stones are in co
 Gate: G-06
 Applied: Gen3Elevation.BAND_LEVEL='lower' + Gen3Blocks.UP_FACES (round 1b, d1c67c9).
 Lessons: L-01
-Status: active
+Status: SUPERSEDED 2026-11-01 by R-ridge-slope: user on the Route 112 red wall (installed|rewrite crop, docs/faults/rocks/user_2026-11-01_red_wall_is_45deg.png): "that wall should also be ridges of 45 degrees". No band is flat any more; every band is the slope between its plateaus.
 
 ### R-05 Rock tops are flat
 Rule: a numbered mass is a flat-topped block at its number with faces for sides. No rounded, ridged, lathed, profile or parabola tops on a pinned map (no Gen3Relief hybrids, Gen3Hills PROFILE, Gen3Rock lids there).
@@ -309,6 +309,7 @@ Status: active
 - Clarified (user 2026-10-27, Route 114 panel): the band rows are the slope's footprint; the slope climbs across them toward the upper plateau, up AND over ("an angle and not a straight upward thing"); a multi-row band is one ramp over all its rows.
 - WEDGES STACK (user 2026-10-27, cube-with-diagonal sketch + Safari N arrows): each band tile is a wedge, the cube cut by its diagonal (foot at the lower side, top at the upper side: one course per tile at 45 degrees); consecutive band tiles in the climb direction stack into one continuous slant, N rows = N courses.
 - Applied by: Gen3Blocks.RAMPS (r1 aa14ea6, r2 022561d), Gen3Elevation RAMP_EXT ramp extension (2026-10-28); open: stair-side slit, tall bands left steep
+- EVERYWHERE (user 2026-11-01, docs/faults/rocks/user_2026-11-01_red_wall_is_45deg.png, "that wall should also be ridges of 45 degrees"; and the cave screenshot, R-37): the rule covers every band of every tileset: the stacked red walls of Route 112 / Mt Chimney (3 rows = 3 courses = one 45-degree slant), cave and underwater bands, the brown and beige terraces. The rewrite's "flat band at the lower level with a wall at its upper edge" case (BlockBuilder spec 4a, R-04) is retired: a band at the lower plateau's level still slopes up to the upper plateau over its rows. Listed as an intended difference under R-36.
 
 ## Rewrite (own-code drop-in)
 
@@ -317,5 +318,26 @@ Rule: EMERALD_3D is a drop-in replacement: it must reproduce the installed mod's
 Source: user 2026-10-29: "one thing i want to make sure is that we dont change anything about the look we have now! we are really close to the desired look of the game"
 Gate: G-12
 Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec, slice 22 (VoxelHull: the hull build flattened, model pinned by digest)
-Lessons: L-36, L-37, L-38, L-41, L-43, L-44, L-45
+Lessons: L-36, L-37, L-38, L-41, L-43, L-44, L-45, L-46
+Status: active
+
+## caves
+- Intended differences Petya asked for (2026-11-01): every rock/cave band is a 45-degree slope (R-ridge-slope, R-37), including the stacked red walls the installed look draws as vertical courses.
+
+### R-37 Cave wall bands are 45-degree ridge slopes everywhere
+Rule: The dark diamond-pattern band tiles that edge a cave floor (every cave, and the same family on underwater maps) are 45-degree ridge slopes like the outdoor band tiles (BlockBuilder 4a, R-ridge-slope): never a flat band at floor level, never a vertical wall. The band's art orientation (lit rim side) says which side is up; the two floors it separates stand one rise apart.
+Source: user 2026-11-01, screenshot docs/faults/caves/user_2026-11-01_cave_band_is_ridge.png; 'they are everywhere in caves'
+Gate: none yet
+Applied: not yet
+Lessons: none
+Status: active
+
+## rocks
+
+### R-38 No vertical rock walls: every rock drop is a 45-degree slope
+Rule: There is no vertical rock wall anywhere in the game. Every drop between two rock or plateau levels, of any height, any tileset, outdoors, in caves and underwater, is a 45-degree slope: one course of rise per cell of run, laid over the drawn face rows (N rows = N courses) and, where the drawing shows fewer rows than courses, continued as wedges over the lower cells (R-35) until the slope reaches the lower level. Stacked face courses standing straight up are a fault wherever they appear, even where the installed look drew them that way (R-36 intended difference).
+Source: user 2026-11-01, after the Route 112 red wall crop: 'and to add: there are actually no stacked vertical walls in the game, its always a 45 degree slope'
+Gate: none yet
+Applied: not yet
+Lessons: none
 Status: active
