@@ -1,39 +1,22 @@
-# scratch staging areas for QA captures: mod source copies, never repo content
-.qa-stage/
+# Deze repo bewaart alleen: tools/, docs/, .claude/, CLAUDE.md, README.md.
+
+# eigen git-repo's in deze map (niet in deze repo)
+/mod/
+/stadium2-importer/
+/gen1recomp/
+
+# oud werk, alleen lokaal (alles wat ooit in git stond zit nog in de geschiedenis)
+/archief/
+
 .DS_Store
-
-# capture and driver logs, and python bytecode from the tools
-logs/
 __pycache__/
-
-# never commit game-derived data
+*.png
+*.jpg
 *.gba
 *.z64
 *.iso
 *.rvz
 *.love
-*.dsm
-*.png
-*.jpg
-world.json
-world.lua
-atlases/
-shots*/
-sheets*/
 
-# autoloop work area: rc tree (mod code), geometry dumps, runs and shots (game-derived), never repo content
-.autoloop/
-
-# local working areas and backups, never repo content
-backups/
-.dsh/
-.cleanup/
-*.bundle
-
-# world fill: copies of the user's reference maps (third-party art) and outputs traced from them
-tools/worldfill/ref/
-.rewrite/
-
-# local convenience link to the clean-room rewrite repo (~/Documents/emerald3d), never repo content:
-# that repo is separate on purpose and has no remote; a committed link would point nowhere on a clone
-emerald3d
+# screenshots die Petya stuurt (spelbeelden)
+/docs/aanwijzingen/

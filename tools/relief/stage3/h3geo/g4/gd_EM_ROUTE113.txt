@@ -1,4 +1,0 @@
-=== EM_ROUTE113
-under tris 90749 90749 | only-A 0 only-B 0
-  only-A {}
-    top cells []

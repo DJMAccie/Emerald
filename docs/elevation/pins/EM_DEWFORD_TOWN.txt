@@ -1,5 +1,0 @@
-# EM_DEWFORD_TOWN  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet
-# x y height  (cell of the mark; height in 16 px courses above ground 0; water = 0 always)
-15 3 1
-12 8 0
-7 10 0

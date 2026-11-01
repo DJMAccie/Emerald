@@ -1,6 +1,0 @@
-[EM float]	EM_DEWFORD_TOWN	38	true
-[EM float]	EM_ROUTE105	92	true
-[EM float]	EM_ROUTE107	54	true
-[EM float]	EM_ROUTE109	60	true
-[EM float]	EM_ROUTE122	20	true
-[EM float]	EM_ROUTE124	172	true

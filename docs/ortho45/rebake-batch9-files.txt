@@ -1,2 +1,0 @@
-fortree_treehouse.lua
-pacifidlog_hut.lua

@@ -1,6 +1,0 @@
-[EM float]	EM_PACIFIDLOG_TOWN	83	true
-[EM float]	EM_ROUTE103	21	true
-[EM float]	EM_ROUTE117	8	true
-[EM float]	EM_SKY_PILLAR_OUTSIDE	44	true
-[EM float]	EM_SOUTHERN_ISLAND_EXTERIOR	6	true
-[EM float]	EM_VERDANTURF_TOWN	12	true

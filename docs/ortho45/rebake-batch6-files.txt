@@ -1,2 +1,0 @@
-b147_battlefrontier_lounge7.lua
-weather_institute.lua

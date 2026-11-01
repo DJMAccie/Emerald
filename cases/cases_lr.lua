@@ -1,1 +1,0 @@
-return { {'EM_LITTLEROOT_TOWN',10,6}, {'EM_ROUTE103',20,10} }

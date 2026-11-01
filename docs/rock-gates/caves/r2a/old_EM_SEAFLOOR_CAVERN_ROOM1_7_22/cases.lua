@@ -1,1 +1,0 @@
-return {{'EM_SEAFLOOR_CAVERN_ROOM1',7,22}}

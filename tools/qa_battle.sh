@@ -1,6 +1,6 @@
 #!/bin/bash
 # Battle capture: boots the QA identity, starts a wild battle through
-# tools/em_battle_driver.lua and drops frames into $1.
+# tools/drivers/em_battle_driver.lua and drops frames into $1.
 #
 #   tools/qa_battle.sh <outdir> [player_national] [foe_national] [frames]
 #
@@ -38,9 +38,9 @@ caffeinate -u -t $((LIMIT+30)) >/dev/null 2>&1 &
 # is the same trick for OpenAL, which the log shows this build using.
 export SDL_AUDIODRIVER=${SDL_AUDIODRIVER:-dummy}
 export ALSOFT_DRIVERS=${ALSOFT_DRIVERS:-null}
-cd ~/Documents/gen1recomp || exit 1
+cd ~/Documents/Emerald/gen1recomp || exit 1
 EM_BATTLE_FRAMES=$FRAMES EM_PLAYER_SPECIES=$PLAYER EM_FOE_SPECIES=$FOE \
-  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/gen1recomp-modwork/tools/em_battle_driver.lua} \
+  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/Emerald/tools/drivers/em_battle_driver.lua} \
   POKEPORT_IDENTITY=pokemon-love2d-rseqa POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   /Applications/gen1recomp.app/Contents/MacOS/love . > "$OUT/run.log" 2>&1 &
 G=$!

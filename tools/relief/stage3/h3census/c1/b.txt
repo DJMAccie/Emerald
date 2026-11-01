@@ -1,3 +1,0 @@
-[EM h3stats]	EM_MOSSDEEP_CITY	273	60	0	true
-[EM h3stats]	EM_MT_CHIMNEY	7748	0	0	true
-[EM h3stats]	EM_MT_PYRE_EXTERIOR	826	169	0	true

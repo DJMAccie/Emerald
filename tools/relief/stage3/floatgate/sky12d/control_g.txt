@@ -1,3 +1,0 @@
-[EM float]	EM_FALLARBOR_TOWN	25	true
-[EM float]	EM_MT_CHIMNEY	10	true
-[EM float]	EM_ROUTE112	63	true

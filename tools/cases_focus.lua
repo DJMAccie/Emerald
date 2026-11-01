@@ -1,6 +1,0 @@
-return {
- {'EM_MOSSDEEP_CITY',24,19},
- {'EM_MT_CHIMNEY',20,23},
- {'EM_ROUTE114',30,53},
- {'EM_SOOTOPOLIS_CITY',10,50},
-}

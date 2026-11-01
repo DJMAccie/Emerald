@@ -1,2 +1,0 @@
-ferry_birth_island.lua
-ferry_navel_rock.lua

@@ -1,1 +1,0 @@
-return {{'EM_SKY_PILLAR_OUTSIDE',17,8}}

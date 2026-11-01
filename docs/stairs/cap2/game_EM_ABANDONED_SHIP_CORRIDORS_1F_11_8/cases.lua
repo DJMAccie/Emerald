@@ -1,1 +1,0 @@
-return {{'EM_ABANDONED_SHIP_CORRIDORS_1F',11,8}}

@@ -1,1 +1,0 @@
-return {{'EM_ROUTE104',20,66},{'EM_ROUTE105',31,12},{'EM_ROUTE109',6,55}}

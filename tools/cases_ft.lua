@@ -1,4 +1,0 @@
-return {
- {'EM_FORTREE_CITY',20,10},
- {'EM_MOSSDEEP_CITY',24,19},
-}

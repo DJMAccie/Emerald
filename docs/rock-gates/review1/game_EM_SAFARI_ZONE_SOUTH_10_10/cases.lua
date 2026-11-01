@@ -1,1 +1,0 @@
-return {{'EM_SAFARI_ZONE_SOUTH',10,10}}

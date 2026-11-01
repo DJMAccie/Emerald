@@ -1,1 +1,0 @@
-return {{'EM_BATTLE_PYRAMID_SQUARE08',6,8}}

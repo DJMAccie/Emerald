@@ -1,1 +1,0 @@
-return {{'EM_SHOAL_CAVE_HIGH_TIDE_INNER_ROOM',42,5}}

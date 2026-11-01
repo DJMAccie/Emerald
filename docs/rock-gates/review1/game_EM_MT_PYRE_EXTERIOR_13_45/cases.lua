@@ -1,1 +1,0 @@
-return {{'EM_MT_PYRE_EXTERIOR',13,45}}

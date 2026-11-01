@@ -1,6 +1,0 @@
-[EM float]	EM_LILYCOVE_CITY	88	true
-[EM float]	EM_MOSSDEEP_CITY	64	true
-[EM float]	EM_ROUTE118	28	true
-[EM float]	EM_ROUTE119	31	true
-[EM float]	EM_ROUTE120	39	true
-[EM float]	EM_ROUTE121	22	true

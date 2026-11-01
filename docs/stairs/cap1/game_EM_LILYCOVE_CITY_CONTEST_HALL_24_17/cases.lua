@@ -1,1 +1,0 @@
-return {{'EM_LILYCOVE_CITY_CONTEST_HALL',24,17}}

@@ -1,1 +1,0 @@
-return {{'EM_SEAFLOOR_CAVERN_ENTRANCE',10,13}}

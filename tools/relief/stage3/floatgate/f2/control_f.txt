@@ -1,7 +1,0 @@
-[EM float]	EM_ROUTE111	56	true
-[EM float]	EM_ROUTE113	44	true
-[EM float]	EM_ROUTE114	55	true
-[EM float]	EM_ROUTE115	37	true
-[EM float]	EM_ROUTE125	116	true
-[EM float]	EM_ROUTE128	158	true
-[RK1 float] EM_ROUTE125 mass cells=3 bottom=61.0 ground=48.0 lowest=45,47 path=Gen3Rock.append

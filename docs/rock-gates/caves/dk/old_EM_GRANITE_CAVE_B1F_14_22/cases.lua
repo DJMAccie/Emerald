@@ -1,1 +1,0 @@
-return {{'EM_GRANITE_CAVE_B1F',14,22}}

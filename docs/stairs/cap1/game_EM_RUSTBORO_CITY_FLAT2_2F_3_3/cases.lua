@@ -1,1 +1,0 @@
-return {{'EM_RUSTBORO_CITY_FLAT2_2F',3,3}}

@@ -218,7 +218,7 @@ Lessons: none
 Status: active
 
 ### R-26 Install rule
-Rule: install only with the game closed (pgrep -fl MacOS/love), backup under ~/Documents/gen1recomp-modwork/backups/<name>-<date>, source = game = QA, patch regenerated (tools/props/make_patch.sh), Emerald commit + push, one Log line in PLAN.md. The mod repo (~/Documents/battle-art-notquiteog) stays uncommitted: make_patch.sh needs its HEAD = upstream. Install QA-checked work without asking; push main every few commits; never push ROM-derived files.
+Rule: install only with the game closed (pgrep -fl MacOS/love), backup under ~/Documents/Emerald/gen1recomp-modwork/backups/<name>-<date>, source = game = QA, patch regenerated (tools/props/make_patch.sh), Emerald commit + push, one Log line in PLAN.md. The mod repo (~/Documents/Emerald/battle-art-notquiteog) stays uncommitted: make_patch.sh needs its HEAD = upstream. Install QA-checked work without asking; push main every few commits; never push ROM-derived files.
 Source: user 2026-10-05: "we also need to push once in a while"; "you can install your work, we can always refine".
 Gate: G-05
 Applied: tools/elevation/install_pins.sh, install_blocks.sh, install_trees.sh.
@@ -273,6 +273,22 @@ Applied: tools/release_check.sh, tools/ledger.py, tools/tour_note.sh.
 Lessons: none
 Status: active
 
+### R-41 Stacked rock steps are one continuous 45-degree wedge line
+Rule: Every rock cell beside a LOWER cell is a wedge: its edge toward the lower cell drops, the far edge stays at its base. Cells in a staircase of bases (48,32,16,0) chain into one unbroken 45-degree slant (side-view sketch: stacked right triangles). A convex corner is a quarter cone round the vertex that stays high; an inside corner (inham) is the inverse cone. A drop taller than one cell is one steeper wedge (no vertical wall); true 45 over the lower cells stays an open option. Applies to EVERY rock ledge tile of every map, never to one map.
+Source: user 2026-11-01: 'alle richel tiles in de hele game op 45 graden zetten. ook als ze stacken', cone sketch ('ja kegel inderdaad'), 'dit geldt voor elke rock richel tile in de game, we moeten algemene regels schrijven'
+Gate: none yet
+Applied: mod 7e9fcd5 a851f98 caf4afb: Gen3Blocks.buildSlopes (all pinned maps)
+Lessons: none
+Status: active
+
+### R-42 A tile drawn ON a wall belongs to the wall
+Rule: Art that sits on a rock wall in the 2D (the secret-base square 0x33B/0x33C, a dark cave mouth) is part of that wall: the cell takes the wall's height and slope, and its own art is drawn on the wedge. It is never a hollow at ground level. A black cave entrance is a black hole with rock still on top of it, not an opening. A grey stair is ALWAYS a real stair at 45 degrees, wherever it is drawn (Petya's correction: I had read 'trap in de verte' as ground art and written 'stays flat', wrong). On Route 116 the far stair is drawn flat on the ground in our 3D: it must rise 45 degrees like every stair. There is NO rock ledge tile that does not go up: every rock ledge tile outlines an elevation change of one block, always. And elevation can ONLY come from a rock ledge tile or a stair: never a height difference in grass, water, sand or a town. So a ledge piece with no height change beside it is a HEIGHT-DATA BUG (pins / field): fix the heights so the ledge outlines one block of rise; and any height difference without a ledge tile or stair is equally wrong (Petya 2026-11-01, 'dat is de fucking regel').
+Source: user 2026-11-01, Route 116 screenshots: hidden-base square sits on the wall, 'trap' far away is ground art, black entrance is a black hole with rock on top, one ledge piece does not go up
+Gate: none yet
+Applied: hidden-base spots: Gen3Blocks.liftSpots (this session); stair (must be 45 degrees, flat now = bug), ledge-flat and black hole: open
+Lessons: none
+Status: active
+
 ## World shape, continued (rules given 2026-10-28)
 
 ### R-33 NEVER ON GRASS OR SAND
@@ -319,7 +335,7 @@ Source: user 2026-10-29: "one thing i want to make sure is that we dont change a
 Gate: G-12
 Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec, slice 22 (VoxelHull: the hull build flattened, model pinned by digest)
 Lessons: L-36, L-37, L-38, L-41, L-43, L-44, L-45, L-46, L-48
-Status: active
+Status: retired 2026-11-01: the rewrite is archived, the old mod is the mod (see R-39)
 
 ## caves
 - Intended differences Petya asked for (2026-11-01): every rock/cave band is a 45-degree slope (R-ridge-slope, R-37), including the stacked red walls the installed look draws as vertical courses.
@@ -340,4 +356,38 @@ Source: user 2026-11-01, after the Route 112 red wall crop: 'and to add: there a
 Gate: none yet
 Applied: not yet
 Lessons: L-48
+Status: active
+
+## One mod (from 2026-11-01)
+
+### R-39 One mod: the old mod is the mod
+Rule: mod/ (the old mod, installed as BATTLE_ART_VOXEL_FORK) is the only Emerald mod. All code is Petya's, so old code is used freely; the rewrite (archief/herschrijving-emerald3d) is not developed further, only mined for pieces Petya asks for. Work = Petya names one wrong thing, fix it in mod/, test with tools/qa_tryp.sh, show before/after, install with tools/install.sh. Never rebuild what already works.
+Source: user 2026-11-01: "de oude code mag gewoon gebruikt worden. ik wil gewoon dat het werkt"; "alle code is nu overigens van mij"; "we kunnen de code ook samenvoegen als dat nodig is"
+Gate: none yet
+Applied: cleanup 2026-11-01: rewrite out of the game, old mod reinstalled, project folder cut to mod/ stadium2-importer/ gen1recomp/ tools/ docs/ archief/
+Lessons: none
+Status: active
+
+### R-40 Jump ledges are a small ramp
+Rule: A one-way jump ledge is a low wedge, not a thin wall: a long gentle slope rises toward the lip, then a short steep face drops on the jump (south) side. Sketch: docs/aanwijzingen/richel-schets-zijaanzicht.webp.
+Source: user 2026-11-01: "die ledges zijn nog niet helemaal goed. ze moeten meer als een kleine ramp zijn" (with a side-view sketch)
+Gate: none yet
+Applied: mod dab9db9 2026-11-01, installed: Gen3Outdoor.ledge = one slope from the cell's north edge up to M.LEDGE_H=10 px at the lip, dirt face on the south side, triangle sides; sideLedge (Route 115 east/west) the same toward the jump side. Drop ledges (ledgeLow) unchanged. Before/after sheet: docs/aanwijzingen/richel-voor-na.png.
+Lessons: none
+Status: active
+
+### R-43 Fixes are game-wide tile rules, never per-route code
+Rule: Every fix is written as a rule for a kind of tile or terrain that holds in the whole game (all ledges, all rock edges, all water), never as 'if map == X', and not per house, per ledge or per object either (Petya 2026-11-01: "ook per huisje of per richel ... niet goed als er heel veel hyper specifieke code is"). Specific code or data is a last resort for what a general rule cannot do, kept as a small data entry. Per-map DATA that the 2D game lacks (height pins) is fine; per-map CODE is not. When a fix touches an area with overlapping systems (rocks: Gen3Rock/Relief/Hills/Mass/Blocks/Elevation/Terrain), fold them into one rule step by step, with before/after on several maps so other places do not change by accident.
+Source: user 2026-11-01: "ik wil juist meer algemene regels hebben voor tiles. dus dat we niet per route allemaal weirde stukjes code hebben maar algemene regels voor de game maken"
+Gate: none yet
+Applied: not yet
+Lessons: none
+Status: active
+
+### R-44 Emerald only: no code for other games
+Rule: mod/ is an Emerald-only mod. Code, tests, docs and assets that only serve other games (Gen 1 Red/Blue/Yellow, Gen 2 Gold/Silver/Crystal, FireRed/LeafGreen, other ports) are removed, not kept 'just in case'. Code that Emerald actually runs stays even when it was first written for another game or still carries a 'Gen2'/'FireRed' name. Git history keeps what was removed.
+Source: user 2026-11-01: "ja haal alsjeblieft alle code voor andere games er uit. dit is specifiek een emerald mod" and then "and even get rid of any fire red leaf green code. this is only for emerald!"
+Gate: none yet
+Applied: mod f8a1895 2026-11-01 (installed): main.lua is the Gen 3 hand-off only (2366 -> 54 lines), 38 never-loaded lib modules, 64 tests, docs/README/CHANGELOG removed (-63.5k lines); method = log every V.require in a probe main.lua over 22 QA cases + a battle (tools in PLAN handoff), then fixpoint of modules nothing loaded refers to. FRLG pass started (Gen3Tilesets FR_ tables); Gen1/2 voxel stack (VoxelScene/Structures/Buildings/ChunkMesher/BattleScene/OverworldBattle) and FRLG tables in Gen3TileShape/Furniture/InteriorProfiles still to do.
+Lessons: none
 Status: active

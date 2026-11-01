@@ -1,1 +1,0 @@
-return {{'EM_MAGMA_HIDEOUT_3F_3R',17,15}}

@@ -1,1 +1,0 @@
-return {{'EM_VERDANTURF_TOWN',19,2}}

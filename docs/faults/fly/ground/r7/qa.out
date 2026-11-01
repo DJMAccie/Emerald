@@ -1,3 +1,0 @@
-== short: 3 shots
-[error] BATTLE_ART_VOXEL_FORK: requires src.world.Map, which a Gen 3 game never runs and no compat layer has no adapter for; take the game from the game.ready payload and mod.world
-[fly dbg] landed: map	EM_OLDALE_TOWN	cell	6	17	facing	down	locked	false	visible	true	wanted	EM_OLDALE_TOWN	6	17	flight wall	17.4 s	worst frame	0 ms ()	scene ready	false

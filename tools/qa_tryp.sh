@@ -28,7 +28,7 @@ LOCK=/tmp/emerald-qa.lock
 AS="$HOME/Library/Application Support"
 MAIN="$AS/pokemon-love2d-rseqa"
 # QA_SRC: take the named files from this tree instead of the mod source (a QA-only probe build)
-M=${QA_SRC:-$HOME/Documents/battle-art-notquiteog}
+M=${QA_SRC:-$HOME/Documents/Emerald/mod}
 LIMIT=${QA_LIMIT:-360}; [ "$LIMIT" -gt 400 ] && LIMIT=400
 COPIES=4; GAMES=4
 # a bare name is a lib file; a name with a slash is a path under the mod root
@@ -123,10 +123,10 @@ U="$AS/pokemon-love2d/updates"
 PAY=$(ls -t "$U"/gen1recomp-*.love 2>/dev/null | head -1)
 [ -n "$PAY" ] && { mkdir -p "$QI/updates"; cmp -s "$PAY" "$QI/updates/$(basename "$PAY")" || cp "$PAY" "$QI/updates/"; }
 caffeinate -u -t $((LIMIT+30)) >/dev/null 2>&1 &
-cd ~/Documents/gen1recomp || exit 1
+cd ~/Documents/Emerald/gen1recomp || exit 1
 echo "[qa_tryp] identity $ID files $FILES" > "$OUT/run.log"
 EM_YAW=$YAW EM_LEVELS="$OUT/levels.lua" \
-  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/gen1recomp-modwork/tools/em_views_driver.lua} \
+  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/Emerald/tools/drivers/em_views_driver.lua} \
   SDL_MAC_BACKGROUND_APP=${QA_SDL_BG:-1} POKEPORT_BACKGROUND=${QA_BACKGROUND:-1} POKEPORT_IDENTITY=$ID POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   EM_CASES="$OUT/cases.lua" EM_WAIT=$WAIT /Applications/gen1recomp.app/Contents/MacOS/love . >> "$OUT/run.log" 2>&1 &
 G=$!

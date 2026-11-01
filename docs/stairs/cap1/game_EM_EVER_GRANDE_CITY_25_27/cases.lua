@@ -1,1 +1,0 @@
-return {{'EM_EVER_GRANDE_CITY',25,27}}

@@ -1,1 +1,0 @@
-return {{'EM_PACIFIDLOG_TOWN',15,8}}

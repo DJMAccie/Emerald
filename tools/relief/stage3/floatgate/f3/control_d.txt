@@ -1,6 +1,0 @@
-[EM float]	EM_ROUTE104	36	true
-[EM float]	EM_ROUTE106	35	true
-[EM float]	EM_ROUTE110	24	true
-[EM float]	EM_ROUTE123	30	true
-[EM float]	EM_SAFARI_ZONE_SOUTH	54	true
-[EM float]	EM_SAFARI_ZONE_SOUTHWEST	19	true

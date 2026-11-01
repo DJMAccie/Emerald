@@ -1,1 +1,0 @@
-return {{'EM_SLATEPORT_CITY',17,59}}

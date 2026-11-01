@@ -1,4 +1,0 @@
-EM_ROUTE111 zfight pairs 614
-   464 ('Gen3Scene.lua:2572<Gen3Scene.lua:2585', 'Gen3Scene.lua:2572<Gen3Scene.lua:2585')
-   150 ('Gen3Scene.lua:2572<Gen3Scene.lua:2586', 'Gen3Scene.lua:2572<Gen3Scene.lua:2586')
-  top cells [((27, 143), 43), ((31, 143), 43), ((27, 144), 43), ((31, 144), 43), ((32, 143), 39), ((32, 144), 39), ((26, 143), 32), ((30, 143), 32), ((26, 144), 32), ((30, 144), 32)]
