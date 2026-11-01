@@ -54,6 +54,17 @@ P4 Play-order walkthrough with Petya (their screenshots -> class fixes), then th
    Route 120 strip, PLATEAU walls, mist default).
 P5 Battles M4, then packaging (release target mid-late Jan 2027 stands).
 
+## Method correction (Petya 2026-11-01: "why do we need to do this by eye? we already have all the recipes and code
+## from the previous version that we built ourselves")
+PORT, do not re-derive. REWRITE-PLAN.md section 2 already allows lifting our OWN modules (51 new files, 218 upstream-identical
+lines in 69,667) into the clean tree after tools/rewrite/simcheck.py. From P3 on: a dirty-side lift session copies our own rock
+builders (Gen3Rock, Gen3Relief, Gen3Hills, Gen3Blocks, Gen3Mass, Gen3Cave; 4,471 lines) and, where P1c left gaps, the tree
+recipes (Gen3Canopy, Gen3TreeStamps, NativeTreeArt), swaps their calls into upstream internals for our own interfaces, rebakes
+the relief data locally (never committed), passes simcheck, and wires them; THEN R-38/R-37 slopes go on top. The specs
+(RockRelief.md) and the gold|new sheets are acceptance gates, not design input. Gold is the floor, not the target: the old
+version was not perfect either; where gold and rewrite differ, R-38/R-37 and the ortho-45 check against the 2D art decide.
+Sessions: Sonnet 5.5 at medium effort only (Petya 2026-11-01), coordinators included.
+
 ## Roles (Petya 2026-11-01: 'stay as the coordinator')
 Fable = coordinator: plans, specs, briefs, reviews sheets, records rules; never the builder. Sonnet sessions build, one at a time.
 

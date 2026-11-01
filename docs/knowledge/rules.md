@@ -318,7 +318,7 @@ Rule: EMERALD_3D is a drop-in replacement: it must reproduce the installed mod's
 Source: user 2026-10-29: "one thing i want to make sure is that we dont change anything about the look we have now! we are really close to the desired look of the game"
 Gate: G-12
 Applied: REWRITE-PLAN.md, M1-PLAN.md, HeightField spec, slice 22 (VoxelHull: the hull build flattened, model pinned by digest)
-Lessons: L-36, L-37, L-38, L-41, L-43, L-44, L-45, L-46
+Lessons: L-36, L-37, L-38, L-41, L-43, L-44, L-45, L-46, L-48
 Status: active
 
 ## caves
@@ -339,5 +339,5 @@ Rule: There is no vertical rock wall anywhere in the game. Every drop between tw
 Source: user 2026-11-01, after the Route 112 red wall crop: 'and to add: there are actually no stacked vertical walls in the game, its always a 45 degree slope'
 Gate: none yet
 Applied: not yet
-Lessons: none
+Lessons: L-48
 Status: active

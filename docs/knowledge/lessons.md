@@ -379,3 +379,11 @@ Cause: The brief did not say to wait for the batch and finish the gate in the sa
 Fix: Every builder brief: wait for the capture batch (foreground or DONE markers), then sheet, controls, commit and report in ONE turn
 Proof: nudge message 2026-11-01, builder then finished and committed 1b49aaa
 Rules: none
+
+### L-48 Port our own old-mod modules, never re-derive them by eye
+Symptom: P3a/P3b were briefed as by-eye re-implementation of rock relief from sheets and the RockRelief.md spec
+Wrong model: re-deriving recipes the old mod already holds in our own modules (Gen3Rock, Gen3Relief, Gen3Hills, Gen3Blocks, Gen3Mass, Gen3Cave; trees: Gen3Canopy, Gen3TreeStamps, NativeTreeArt)
+Cause: the clean-room deny rules on the implementer side hid that REWRITE-PLAN.md section 2 allows lifting our OWN modules after tools/rewrite/simcheck.py (12 pieces already lifted)
+Fix: a dirty-side lift session copies the module, swaps upstream calls for our interfaces (SceneDispatch cells, TileAtlas, HeightField), rebakes ROM-derived data into a git-ignored file, passes simcheck, lands behind BlockBuilder; the spec stays the gate; Petya 2026-11-01: why do we need to do this by eye?
+Proof: PLAN.md task 37 METHOD CORRECTION; tools/rewrite/own/ pipeline
+Rules: R-36,R-38
