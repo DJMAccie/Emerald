@@ -214,17 +214,6 @@ function Fragment26.scanDirectCalls(code, startAddress)
   return calls
 end
 
-function Fragment26.describeWord(value)
-  local kind, info = Fragment26.classifyWord(value)
-  if kind == "fragment26-function" then
-    if info.exact then return kind .. ":" .. info.name end
-    return kind .. ":" .. info.name .. ("+0x%X"):format(info.delta)
-  end
-  if kind == "fragment26-data" then return kind .. (":+0x%X"):format(info.offset) end
-  if kind == "descriptor" then return kind .. ":" .. hex32(value) end
-  return kind
-end
-
 
 function Fragment26.runtimeName(address)
   return Fragment26.RUNTIME_NAMES[tonumber(address)]

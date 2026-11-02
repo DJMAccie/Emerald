@@ -691,27 +691,6 @@ function Renderer.shaderSource(forceMediump)
     "#define STADIUM_FLOAT mediump", 1))
 end
 
-function Renderer.compileShaderAudit(forceMediump)
-  if not (love and love.graphics and love.graphics.newShader) then
-    return false, "LÖVE shader compiler unavailable"
-  end
-  local ok, shader = pcall(love.graphics.newShader,
-    Renderer.shaderSource(forceMediump))
-  if not ok or not shader then return false, tostring(shader) end
-  if shader.release then pcall(shader.release, shader) end
-  return true
-end
-
-function Renderer.compileMobileShaderAudit()
-  if not (love and love.graphics and love.graphics.newShader) then
-    return false, "LÖVE shader compiler unavailable"
-  end
-  local ok, shader = pcall(love.graphics.newShader, MOBILE_SHADER)
-  if not ok or not shader then return false, tostring(shader) end
-  if shader.release then pcall(shader.release, shader) end
-  return true
-end
-
 local floor = math.floor
 local unpack = table.unpack or unpack
 local sin, cos, sqrt = math.sin, math.cos, math.sqrt
@@ -1837,18 +1816,6 @@ function Renderer:rapidashCutEffectEnabled()
     if ok and value~=nil then return value==true end
   end
   return true
-end
-
-function Renderer:setRapidashCutEffect(enabled)
-  self.rapidashCutEffectOverride=enabled==true
-  if not self.rapidashCutEffectOverride then
-    for _,effect in pairs(self.handlerState and self.handlerState.dynamicObjectsBySite or {}) do
-      if tonumber(effect.species)==78 then
-        effect.emitters,effect.particles,effect.lastFrame={},{},nil
-      end
-    end
-  end
-  return self.rapidashCutEffectOverride
 end
 
 function Renderer:handlerValues()

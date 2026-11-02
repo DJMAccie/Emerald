@@ -942,6 +942,7 @@ local function door(emit,uvFor,c)
  emit({{x,f,z},{x+16,f,z},{x+16,f,z+16},{x,f,z+16}},g,1)
 end
 function M.append(mass,cells,emit,uvFor,cell)
+ if mass and mass.blocksOwned then return true end
  if cell and DOOR[cell.behavior or -1] then door(emit,uvFor,cell);return true end
  local Rock=V.require('Gen3Rock')
  if Rock.audit and not mass.audited then

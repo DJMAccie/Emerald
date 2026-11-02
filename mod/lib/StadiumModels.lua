@@ -3,7 +3,7 @@
 local V = ...
 
 local Mat4 = V.require("Mat4")
-local BattleArt = V.require("BattleArt")
+local BattleSpecies = V.require("BattleSpecies")
 
 local StadiumModels = {}
 local FlyMotion = V.require("FlyMotion")
@@ -65,50 +65,6 @@ function StadiumModels.active()
   return true
 end
 
--- Stadium 2 effects decode the user's ROM; address tables are revision-specific, so they can be silent.
-local fxReported = false
-function StadiumModels.reportEffectAvailability()
-  if fxReported then return StadiumModels.effectsAvailable end
-  fxReported = true
-  local _, exports = connect()
-  if type(exports) ~= "table" then
-    StadiumModels.effectsAvailable = false
-    return false
-  end
-  local enabled = exportEnabled(exports, "betaBattleFxEnabled")
-  if enabled == nil then
-    StadiumModels.effectsAvailable, StadiumModels.effectsReason = false,
-      "the installed importer exposes no betaBattleFxEnabled export (build predates the effect runtime)"
-    return false
-  end
-  if enabled ~= true then
-    StadiumModels.effectsAvailable, StadiumModels.effectsReason = false,
-      "the importer's MOVE EFFECTS (BETA) row is off"
-    return false
-  end
-  local factory = exports.newBattleFxPlayer
-  if type(factory) ~= "function" then
-    StadiumModels.effectsAvailable, StadiumModels.effectsReason = false,
-      "the importer exposes no battle FX player factory"
-    return false
-  end
-  local ok, player, err = pcall(factory, {})
-  if ok and type(player) == "table" then
-    if type(player.release) == "function" then pcall(player.release, player) end
-    StadiumModels.effectsAvailable = true
-    return true
-  end
-  StadiumModels.effectsAvailable = false
-  StadiumModels.effectsReason = tostring(err or player or "unknown error")
-  warnOnce("fx:unavailable",
-    "Stadium 2 move effects are unavailable: " .. StadiumModels.effectsReason
-    .. ". The effect decoder's address tables are derived from the USA Stadium 2 "
-    .. "disc only (MD5 1561c75d11cedf356a8ddb1a4a5f9d5d); a Europe or other "
-    .. "revision ROM imports models correctly but cannot decode the battle-effect "
-    .. "overlay. Pokemon art and move animations are unaffected.")
-  return false
-end
-
 local function releaseActor(actor)
   if actor.instance and type(actor.instance.release) == "function" then
     pcall(actor.instance.release, actor.instance)
@@ -141,7 +97,7 @@ local function maxDex()
 end
 
 local function dexFor(battle, battler)
-  local species = BattleArt.speciesFor(battler)
+  local species = BattleSpecies.speciesFor(battler)
   local limit = maxDex()
   if type(species) == "number" then
     local dex = math.floor(species)
@@ -205,7 +161,7 @@ local function syncSide(battle, side)
   local actor = actors[side]
   local battler = battle and battle[side]
   local dex = dexFor(battle, battler)
-  local variant = BattleArt.isShiny(battler) and "shiny" or "normal"
+  local variant = BattleSpecies.isShiny(battler) and "shiny" or "normal"
   if actor.instance and actor.battler == battler and actor.dex == dex
       and actor.variant == variant then return actor end
   if actor.failedBattler == battler and actor.failedDex == dex

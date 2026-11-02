@@ -50,15 +50,6 @@ local function readU16le(s, p)
   return a + b * 256
 end
 
--- Storage is an implementation detail of the importer API. Compress DSM
--- payloads before the engine's transactional write (tmp/main/backup plus
--- verification reads), then unwrap them before returning from Cache.read.
--- Existing raw caches and non-DSM test payloads remain valid.
-local function isModelPack(bytes)
-  local magic = type(bytes) == "string" and bytes:sub(1, 4) or nil
-  return magic == "DSM4" or magic == "DSM5"
-end
-
 local function encodeBlob(bytes)
   if type(bytes) ~= "string" or #bytes < 1024 then
     return bytes
@@ -345,12 +336,6 @@ function Cache.context()
     return nil, contextCode or "storage_unavailable", contextMessage
   end
   return context
-end
-
-function Cache.ensureDirectories()
-  local context, code, message = Cache.context()
-  if not context then return false, message or code end
-  return true
 end
 
 function Cache.clear(count)

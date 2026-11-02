@@ -27,7 +27,7 @@ function M.prepare(cells,regions,def)
  if not on then return 0 end
  for _,c in pairs(cells)do
   local s=c.shape
-  if s and s.kind=='cliff' and (c.collision==nil or c.collision==7) and not s.seaRock and not c.masonry and not c.bedPlanter and c.ts and c.ts.midToSlot[c.mid] then
+  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.seaRock and not c.masonry and not c.bedPlanter and c.ts and c.ts.midToSlot[c.mid] then
    local mine=c.boundary and true or false
    if not mine then
     for _,r in ipairs(regions)do

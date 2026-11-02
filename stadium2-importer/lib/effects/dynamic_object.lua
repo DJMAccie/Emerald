@@ -48,11 +48,6 @@ function DynamicObject.profile(species)
   return Manifest.profile(species)
 end
 
-function DynamicObject.isExclusiveCarrier(species)
-  local profile = Manifest.profile(species)
-  return profile ~= nil and profile.ownership == "exclusive-card"
-end
-
 function DynamicObject.isCarrierPrimitive(species, primitiveIndex)
   local profile = Manifest.profile(species)
   if not profile then return false end

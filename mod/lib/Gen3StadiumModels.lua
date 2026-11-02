@@ -2,7 +2,7 @@
 local V=...
 local M={owned={},drawing=false,active=false}
 local StadiumModels=V.require('StadiumModels')
-local BattleArt=V.require('BattleArt')
+local BattleSpecies=V.require('BattleSpecies')
 local Mat4=V.require('Mat4')
 local R=V.require('Voxel3D')
 local adapter
@@ -62,7 +62,7 @@ function M.battle()
  for _,name in ipairs(WARM_MOVES)do moveRow(name) end
  for _,bt in pairs({adapter.player,adapter.enemy})do
   local sp=tonumber(bt.species or (bt.mon and bt.mon.species))
-  local key=BattleArt.speciesFor(bt)
+  local key=BattleSpecies.speciesFor(bt)
   if sp and type(key)=='string' then
    local okN,nat=pcall(Pokemon.national,sp)
    nat=okN and tonumber(nat) or (sp<=251 and sp or nil)
@@ -116,8 +116,6 @@ end
 M.performPendingMove = performPendingMove
 
 function M.update(dt)
- -- Log once whether the Stadium 2 effect runtime came up: a ROM-revision mismatch is silent.
- StadiumModels.reportEffectAvailability()
  local b=M.battle()
  if not b then
   if M.active then M.reset() end

@@ -10,7 +10,7 @@ UiBackplates.spriteLight = ModSetting.new("spriteLight", "SPRITE LIGHT",
   { "SHADED", "UNLIT" }, { "SHADED", "UNLIT" })
 
 function UiBackplates.spritesUnlit()
-  if UiBackplates.arenaWhite() or UiBackplates.arenaArt() then return true end
+  if UiBackplates.arenaWhite() then return true end
   return UiBackplates.spriteLight:get() == "UNLIT"
 end
 
@@ -34,46 +34,15 @@ function UiBackplates.hudUsesColor()
          or UiBackplates.hudColor:get() == "COLOR"
 end
 
-
 UiBackplates.arenaFill = ModSetting.new("arenaFill", "ARENA FILL",
-  { "OFF", "WHITE", "GEN6", "PNG", "BLUE" },
-  { "OFF", "WHITE", "GEN6", "PNG", "BLUE" })
+  { "OFF", "WHITE" }, { "OFF", "WHITE" })
 
 UiBackplates.stadiumCircle = ModSetting.new("stadiumCircle", "STADIUM CIRCLE",
   { "ON", "OFF", "HALF" }, { "ON", "OFF", "HALF" })
 
-
-local offsetValues, offsetLabels = {}, {}
-for px = 0, 400, 20 do
-  offsetValues[#offsetValues + 1] = px
-  offsetLabels[#offsetLabels + 1] = px .. " PX"
-end
-UiBackplates.backdropOffset = ModSetting.new(
-  "backdropOffset", "BG Y-OFFSET", offsetValues, offsetLabels, 6)
-
-function UiBackplates.backdropOffsetPixels()
-  return tonumber(UiBackplates.backdropOffset:get()) or 100
-end
-
 function UiBackplates.arenaWhite()
   return UiBackplates.arenaFill:get() == "WHITE"
 end
-
-
-
-
-function UiBackplates.arenaArt()
-  local value = UiBackplates.arenaFill:get()
-  return value ~= "OFF" and value ~= "WHITE" and value ~= "BLUE"
-end
-
-UiBackplates.bossBg = ModSetting.new("bossBg", "BOSS BG",
-  { "ON", "OFF" }, { "ON", "OFF" })
-
-function UiBackplates.bossEnabled()
-  return UiBackplates.bossBg:get() == "ON"
-end
-
 
 UiBackplates.textboxFill = ModSetting.new("textboxFill", "TEXTBOX FILL",
   { "WHITE", "HALF", "BLACK", "OFF" },

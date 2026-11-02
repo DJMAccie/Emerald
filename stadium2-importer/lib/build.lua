@@ -21,10 +21,8 @@ StadiumBuild.CONTEXTS = {
   "rom_context_270",
 }
 
-local NAME_PREF = { "idle", "entrance", "faint", "hit" }
 
 local N_MOVES = 251
-local CTX_BASE = 251
 local NONE16 = 0xFFFF
 
 
@@ -301,95 +299,6 @@ local function writeTrackComponent(w, values, kind)
   end
 end
 
-function StadiumBuild.contextTable(rows, nAnims)
-  local ctx = {}
-  for i = 1, #StadiumBuild.CONTEXTS do
-    local row = rows[CTX_BASE + i - 1]
-    local ai = row and row[1] or nil
-    -- Preserve the ROM selector even when the currently decoded animation
-    -- bank does not expose that slot.  Runtime lookup validates it before
-    -- playback; audits can therefore distinguish "ROM says slot 7" from
-    -- "no route" instead of silently substituting another clip.
-    ctx[i] = (ai ~= nil and ai >= 0 and ai < NONE16) and ai or NONE16
-  end
-  return ctx
-end
-
-
-local function labelAnimations(data, rows, nAux)
-  local anims = data.anims
-  local n = #anims
-  local uses, moveUses = {}, {}
-  local auxOrder, auxCount = {}, {}
-  for i = 1, n do
-    uses[i], moveUses[i] = {}, 0
-    auxOrder[i], auxCount[i] = {}, {}
-  end
-  for e = 0, rows.n - 1 do
-    local ai = rows[e][1]
-    if ai < n then
-      if e < N_MOVES then
-        moveUses[ai + 1] = moveUses[ai + 1] + 1
-      elseif e >= CTX_BASE and e < CTX_BASE + #StadiumBuild.CONTEXTS then
-        local list = uses[ai + 1]
-        list[#list + 1] = StadiumBuild.CONTEXTS[e - CTX_BASE + 1]
-      end
-      local ax = rows[e][2]
-      if ax >= 0 and ax < nAux then
-        local counts, order = auxCount[ai + 1], auxOrder[ai + 1]
-        if counts[ax] == nil then
-          counts[ax] = 0
-          order[#order + 1] = ax
-        end
-        counts[ax] = counts[ax] + 1
-      end
-    end
-  end
-
-  for i = 1, n do
-    local seen, ctx = {}, {}
-    for _, name in ipairs(uses[i]) do
-      if not seen[name] then
-        seen[name] = true
-        ctx[#ctx + 1] = name
-      end
-    end
-    table.sort(ctx)
-    local name = nil
-    for _, pref in ipairs(NAME_PREF) do
-      if seen[pref] then
-        name = pref
-        break
-      end
-    end
-    if not name then
-      if moveUses[i] > 0 then
-        name = "attack"
-      elseif ctx[1] then
-        name = ctx[1]
-      else
-        name = "anim" .. (i - 1)
-      end
-    end
-    anims[i].name = name
-    local best, bestN = -1, -1
-    local order, counts = auxOrder[i], auxCount[i]
-    for _, ax in ipairs(order) do
-      if counts[ax] > bestN then
-        best, bestN = ax, counts[ax]
-      end
-    end
-    anims[i].aux = best
-  end
-
-  local seenName = {}
-  for i = 1, n do
-    local base = anims[i].name
-    local k = seenName[base] or 0
-    seenName[base] = k + 1
-    if k > 0 then anims[i].name = base .. "_" .. (k + 1) end
-  end
-end
 
 
 -- Build the variant-independent portions of a DSM pack once. Normal and

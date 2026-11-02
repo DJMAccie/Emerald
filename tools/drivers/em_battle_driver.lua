@@ -87,7 +87,7 @@ return function(game)
    local s=Models.status()
    if t==120 or t==300 then
     local lib=game.mods.exports.BATTLE_ART_VOXEL_FORK.lib
-    local BA=lib.require('BattleArt'); local SM=lib.require('StadiumModels')
+    local BA=lib.require('BattleSpecies'); local SM=lib.require('StadiumModels')
     local b=Models.battle()
     print('[BT dbg] battle?',b~=nil,'player',b and b.player and b.player.species,'enemy',b and b.enemy and b.enemy.species,
      'speciesFor',b and tostring(BA.speciesFor(b.player)),tostring(b and BA.speciesFor(b.enemy)),'shiny',b and tostring(pcall(BA.isShiny,b.player)),

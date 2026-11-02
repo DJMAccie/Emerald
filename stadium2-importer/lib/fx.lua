@@ -188,40 +188,6 @@ function Fx.identity(probe, callback)
   return tostring(probe and probe.origin or "unknown") .. ":" .. ("%08X"):format((tonumber(callback) or 0) % 0x100000000)
 end
 
-function Fx.modelExtent(model)
-  local lo, hi = math.huge, -math.huge
-  for _, prim in ipairs(model and model.prims or {}) do
-    for i = 1, #(prim.pos or {}) do
-      local v = prim.pos[i]
-      if v < lo then lo = v end
-      if v > hi then hi = v end
-    end
-  end
-  if lo == math.huge then return 1 end
-  local root = model and model.rootScale or 1
-  local scale = type(root) == "table"
-    and math.max(math.abs(root[1] or 1), math.abs(root[2] or 1), math.abs(root[3] or 1))
-    or math.abs(tonumber(root) or 1)
-  return math.max(1, (hi - lo) * scale)
-end
-
-function Fx.crossedQuads(bone, height, width)
-  local h, r = math.max(0.01, height or 1), math.max(0.01, (width or 1) * 0.5)
-  local pos = {
-    -r, 0, 0,  r, 0, 0,  r, h, 0, -r, h, 0,
-     0, 0,-r,  0, 0, r,  0, h, r,  0, h,-r,
-  }
-  local uv, nrm, skin = {}, {}, {}
-  local quadUV = { 0,1, 1,1, 1,0, 0,0 }
-  for i = 1, 8 do
-    uv[i * 2 - 1], uv[i * 2] = quadUV[((i - 1) % 4) * 2 + 1], quadUV[((i - 1) % 4) * 2 + 2]
-    nrm[i * 3 - 2], nrm[i * 3 - 1], nrm[i * 3] = 0, 1, 0
-    skin[i] = bone
-  end
-  return { pos=pos, uv=uv, nrm=nrm, skin=skin, nverts=8,
-    idx={1,2,3,1,3,4,5,6,7,5,7,8}, nidx=12 }
-end
-
 Fx.u32be = u32be
 Fx.crc32 = crc32
 Fx.hexBytes = hexBytes

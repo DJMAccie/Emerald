@@ -27,4 +27,13 @@ function M.scope(draw,...)
  if not result[1]then error(result[2],0)end
  return unpack(result,2)
 end
+-- Tag the native battler pictures while the battle UI draws, so scope can tint them.
+function M.install()
+ local P=require('src.core.game3.pokemon');local UI=require('src.core.game3.battle.ui')
+ local draw,front,back=UI.draw,P.frontPic,P.backPic
+ UI.draw=function(...)return M.scope(draw,...)end
+ P.frontPic=function(...)return M.tag(front(...))end
+ P.backPic=function(...)return M.tag(back(...))end
+ return function()UI.draw,P.frontPic,P.backPic=draw,front,back end
+end
 return M

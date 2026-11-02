@@ -77,7 +77,7 @@ function V.require(name)
   local value
   if name == "StadiumModels" then
     value = Stadium
-  elseif name == "BattleArt" then
+  elseif name == "BattleSpecies" then
     value = {
       speciesFor = function() return "PIKACHU" end,
       isShiny = function() return false end,

@@ -893,6 +893,7 @@ local function build(req,cache,previous)
  V.require('Gen3Masonry').restore(masonry)
  V.require('Gen3Planter').restore(bedPlanter)
  if Decks.MAPS[def.id or ''] then for _,c in pairs(cells)do c.mass=nil end end
+ if def and (tonumber(def.mapType)==4 or tonumber(def.mapType)==9) and V.require('Gen3Blocks').pinned(def) then for _,c in pairs(cells)do if c.mass and not c.blocks then c.mass.blocksOwned=true end end end
  cache.floorRegions=regions
  do
   local SLOPE_KIND={flat=true,grass=true,flowers=true,sand=true}
@@ -1309,6 +1310,9 @@ local function build(req,cache,previous)
    plane(b.wv,b.wi,x,z,uv,.05)
   elseif shape.kind=='interiorFloor' then
    plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
+  elseif (shape.kind=='caveWall' or shape.kind=='rock') and c.blocks then
+   M.cliffCount=M.cliffCount+1
+   if not c.stageHidden then V.require('Gen3Blocks').append(c,cells,function(v,t,sh)quad(b.v,b.i,v,t,sh)end,uvFor) end
   elseif shape.kind=='caveWall' and c.mass and Mass.usable(c.mass,cells) then
    local g=Mass.ground(c.mass,cells,c) or shape.ground
    plane(b.v,b.i,x,z,uvFor(ts,g) or uvFor(ts,shape.ground) or uv,c.base or 0)

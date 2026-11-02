@@ -505,10 +505,6 @@ function Handlers.runExtension(extension, phase, runtime, state)
   return Handlers.run(extension.records, phase, values, state)
 end
 
-function Handlers.koffingGasSpawnExpected(runtime)
-  return DynamicObject.koffingSpawnExpected(type(runtime) == "table" and runtime or {})
-end
-
 function Handlers.koffingGasRenderState(age)
   return DynamicObject.koffingRenderState(age)
 end

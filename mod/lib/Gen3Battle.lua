@@ -295,8 +295,7 @@ function M.install()
   end
   M.orbit(camera,love.timer.getDelta())
   camera.dist=math.max(camera.dist or M.CAM.dist,M.fit(camera))
-  local Map=require('src.core.game3.map')
-  camera.plate=V.require('Gen3BattleBackdrop').frame(Map.current,Map.currentDef(),Battle._st)
+  camera.plate=V.require('UiBackplates').arenaWhite() and {color={1,1,1,1}} or nil
   Models.update(love.timer.getDelta())
   local G=love.graphics
   local ui=G.getCanvas()

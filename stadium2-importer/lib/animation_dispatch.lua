@@ -171,14 +171,6 @@ function Dispatch.moveRows(rows)
   return moves
 end
 
-function Dispatch.contextRows(rows)
-  local contexts = {}
-  for index = 1, Dispatch.CONTEXT_COUNT do
-    contexts[index] = rows and rows[Dispatch.MOVE_COUNT + index - 1] or nil
-  end
-  return contexts
-end
-
 function Dispatch.moveNames(rom)
   if type(rom) ~= "string" then return nil, "Stadium 2 ROM bytes are required" end
   local names, cursor = {}, Dispatch.MOVE_NAMES_START + 1

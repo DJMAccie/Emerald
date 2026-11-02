@@ -1,6 +1,5 @@
 
 local StadiumFragment = {}
-local Fx = require("mods.STADIUM2_IMPORTER.lib.fx")
 local Flame = require("mods.STADIUM2_IMPORTER.lib.render_callbacks.flame")
 local Phase5Geometry = require("mods.STADIUM2_IMPORTER.lib.render_callbacks.phase5_geometry")
 local HandlerRegistry = require("mods.STADIUM2_IMPORTER.lib.handler_registry")
@@ -524,11 +523,6 @@ function Model:nodeCallbackState(bone)
     bone = row and row.parent or -1
   end
   return nil
-end
-
-function Model:nodeCallback(bone)
-  local callback = self:nodeCallbackState(bone)
-  return callback and not callback.blocked and callback or nil
 end
 
 -- D_80094AAC: the model combiners 8003CB3C selects by material selector
@@ -1274,99 +1268,6 @@ local function decodeTexture(f, tex, tlut, palette)
 end
 
 StadiumFragment.decodeTexture = decodeTexture
-
--- Decode standalone F3DEX2 display lists from a relocated FRAGMENT module.
--- Battle FX resource modules do not contain Pokemon model roots, but their
--- kind-2 shape exports use the same vertex/display-list format. Keeping this
--- path on Model:runDL also preserves the persistent 64-entry N64 vertex cache.
-function StadiumFragment.extractDisplayLists(data,draws,name,sourceBase,options)
-  local previousBase=BASE
-  BASE=tonumber(sourceBase) or 0x8FF00000
-  local frag,err=StadiumFragment.open(data,name or "<battle-fx-resource>")
-  if not frag then BASE=previousBase; return nil,err end
-  frag.intensityAlpha=type(options)=="table" and options.intensityAlpha==true
-  local m=setmetatable({
-    f=frag,species=0,textures={},tluts={},bones={{parent=-1,boneId=0,chan=-1,
-      t={0,0,0},r={0,0,0},s={1,1,1}}},
-    prims={},primsByKey={},vbuf={},geometryMode=0,drawSerial=0,
-    curTex=-1,curTlut=-1,curMat=nil,curTexAnim=-1,curNodeColor=nil,
-    warnings={},options={},
-  },Model)
-  local textures,textureByKey={},{ }
-  local function register(spec)
-    local key=table.concat({spec.pointer,spec.w,spec.h,spec.format,spec.size},":")
-    local slot=textureByKey[key]
-    if slot~=nil then return slot end
-    local offset=spec.pointer-BASE
-    local w,h,rgba=decodeTexture(frag,{w=spec.w,h=spec.h,fmt=spec.format,
-      siz=spec.size,data=offset},nil,0)
-    slot=#textures
-    textureByKey[key]=slot
-    textures[slot+1]={index=-1,w=w,h=h,rgba=rgba,format=spec.format,
-      size=spec.size,sourcePointer=spec.pointer,callback=true}
-    m.textures[slot+1]={w=w,h=h,fmt=spec.format,siz=spec.size,data=offset}
-    return slot
-  end
-  for _,draw in ipairs(draws or {}) do
-    local slots={}
-    for _,spec in ipairs(draw.textures or {}) do slots[#slots+1]=register(spec) end
-    local firstPrim=#m.prims+1
-    m.curTex=slots[1] or -1
-    m.curMat=draw.materialOffset
-    m.geometryMode=tonumber(draw.geometryMode) or m.geometryMode
-    m:runDL(draw.displayListOffset,0,0)
-    for index=firstPrim,#m.prims do
-      local prim=m.prims[index]
-      prim.fxFrames=slots
-      prim.battleFxMaterial=draw.material
-      prim.battleFxController=draw.controller
-      prim.battleFxState=draw.state
-      prim.battleFxRenderState=draw.renderState
-      prim.battleFxSampler=draw.textures and draw.textures[1]
-        and draw.textures[1].sampler or nil
-    end
-  end
-  local prims={}
-  for _,p in ipairs(m.prims) do
-    if p.ntris>0 then
-      local texture=textures[(p.tex or -1)+1]
-      local tw,th=texture and texture.w or 32,texture and texture.h or 32
-      local pos,uv,nrm,color,skin,idx={},{},{},{},{},{}
-      for i=1,p.nverts do
-        local v=p.verts[i]
-        pos[i*3-2],pos[i*3-1],pos[i*3]=v[1],v[2],v[3]
-        uv[i*2-1],uv[i*2]=(v[4]/32)/tw,(v[5]/32)/th
-        nrm[i*3-2],nrm[i*3-1],nrm[i*3]=v[6]/127,v[7]/127,v[8]/127
-        color[i*4-3]=(v[6]<0 and v[6]+256 or v[6])
-        color[i*4-2]=(v[7]<0 and v[7]+256 or v[7])
-        color[i*4-1]=(v[8]<0 and v[8]+256 or v[8])
-        color[i*4]=v[9]
-        skin[i]=0
-      end
-      local n=0
-      for _,tri in ipairs(p.tris) do
-        idx[n+1],idx[n+2],idx[n+3]=tri[1],tri[2],tri[3]; n=n+3
-      end
-      local semantics=VertexSemantics.classify(nrm)
-      local material=p.battleFxMaterial or {
-        primitiveColor={1,1,1,1},environmentColor={1,1,1,1},textureEnabled=true}
-      prims[#prims+1]={
-        tex=p.tex,cull=floor((p.cull or 0)/0x400)%2==1,
-        geometryMode=p.cull or 0,lighting=semantics=="normal",
-        vertexSemantics=semantics,color=color,texAnim=-1,texMap=nil,
-        fxFrames=p.fxFrames,sampler=p.battleFxSampler,
-        material=material,battleFxController=p.battleFxController,
-        battleFxState=p.battleFxState,battleFxRenderState=p.battleFxRenderState,
-        blend="alpha",alphaMode="blend",decal=false,
-        pos=pos,uv=uv,nrm=nrm,skin=skin,nverts=p.nverts,idx=idx,nidx=n,
-      }
-    end
-  end
-  BASE=previousBase
-  return {species=0,staticPose=false,file=name or "battle-fx",rootScale={1,1,1},
-    bones=m.bones,textures=textures,prims=prims,anims={},auxAnims={},fx={},
-    moveAnim={},contextAnim={},warnings=m.warnings}
-end
 
 
 local function compress(values, n, nd)
@@ -2132,26 +2033,6 @@ local function crystal251DecodeOne(frag, off, bones)
     tracks = tracks,
     sourceOffset = off,
   }
-end
-
--- FX animations are independent kind-4 exports, sometimes in a different
--- resource from their kind-3 skeleton. Decode against the supplied bones.
-function StadiumFragment.decodeAnimation(data, offset, bones, sourceBase)
-  local previous=BASE
-  if sourceBase then StadiumFragment.setBase(sourceBase) end
-  local ok,anim,err=pcall(function()
-    local frag,openError=StadiumFragment.open(data,'battle-fx-animation')
-    if not frag then return nil,openError end
-    if not offset or offset<0 or offset+28>#data then
-      return nil,'animation header outside resource'
-    end
-    local frames=frag:u16(offset+10)
-    if frames<1 or frames>4096 then return nil,'invalid animation frame count' end
-    return crystal251DecodeOne(frag,offset,bones)
-  end)
-  StadiumFragment.setBase(previous)
-  if not ok then return nil,tostring(anim) end
-  return anim,err
 end
 
 local function crystal251DecodeOffsets(frag, offsets, bones)

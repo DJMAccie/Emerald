@@ -41,20 +41,16 @@ function M.install()
  local draw,present,update=FieldView.draw,Display.present,Player.update
  local function ready(game)return recovery:ready(Scene.context and Scene.context()or game.session)end
  mode:read();M.level=mode:get();local schema=mod.options:define({Distance.setting:schema('Scenery distance: AUTO adapts to the platform; FULL includes the loaded connected maps. Distant scenery fades into the sky.'),BattleStage.setting:schema('Native battle sprites and attacks over the 2.5D field. Disable to use the original FireRed battle background.'),mode:schema('2.5D camera. Press 3 to cycle. In 1ST and rotating 3RD look with the mouse, the right stick or Q/E/R/F; left click is A, right click is B. Special field effects retain their original presentation.')})
- local nativeArt=V.require('NativeBattleArt');nativeArt.install()
- local interfaceArt=V.require('NativeInterfaceArt')
- local uninstallInterface=interfaceArt.install()
+ local uninstallLight=V.require('Gen3SpriteLight').install()
  local sharedSettings={Trees.props,Trees.surfaces,V.require('ModernBattleUI').setting,
   V.require('Shadows').setting,V.require('WorldCurve').setting,V.require('VoxelGrid').setting}
  for _,setting in ipairs(V.require("NativeAtmosphere").settings)do sharedSettings[#sharedSettings+1]=setting end
  for _,setting in ipairs(SceneOptions.settings)do sharedSettings[#sharedSettings+1]=setting end
- for _,setting in ipairs(interfaceArt.settings)do sharedSettings[#sharedSettings+1]=setting end
  for _,setting in ipairs(V.require('Gen3BattleOptions').settings)do sharedSettings[#sharedSettings+1]=setting end
- for _,setting in ipairs(V.require('Gen3BattleBackdrop').settings)do sharedSettings[#sharedSettings+1]=setting end
+ local Plates=V.require('UiBackplates');sharedSettings[#sharedSettings+1]=Plates.arenaFill;sharedSettings[#sharedSettings+1]=Plates.spriteLight
  for _,setting in ipairs(sharedSettings)do
   schema[#schema+1]=setting:schema(setting.key=='spatialUpscale' and V.require('SpatialUpscale').description or 'Shared renderer option; applies immediately to the native Gen 3 presentation.')
  end
- for _,setting in ipairs(nativeArt.settings())do schema[#schema+1]=setting:schema('Shared Battle Art sprite settings. ANIMATED uses installed atlases or bundled BW backs (dex 1–251); missing art falls back to static full-body images. ROM/MODDED preserves native/provider art.')end
  mod.options:define(schema)
  local Support=V.require('OptionSupport')
  V.require('InGameOptions').install(mod,Support.rows(schema,3),'BATTLE ART')
@@ -215,7 +211,6 @@ function M.install()
   if payload and payload.mod==mod.id and payload.key==BattleStage.setting.key then BattleStage.setting:sync(payload.value) end
   if payload and payload.mod==mod.id then
    for _,setting in ipairs(sharedSettings)do if payload.key==setting.key then setting:sync(payload.value);Trees.changed(payload.key)end end
-   for _,setting in ipairs(nativeArt.settings())do if payload.key==setting.key then setting:sync(payload.value)end end
   end
   if payload and payload.mod==mod.id and payload.key==mode.key then
    recovery:reset()
@@ -227,7 +222,7 @@ function M.install()
   releaseClicks();captured=false
   if love and love.mouse and love.mouse.setRelativeMode then pcall(love.mouse.setRelativeMode,false) end
   for name,inner in pairs(wrapped)do love[name]=inner or nil end
-  uninstallFly();uninstallInterface();uninstallBattle();uninstallRecap();Scene.release();return next(...)
+  uninstallFly();uninstallLight();uninstallBattle();uninstallRecap();Scene.release();return next(...)
  end)
  mod.exports.version=mod.version;mod.exports.lib=V
  mod.exports.gen3Camera=M

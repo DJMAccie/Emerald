@@ -87,4 +87,8 @@ Rules: R-44
 
 ### L-58 Andere sessie commit jouw klaargezette bestanden mee
 Cause: Twee sessies in een checkout: een 'git add -A' of 'commit -a' van de ene neemt de gestagede bestanden van de andere mee (importer-opruiming landde in 63e4710 'PLAN: ...').
-Fix: Zet niets klaar voor later; commit alleen eigen paden in een keer: git commit -m ... -- <paden>.
+Fix: Zet niets klaar voor later (ook git rm/git mv zetten klaar: gebruik rm/mv); commit alleen eigen paden in een keer: git commit -m ... -- <paden>. Gebeurde weer 2026-11-02: sprite-verwijderingen landden in 0cf0897 'Aqua Map2'.
+
+### L-59 Pinned caves: black holes and domes after pinning
+Cause: Gen3Scene caveWall/rock draw branches skip Gen3Blocks.append, and Mass.prepare runs after Blocks.prepare so Mass still drew domes
+Fix: branch (caveWall|rock + c.blocks -> Blocks.append) and mass.blocksOwned on pinned caves (039c94e)

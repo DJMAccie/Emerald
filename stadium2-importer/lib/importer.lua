@@ -8,10 +8,6 @@ local Palette = require("mods.STADIUM2_IMPORTER.lib.palette")
 local Handlers = require("mods.STADIUM2_IMPORTER.lib.model_handlers")
 local Pack = require("mods.STADIUM2_IMPORTER.lib.pack")
 local Renderer = require("mods.STADIUM2_IMPORTER.lib.renderer")
-local BattleFxRom = require("mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_rom")
-local BattleFxResources = require("mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_resources")
-local BattleFxNative = require("mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_native")
-local BattleFxPlayer = require("mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_player")
 
 local Importer = {}
 
@@ -20,8 +16,6 @@ local job
 local romMeta
 local modelCache = {}
 local modelOrder = {}
-local battleFxCatalog
-local battleFxResourceArchive
 local ownedModels = setmetatable({}, {__mode="k"})
 local MODEL_KEEP = 4
 local configuredCount = 151
@@ -156,44 +150,6 @@ function Importer.rapidashCutEffectEnabled()
   return true
 end
 
-function Importer.battleFxParticlesEnabled()
-  if modRef and modRef.options and modRef.options.get then
-    local ok,value=pcall(modRef.options.get,modRef.options,"stadium2_fx_particles")
-    if ok and value=="lite" then return "lite" end
-    if ok and value~=nil then return value==true end
-  end
-  return true
-end
-
-function Importer.battleFxSendOutEnabled()
-  if modRef and modRef.options and modRef.options.get then
-    local ok,value=pcall(modRef.options.get,modRef.options,"stadium2_fx_pokeball")
-    if ok and value~=nil then return value==true end
-  end
-  return false
-end
-
--- EXTRA EFFECTS shares the stored PARTICLES key, so saved choices carry over.
-Importer.extraEffectsEnabled=function() return Importer.battleFxParticlesEnabled()==true end
-
--- One info line per battle, so a player's log shows which settings the FX
--- player actually reads (and which mod version is running).
-function Importer.logBattleFxSettings()
-  if not (modRef and modRef.log and modRef.log.info) then return end
-  local version=(modRef.manifest and modRef.manifest.version) or (modRef.exports and modRef.exports.version) or "?"
-  pcall(modRef.log.info,modRef.log,"stadium2 importer %s: move effects on; extra effects=%s, poke ball=%s",
-    tostring(version),tostring(Importer.battleFxParticlesEnabled()),tostring(Importer.battleFxSendOutEnabled()))
-end
-
-function Importer.betaBattleFxEnabled()
-  if modRef and modRef.options and modRef.options.get then
-    local ok,value=pcall(modRef.options.get,modRef.options,
-      "stadium2_beta_battle_fx")
-    if ok and value~=nil then return value==true end
-  end
-  return false
-end
-
 local function rendererOptions(options)
   local out = {}
   for key, value in pairs(type(options) == "table" and options or {}) do
@@ -221,11 +177,6 @@ local function readPack(species, variant)
 end
 function Importer.speciesMax()
   return math.max(configuredCount, Colosseum.max())
-end
-function Importer.modelPath(species, variant)
-  species = tonumber(species)
-  if not species or species < 1 or species > configuredCount then return nil end
-  return Cache.path(species, variant)
 end
 
 function Importer.readPack(species, variant)
@@ -332,141 +283,9 @@ function Importer.loadSpecial(name)
   return model
 end
 
-function Importer.newSpecialRenderer(name,options)
-  local model,err=Importer.loadSpecial(name)
-  if not model then return nil,err end
-  return Renderer.new(model,rendererOptions(options))
-end
-
--- Decode the battle-effect graph cached from the user's own Stadium 2 ROM.
--- The records stay ROM-native: routing IDs, bytecode, emitter timing,
--- callbacks and lifecycle triples are never replaced by visual categories.
-function Importer.battleFxCatalog()
-  if battleFxCatalog then return battleFxCatalog end
-  local overlay=Cache.readSpecial("battle_fx_rom")
-  if not overlay then
-    return nil,"Stadium 2 battle FX cache unavailable; reimport the ROM"
-  end
-  local catalog,err=BattleFxRom.catalog(overlay,Cache.readSpecial("battle_fx_trig"))
-  if not catalog then return nil,err end
-  battleFxCatalog=catalog
-  return catalog
-end
-
--- Return one decompressed Stadium 2 battle resource module by the exact ID
--- named in a move's ROM resource list. Data remains private to the user's
--- playthrough cache and is never included in the mod package.
-function Importer.battleFxResource(resourceId)
-  battleFxResourceArchive=battleFxResourceArchive
-    or Cache.readSpecial("battle_fx_resources")
-  if not battleFxResourceArchive then
-    return nil,"Stadium 2 battle FX resource cache unavailable; reimport the ROM"
-  end
-  return BattleFxResources.member(battleFxResourceArchive,resourceId)
-end
-
--- Resolve the exact common and move-local export bindings installed by the
--- game before it runs a move's native FX controller.
-function Importer.battleFxResources(moveId)
-  local catalog,catalogError=Importer.battleFxCatalog()
-  if not catalog then return nil,catalogError end
-  local move=catalog.moves[math.floor(tonumber(moveId) or -1)]
-  if not move then return nil,"move ID out of range" end
-  battleFxResourceArchive=battleFxResourceArchive
-    or Cache.readSpecial("battle_fx_resources")
-  if not battleFxResourceArchive then
-    return nil,"Stadium 2 battle FX resource cache unavailable; reimport the ROM"
-  end
-  return BattleFxResources.resolve(battleFxResourceArchive,move.resources)
-end
-
-function Importer.battleFxShape(moveId,shapeId,animationId)
-  local resources,err=Importer.battleFxResources(moveId)
-  if not resources then return nil,err end
-  return BattleFxResources.shapeFromResolved(resources,
-    math.floor(tonumber(shapeId) or -1),animationId)
-end
-
-function Importer.battleFxShapeModel(moveId,shapeId,animationId)
-  local shape,err=Importer.battleFxShape(moveId,shapeId,animationId)
-  if not shape then return nil,err end
-  return BattleFxResources.modelFromShape(shape,
-    ("stadium2_move_%03d_shape_%03d"):format(moveId,shapeId))
-end
-
--- Construct the persistent runtime/player against models extracted from the
--- user's own cached ROM. Placement/native callback resolvers are injected by
--- the battle adapter; this factory never substitutes procedural effects.
-function Importer.newBattleFxPlayer(options)
-  options=type(options)=="table" and options or {}
-  local catalog,err=Importer.battleFxCatalog()
-  if not catalog then return nil,err end
-  local playerOptions={}
-  for key,value in pairs(options) do playerOptions[key]=value end
-  playerOptions.catalog=catalog
-  playerOptions.loadBeamTexture=playerOptions.loadBeamTexture or function(moveId,symbol,format,size)
-    local resources,err=Importer.battleFxResources(moveId)
-    if not resources then return nil,err end
-    return BattleFxResources.beamTexture(resources,symbol,format,size)
-  end
-  playerOptions.loadWaveGridTexture=playerOptions.loadWaveGridTexture or function(moveId,family)
-    local resources,err=Importer.battleFxResources(moveId)
-    if not resources then return nil,err end
-    return BattleFxResources.waveGridTexture(resources,family)
-  end
-  playerOptions.createGeometryRenderer=playerOptions.createGeometryRenderer or function(model)
-    return Importer.newRendererFromModel(model,{textureFilter="nearest",flipY=false})
-  end
-  if not playerOptions.loadRenderer then
-    playerOptions.loadRenderer=function(moveId,shapeId,animationId)
-      local model,modelError=Importer.battleFxShapeModel(moveId,shapeId,animationId)
-      if not model then return nil,modelError end
-      local renderer,rendererError=Importer.newRendererFromModel(model,{
-        textureFilter="nearest",anisotropy=4,flipY=false,
-      })
-      if not renderer then Pack.release(model);return nil,rendererError end
-      return renderer,model
-    end
-  end
-  if not playerOptions.releaseRenderer then
-    playerOptions.releaseRenderer=function(renderer,model)
-      if renderer and renderer.release then pcall(renderer.release,renderer) end
-      if model then Pack.release(model) end
-    end
-  end
-  if playerOptions.particlesEnabled==nil then
-    playerOptions.particlesEnabled=Importer.battleFxParticlesEnabled
-  end
-  return BattleFxPlayer.new(playerOptions)
-end
-
-function Importer.battleFxProgram(moveId,alternate,context)
-  local catalog,err=Importer.battleFxCatalog()
-  if not catalog then return nil,err end
-  local move=catalog.moves[math.floor(tonumber(moveId) or -1)]
-  if not move then return nil,"move ID out of range" end
-  local dispatch=alternate and move.alternateDispatch or move.primaryDispatch
-  local out={moveId=move.moveId,alternate=alternate==true,dispatch={},resources=move.resources}
-  for _,entry in ipairs(dispatch) do
-    if entry.kind=="program" then
-      local executionContext={moveId=move.moveId,alternate=alternate==true}
-      for key,value in pairs(type(context)=="table" and context or {}) do
-        executionContext[key]=value
-      end
-      out.dispatch[#out.dispatch]={kind="program",programId=entry.programId,
-        execution=BattleFxNative.execute(catalog.programs[entry.programId],executionContext)}
-    else
-      out.dispatch[#out.dispatch]=entry
-    end
-  end
-  return out
-end
-
 function Importer.releaseModels()
   for _, model in pairs(modelCache) do Pack.release(model) end
   modelCache, modelOrder = {}, {}
-  battleFxCatalog=nil
-  battleFxResourceArchive=nil
 end
 
 function Importer.parsePack(bytes)
@@ -479,28 +298,6 @@ function Importer.readHandlers(species, variant)
   local bytes = Importer.readPack(species, variant)
   if not bytes then return nil end
   return Handlers.readExtension(bytes)
-end
-
-function Importer.handlerInfo(address)
-  return Handlers.info(address)
-end
-
-function Importer.evaluateHandler(record, phase, runtime)
-  return Handlers.evaluate(record, phase, runtime)
-end
-
-function Importer.runHandlers(records, phase, runtime, state)
-  return Handlers.run(records, phase, runtime, state)
-end
-
-function Importer.runModelHandlers(species, variant, phase, runtime, state)
-  local extension = Importer.readHandlers(species, variant)
-  if not extension then return nil, nil end
-  return Handlers.runExtension(extension, phase, runtime, state)
-end
-
-function Importer.resolveHandlerPointer(extension, pointer, length)
-  return Handlers.resolvePointer(extension, pointer, length)
 end
 
 function Importer.beginFrom(bytes, label, options)
@@ -585,10 +382,6 @@ local function beginCandidate(candidate, options)
   local started, beginErr = Importer.beginFrom(
     bytes, options.label or candidate.path, options)
   return started, beginErr
-end
-
-function Importer.beginPath(path)
-  return beginCandidate({ kind = "mod", path = path })
 end
 
 function Importer.autoImport()

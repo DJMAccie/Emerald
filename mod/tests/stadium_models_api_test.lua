@@ -9,7 +9,7 @@ local function identity()
 end
 
 local Mat4 = assert(loadfile("lib/Mat4.lua"))()
-local BattleArt = {
+local BattleSpecies = {
   speciesFor=function(battler) return battler and battler.mon.species end,
   isShiny=function(battler) return battler and battler.shiny == true end,
 }
@@ -66,7 +66,7 @@ local V = {mod={
 }}
 function V.require(name)
   if name == 'FlyMotion' then return assert(loadfile('lib/FlyMotion.lua'))() end
-  return assert(({Mat4=Mat4,BattleArt=BattleArt})[name],name)
+  return assert(({Mat4=Mat4,BattleSpecies=BattleSpecies})[name],name)
 end
 
 local StadiumModels = assert(loadfile("lib/StadiumModels.lua"))(V)

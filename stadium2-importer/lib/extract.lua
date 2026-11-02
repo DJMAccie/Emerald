@@ -7,7 +7,6 @@ local Layout = require("mods.STADIUM2_IMPORTER.lib.layout")
 local AnimationRouting = require("mods.STADIUM2_IMPORTER.lib.animation_routing")
 local AnimationDispatch = require("mods.STADIUM2_IMPORTER.lib.animation_dispatch")
 local AnimationSemantics = require("mods.STADIUM2_IMPORTER.lib.animation_semantics")
-local BattleFxRom = require("mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_rom")
 
 local Extract = {}
 Extract.BASE_COUNT = 151
@@ -83,7 +82,6 @@ local function palettePairForDex(dex)
   return pair
 end
 
-local recolourRgba = Palette.recolour
 local function rareVariation(data, species)
   local offset = Layout.SPECIES_META_START + (species - 1) * 0x10 + 4
   return Palette.decodeRare(data, offset)
@@ -99,43 +97,6 @@ local function md5(data)
   return ok and value or nil
 end
 
-local IO_CHUNK = 1024 * 1024
-local WORK_BUDGET = 0.006
-
-local function workClock()
-  if love and love.timer and love.timer.getTime then
-    local ok, value = pcall(love.timer.getTime)
-    if ok and type(value) == "number" then return value end
-  end
-  return nil
-end
-
-local function romTitle(data)
-  if type(data) ~= "string" or #data < 0x34 then return "" end
-  local title = data:sub(0x21, 0x34):gsub("%z", ""):gsub("%s+$", "")
-  return title
-end
-
-local function n64Title(header)
-  if type(header) ~= "string" or #header < 0x34 then return "" end
-  local magic = header:sub(1, 4)
-  local mode
-  if magic == "\128\055\018\064" then mode = "z64"
-  elseif magic == "\055\128\064\018" then mode = "v64"
-  elseif magic == "\064\018\055\128" then mode = "n64"
-  else return "" end
-  local out = {}
-  for offset = 0x20, 0x33 do
-    local source = offset
-    if mode == "v64" then
-      source = offset - offset % 2 + (1 - offset % 2)
-    elseif mode == "n64" then
-      source = offset - offset % 4 + (3 - offset % 4)
-    end
-    out[#out + 1] = header:sub(source + 1, source + 1)
-  end
-  return table.concat(out):gsub("%z", ""):gsub("%s+$", "")
-end
 
 local archiveAt = Rom.archiveAt
 
@@ -321,20 +282,6 @@ local function decompressedFragment(data, record, StadiumRom)
   local info, infoErr = fragmentInfo(decoded)
   if not info then return nil, infoErr end
   return decoded, info
-end
-
-local function inspectFragment(data, record, StadiumRom, V, name)
-  local decoded, infoOrErr = decompressedFragment(data, record, StadiumRom)
-  if not decoded then return nil, infoOrErr end
-  local parser = fragmentParser(infoOrErr.sourceBase)
-  local inspect = parser.inspectAny or parser.inspect
-  local ok, summary, summaryErr = pcall(inspect, decoded, name)
-  if not ok then return nil, tostring(summary) end
-  if not summary then return nil, summaryErr end
-  return summary, {
-    record = record,
-    sourceBase = infoOrErr.sourceBase,
-  }
 end
 
 local function inspectModelFragment(data, record, StadiumRom, V, name)
@@ -966,10 +913,7 @@ local function newBuildJob(data, dependencies, writePack, writeSpecial, options)
     if not species then
       if not includeSpecials then return finish() end
       if not self.specialQueue then
-        self.specialQueue={{kind="battle_fx_rom",name="battle_fx_rom"},
-          {kind="battle_fx_trig",name="battle_fx_trig"},
-          {kind="battle_fx_resources",name="battle_fx_resources"},
-          {kind="substitute",record=SUBSTITUTE_RECORD,
+        self.specialQueue={{kind="substitute",record=SUBSTITUTE_RECORD,
           name="substitute",source=self.specialModelSource,
           animations=self.specialAnimationSources},
           {kind="egg",record=EGG_RECORD,name="egg",source=self.eggModelSource,
@@ -985,36 +929,6 @@ local function newBuildJob(data, dependencies, writePack, writeSpecial, options)
       local special=self.specialQueue[self.specialIndex]
       if not special then return finish() end
       self.specialIndex=self.specialIndex+1
-      if special.kind=="battle_fx_rom" or special.kind=="battle_fx_resources"
-          or special.kind=="battle_fx_trig" then
-        self.specialWorker=coroutine.create(function()
-          -- Fragment 79 is the complete Stadium 2 battle actor/effect overlay.
-          -- Cache the user's own ROM bytes verbatim for the native FX decoder;
-          -- no ROM-derived payload is shipped with the mod or release archive.
-          local first,last
-          if special.kind=="battle_fx_resources" then
-            -- Main archive group 5. Move rows in fragment 79 name these
-            -- members, whose kind-2 exports provide the referenced shapes.
-            first,last=0x267D000+1,0x27ED000
-          elseif special.kind=="battle_fx_trig" then
-            first,last=BattleFxRom.TRIG_ROM_START+1,BattleFxRom.TRIG_ROM_END
-          else
-            first,last=0x36F890+1,0x419480
-          end
-          local bytes=data:sub(first,last)
-          if #bytes~=(last-first+1) then
-            return nil,"Stadium 2 battle FX source is truncated"
-          end
-          coroutine.yield("battle-fx-rom")
-          if type(writeSpecial)~="function" then
-            return nil,"special pack writer unavailable"
-          end
-          local wrote,writeErr=writeSpecial(special.name,bytes)
-          if not wrote then return nil,writeErr end
-          return {bytes=#bytes,kind=special.kind}
-        end)
-        return true
-      end
       local source=special.source
       if not source then
         self.lastError=("Stadium 2 model-table record %d (%s) is missing")
