@@ -59,6 +59,26 @@ end
 -- Drawn arrows (Gen3PinData height maps): each arrow tile is a 45-degree wedge rising toward the arrow; a diagonal is a corner cone.
 local HIGH={N={1,2},S={3,4},E={2,3},W={1,4}}
 local APEX={NW=1,NE=2,SE=3,SW=4}
+-- The end of a rock row is round in the art: a straight ramp with low floor on one side and rock on the other
+-- is a corner cone around its high corner on the rock side. Returns that corner or nil.
+local SIDE={N={0,-1,{1,2}},S={0,1,{3,4}},E={1,0,{2,3}},W={-1,0,{1,4}}}
+local PERP={N={'E','W'},S={'E','W'},E={'N','S'},W={'N','S'}}
+local function roundEnd(p,lx,ly,a)
+ local function at(s)
+  local d=SIDE[s];local k=(lx+d[1])..':'..(ly+d[2])
+  local b=p.arrows[k]
+  if b then return (b.dir==a.dir and b.lo==a.lo and b.hi==a.hi) and 'rock' or nil end
+  local z=p.cells[k];local h=z and p[z][3]
+  if not h then return nil end
+  if h<=a.lo then return 'low' end
+  if h>=a.hi then return 'rock' end
+ end
+ local s1,s2=PERP[a.dir][1],PERP[a.dir][2]
+ local t1,t2=at(s1),at(s2)
+ local rock=(t1=='low' and t2=='rock') and s2 or (t2=='low' and t1=='rock') and s1
+ if not rock then return nil end
+ for _,i in ipairs(HIGH[a.dir])do for _,j in ipairs(SIDE[rock][3])do if i==j then return i end end end
+end
 function M.arrowRamps(cells,regions)
  local n,px=0,V.require('Gen3Elevation').PIN_PX
  for _,c in pairs(cells)do c.hmap=nil;if c.arrow then c.arrow=nil;c.ramp=nil end end
@@ -74,7 +94,9 @@ function M.arrowRamps(cells,regions)
      if a and c.blocks and c.layer~=15 then
       local lo,hi=a.lo*px+off,a.hi*px+off
       local q
-      if HIGH[a.dir] then q={lo,lo,lo,lo};for _,i in ipairs(HIGH[a.dir])do q[i]=hi end
+      local ap=HIGH[a.dir] and roundEnd(p,lx,ly,a)
+      if ap then q={lo,lo,lo,lo};q[ap]=hi;q.cone={apex=ap,D=hi-lo}
+      elseif HIGH[a.dir] then q={lo,lo,lo,lo};for _,i in ipairs(HIGH[a.dir])do q[i]=hi end
       elseif a.inner then local o=(APEX[a.dir]+1)%4+1;q={hi,hi,hi,hi};q[o]=lo;q.cone={apex=o,D=hi-lo,inv=true}
       else local ap=APEX[a.dir];q={lo,lo,lo,lo};q[ap]=hi;q.cone={apex=ap,D=hi-lo} end
       q.comp={c};c.ramp=q;c.arrow=a;n=n+1

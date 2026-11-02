@@ -122,3 +122,7 @@ Source: Petya 2026-11-02: "ik vind 56k lines of code echt veel", "haal de commen
 ### R-46 One system per job: the new one replaces the old in the same change
 Rule: when a new builder, tool or note takes over a job, the old one goes in the same change; never stack a second system next to the first. Before building, check whether one already exists (docs/dubbel-werk.md) and extend it.
 Source: Petya 2026-11-02: "ik heb het gevoel dat we heel vaak dezelfde shit hebben geprobeerd en opgeschreven"; "precies bij rots trap en bomen veel werk ... veel parallelle dingen".
+
+### R-49 Uiteinden van rotsrijen zijn rond
+Rule: Een helling met lage vloer aan de ene zijkant en rots aan de andere is een kwart-kegel om de hoge hoek aan de rotskant, geen rechte wig met puntige zijkant (Gen3Blocks roundEnd).
+Source: Petya 2026-11-02: hoekjes van stenen zijn in de game rond

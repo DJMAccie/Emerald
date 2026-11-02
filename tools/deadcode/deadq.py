@@ -6,8 +6,8 @@ sys.path.insert(0,os.path.dirname(__file__))
 import lualex
 ROOT=sys.argv[1]
 files=sorted(f for f in glob.glob(ROOT+'/lib/*.lua') if 'ReliefData' not in f)+[ROOT+'/main.lua']
-users=[p for r in ('/Users/user/Documents/Emerald/tools')
-       for p in glob.glob(r+'/**/*.lua',recursive=True)]
+users=[p for r in ('/Users/user/Documents/Emerald/tools/drivers','/Users/user/Documents/Emerald/tools/deadcode','/Users/user/Documents/Emerald/tools/qa_cases','/Users/user/Documents/Emerald/tools')
+       for p in glob.glob(r+'/*.lua')]
 OPEN={'function','do','if','repeat'};CLOSE={'end','until'}
 class F: pass
 def lexf(path):

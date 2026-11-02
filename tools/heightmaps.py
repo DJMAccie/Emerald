@@ -7,7 +7,7 @@ Per cell one token (rows top to bottom):
   <dir>[io]<lo>:<hi>  45-degree ramp rising toward dir (N S E W NE NW SE SW); a corner is i (inner) or o (outer)
 Ramps with no height are stacked one course per tile from the nearest known height (R-38).
 """
-import json, os, sys
+import json, math, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, 'docs/elevation/draw/claude_heightmaps')
@@ -19,6 +19,14 @@ CORNER = [(0, 0), (1, 0), (1, 1), (0, 1)]
 HIGH = {'N': (0, 1), 'S': (2, 3), 'E': (1, 2), 'W': (0, 3)}
 APEX = {'NW': 0, 'NE': 1, 'SE': 2, 'SW': 3}
 FLAT = ('flat', 'water', 'object')
+# Petya's corrections on single tiles: map -> {(x, y): (lo, hi, dir)}
+FIX = {
+    # Seafloor Cavern room 1 (2026-11-02): the diagonal rock pieces right of the stairs and along the east wall
+    # rise to the upper right and are plain corners; the area above them is 1 high
+    'EM_SEAFLOOR_CAVERN_ROOM1': {(11, 4): (0, 1, 'NE'), (12, 5): (0, 1, 'NE'), (13, 6): (0, 1, 'NE'),
+                                 (14, 1): (1, 2, 'NE'), (15, 2): (1, 2, 'NE'), (16, 3): (1, 2, 'NE'),
+                                 (17, 6): (1, 2, 'NE'), (18, 8): (1, 2, 'NE')},
+}
 SLOPE = ('ramp', 'stairs', 'waterfall')
 
 
@@ -159,6 +167,16 @@ def bake(name):
     spiked = spikes(W, H, T, Hm, R)
     filled = fill(d, W, H, T, Hm, R)
     flipped = orient(W, H, T, Hm, R)
+    for (x, y), (lo, hi, up) in FIX.get(name, {}).items():
+        T[y][x], Hm[y][x], R[y][x] = 'ramp', (lo + hi) / 2, [lo, hi, up]
+    # floors and ramp feet below 0 are not built (black holes, Shoal Cave low tide, Navel Rock top):
+    # heights are per map, so lift a dry map until its lowest floor or ramp foot is 0
+    low = min([Hm[y][x] for y in range(H) for x in range(W) if T[y][x] in FLAT and Hm[y][x] is not None]
+              + [r[0] for row in R for r in row if r and r[0] is not None] or [0])
+    if low < 0 and not any(t == 'water' for row in T for t in row):
+        s = math.ceil(-low)
+        Hm = [[v + s if v is not None else None for v in row] for row in Hm]
+        R = [[[r[0] + s if r[0] is not None else None, r[1] + s if r[1] is not None else None, r[2]] if r else None for r in row] for row in R]
     vert = {}
     for y in range(H):
         for x in range(W):
