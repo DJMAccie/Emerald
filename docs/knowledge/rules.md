@@ -18,7 +18,7 @@ Rule: a numbered mass is a flat-topped block at its number; no rounded, ridged o
 Source: Petya 2026-10-27: "the tops of all those rocks are flat!"; 2026-10-14: "its not a bouncy castle".
 
 ### R-07 One course = 16 px everywhere
-Rule: one drawn course is 16 px of height in every builder (Gen3Elevation.PIN_PX, Gen3Relief.LEVEL, Gen3Rock.COURSE).
+Rule: one drawn course is 16 px of height in every builder (Gen3Elevation.PIN_PX, Gen3Rock.COURSE).
 Source: Petya 2026-10-27: "if a tile is 16x16px lets do 16px height as well".
 
 ### R-08 More depth than the flat original, from the object's own pixels (takes R-19)
@@ -70,6 +70,10 @@ Source: Petya 2026-10-07: "arches where you walk through underneath".
 ### R-21 Beyond the map edge: the border tile's family, never green steps
 Rule: off-map fill follows the nearest edge cell's family (forest/mountain/water) or the map's border block, continuing the edge heights; a rim of flat rock over sea gets sea at 0 (Gen3Boundary M.SEA). Check which cells are border cells before judging a shot.
 Source: Petya 2026-10-27 (Sootopolis): crater rock or nothing, never green steps.
+
+### R-47 A map without a drawing gets pins from its own art
+Rule: When Petya has not drawn a map, Claude sets its pins: ground 0, each band or stair row is one course (R-38), heights at the map seams copied from the neighbour map's pins, a pond on a plateau sits at the plateau's height. One pin per enclosed area (the GBA level often does not tell a plateau from the ground); stairs 0xAF/0xCF/0xE8 stop the flood.
+Source: Petya 2026-11-02 on Safari Zone Southwest (pins 0ea2e44): "wat je hebt gedaan bij safarizone is echt perfect"
 
 ## Checking
 

@@ -69,15 +69,4 @@ ok(Importer.battleFxSendOutEnabled()==false,"POKE BALL defaults to off")
 local mainSource=io.open("mods/STADIUM2_IMPORTER/main.lua"):read("*a")
 ok(mainSource:find('key="stadium2_fx_pokeball", label="POKE BALL", type="toggle", default=false',1,true)~=nil,
   "the POKE BALL option is defined off by default")
--- EXTRA EFFECTS off also stops torch/lamp shadows, in every instance.
-local TorchShadows=require("mods.STADIUM2_IMPORTER.lib.battle_torch_shadows")
-local lamps=TorchShadows.new()
-TorchShadows.setEnabled(false)
-local g={getDimensions=function() return 1,1 end}
-ok(lamps.update(g,{},{},{},{},{})==nil,"torch shadows are not rendered when off")
-local sent={}
-lamps.send({send=function(_,k,v) sent[k]=v end})
-ok(sent.torchShadows==0,"scene shaders are told torch shadows are off")
-TorchShadows.setEnabled(true)
-ok(TorchShadows.enabled()==true,"torch shadows switch back on")
 print(("%d checks passed (Stadium 2 FX particles option)"):format(checks))

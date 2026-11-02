@@ -58,16 +58,8 @@ beside it shows the reading for the user's check. Tools: `tools/elevation/draw_p
 - A 0.5 platform sits just above the water/ground it stands in (Route 121 (31,16): a hair above the sea, not a half-step of its own surroundings).
 
 ## Course height: DECIDED 16 px (user 2026-10-27: "if a tile is 16x16px lets do 16px height as well")
-One course = 16 px everywhere; no A/B needed. Gen3Relief.LEVEL=24 must come down to 16 so the counted-relief maps match.
+One course = 16 px everywhere (`Gen3Elevation.PIN_PX`, `Gen3Rock.COURSE`).
 
-### Background (why it was asked)
-The user suspects heights are exaggerated: a course drawn 16 px tall built 16 px high on 16 px tiles gives cubes.
-Today the builders disagree: `Gen3Rock.COURSE=16`, `Gen3Elevation.COURSE=16`, but `Gen3Relief.LEVEL=24` (its own
-comment says the 3DS port uses 16), so counted-relief maps already stand 1.5x taller than the rest. The pin builder
-takes ONE constant `COURSE_PX` for the whole world; phase 1 shows the user an A/B at 12 / 16 / 24 px per course on a
-pinned map (Jagged Pass or Mt Pyre, play camera + low camera, player sprite in frame for scale) and the user picks.
-
-## How the pins are used (planned)
-Per-map anchor tables that override the counted relief (Gen3Relief / Gen3Hills / Gen3Rock heights) at the pinned
-areas, with the pinned cells' flood regions taking the pin and the gates comparing the built heights against the pins
-cell by cell. Not built yet; see PLAN.md.
+## How the pins are used
+Gen3Elevation floods each pin over its connected flat area (same GBA level, stopped by stairs, ledges and rock);
+on a pinned map Gen3Blocks builds the rock between the areas. Gen3Relief (counted relief) is gone since 2026-11-02.

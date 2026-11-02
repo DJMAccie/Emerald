@@ -84,3 +84,7 @@ Rules: R-29
 Cause: data/gen3_stairs.lua had 57 flight recipes, 55 for pairs like player_house, house and *rom_082d* (not Emerald); Gen3HouseStairs only drew those, so it never loaded. Static greps on module names missed it.
 Fix: Check every pair name in a table against the 80 pairs in the native manifest (~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native/manifest.lua); entries for other pairs are dead. Mind labels the mod sets itself (InteriorDiorama gives the Abandoned Ship secondary 'rom_082d4d94').
 Rules: R-44
+
+### L-58 Andere sessie commit jouw klaargezette bestanden mee
+Cause: Twee sessies in een checkout: een 'git add -A' of 'commit -a' van de ene neemt de gestagede bestanden van de andere mee (importer-opruiming landde in 63e4710 'PLAN: ...').
+Fix: Zet niets klaar voor later; commit alleen eigen paden in een keer: git commit -m ... -- <paden>.

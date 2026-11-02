@@ -752,7 +752,7 @@ local function build(req,cache,previous)
  M.objectCount=#Standing.prepare(cells,Pairs.outdoor(def))
  V.require('Gen3TreeStamps').claim(cells)
  Elevation.bind(cells,regions)
- -- PLATEAU RULE: on hand-drawn maps Gen3Blocks builds the rock; relief/hill/rock/mass builders skip it.
+ -- PLATEAU RULE: on hand-drawn maps Gen3Blocks builds the rock; hill/rock/mass builders skip it.
  M.blocksCount=V.require('Gen3Blocks').prepare(cells,regions,def)
  for _,c in pairs(cells)do if c.shape and c.shape.level and c.base~=c.shape.level then c.base=c.shape.level;c.floorHigh=nil end end
  if def and SEA_LEVEL_MAPS[def.id] then

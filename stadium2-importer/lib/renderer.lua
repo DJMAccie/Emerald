@@ -2017,9 +2017,6 @@ function Renderer:updatePose(force)
       end
     end
   end
-  if self.visitorLocomotion then
-    require("mods.STADIUM2_IMPORTER.lib.visitor_locomotion").apply(self)
-  end
   return true
 end
 

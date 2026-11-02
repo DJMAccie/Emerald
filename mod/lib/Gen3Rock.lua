@@ -94,7 +94,6 @@ end
 function M.handles(mass,cells)
  if not (M.enabled and mass and not mass.object and not (mass.bank and not V.require('Gen3Hills').bankOk(mass))) then return false end
  if not (M.MAPS[mass.mapId or ''] or M.CAVES[mass.mapId or '']) then return false end
- if V.require('Gen3Relief').claims(mass,cells) then return true end
  if V.require('Gen3Hills').claims(mass,cells) then return true end
  if M.LONE_BOULDER and not mass.seaBoulders and not bluff(mass) and not M.CAVES[mass.mapId or ''] and #mass.members<=4 then
   local x0,y0,x1,y1=1e9,1e9,-1e9,-1e9
@@ -690,7 +689,6 @@ function M.flat(c,cells)
  return r
 end
 function M.append(mass,cells,emit,uvFor,cell)
- if mass.relief then return V.require('Gen3Relief').append(mass,cells,emit,uvFor,cell) end
  if mass.hill then return V.require('Gen3Hills').append(mass,cells,emit,uvFor,cell) end
  local R=prepare(mass,cells)
  local c=cell

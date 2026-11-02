@@ -1,0 +1,14 @@
+# EM_SAFARI_ZONE_SOUTHWEST  set by Claude 2026-11-02 (no drawing): band rows = courses (R-38), seam heights from Safari Zone Northwest
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0)
+19 9 0   # ground (first, so the tree row north of the plateau stays on the ground)
+21 0 0   # north path to Safari NW, behind the jump ledge (NW has 0 there)
+8 0 2    # northwest path above the 2-row band (NW has 2 there)
+0 0 2    # northwest corner, same plateau
+8 4 0    # foot of the northwest stairs
+20 21 2  # central plateau: 2-row band and 2-row stairs on the south side
+14 15 2  # pond on the central plateau, level with its grass
+1 33 0   # big pond
+0 6 0
+2 8 0
+12 4 0
+0 37 0

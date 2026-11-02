@@ -1,12 +1,10 @@
 {
   "id": "STADIUM2_IMPORTER",
   "name": "Pokemon Stadium 2 Importer",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "api": 2,
   "games": [
-    "gen1",
-    "gen2",
-    "gen3"
+    "emerald"
   ],
   "entry": "main.lua",
   "profile": "content",
@@ -17,24 +15,12 @@
   ],
   "game_version": ">=0.1.86 <1.0.0",
   "priority": 105,
-  "dependencies": [
-    {
-      "id": "STADIUM2_UI",
-      "range": ">=1.1.0 <2.0.0",
-      "games": [
-        "gen1",
-        "gen2"
-      ]
-    }
-  ],
-  "dependency_sources": {
-    "STADIUM2_UI": "Deftones565/Stadium-2-UI"
-  },
+  "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
   "github": "Deftones565/gen1recomp-mod-stadium2-importer",
   "affects_link": false,
-  "description": "Pokemon Stadium 2 extractor and renderer with owned 3D battle presentation for Gen 1 and Gen 2.",
+  "description": "Pokemon Stadium 2 model importer for Emerald: serves the 3D Pokemon models (and Colosseum models #252-386) that Battle Art places in its battles.",
   "required_imports": [
     {
       "id": "stadium2_rom",
