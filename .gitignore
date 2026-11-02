@@ -20,3 +20,6 @@ __pycache__/
 
 # screenshots die Petya stuurt (spelbeelden)
 /docs/aanwijzingen/
+
+# invoer van tools/tilerules (ROM-afgeleid: world.json + tegelatlassen), alleen lokaal
+/tools/tilerules/input/

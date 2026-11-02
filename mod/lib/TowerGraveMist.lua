@@ -326,7 +326,6 @@ end
 
 local function draw(map,layout)
   if not layout then return false end
-  if not (layout and layout.gated) and not TowerFogSettings.active() then return false end
   local img = mistTexture()
   if not img then return false end
   local slot = cache[map]

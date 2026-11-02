@@ -14,7 +14,7 @@ local Tour=V.require('TourMode')
 local DebugWalk=V.require('DebugWalk')
 M.tour=V.require('ModSetting').new('tour','TOUR',{false,true},{'OFF','ON'},1)
 M.settings={V.require("SpatialUpscale").setting,AA.setting,Day.setting,Underlay.setting,Community.sky,M.invert,M.tilt,
- V.require('Water').setting,V.require('Weather').setting,M.tour}
+ V.require('Water').setting,M.tour}
 
 M.tiltDefault=2
 function M.tiltAdopt()
@@ -66,7 +66,6 @@ end
 
 function M.update(dt)
  Day.update(dt)
- V.require("Weather").update(dt)
  V.require("ForestAtmos").update(dt)
  if not M.tiltAdopted then M.tiltAdopted=true; M.tiltAdopt() end
  Tour.update(DebugWalk.on())

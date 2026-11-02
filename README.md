@@ -10,7 +10,7 @@ Pokémon Emerald in gen1recomp met een 3D-voxelwereld, Pokémon in de overworld,
 | `mod/` | **De mod.** Hoort bij deze repo. Wordt in het spel geïnstalleerd als `BATTLE_ART_VOXEL_FORK`. |
 | `stadium2-importer/` | Tweede mod: haalt de 3D-Pokémonmodellen voor gevechten uit de Stadium 2-ROM. Hoort bij deze repo (ROM's nooit in git: `baseroms/` is genegeerd). |
 | `gen1recomp/` | De spelengine (alleen naslag; de testscripts starten vanuit deze map). |
-| `tools/` | `install.sh` (installeren), `qa_tryp.sh` (testfoto's), `qa_battle.sh` (gevechtstest), `drivers/` (views, battle, fly, ortho), `ortho45/` (rotsen naast de 2D-art), `knowledge/learn.py`, `crop.py`, `sheet.py`, `colosseum/` (Colosseum-modellen #252-386 maken, zie de README daar). |
+| `tools/` | `install.sh` (installeren), `qa_tryp.sh` (testfoto's), `qa_battle.sh` (gevechtstest), `drivers/` (views, battle, fly, ortho), `ortho45/` (rotsen naast de 2D-art), `knowledge/learn.py`, `crop.py`, `sheet.py`, `colosseum/` (Colosseum-modellen #252-386 maken, zie de README daar), `tilerules/` (tegelregels die de tegeltabellen van de mod genereren). |
 | `docs/knowledge/` | Regels, lessen en het dagboek. |
 | `archief/` | Alleen de oude losse git-geschiedenis van mod/ en stadium2-importer (oude hashes in PLAN.md: `git --git-dir=archief/mod-git-2026-11-02 show <hash>`). Alleen lokaal. Al het andere oude werk staat sinds 2026-11-02 in de Prullenmand (Emerald-opruimen-2026-11-02). |
 

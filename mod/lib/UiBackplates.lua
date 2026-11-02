@@ -37,9 +37,6 @@ end
 UiBackplates.arenaFill = ModSetting.new("arenaFill", "ARENA FILL",
   { "OFF", "WHITE" }, { "OFF", "WHITE" })
 
-UiBackplates.stadiumCircle = ModSetting.new("stadiumCircle", "STADIUM CIRCLE",
-  { "ON", "OFF", "HALF" }, { "ON", "OFF", "HALF" })
-
 function UiBackplates.arenaWhite()
   return UiBackplates.arenaFill:get() == "WHITE"
 end

@@ -92,3 +92,7 @@ Fix: Zet niets klaar voor later (ook git rm/git mv zetten klaar: gebruik rm/mv);
 ### L-59 Pinned caves: black holes and domes after pinning
 Cause: Gen3Scene caveWall/rock draw branches skip Gen3Blocks.append, and Mass.prepare runs after Blocks.prepare so Mass still drew domes
 Fix: branch (caveWall|rock + c.blocks -> Blocks.append) and mass.blocksOwned on pinned caves (039c94e)
+
+### L-60 Mod-instellingen staan alleen onder MODS, niet in het opties-menu
+Cause: Engine 0.3.99: het Emerald-opties-menu (rse/option_menu) bouwt rijen via Rows.withCart -> lokale buildRows, dus een mod die Rows.build vervangt komt nooit in beeld (InGameOptions/OptionSupport waren dood). Alleen de hook ui.options.rows werkt (zo doet de importer zijn STADIUM 2 ROM-regel).
+Fix: Kijk wat Petya ziet in het spel zelf: MODS -> BATTLE ART VOXEL FORK -> opties = het schema van mod.options:define. Uitlezen met een driver die ModManager.show + openOptions doet en m.optionRows print (730db30).

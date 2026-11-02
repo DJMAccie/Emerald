@@ -51,7 +51,8 @@ function M.resolve(rs,x,y)
  elseif donor.biome=='mountain' then
   return 113,donor.pair,{kind='cliff',height=32,ground=1},'mountain'
  elseif donor.biome=='water' then
-  return V.require('Gen3WaterEdge').plain(donor.pair,donor.mid),donor.pair,{kind='water',reviewedSurface=true},'water'
+  local shore=V.data('gen3_water_edge')[donor.pair] -- (tools/tilerules/water_edge.py)
+  return shore and shore[donor.mid] or donor.mid,donor.pair,{kind='water',reviewedSurface=true},'water'
  end
  local r=Select.owner(rs,x,y)
  local L=r and r.def and r.def.midLayout

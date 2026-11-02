@@ -3,7 +3,6 @@
 local V = ...
 
 local DayNight = V.require("DayNight")
-local ModSetting = V.require("ModSetting")
 
 local floor, sqrt, min, max = math.floor, math.sqrt, math.min, math.max
 
@@ -23,10 +22,6 @@ local function cullRect()
   local c = V.require("Voxel3D").cull
   return c and { c.rx or c.r, c.rz or c.r } or { 0, 0 }
 end
-
-ForestAtmos.setting = ModSetting.new(
-  "atmos", "FOREST FX", { "low", "off" }, { "LOW", "OFF" }
-)
 
 ForestAtmos.time = 0
 ForestAtmos.frozen = false
@@ -102,7 +97,7 @@ ForestAtmos.RAMP = {
 }
 
 function ForestAtmos.frame(map, t, options)
-  if (options and options.level or ForestAtmos.setting:get()) == "off" then return nil end
+  if (options and options.level or "off") == "off" then return nil end
   local cfg = configFor(map and map.id)
   if not cfg then return nil end
   local mix = DayNight.mix(t or DayNight.time())
@@ -620,7 +615,7 @@ local function billboardAxes(Voxel3D)
 end
 
 function ForestAtmos.draw(map, options)
-  local rung = options and options.level or ForestAtmos.setting:get()
+  local rung = options and options.level or "off"
   if rung == "off" then return end
   local f = ForestAtmos.frame(map,nil,options)
   if not f then return end

@@ -52,9 +52,6 @@ function M.install()
   schema[#schema+1]=setting:schema(setting.key=='spatialUpscale' and V.require('SpatialUpscale').description or 'Shared renderer option; applies immediately to the native Gen 3 presentation.')
  end
  mod.options:define(schema)
- local Support=V.require('OptionSupport')
- V.require('InGameOptions').install(mod,Support.rows(schema,3),'BATTLE ART')
- mod.exports.optionSupport=Support.inventory(3)
  local function field(game)return game and game.phase=='field' and game.session and not Battle.isActive() end
  local function looking(game)return field(game) or game and game.phase=='quest_log' end
  local uninstallRecap=V.require('Gen3Recap').install(M)

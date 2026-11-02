@@ -75,19 +75,6 @@ function ModSetting:sync(value)
   self.index = indexOf(self, value)
 end
 
-function ModSetting:row()
-  local self_ = self
-  return {
-    id = modId() .. ":" .. self.key,
-    label = self.label,
-    value = function() return self_.labels[self_:read()] end,
-    step = function(game, dir)
-      self_:cycle(game, dir)
-      return true
-    end,
-  }
-end
-
 function ModSetting:schema(help)
   local choices = {}
   for i, v in ipairs(self.values) do choices[i] = { self.labels[i], v } end

@@ -16,16 +16,10 @@ local SHADE={0.90,0.68,1.00,0.84,0.72} -- south, north, top, east, west
 local loaded={}
 -- Vertex lists are a pool: a build that yields mid-mesh never shares one.
 local pool={}
-local AUTHORED={abandoned_ship_wreck='AbandonedWreck'}
 local function model(name)
  if loaded[name]==nil then
   local ok,m=pcall(V.data,'buildings/'..name)
   loaded[name]=ok and type(m)=='table' and m or false
-  local authored=loaded[name] and AUTHORED[name]
-  if authored then
-   local okA,Q=pcall(V.require,authored)
-   if okA and type(Q)=='table' and type(Q.QUADS)=='table' then loaded[name].quads=Q.QUADS end
-  end
  end
  return loaded[name] or nil
 end

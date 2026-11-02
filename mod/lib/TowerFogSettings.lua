@@ -1,8 +1,7 @@
--- Live presentation controls for TEST137's Pokemon Tower atmosphere
+-- Mt. Pyre fog controls
 
 local V = ...
 local ModSetting = V.require("ModSetting")
-local CommunityVisuals = V.require("CommunityVisuals")
 
 local TowerFogSettings = {}
 
@@ -37,18 +36,6 @@ local THICKNESS = {
 }
 
 local SPEED = { slow = .55, normal = 1.00, fast = 1.45 }
-
-function TowerFogSettings.active()
-  return CommunityVisuals.customTower()
-    and TowerFogSettings.enabled:get() == "on"
-end
-
-function TowerFogSettings.detailsLevel()
-  if not CommunityVisuals.customTower() then return "off" end
-  local value = TowerFogSettings.details:get()
-  if value == "off" or value == "subtle" then return value end
-  return "full"
-end
 
 function TowerFogSettings.thicknessMultipliers()
   local value = THICKNESS[TowerFogSettings.thickness:get()]

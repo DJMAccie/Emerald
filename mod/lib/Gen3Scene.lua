@@ -2627,11 +2627,6 @@ function M.draw(game,vw,vh,cam)
  if not plate and built then atmosphere.draw(atmosphereMap) end
  local canvas=Options.finish(R.endScene(),width,height)
  if flying then Fly.overlay(canvas,width,height,renderWidth,renderHeight)end
- if not plate then
-  local weather=V.require('Weather')
-  local apply=cam.battle and weather.applyBattle or weather.apply
-  apply(canvas,width,height,{id=Map.current,def={outdoor=not indoor}},math.max(1,width/640))
- end
  R.fog=nil
  R.tint={1,1,1}
  love.graphics.pop();love.graphics.setCanvas(savedCanvas);saved=false;savedCanvas=nil

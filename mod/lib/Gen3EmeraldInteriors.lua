@@ -109,8 +109,8 @@ profile('pokemon_day_care',0x201,
   reliefs({0x225,0x229,0x22A,0x231,0x232,0x234,0x243},18)))
 
 do
- local ok,auto=pcall(function()return V and V.require and V.require('Gen3EmeraldAuto') end)
- if not (ok and auto) then ok,auto=pcall(dofile,(os.getenv('DS_MOD_PATH') or '.')..'/lib/Gen3EmeraldAuto.lua') end
+ local ok,auto=pcall(function()return V.data('gen3_emerald_auto')end)
+ if not (ok and auto) then ok,auto=pcall(dofile,(os.getenv('DS_MOD_PATH') or '.')..'/data/gen3_emerald_auto.lua') end
  for key,gen in pairs(ok and auto and auto.interiors or {})do
   if not M[key] then profile(key,gen.floor,gen.walls or {},gen.props or {}) end
  end
