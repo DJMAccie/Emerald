@@ -42,14 +42,12 @@ function M.install()
  local function ready(game)return recovery:ready(Scene.context and Scene.context()or game.session)end
  mode:read();M.level=mode:get();local schema=mod.options:define({Distance.setting:schema('Scenery distance: AUTO adapts to the platform; FULL includes the loaded connected maps. Distant scenery fades into the sky.'),BattleStage.setting:schema('Native battle sprites and attacks over the 2.5D field. Disable to use the original FireRed battle background.'),mode:schema('2.5D camera. Press 3 to cycle. In 1ST and rotating 3RD look with the mouse, the right stick or Q/E/R/F; left click is A, right click is B. Special field effects retain their original presentation.')})
  local uninstallLight=V.require('Gen3SpriteLight').install()
- local sharedSettings={Trees.props,Trees.surfaces,V.require('ModernBattleUI').setting,
-  V.require('Shadows').setting,V.require('WorldCurve').setting,V.require('VoxelGrid').setting}
- for _,setting in ipairs(V.require("NativeAtmosphere").settings)do sharedSettings[#sharedSettings+1]=setting end
+ local sharedSettings={Trees.props,Trees.surfaces,
+  V.require('Shadows').setting}
  for _,setting in ipairs(SceneOptions.settings)do sharedSettings[#sharedSettings+1]=setting end
- for _,setting in ipairs(V.require('Gen3BattleOptions').settings)do sharedSettings[#sharedSettings+1]=setting end
  local Plates=V.require('UiBackplates');sharedSettings[#sharedSettings+1]=Plates.arenaFill;sharedSettings[#sharedSettings+1]=Plates.spriteLight
  for _,setting in ipairs(sharedSettings)do
-  schema[#schema+1]=setting:schema(setting.key=='spatialUpscale' and V.require('SpatialUpscale').description or 'Shared renderer option; applies immediately to the native Gen 3 presentation.')
+  schema[#schema+1]=setting:schema('Shared renderer option; applies immediately to the native Gen 3 presentation.')
  end
  mod.options:define(schema)
  local function field(game)return game and game.phase=='field' and game.session and not Battle.isActive() end
@@ -189,10 +187,6 @@ function M.install()
   end
   return next(game,dt,...)
  end)
- for _,event in ipairs({'save.loaded','save.created'})do
-  mod.events:on(event,function()V.require('DayNight').restore()end)
- end
- mod.events:on('save.writing',function()V.require('DayNight').store()end)
  local dragging=false
  mod.hooks:wrap('input.pointer',function(next,game,ev)
   if ev.source=='mouse' and looking(game) and free() then
@@ -223,9 +217,6 @@ function M.install()
  end)
  mod.exports.version=mod.version;mod.exports.lib=V
  mod.exports.gen3Camera=M
- mod.exports.battleTheme=V.require('BattleTheme')
- mod.exports.battlePresentation={modernUIEnabled=V.require('ModernBattleUI').enabled,
-  }
  mod.exports.firered={camera=M,outdoor=true,battles=BattleStage,presentation='beta'}
  local gen3Namespace=mod.exports.firered
  for _,cart in ipairs{'emerald'}do mod.exports[cart]=gen3Namespace end

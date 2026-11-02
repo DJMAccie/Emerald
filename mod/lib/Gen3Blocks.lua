@@ -51,9 +51,39 @@ function M.prepare(cells,regions,def)
   end
  end
  M.liftSpots(cells)
+ M.arrowRamps(cells,regions)
  if M.RAMPS then M.buildRamps(cells) end
  if M.SLOPES then M.buildSlopes(cells) end
  return M.count
+end
+-- Drawn arrows (Gen3PinData height maps): each arrow tile is a 45-degree wedge rising toward the arrow; a diagonal is a corner cone.
+local HIGH={N={1,2},S={3,4},E={2,3},W={1,4}}
+local APEX={NW=1,NE=2,SE=3,SW=4}
+function M.arrowRamps(cells,regions)
+ local n,px=0,V.require('Gen3Elevation').PIN_PX
+ for _,c in pairs(cells)do c.hmap=nil;if c.arrow then c.arrow=nil;c.ramp=nil end end
+ for _,r in ipairs(regions)do
+  local p=r.def and M.pinned(r.def) and PinData.MAPS[r.def.id]
+  if p and p.arrows then
+   local off=r.floorOffset or 0
+   for ly=0,r.h-1 do for lx=0,r.w-1 do
+    local c=cells[key(r.x+lx,r.y+ly)]
+    if c then
+     c.hmap=true
+     local a=p.arrows[math.min(lx,p.w-1)..':'..math.min(ly,p.h-1)]
+     if a and c.blocks and c.layer~=15 then
+      local lo,hi=a.lo*px+off,a.hi*px+off
+      local q
+      if HIGH[a.dir] then q={lo,lo,lo,lo};for _,i in ipairs(HIGH[a.dir])do q[i]=hi end
+      elseif a.inner then local o=(APEX[a.dir]+1)%4+1;q={hi,hi,hi,hi};q[o]=lo;q.cone={apex=o,D=hi-lo,inv=true}
+      else local ap=APEX[a.dir];q={lo,lo,lo,lo};q[ap]=hi;q.cone={apex=ap,D=hi-lo} end
+      q.comp={c};c.ramp=q;c.arrow=a;n=n+1
+     end
+    end
+   end end
+  end
+ end
+ M.arrowCells=n
 end
 -- Ramp levels come from what lies beside it, never from the field's lo/hi.
 function M.buildRamps(cells)
@@ -64,9 +94,9 @@ function M.buildRamps(cells)
    if o and o.blocks and o.base and o.base>c.base+.25 and not (o.floor and o.floor.cls=='FACE') then return true end
   end
  end
- local function member(c)return c and c.blocks and c.base and c.floor and c.floor.cls=='FACE' and c.floor.srcMax and c.floor.height and (c.floor.srcMax-c.floor.height>.25 or higherRock(c)) end
+ local function member(c)return c and c.blocks and not c.hmap and c.base and c.floor and c.floor.cls=='FACE' and c.floor.srcMax and c.floor.height and (c.floor.srcMax-c.floor.height>.25 or higherRock(c)) end
  local n=0
- for _,c in pairs(cells)do c.ramp=nil end
+ for _,c in pairs(cells)do if not c.arrow then c.ramp=nil end end
  local function vk(x,y)return x..','..y end
  for _,c in pairs(cells)do
   if member(c) and not comp[c] then
@@ -210,7 +240,7 @@ function M.buildSlopes(cells)
   return math.min(dd,M.SLOPE_RUN)
  end
  for _,c in pairs(cells)do
-  if c.blocks and c.base and not c.ramp then
+  if c.blocks and c.base and not c.ramp and not c.hmap then
    local dr={}
    for i,d in ipairs(DIRS)do dr[i]=dropOf(c,d) end
    if not (dr[1]>0 and dr[2]>0) and not (dr[3]>0 and dr[4]>0) and (dr[1]+dr[2]+dr[3]+dr[4])>0 then
@@ -229,7 +259,7 @@ function M.buildSlopes(cells)
   end
  end
  for _,c in pairs(cells)do
-  if c.blocks and c.base and not c.ramp then
+  if c.blocks and c.base and not c.ramp and not c.hmap then
    for _,dg in ipairs({{1,1,3},{-1,1,4},{1,-1,2},{-1,-1,1}})do
     local X=cells[key(c.cx+dg[1],c.cy+dg[2])]
     local A=cells[key(c.cx+dg[1],c.cy)];local B=cells[key(c.cx,c.cy+dg[2])]

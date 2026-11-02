@@ -2,9 +2,6 @@
 local V=...
 local M={}
 local F=V.require('ForestAtmos')
-local C=V.require('CommunityVisuals')
-local T=V.require('TowerFogSettings')
-M.settings={C.caves,C.caveDetails,T.enabled,T.thickness,T.speed,T.details}
 local configured={}
 local mistLayouts=setmetatable({},{__mode='k'})
 local proxies=setmetatable({},{__mode='k'})
@@ -35,31 +32,22 @@ local function profile(map)
   configured[key]=true
  end
  local opt={level='off',speed=1}
- if kind=='cave' and C.customCaves()then
-  local d=C.caveDetailLevel();opt.level=d=='full' and 'full' or d=='subtle' and 'low' or 'off'
- elseif kind=='pyre' then
-  local detail=T.details:get()
-  opt.level=detail=='off' and 'low' or 'full';opt.speed=T.speedMultiplier()
-  opt.particleLevel=detail=='subtle' and .35 or 1
- end
+ if kind=='pyre' then opt.level='full';opt.particleLevel=1 end
  return kind,opt
 end
 local function misty(kind)return kind=='pyre' end
-local function mistOn()return T.enabled:get()=='on' end
 function M.fog(map)
  local kind,opt=profile(map);if not opt or opt.level=='off'then return end
- if misty(kind) and not mistOn()then return end
  local part=kind=='pyre' and tostring(map.id):match('_(%u+)$')
  if part=='EXTERIOR' or part=='SUMMIT' then return end
  local f=F.frame(map,nil,opt);if not f then return end
  f.fog.color=misty(kind) and {.32,.30,.40} or {.26,.29,.32}
- if misty(kind)then local a,h=T.thicknessMultipliers();f.fog.density=f.fog.density*a;f.fog.heightK=f.fog.heightK/h end
  return f.fog
 end
 function M.mistLayout(map)
  if not misty(M.kind(map))then return end
  if mistLayouts[map]then return mistLayouts[map]end
- local layout={anchors={}} -- (drawn only after mistOn: see M.draw)
+ local layout={anchors={}} 
  local w,h=map.def.width*2,map.def.height*2
  if map.nativeGeneration==3 then
   local def=map.nativeDef;local native=def and def.midLayout
@@ -76,6 +64,6 @@ function M.draw(map)
  local kind,opt=profile(map);if not opt or opt.level=='off'then return end
  local part=kind=='pyre' and tostring(map.id):match('_(%u+)$')
  if not (part=='EXTERIOR' or part=='SUMMIT') then F.draw(map,opt) end
- if misty(kind) and mistOn()then V.require('TowerGraveMist').drawNative(map,M.mistLayout(map))end
+ if misty(kind)then V.require('TowerGraveMist').drawNative(map,M.mistLayout(map))end
 end
 return M

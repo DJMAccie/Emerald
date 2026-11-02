@@ -96,3 +96,13 @@ Fix: branch (caveWall|rock + c.blocks -> Blocks.append) and mass.blocksOwned on 
 ### L-60 Mod-instellingen staan alleen onder MODS, niet in het opties-menu
 Cause: Engine 0.3.99: het Emerald-opties-menu (rse/option_menu) bouwt rijen via Rows.withCart -> lokale buildRows, dus een mod die Rows.build vervangt komt nooit in beeld (InGameOptions/OptionSupport waren dood). Alleen de hook ui.options.rows werkt (zo doet de importer zijn STADIUM 2 ROM-regel).
 Fix: Kijk wat Petya ziet in het spel zelf: MODS -> BATTLE ART VOXEL FORK -> opties = het schema van mod.options:define. Uitlezen met een driver die ModManager.show + openOptions doet en m.optionRows print (730db30).
+
+### L-61 Odd-sized maps are padded by one row or column
+Cause: native_pack pads a layout with an odd side to even by repeating its last row/column, so l.width/l.height can be one more than the art (Granite Cave 1F: art 42x15, layout 42x16); an exact size check silently skipped 72 of 96 height maps
+Fix: compare per-cell data to the true size and clamp x,y to the last row/column for the padding (Gen3Elevation height-map branch, Gen3Blocks.arrowRamps)
+Rules: R-29
+
+### L-62 Cave bridges and stairs under a drawn height map
+Cause: Victory Road bridge cells (layer 15 plus end caps, collision 43) got ramp arrows and floor pins so they became solid boxes; Scene.isDeck refused collision 43; the cave stair metatile 0x204 (elev 0) was no step, so a plate over a void. Dark caves also fall back to 2D in QA.
+Fix: A layer-15 run plus its end-cap metatiles stays a deck (no pin, no arrow); isDeck accepts layer 15 with collision 0 or >7; general__cave 0x204 is a step (PAIR_STEP_MIDS); QA drivers take EM_NODARK=1
+Rules: R-13,R-18,R-43

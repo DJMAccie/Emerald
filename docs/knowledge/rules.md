@@ -75,6 +75,10 @@ Source: Petya 2026-10-27 (Sootopolis): crater rock or nothing, never green steps
 Rule: When Petya has not drawn a map, Claude sets its pins: ground 0, each band or stair row is one course (R-38), heights at the map seams copied from the neighbour map's pins, a pond on a plateau sits at the plateau's height. One pin per enclosed area (the GBA level often does not tell a plateau from the ground); stairs 0xAF/0xCF/0xE8 stop the flood.
 Source: Petya 2026-11-02 on Safari Zone Southwest (pins 0ea2e44): "wat je hebt gedaan bij safarizone is echt perfect"
 
+### R-48 Drawn arrows are 45-degree wedges
+Rule: On a map with a drawn height map (data/gen3_heightmaps.lua, baked by tools/heightmaps.py from docs/elevation/draw/claude_heightmaps), each ramp tile's arrow is the direction that tile rises at 45 degrees, one course per tile, from the floor behind it to the floor ahead; a diagonal arrow is a corner (inner = inverse cone, outer = quarter cone). The arrows replace Gen3Blocks' own ramp guessing on those maps; floor heights come from the map, not from a pin flood.
+Source: Petya 2026-11-02: "die pijlen geven aan in welke richting de tile omhoog gaat met 45 graden!!!"
+
 ## Checking
 
 ### R-22 Judge from three cameras and from behind, against the 2D art

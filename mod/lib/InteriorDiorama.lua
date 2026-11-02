@@ -440,7 +440,7 @@ function M.camera(p,angle,aspect)
  local extent=math.max((w+10)*.5/math.max(.5,aspect or 1.5),(d*math.cos(a)+h*math.sin(a))*.5)
  local distance=extent/math.tan(fov*.5)+(d*math.sin(a)+h*math.cos(a))*.5+10
  local x,z=(b[1]+b[3])*.5,(b[2]+b[4])*.5
- return {eye={x,h*.35+distance*math.cos(a),z+distance*math.sin(a)},focus={x,h*.35,z},fov=fov,curve=0}
+ return {eye={x,h*.35+distance*math.cos(a),z+distance*math.sin(a)},focus={x,h*.35,z},fov=fov}
 end
 function M.configure(p)
  V.require('Voxel3D').interior=p

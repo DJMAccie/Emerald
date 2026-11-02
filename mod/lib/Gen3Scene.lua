@@ -48,8 +48,9 @@ local DECK_FAMILY={general__fortree={[0x210]=1,[0x211]=1,[0x212]=1,[0x213]=1,[0x
  [0x256]=1}}
 local function isDeck(c)
  if c.shape and c.shape.underWater then return true end
- if c.collision~=0 or not c.floor then return false end
- if c.floor.layer==15 then return true end
+ if not c.floor then return false end
+ if c.floor.layer==15 and (c.collision==0 or (c.collision or 0)>7) then return true end -- cave bridges carry a map-specific collision code (Victory Road: 43), never 1..7
+ if c.collision~=0 then return false end
  local fam=DECK_FAMILY[c.pair];return fam and fam[c.mid] or false
 end
 function M.context()return Map.currentDef()end
@@ -2519,7 +2520,7 @@ function M.draw(game,vw,vh,cam)
  end
  M.renderWidth,M.renderHeight=width,height
  local Options=V.require('Gen3SceneOptions')
- local renderWidth,renderHeight=Options.expand(width,height)
+ local renderWidth,renderHeight=width,height
  local def=M.sceneDef or Map.currentDef()
  if not def then return false end
  local indoor
@@ -2553,7 +2554,7 @@ function M.draw(game,vw,vh,cam)
    dist=Clear.ease(camArm,Clear.arm(cache.solid,cx,cz,dx,dz,ey,dist),love.timer.getDelta(),90,cache)
   end
   local focusDistance=cam.level==6 and 24 or 70
-  R.camera={eye={cx-dx*dist,ey,cz-dz*dist},focus={cx+dx*focusDistance,ey-focusDistance*math.tan(cam.pitch),cz+dz*focusDistance},fov=math.rad(62),curve=cam.level==6 and 0 or nil}
+  R.camera={eye={cx-dx*dist,ey,cz-dz*dist},focus={cx+dx*focusDistance,ey-focusDistance*math.tan(cam.pitch),cz+dz*focusDistance},fov=math.rad(62)}
   if cam.battle then
    local bc={dist=80,height=24,look=36,lookY=-8,fov=38,pitchUnits=40}
    local dist=cam.dist or bc.dist

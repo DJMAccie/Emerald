@@ -289,7 +289,6 @@ local RAY_SHADER = [[
   uniform mat4 sunVP;
   uniform float sunBias;
   uniform vec3 eye;
-  uniform vec3 curve;        // xy = the focus in world XZ, z = k; 0 = off
   uniform vec2 screen;       // canvas size, for the pixel's own uv
   uniform vec4 fogW;         // density, heightK, canopyY, fadeTo
   uniform vec3 shear;        // the noon shear kx, kz; z = reach
@@ -360,9 +359,7 @@ local RAY_SHADER = [[
     for (int i = 0; i < STEPS; i++) {
       float t = t0 + (float(i) + jitter) * dt;
       vec3 p = eye + dir * t;
-      // stop at the surface: bend the sample the way the geometry bent
-      vec2 cd = p.xz - curve.xy;
-      vec4 c = vp * vec4(p.x, p.y - dot(cd, cd) * curve.z, p.z, 1.0);
+      vec4 c = vp * vec4(p, 1.0);
       if (c.w <= 1e-6) break;
       if (c.z / c.w * 0.5 + 0.5 > sceneD) break;
       if (p.y < fogW.z) {
@@ -480,7 +477,6 @@ local PART_SHADER = [[
   varying float vGlow;
 #ifdef VERTEX
   uniform mat4 vp;
-  uniform vec3 curve;
   uniform vec3 cullAt;     // the viewport (see Voxel3D.cull): a mote
   uniform vec3 cullShape;  // outside the model is not in the air
   uniform vec2 cullRect;   // the box's half-extents in x and z
@@ -520,10 +516,6 @@ local PART_SHADER = [[
     vCorner = AtmosData.xy;
     vec4 w = vec4(base + axisR * (AtmosData.x * size)
                        + axisU * (AtmosData.y * size), 1.0);
-    if (curve.z > 0.0) {
-      vec2 cd = w.xz - curve.xy;
-      w.y -= dot(cd, cd) * curve.z;
-    }
     return vp * w;
   }
 #endif
@@ -656,9 +648,6 @@ function ForestAtmos.draw(map, options)
         pcall(sh.send, sh, "sunVP", "row", ShadowMap.uvVP)
         pcall(sh.send, sh, "sunBias", ShadowMap.bias)
         pcall(sh.send, sh, "eye", Voxel3D.eye)
-        pcall(sh.send, sh, "curve",
-              { Voxel3D.curveX or 0, Voxel3D.curveZ or 0,
-                Voxel3D.curveK or 0 })
         pcall(sh.send, sh, "cullAt", cullAt())
         pcall(sh.send, sh, "cullShape", cullShape())
         pcall(sh.send, sh, "cullRect", cullRect())
@@ -689,9 +678,6 @@ function ForestAtmos.draw(map, options)
       Voxel3D.withEffect("add",function()
         love.graphics.setShader(psh)
         pcall(psh.send, psh, "vp", "row", Voxel3D.vp)
-        pcall(psh.send, psh, "curve",
-              { Voxel3D.curveX or 0, Voxel3D.curveZ or 0,
-                Voxel3D.curveK or 0 })
         pcall(psh.send, psh, "cullAt", cullAt())
         pcall(psh.send, psh, "cullShape", cullShape())
         pcall(psh.send, psh, "cullRect", cullRect())

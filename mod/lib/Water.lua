@@ -2,7 +2,6 @@
 
 local V = ...
 
-local ModSetting = V.require("ModSetting")
 local Sky = V.require("Sky")
 local DayNight = V.require("DayNight")
 local ShadowMap = V.require("ShadowMap")
@@ -10,22 +9,8 @@ local Mat4 = V.require("Mat4")
 
 local Water = {}
 
-Water.KEY = "water"
-Water.LABEL = "WATER"
-
-Water.setting = ModSetting.new(Water.KEY, Water.LABEL,
-                               { "full", "sky", "off" },
-                               { "FULL", "SKY", "OFF" })
-
-function Water.level()
-  local v = Water.setting:get()
-  if v == "off" then return 0 end
-  if v == "sky" then return 1 end
-  return 2
-end
-
 function Water.enabled()
-  return Water.level() > 0
+  return true
 end
 
 Water.FRESNEL_FLOOR = 0.34
@@ -99,17 +84,12 @@ varying LOVE_HIGHP_OR_MEDIUMP vec3 vBent;
 uniform mat4 vp;
 uniform mat4 model;
 uniform mat4 sunVP;
-uniform vec3 curve;          // xy = the focus in world XZ, z = k; 0 = off
 attribute float VertexShade;
 
 vec4 position(mat4 transform_projection, vec4 vertex_position) {
   vShade = VertexShade;
   vec4 w = model * vertex_position;
   vSun = (sunVP * w).xyz;
-  if (curve.z > 0.0) {
-    vec2 cd = w.xz - curve.xy;
-    w.y -= dot(cd, cd) * curve.z;
-  }
   vBent = w.xyz;
   return vp * w;
 }
@@ -140,21 +120,6 @@ uniform vec4 fogInfo;
 uniform vec2 screen;         // the canvas, in pixels
 uniform float cell;          // one diorama pixel, in canvas pixels
 uniform float pxAngle;       // radians of view one screen pixel subtends
-// The same bend the vertex stage applied. This stage has to undo it to get
-// back to the flat world it reflects in, and re-apply it on every marched
-// sample to get back to the screen. Declared in both stages, like `vp`, and
-// both are highp here.
-uniform vec3 curve;          // xy = the focus in world XZ, z = k; 0 = off
-
-// How far the bend has pushed the world down at world XZ `q` -- the vertex
-// stage's own displacement, as a number this stage can add and subtract.
-// Zero when the curve is off, which is the shader's "skip it" everywhere.
-float bendDrop(vec2 q) {
-  if (curve.z <= 0.0) return 0.0;
-  vec2 d = q - curve.xy;
-  return dot(d, d) * curve.z;
-}
-
 // the sun's own pass, exactly as the scene shader reads it
 uniform Image sunMap;
 uniform float sunDark;
@@ -221,11 +186,6 @@ uniform float glowAmt;
 uniform float glowReach;     // in radians, like bodyAng
 uniform vec3 glowColor;
 
-#ifdef VOXEL_GRID
-uniform float gridDark;
-uniform float gridWidth;
-#endif
-
 // ------- the sun's pass (the scene shader's, verbatim)
 
 // One shadow tap: 1 where the sun reaches, 0 where something blocks it --
@@ -258,55 +218,6 @@ float sunlight(vec3 p) {
             + sunLit(p.xy + sunTexel * vec2( 0.5,  0.5), z);
   return 1.0 - sunDark * edge * (1.0 - lit * 0.25);
 }
-
-#ifdef VOXEL_GRID
-// The wireframe, ruled on the COLUMNS rather than on the flat sheet they
-// stand on.
-//
-// The scene shader reads a mesh's own model space, and for water that is the
-// base plane -- so it would draw a grid across a flat sheet and ignore the
-// bars entirely, which is the one thing that would give away that they are
-// bars. What has to be outlined is what is actually SEEN: the column the ray
-// landed on, at the height it landed at, so every voxel of water reads as
-// its own block with its own edges.
-//
-// `p` is that hit; `base` is the smooth plane under it, and the derivative
-// comes from THERE. `p` jumps a whole column between neighbouring fragments,
-// so fwidth() of it reports a step rather than a scale and every column edge
-// would blow out into a band. The plane underneath is smooth, and is the
-// same scale in x and z that the columns are built on.
-//
-// `axis` is the direction the face does not vary along -- the top's own y,
-// or a side's x or z. Its distance to the nearest plane is a constant zero,
-// and taken at face value it floods the whole face solid; pushed out of
-// reach it simply drops out, exactly as the scene shader's own seam handles
-// the axis a face's normal points along.
-float columnSeam(vec3 p, vec3 base, float axis) {
-  vec3 w = fwidth(base);
-  float wide = max(w.x, w.z);
-  // the plane has no vertical extent of its own to measure, so y borrows
-  // the horizontal scale -- it sets a line's THICKNESS and nothing else
-  w.y = wide;
-  vec3 d = abs(fract(p + 0.5) - 0.5);
-  vec3 px = d / max(w, vec3(1e-6));
-  if (axis < 0.5) { px.y += 1e6; }
-  else if (axis < 1.5) { px.x += 1e6; }
-  else { px.z += 1e6; }
-  float near = min(min(px.x, px.y), px.z);
-  // Fade out where a column is too small on screen to hold a line at all,
-  // or the far water turns into a flat wash of seams rather than a grid.
-  //
-  // It holds on further than the scene shader's own does. That one is ruling
-  // seams across whole 16px walls and roofs; these are one world pixel
-  // apart, so the fade starts biting while the water is still perfectly
-  // readable -- and at the lowest rung, where the middle distance is most of
-  // the frame, it took the grid off nearly all of it. Full lines by a pixel
-  // and a half of screen space, gone under three quarters of one.
-  float span = 1.0 / max(wide, 1e-6);
-  float fade = clamp((span - 0.75) * 1.35, 0.0, 1.0);
-  return fade * clamp(gridWidth * 0.5 + 0.5 - near, 0.0, 1.0);
-}
-#endif
 
 // ------- the sky, by direction
 
@@ -392,15 +303,7 @@ vec3 bodyAt(vec3 d, vec3 c, float parity) {
 // with. The uv and the depth are the same numbers the hardware wrote -- the
 // clip-space Y flip is already baked into `vp`, and a canvas texture's v runs
 // the same way its pixel rows do, so one 0.5x+0.5 answers for both.
-//
-// The point arrives in the FLAT world -- the space the ray is straight in --
-// and is bent here, by the same displacement the vertex stage applied, so it
-// lands exactly where the geometry it is being compared against landed. That
-// split is the whole trick: the reflection is worked out in a world that has
-// not been tipped, and every sample of it is tipped on the way to the screen,
-// so the march reads the depth buffer it actually has.
 vec4 project(vec3 p) {
-  p.y -= bendDrop(p.xz);
   vec4 c = vp * vec4(p, 1.0);
   if (c.w <= 1e-6) return vec4(0.0, 0.0, 0.0, 0.0);
   return vec4(c.xy / c.w * 0.5 + 0.5, c.z / c.w * 0.5 + 0.5, 1.0);
@@ -691,17 +594,7 @@ vec4 effect(mediump vec4 color, Image tex, mediump vec2 tc, mediump vec2 sc) {
   // drawn at, with no smooth shading anywhere across it. (The depth test
   // above is the one thing that stays per fragment: that is the hardware's
   // own question and it is asked in screen space.)
-  //
-  // Answered on the FLAT sheet, which is where the bars are a slab of even
-  // thickness over a level plane -- the one thing relief() is built on. The
-  // bend translates every bar straight down by its own column's drop, so the
-  // field keeps its shape and only its height moves; undo that here and the
-  // walk is the walk it was written for. Try it in the world as DRAWN
-  // instead and the slab is a bowl: the backward step up the ray climbs the
-  // bowl's near side as fast as it climbs out of the water, the walk starts
-  // inside the sheet, and it hands back a column a pixel or three off -- per
-  // fragment, differently, which is a patch of noise rather than parallax.
-  vec3 sheet = vec3(vBent.x, vBent.y + bendDrop(vBent.xz), vBent.z);
+  vec3 sheet = vBent;
   vec3 view = normalize(sheet - eye);
   vec3 hit;
   vec2 col;
@@ -798,9 +691,6 @@ vec4 effect(mediump vec4 color, Image tex, mediump vec2 tc, mediump vec2 sc) {
     rgb = mix(rgb, person.rgb, clamp(person.a * castAlpha, 0.0, 1.0));
   }
 
-#ifdef VOXEL_GRID
-  rgb *= 1.0 - gridDark * columnSeam(hit, sheet, axis);
-#endif
   if (fogInfo.x > 0.0) {
     float distance = fogInfo.w > 0.5 ? length(hit.xz - fogOrigin.xz) : length(hit - eye);
     if (fogInfo.w > 1.5) {
@@ -853,14 +743,13 @@ end
 
 Water._trainSource = trainSource -- named for the suite
 
-local function source(grid, skyOnly)
+local function source(skyOnly)
   local src = SHADER_SRC:gsub("//@CRATERS", (craterSource():gsub("%%", "%%%%")))
   src = src:gsub("//@TRAINS", (trainSource():gsub("%%", "%%%%")))
   local head = ("#define RAY_STEPS %d\n#define RAY_REFINE %d\n"
                 .. "#define WAVE_STEPS %d\n#define WAVE_STRIDE %.1f\n")
     :format(Water.RAY_STEPS, Water.RAY_REFINE, Water.WAVE_STEPS,
             Water.WAVE_STRIDE)
-  if grid then head = head .. "#define VOXEL_GRID 1\n" end
   if skyOnly then head = head .. "#define SKY_ONLY 1\n" end
   return head .. src
 end
@@ -872,22 +761,21 @@ local shaders = {
   sky = { [false] = nil, [true] = nil },
 }
 
-function Water.shader(grid, skyOnly)
-  grid = grid and true or false
+function Water.shader(skyOnly)
   local family = skyOnly and shaders.sky or shaders.full
-  if family[grid] == nil then
+  if family[false] == nil then
     if not (love.graphics and love.graphics.newShader) then
-      shaders[grid] = false
+      family[false] = false
     else
-      local ok, sh = pcall(love.graphics.newShader, source(grid, skyOnly))
+      local ok, sh = pcall(love.graphics.newShader, source(skyOnly))
       if not ok and V and V.mod and V.mod.log then
         V.mod.log:warn("water shader did not compile: %s -- lakes draw flat",
                        tostring(sh))
       end
-      family[grid] = (ok and sh) or false
+      family[false] = (ok and sh) or false
     end
   end
-  return family[grid] or nil
+  return family[false] or nil
 end
 
 local active = nil -- the shader this pass bound, or nil
@@ -912,10 +800,7 @@ function Water.begin(ctx, skyOnly)
     local edge = ctx.skyEdge
     if not (ramp and count and edge and edge > 0) then return false end
   end
-  local level = Water.level()
-  if level <= 0 then return false end
-  local sh = ctx.grid and Water.shader(true, skyOnly) or nil
-  if not sh then sh = Water.shader(false, skyOnly) end
+  local sh = Water.shader(skyOnly)
   if not sh then return false end
 
   love.graphics.setShader(sh)
@@ -926,7 +811,6 @@ function Water.begin(ctx, skyOnly)
 
   send("vp", "row", ctx.vp)
   send("eye", ctx.eye)
-  send("curve", ctx.curve)
   send("screen", { ctx.screen[1], ctx.screen[2] })
   send("cell", math.max(1, ctx.cell or 1))
   send("pxAngle", (ctx.fov or 1) / math.max(1, ctx.screen[2]))
@@ -961,7 +845,7 @@ function Water.begin(ctx, skyOnly)
   local castBound = castTex or ctx.reflect or Sky.ramp()
   if castBound then send("castTex", castBound) end
 
-  if not skyOnly then send("rays", level >= 2 and 1 or 0) end
+  if not skyOnly then send("rays", 1) end
   send("lookFlat", ctx.lookFlat or { 0, 0, -1 })
   send("lean", Water.lean(ctx.descent))
   send("leanElev", Water.LEAN_ELEV)
@@ -978,11 +862,6 @@ function Water.begin(ctx, skyOnly)
   send("rayGrow", Water.RAY_GROW)
   send("rayThick", Water.RAY_THICK)
   send("edgeFade", Water.EDGE_FADE)
-  if ctx.grid then
-    local VoxelGrid = V.require("VoxelGrid")
-    send("gridDark", VoxelGrid.DARK)
-    send("gridWidth", VoxelGrid.width())
-  end
 
   Water.sendSky(sh, ctx)
   active = sh

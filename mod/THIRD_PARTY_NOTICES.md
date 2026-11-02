@@ -1,9 +1,5 @@
 # Third-party code
 
-`assets/shaders/fsr1/ffx_a.h` and `ffx_fsr1.h` are the AMD FidelityFX Super Resolution 1 reference headers, from [GPUOpen-Effects/FidelityFX-FSR](https://github.com/GPUOpen-Effects/FidelityFX-FSR/tree/a21ffb8f6c13233ba336352bdff293894c706575/ffx-fsr), revision `a21ffb8f6c13233ba336352bdff293894c706575`. Copyright (c) 2021 Advanced Micro Devices, Inc.; additional notices appear in the headers. Distributed under the MIT license printed in both files.
-
-The headers are unchanged. `lib/SpatialUpscale.lua` supplies texture callbacks, GLSL 330 packing/bitfield compatibility and unsigned setup literals, canvas management and quality options. It uses the full-precision EASU and RCAS algorithms. It does not implement AMD temporal upscaling, frame generation or NVIDIA DLSS.
-
 ## Emerald 3DS street lamps
 
 `lib/Gen3Lamp.lua` reimplements, in Lua, the night lamps of the [Emerald 3DS dual-screen port](https://github.com/ZallaxDev/pokeemerald-3Ds-dualscreen) (`3ds_port/src/voxel/voxel_sign.c`, `ctr_voxel.c`), revision `b98cc23b8c8a607363504a866d2b562f7c532fb2`, by Zallax and Emerald 3DS contributors: the lantern test and glass quads on the lamp head (flat colour 255,191,107 at alpha 220 x strength, front and back) and the ground pool of light (radius 1.75 cells, falloff (1 - r^2)^2, ground-height quads). The constants and the method follow that project; the code is written for this mod's scene and effect pass, and no 3DS source, art or ROM data is copied.

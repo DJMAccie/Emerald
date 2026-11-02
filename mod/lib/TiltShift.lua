@@ -4,14 +4,11 @@ local V = ...
 local TiltShift = {}
 
 TiltShift.level = 0
-TiltShift.LABELS = { "OFF", "1", "2", "3" }
 
 TiltShift.FOCUS_Y = 0.5
 TiltShift.focusY = TiltShift.FOCUS_Y
 TiltShift.PRESETS = {
-  [1] = { spacing = 0.0016, band = 0.25, range = 0.25, saturation = 1.06 },
   [2] = { spacing = 0.0028, band = 0.25, range = 0.25, saturation = 1.10 },
-  [3] = { spacing = 0.0042, band = 0.25, range = 0.25, saturation = 1.14 },
 }
 
 local SHADER = [[

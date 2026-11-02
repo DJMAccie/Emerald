@@ -36,6 +36,7 @@ M.COURSE_BY_MAP={EM_FORTREE_CITY=32,EM_ROUTE110=48}
 M.ELEV_REMAP={EM_FORTREE_CITY={[15]=4},EM_ROUTE110={[15]=4},EM_ROUTE109={[4]=3},
  EM_ROUTE119={[15]=4}}
 M.STEP_MIDS={EM_ROUTE110={[0x2D4]=true}}
+M.PAIR_STEP_MIDS={general__cave={[0x204]=true}} -- the cave's stair metatile (Victory Road, ...): a run of steps between two floors, whatever the map
 for id,d in pairs(V.require('Gen3Decks').MAPS)do M.STEP_MIDS[id]=d.steps end
 local FLIGHT_TREADS={general__mauville={[0x2D4]=8},general__mossdeep={[0xAF]=2,[0xCF]=2},general__lilycove={[0xAF]=2,[0xCF]=2},general__sootopolis={[0x244]=2,[0x245]=2}}
 M.DAIS={EM_LILYCOVE_CITY_CONTEST_HALL={h=10,rects={{18,7,32,16},{6,19,20,28},{30,19,44,28}},
@@ -270,6 +271,7 @@ function M.field(def)
   end end
  end
  local userPins=M.PINS_ON and not M.PIN_SKIP[def.id] and PinData and PinData.MAPS[def.id]
+ local asDeck={}
  if userPins then
   pins={};zoneOf={};keepRated=true
   local barrier=function(n,x,y,noClimb)
@@ -292,6 +294,26 @@ function M.field(def)
      elseif M.BLOCKED_WATER and not row[4] and riverAt(n) then info[zi]={elev=elevAt(x,y,n),water=true,blockedWater=true};front[#front+1]={x,y,zi} end
     end
    end
+  end
+  local hw,hh=userPins.w,userPins.h
+  if userPins.cells and l.width>=hw and l.height>=hh and l.width<=hw+1 and l.height<=hh+1 then -- drawn height map: every floor cell is set; an odd map's padding repeats its last row/column
+   -- A bridge is not a drawn floor (R-13, R-18): the cells of a layer-15 bridge, with its end caps (the metatiles beside its own in the tileset row), stay a flat deck over the ground.
+   local bm={}
+   for y=0,l.height-1 do for x=0,l.width-1 do local r=l:cellAt(x,y);if r and r.elev==15 and r.coll~=7 then bm[r.mid-1]=true;bm[r.mid]=true;bm[r.mid+1]=true end end end
+   local q={}
+   for y=0,l.height-1 do for x=0,l.width-1 do local r=l:cellAt(x,y);if r and r.elev==15 and r.coll~=7 then asDeck[x..':'..y]=true;q[#q+1]={x,y} end end end
+   while #q>0 do
+    local p=table.remove(q)
+    for _,d in ipairs({{1,0},{-1,0},{0,1},{0,-1}})do
+     local nx,ny=p[1]+d[1],p[2]+d[2];local nk=nx..':'..ny
+     local r=nx>=0 and ny>=0 and nx<l.width and ny<l.height and l:cellAt(nx,ny)
+     if r and r.coll~=7 and not asDeck[nk] and bm[r.mid] then asDeck[nk]=true;q[#q+1]={nx,ny} end
+    end
+   end
+   for y=0,l.height-1 do for x=0,l.width-1 do
+    local k,zi=x..':'..y,userPins.cells[math.min(x,hw-1)..':'..math.min(y,hh-1)]
+    if zi and not claimed[k] and not asDeck[k] then claimed[k]=zi;pins[k]=userPins[zi][3]*M.PIN_PX;zoneOf[k]=zi end
+   end end
   end
   local head=1
   local passed={}
@@ -428,10 +450,10 @@ function M.field(def)
   local remap=M.ELEV_REMAP[def.id]
   local hElev=(remap and remap[raw.elev]) or bridgeElev[x..':'..y] or raw.elev
   local dz=dais and daisAt(dais,x,y,raw.mid)
-  local step=((dz or (dais and dais.anySteps)) and dais.steps[raw.mid]) or beh==0x2A or beh==0x1D0 or climb[x..':'..y]==true or stairCells[x..':'..y]==true or (M.STEP_MIDS[def.id] and M.STEP_MIDS[def.id][raw.mid] and raw.coll==0) or false;local jump=beh and beh>=0x38 and beh<=0x3F -- 0x1D0: Emerald MUDDY_SLOPE
+  local step=((dz or (dais and dais.anySteps)) and dais.steps[raw.mid]) or beh==0x2A or beh==0x1D0 or climb[x..':'..y]==true or stairCells[x..':'..y]==true or (M.STEP_MIDS[def.id] and M.STEP_MIDS[def.id][raw.mid] and raw.coll==0) or (userPins and (M.PAIR_STEP_MIDS[l.pair] or {})[raw.mid] and raw.coll==0) or false;local jump=beh and beh>=0x38 and beh<=0x3F -- 0x1D0: Emerald MUDDY_SLOPE
   local shape=shapes.of(spec.primary,spec.secondary,raw.mid,beh,raw.coll)
   local pinned=raw.coll~=7 and not step and not jump and raw.elev>=3 and shape.kind~='water'
-  return {floor=(dz and not step) or (raw.coll~=7 and not step and not jump),step=step,drop=drop[beh],layer=raw.elev,behavior=beh,
+  return {floor=(dz and not step) or (raw.coll~=7 and not step and not jump),step=step,drop=drop[beh],layer=asDeck[x..':'..y] and 15 or raw.elev,behavior=beh,
    treads=step and ((FLIGHT_TREADS[flightPair] or {})[raw.mid] or 4) or nil,
    waterfall=beh==0x13 or beh==0x113,
    kind=shape.kind,seed=0,anchor=(pins and pins[x..':'..y]~=nil) or nil,zone=zoneOf[x..':'..y],

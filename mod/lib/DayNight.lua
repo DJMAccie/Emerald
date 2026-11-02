@@ -2,7 +2,6 @@
 
 local V = ...
 
-local ModSetting = V.require("ModSetting")
 
 local DayNight = {}
 
@@ -10,20 +9,8 @@ DayNight.CYCLE = 1200 -- seconds around the whole dial
 DayNight.DAY_LEN = 600 -- the sun's half; the moon has the rest
 DayNight.BLEND = 75 -- seconds of palette blend either side of a twilight
 
--- where the pinned settings stop the clock
-DayNight.T = { dawn = 0, day = 300, dusk = 600, night = 900 }
-
-DayNight.KEY = "daytime"
-DayNight.LABEL = "DAYTIME"
-
-DayNight.setting = ModSetting.new(DayNight.KEY, DayNight.LABEL,
-                                  { "sync", "day", "night", "dusk",
-                                    "dawn", "cycle" },
-                                  { "SYNC", "DAY", "NIGHT", "DUSK",
-                                    "DAWN", "CYCLE" })
-
-
-DayNight.clock = DayNight.T.day -- the running cycle's own position
+-- the sun's position in the cycle at noon
+DayNight.T = { day = 300 }
 
 local NOON_KX, NOON_KZ = -0.85, -0.55
 local TH_NOON = math.deg(math.atan2(-NOON_KZ, -NOON_KX))
@@ -201,12 +188,6 @@ function DayNight.glow(t)
   return amt, blend3(DayNight.GLOWS, mix, DayNight.GLOWS.dusk)
 end
 
-local lastMode = nil
-
-local function mode()
-  return DayNight.setting:get() or "day"
-end
-
 function DayNight.hours()
   local d = os.date("*t")
   return d.hour + d.min / 60 + d.sec / 3600
@@ -217,25 +198,7 @@ function DayNight.syncTime()
 end
 
 function DayNight.time()
-  local m = mode()
-  if m == "cycle" then return DayNight.clock end
-  if m == "sync" then return DayNight.syncTime() end
-  return DayNight.T[m] or DayNight.T.day
-end
-
-function DayNight.update(dt)
-  local m = mode()
-  if m ~= lastMode then
-    if m == "cycle" then
-      DayNight.clock = DayNight.T[lastMode]
-                       or (lastMode == "sync" and DayNight.syncTime())
-                       or DayNight.clock
-    end
-    lastMode = m
-  end
-  if m == "cycle" and dt and dt > 0 then
-    DayNight.clock = (DayNight.clock + dt) % DayNight.CYCLE
-  end
+  return DayNight.syncTime()
 end
 
 DayNight.STEP = 2
@@ -284,28 +247,6 @@ function DayNight.windowLight(t)
     lit = lit + (LAMPS[name] or 0) * w
   end
   return lit
-end
-
-
-
-
-DayNight.SAVE_KEY = "clock"
-
-function DayNight.store()
-  local saveApi = V.mod and V.mod.save
-  if not (saveApi and saveApi.set) then return end
-  pcall(saveApi.set, saveApi, DayNight.SAVE_KEY, DayNight.clock)
-end
-
-function DayNight.restore()
-  local saveApi = V.mod and V.mod.save
-  local stored = nil
-  if saveApi and saveApi.get then
-    local ok, got = pcall(saveApi.get, saveApi, DayNight.SAVE_KEY)
-    if ok then stored = got end
-  end
-  DayNight.clock = type(stored) == "number"
-                   and stored % DayNight.CYCLE or DayNight.T.day
 end
 
 return DayNight

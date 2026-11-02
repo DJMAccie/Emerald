@@ -4,7 +4,6 @@ local Path=V.require('Gen3FlyPath')
 local Mat=V.require('Mat4')
 local R=V.require('Voxel3D')
 local Pairs=V.require('Gen3Tilesets')
-local WorldCurve=V.require('WorldCurve')
 local Ground=V.require('Gen3FlyGround')
 local M={
  SLICE=.014,
@@ -610,7 +609,7 @@ function M.camera(normal,cx,cz,ground,vw,vh,cam)
  end
  local lift=(s.h or 0)*M.LIFT
  if lift>0 then
-  base={eye={base.eye[1],base.eye[2]+lift,base.eye[3]},focus={base.focus[1],base.focus[2]+lift,base.focus[3]},fov=base.fov,curve=base.curve,up=base.up}
+  base={eye={base.eye[1],base.eye[2]+lift,base.eye[3]},focus={base.focus[1],base.focus[2]+lift,base.focus[3]},fov=base.fov,up=base.up}
  end
  local w=s.phase=='fly' and Path.blend(s.t,s.T) or 0
  local o0=Path.toOrbit(base.eye,base.focus)
@@ -623,10 +622,9 @@ function M.camera(normal,cx,cz,ground,vw,vh,cam)
  local o=Path.blendOrbit(o0,o1,w)
  o.pitch=math.max(-1.5707,math.min(1.5707,o.pitch))
  local eye,focus=Path.fromOrbit(o)
- local k=base.curve;if k==nil then k=WorldCurve.k(vh)end
  local up=upFor(o.yaw,o.pitch)
  s.view={yaw=o.yaw,pitch=o.pitch,w=w,eye=eye,up=up}
- return {eye=eye,focus=focus,fov=base.fov+(math.rad(60)-base.fov)*w,up=up,curve=(k or 0)*(1-w)}
+ return {eye=eye,focus=focus,fov=base.fov+(math.rad(60)-base.fov)*w,up=up}
 end
 function M.fog(background,normal,cx,cz)
  local s=S;if not (s and s.view) then return normal end

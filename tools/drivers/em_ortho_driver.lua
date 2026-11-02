@@ -14,7 +14,7 @@
 -- the picture is centred on (cx,cy) (default the player's cell), file MAP_cx_cy_ortho.png.
 -- Before the shot the player and all objects/ghost actors are hidden (Player.setVisible,
 -- Objects.forDraw, Ghosts.forDraw, restored after) and the map-name popup is dismissed.
--- Env: EM_CASES, EM_LEVELS, EM_YAW, EM_WAIT (qa_run.sh sets them).
+-- Env: EM_NODARK=1 (dark caves: no flash circle), EM_CASES, EM_LEVELS, EM_YAW, EM_WAIT (qa_run.sh sets them).
 -- Select it with EM_DRIVER=<this file> before tools/qa_try.sh.
 -- Run from the engine root with the QA identity only.
 return function(game)
@@ -66,6 +66,7 @@ return function(game)
  for _,case in ipairs(cases) do
   local ok,err=pcall(function() assert(Map.load(nil,game,case[1],{x=case[2],y=case[3],facing='down'})) end)
   print('[EM view] load',case[1],ok,err or '')
+  if os.getenv('EM_NODARK') then pcall(function() local F=require('src.core.game3.field_view');F.setFlashLevel(0);F.setFlashRadius(5000);game.session.flashLevel=0 end) end -- dark caves: no flash circle
   if ok then
    pcall(Player.reset,case[2],case[3],'down')
    local levels=os.getenv('EM_LEVELS') and dofile(os.getenv('EM_LEVELS')) or {4}

@@ -3,32 +3,15 @@ local V=...
 local M={}
 local Day=V.require('DayNight')
 local Sky=V.require('Sky')
-local AA=V.require('AntiAlias')
 local R=V.require('Voxel3D')
 local Underlay=V.require('WorldUnderlay')
 local TiltShift=V.require('TiltShift')
-local Community=V.require('CommunityVisuals')
 M.invert=V.require('CameraSettings').invertY
-M.tilt=V.require('ModSetting').new('tiltshift','T-SHIFT',{0,1,2,3},{'OFF','1','2','3'},3)
 local Tour=V.require('TourMode')
 local DebugWalk=V.require('DebugWalk')
 M.tour=V.require('ModSetting').new('tour','TOUR',{false,true},{'OFF','ON'},1)
-M.settings={V.require("SpatialUpscale").setting,AA.setting,Day.setting,Underlay.setting,Community.sky,M.invert,M.tilt,
+M.settings={M.invert,
  V.require('Water').setting,M.tour}
-
-M.tiltDefault=2
-function M.tiltAdopt()
- local ok,Pipelines=pcall(require,"src.render.Pipelines")
- if not (ok and Pipelines.get and Pipelines.get("tiltshift")) then return end
- local Game=package.loaded["src.core.Game"]
- local opts=Game and Game.save and Game.save.options
- if not opts then return end
- local bucket=opts.pipelines
- if type(bucket)~="table" or type(bucket.tiltshift)~="number" then
-  Pipelines.setLevel("tiltshift",M.tiltDefault)
-  if Pipelines.syncOptions then Pipelines.syncOptions(opts) end
- end
-end
 
 M.log=false
 local focusAt,focusNow,focusSet,focusUnder,focusPrint,focusShown=nil,.5,false,nil,0,nil
@@ -65,9 +48,7 @@ local function focusTrack()
 end
 
 function M.update(dt)
- Day.update(dt)
  V.require("ForestAtmos").update(dt)
- if not M.tiltAdopted then M.tiltAdopted=true; M.tiltAdopt() end
  Tour.update(DebugWalk.on())
 end
 
@@ -81,35 +62,19 @@ end
 function M.underlay(indoor,cx,cz,background)
  focusUnder={cx,cz}
  if indoor then return false end
- local mode=Underlay.selected()
- local color=mode=='black' and Underlay.COLORS.black or background
- return Underlay.draw(true,cx,cz,color)
+ return Underlay.draw(cx,cz,background)
 end
 
-function M.expand(w,h)return AA.expand(w,h)end
--- Emerald registers no tiltshift pipeline and never runs Pipelines.update: the level is set here.
-local function tiltLevel()
- if V.require('Gen3Integration').level==6 then
-  TiltShift.setLevel(0);return
- end
- local ok,Pipelines=pcall(require,"src.render.Pipelines")
- if ok and Pipelines.get and Pipelines.get("tiltshift") then
-  TiltShift.setLevel(Pipelines.level("tiltshift") or 0)
- else
-  TiltShift.setLevel(M.tilt:get())
- end
-end
 function M.finish(canvas,w,h)
  Tour.update(DebugWalk.on())
- tiltLevel()
+ TiltShift.setLevel(V.require('Gen3Integration').level==6 and 0 or 2)
  focusTrack()
- canvas=AA.resolve(canvas,w,h,'firered')
  canvas=TiltShift.apply(canvas)
  Tour.overlay(canvas,w,h)
  return canvas
 end
 function M.release()
- AA.invalidate();TiltShift.invalidate()
+ TiltShift.invalidate()
  R.tint={1,1,1};R.fog=nil
 end
 return M

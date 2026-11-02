@@ -4,7 +4,6 @@ local V = ...
 local Assets = require("src.render.Assets")
 local Voxel3D = V.require("Voxel3D")
 local Mat4 = V.require("Mat4")
-local TowerFogSettings = V.require("TowerFogSettings")
 
 local Mist = {}
 local GROUPS, TAU = 6, math.pi * 2
@@ -58,7 +57,6 @@ local function fogShader()
     uniform mat4 model;
     uniform vec3 eye;
     uniform float pull;
-    uniform vec3 curve;
     #ifdef VERTEX
     attribute float MistGround;
 
@@ -66,10 +64,6 @@ local function fogShader()
       vec4 w = model * vertex_position;
       // Thickness scales the bank above its floor, never the raised floor.
       w.y += MistGround * (1.0 - model[1][1]);
-      if (curve.z > 0.0) {
-        vec2 d = w.xz - curve.xy;
-        w.y -= dot(d, d) * curve.z;
-      }
       if (pull > 0.0) {
         w.xyz += normalize(eye - w.xyz) * pull;
       }
@@ -313,13 +307,13 @@ local function drawFogMesh(mesh, img, model, pull, shader)
   love.graphics.draw(mesh)
 end
 
-local function fogTime(now, speed)
+local function fogTime(now)
   if not animReal then
     animReal, animTime = now, now
     return animTime
   end
   local dt = math.max(0, math.min(now - animReal, .25))
-  animTime = animTime + dt * speed
+  animTime = animTime + dt
   animReal = now
   return animTime
 end
@@ -333,9 +327,7 @@ local function draw(map,layout)
 
   local now = 0
   pcall(function() now = love.timer.getTime() end)
-  local t = fogTime(now, TowerFogSettings.speedMultiplier())
-  local alphaMult, heightMult =
-    TowerFogSettings.thicknessMultipliers()
+  local t = fogTime(now)
   local g = love.graphics
   local pushed = g and g.push and pcall(g.push, "all")
   local usedFallback = false
@@ -348,12 +340,8 @@ local function draw(map,layout)
       g.setShader(shader)
       pcall(shader.send, shader, "vp", "row", Voxel3D.vp)
       pcall(shader.send, shader, "eye", Voxel3D.eye)
-      pcall(shader.send, shader, "curve", {
-        Voxel3D.curveX or 0, Voxel3D.curveZ or 0, Voxel3D.curveK or 0
-      })
     else
       usedFallback = true
-      Voxel3D.seams(false)
       Voxel3D.glass(false)
       Voxel3D.lighting(false)
     end
@@ -368,29 +356,27 @@ local function draw(map,layout)
       local c = slot.centers[i]
       local model = breathingModel(c[1], c[2], dx,
         .12 + math.sin(t * .13 + phase * 1.4) * .22, dz,
-        1 + pulse * .038, (layout and not shader) and 1 or heightMult * (1 - pulse * .025))
-      g.setColor(.94, .95, .96, .118 * alphaMult)
+        1 + pulse * .038, (layout and not shader) and 1 or 1 - pulse * .025)
+      g.setColor(.94, .95, .96, .118)
       drawFogMesh(slot.banks[i], img, model, 1.45, shader)
 
       local life = (t / 18.0 + (i - 1) / GROUPS) % 1
       local presence = math.sin(life * math.pi)
       presence = presence * presence
       if presence > .015 then
-        g.setColor(.94, .95, .96, .108 * alphaMult * presence)
+        g.setColor(.94, .95, .96, .108 * presence)
         drawFogMesh(slot.wisps[i], img,
           Mat4.translate(dx * .62, life * 8.5, dz * .62), 1.5, shader)
       end
     end
     Voxel3D.lighting(true)
     if usedFallback then
-      Voxel3D.seams(true)
       Voxel3D.glass(true)
     end
     if g.setMeshCullMode then g.setMeshCullMode("none") end
   end)
   pcall(Voxel3D.lighting, true)
   if usedFallback then
-    pcall(Voxel3D.seams, true)
     pcall(Voxel3D.glass, true)
   end
   if g and g.setMeshCullMode then pcall(g.setMeshCullMode, "none") end

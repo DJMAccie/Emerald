@@ -7,8 +7,6 @@ local Mat4 = V.require("Mat4")
 local Voxel = V.require("VoxelState")
 local ShadowMap = V.require("ShadowMap")
 local Shadows = V.require("Shadows")
-local VoxelGrid = V.require("VoxelGrid")
-local WorldCurve = V.require("WorldCurve")
 local Sky = V.require("Sky")
 local DayNight = V.require("DayNight")
 local GlassMask = V.require("GlassMask")
@@ -47,18 +45,11 @@ local SHADER = [[
   varying float weatherDistance;
   varying float vShade;
   varying float vFacadeBack;
-  varying float vWorldY;      // world height before the curve (debugView depth)
+  varying float vWorldY;      // world height (debugView depth)
   varying vec3 vSun;          // this fragment's place in the sun's view
   varying vec3 vModelSun;     // optional Stadium model-shadow view
   varying LOVE_HIGHP_OR_MEDIUMP vec3 vFoliageRay;
   varying float vFog;         // distance/height haze from Viridian Forest
-#ifdef VOXEL_GRID
-  // model space, one unit per voxel -- see VoxelGrid. Precision matters
-  // here in a way it does not for a colour: the seam is the FRACTIONAL
-  // part of a coordinate that runs to a few thousand across a big route,
-  // so a mediump varying would quantise the fraction away entirely.
-  varying LOVE_HIGHP_OR_MEDIUMP vec3 vGrid;
-#endif
 #ifdef VERTEX
 ]] .. V.require("CanopyBillboard").shader .. [[
   uniform mat4 vp;
@@ -69,7 +60,6 @@ local SHADER = [[
   uniform vec3 modelSunOrigin;// map-world origin of Stadium's local arena
   uniform vec3 eye;
   uniform float pull;
-  uniform vec3 curve;         // xy = the focus in world XZ, z = k; 0 = off
   uniform vec4 fogBounds;     // FULL: actual loaded rectangle with scenery margin
   uniform vec3 fogOrigin;     // optional ground-centred distance budget
   uniform vec4 fogInfo;       // density, start, heightK; density 0 = clear
@@ -91,12 +81,6 @@ local SHADER = [[
       vertex_position.z += cos(breeze * 1.3 + phase * 0.7) * 0.2 * rise * trunk * gust;
     }
     vShade = abs(VertexShade);
-#ifdef VOXEL_GRID
-    // MODEL space, deliberately: every mesh here is built a unit per
-    // voxel in its own frame, so the seams ride the model however it is
-    // posed rather than the world's grid sliding across a leaning sprite
-    vGrid = vertex_position.xyz;
-#endif
     vec4 w = faceCanopy(model,vertex_position,eye);
     vFoliageRay = w.xyz - eye;
     vWorldY = w.y;
@@ -121,9 +105,6 @@ local SHADER = [[
     // arena-local coordinates and sample that finished map as a second light
     // layer; no cross-mod render-target or shader handoff is required.
     vModelSun = (modelSunVP * vec4(w.xyz - modelSunOrigin, 1.0)).xyz;
-    // Work out haze on the flat world, before the optional presentation
-    // curve.  Viridian's fog therefore stays planted in the map instead of
-    // bending with the camera trick.
     vFog = 0.0;
     if (fogInfo.x > 0.0) {
       float fogDistance = fogInfo.w > 0.5 ? length(w.xz - fogOrigin.xz) : length(w.xyz - eye);
@@ -135,17 +116,6 @@ local SHADER = [[
       float fogRun = max(0.0, fogDistance - fogInfo.y);
       vFog = (1.0 - exp(-fogInfo.x * fogRun))
              * exp(-max(w.y, 0.0) * fogInfo.z);
-    }
-    // The curved world (see WorldCurve): drop every vertex by the square
-    // of how far its column stands from the camera's focus. Applied AFTER
-    // the shadow lookup above and clear of the wireframe's model space, so
-    // both are worked out on the flat world and the bend carries them
-    // along -- which is why neither has to know this exists. Along Y only,
-    // so a column moves as one piece: the world tips away and the
-    // buildings standing on it stay upright.
-    if (curve.z > 0.0) {
-      vec2 cd = w.xz - curve.xy;
-      w.y -= dot(cd, cd) * curve.z;
     }
     // camera-ward pull: move the vertex along ITS OWN ray to the eye.
     // This is a pure depth bias -- the projection of a point moved along
@@ -261,39 +231,6 @@ local SHADER = [[
               + step(z, modelSunDepth(p.xy + modelSunTexel * vec2( 0.5,  0.5)));
     return 1.0 - modelSunDark * (1.0 - lit * 0.25);
   }
-
-#ifdef VOXEL_GRID
-  uniform float gridDark;     // how far toward black a seam pulls; 0 = off
-  uniform float gridWidth;    // seam width, in display pixels
-
-  // How much of this fragment a voxel seam covers, 0 to 1.
-  float voxelSeam(vec3 p) {
-    // how much of `p` this fragment spans on screen, per axis: the
-    // conversion from model units to display pixels, measured rather than
-    // derived, so it holds under any camera pitch or zoom
-    vec3 w = fwidth(p);
-    vec3 d = abs(fract(p + 0.5) - 0.5);      // distance to the nearest plane
-    // The axis a face does not vary along is that face's own normal, and
-    // its distance is a constant zero -- take it at face value and every
-    // face floods solid. Push those axes out of reach instead of dividing
-    // by their zero.
-    vec3 live = step(1e-4, w);
-    vec3 px = d / max(w, vec3(1e-6)) + (1.0 - live) * 1e6;
-    float near = min(min(px.x, px.y), px.z);
-    // Fade out where a voxel is too small to hold a line. Survey zoom
-    // draws a world pixel at about a display pixel, and a wall seen nearly
-    // edge-on squashes one to nothing at any zoom -- either way the seams
-    // land closer together than they are wide, and drawn anyway they stop
-    // being a wireframe and become a flat 45% dimming of the whole scene.
-    // The tightest axis decides, which is the honest test of whether the
-    // grid can be resolved at all.
-    float span = 1.0 / max(max(w.x, max(w.y, w.z)), 1e-6);
-    float fade = clamp((span - 2.0) * 0.5, 0.0, 1.0);
-    // the textbook antialiased line: solid within the half-width, fading
-    // over the one pixel outside it
-    return fade * clamp(gridWidth * 0.5 + 0.5 - near, 0.0, 1.0);
-  }
-#endif
 
   uniform vec3 ghostColor;    // the flat silhouette colour
   uniform float ghost;        // 0 = shade normally, 1 = flatten to it
@@ -506,11 +443,6 @@ local SHADER = [[
         +streetPool(streetLampC)+streetPool(streetLampD));
       rgb += p.rgb * vec3(0.65,0.42,0.17) * pool * streetLampOn;
     }
-#ifdef VOXEL_GRID
-    // darken what is there rather than painting a colour, so a seam across
-    // dark grass and one across a white roof each stay in their own palette
-    rgb *= 1.0 - gridDark * voxelSeam(vGrid);
-#endif
     // WINDOW GLASS, marked per atlas texel by the mask (see GlassMask).
     // By day a thin diagonal glint crosses the panes WHILE THE VIEW MOVES
     // -- the phase is fed by the camera's own travel and the strength dies
@@ -608,24 +540,12 @@ end
 
 local IDENTITY = Mat4.identity()
 
-local function derivativesOK()
-  if not (love.graphics and love.graphics.getSupported) then return false end
-  local ok, caps = pcall(love.graphics.getSupported)
-  return ok and caps and caps.shaderderivatives == true
-end
-
-function Voxel3D.shader(grid)
-  grid = grid and true or false
-  if shaders[grid] == nil then
-    if grid and not derivativesOK() then
-      shaders[grid] = false
-    else
-      local src = grid and ("#define VOXEL_GRID 1\n" .. SHADER) or SHADER
-      local ok, sh = pcall(love.graphics.newShader, src)
-      shaders[grid] = ok and sh or false
-    end
+function Voxel3D.shader()
+  if shaders[false] == nil then
+    local ok, sh = pcall(love.graphics.newShader, SHADER)
+    shaders[false] = ok and sh or false
   end
-  return shaders[grid] or nil
+  return shaders[false] or nil
 end
 
 function Voxel3D.unlitShader()
@@ -803,7 +723,6 @@ local function cameraWithDelta(camera)
     focus = { ex + dx * distance, ey + dy * distance, ez + dz * distance },
     up = { ux, uy, uz },
     fov = fov,
-    curve = camera.curve,
   }
 end
 
@@ -935,11 +854,7 @@ function Voxel3D.beginScene(w, h, cx, cy, vw, vh, sky, slot, modelShadow, borrow
   Voxel3D.atmosphereCameraCandidate=nil
   Sky.resetDeferredBody()
   Sky.allowDeferredBody = not borrowed and sky and sky.bands ~= nil
-  local grid = VoxelGrid.enabled()
-  local sh = grid and Voxel3D.shader(true) or nil
-  if not sh then
-    grid, sh = false, Voxel3D.shader()
-  end
+  local sh = Voxel3D.shader()
   if not sh then return false end
   -- Hosted passes borrow bound targets: never allocate, clear or release them.
   if borrowed then
@@ -1024,10 +939,6 @@ function Voxel3D.beginScene(w, h, cx, cy, vw, vh, sky, slot, modelShadow, borrow
     external and (tonumber(external.sunBias) or 0) or 0)
   pcall(sh.send, sh, "modelSunTexel",
     external and external.sunTexel or { 1, 1 })
-  if grid then
-    pcall(sh.send, sh, "gridDark", VoxelGrid.DARK)
-    pcall(sh.send, sh, "gridWidth", VoxelGrid.width())
-  end
   pcall(sh.send, sh, "ghost", 0)
   pcall(sh.send, sh, "ghostColor", Voxel3D.GHOST_COLOR)
   flattenColor, flattenAmount = nil, 0
@@ -1081,10 +992,6 @@ function Voxel3D.beginScene(w, h, cx, cy, vw, vh, sky, slot, modelShadow, borrow
   pcall(sh.send, sh, "glassPhase", Voxel3D.glassPhase or 0)
   pcall(sh.send, sh, "glassGlint", Voxel3D.glassGlint or 0)
   pcall(sh.send, sh, "glassOn", 1)
-  local placed = Voxel3D.camera
-  Voxel3D.curveK = Voxel3D.debugOrtho and 0 or (placed and placed.curve) or WorldCurve.k(vh)
-  Voxel3D.curveX, Voxel3D.curveZ = cx, cy
-  pcall(sh.send, sh, "curve", { cx, cy, Voxel3D.curveK })
   local m = Voxel3D.vp
   Voxel3D.focusW = m[13] * cx + m[14] * 0 + m[15] * cy + m[16]
   sceneShader = sh
@@ -1192,12 +1099,6 @@ function Voxel3D.depthReadable()
   return (active and held and held.depth) and true or false
 end
 
-function Voxel3D.seams(on)
-  if not (active and activeShader) then return end
-  pcall(activeShader.send, activeShader, "gridDark",
-        on and VoxelGrid.DARK or 0)
-end
-
 function Voxel3D.blend(mode)
   if not active then return end
   if mode == "add" then
@@ -1299,9 +1200,6 @@ function Voxel3D.lighting(on)
     if flat then
       pcall(flat.send, flat, "vp", "row", Voxel3D.vp)
       pcall(flat.send, flat, "eye", Voxel3D.eye)
-      pcall(flat.send, flat, "curve",
-            { Voxel3D.curveX or 0, Voxel3D.curveZ or 0,
-              Voxel3D.curveK or 0 })
       pcall(flat.send, flat, "ghost", flattenAmount)
       pcall(flat.send, flat, "ghostColor",
             flattenColor or Voxel3D.GHOST_COLOR)
@@ -1363,8 +1261,6 @@ end
 function Voxel3D.project(wx, wy, wz)
   local m = Voxel3D.vp
   if not m then return nil end
-  wy = wy - WorldCurve.drop(Voxel3D.curveK or 0, Voxel3D.curveX or 0,
-                            Voxel3D.curveZ or 0, wx, wz)
   local cx = m[1] * wx + m[2] * wy + m[3] * wz + m[4]
   local cy = m[5] * wx + m[6] * wy + m[7] * wz + m[8]
   local cw = m[13] * wx + m[14] * wy + m[15] * wz + m[16]

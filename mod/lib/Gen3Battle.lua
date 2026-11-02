@@ -249,7 +249,6 @@ function M.install()
  local original,bg=Battle.draw,Bg.draw
  local Hud=V.require('Gen3BattleHud')
  local uninstallHud=Hud.install(M)
- M.hud=Hud
  local Models=V.require('Gen3StadiumModels')
  local uninstallModels=Models.install()
  local drawing=false
@@ -264,7 +263,7 @@ function M.install()
   return bg(...)
  end
  Battle.draw=function(game,w,h)
-  M.active=false;Hud.reset();M.frame=(M.frame or 0)+1
+  M.active=false;M.frame=(M.frame or 0)+1
   recovery:update(love.timer.getDelta())
   if not M.enabled() or not Battle.isActive() or not recovery:ready(Battle._st) or Display.planesBroken
      or Scene.nativeRequired(game) then Models.drawing=false;return original(game,w,h)end
@@ -325,11 +324,11 @@ function M.install()
    local shotNow=bs.state().shot
    if shotNow~=M.lastShot then M.lastShot=shotNow;print(string.format('[BB1] frame=%d shot -> %s',M.frame or 0,tostring(shotNow))) end
   end
-  drawing=true;Models.drawing=true;Hud.begin()
+  drawing=true;Models.drawing=true;Hud.drawing=true
   local restoreNative=Models.hideNative()
   local drawn,err=pcall(original,game,w,h)
   restoreNative()
-  drawing=false;Models.drawing=false;Hud.finish()
+  drawing=false;Models.drawing=false;Hud.drawing=false
   if not drawn then error(err,0)end
  end
  return function()

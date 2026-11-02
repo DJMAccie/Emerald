@@ -4,7 +4,6 @@ local V = ...
 
 local Voxel3D = V.require("Voxel3D")
 local Mat4 = V.require("Mat4")
-local ModSetting = V.require("ModSetting")
 
 local WorldUnderlay = {}
 
@@ -12,30 +11,8 @@ local STEP = 32
 local RANGE = 32768
 local HEIGHT = -20
 
-WorldUnderlay.setting = ModSetting.new(
-  "worldFill", "WORLD FILL",
-  { "cyan", "black", "off", "nature" },
-  { "CYAN", "BLACK", "OFF/KFP", "NATURE" })
-
-local COLORS = {
-  cyan  = {   0 / 255,  71 / 255, 109 / 255, 1 }, -- #00476D
-  black = {  24 / 255,  24 / 255,  24 / 255, 1 }, -- #181818
-  cave  = {  18 / 255,  12 / 255,  12 / 255, 1 }, -- deep earth below shafts
-}
-
-local DEFAULT_FILL = "cyan"
-
 local cachedMesh = nil
 local textures = {}
-
-function WorldUnderlay.selected()
-  return WorldUnderlay.setting:get() or DEFAULT_FILL
-end
-
-function WorldUnderlay.enabled()
-  return WorldUnderlay.selected() ~= "off"
-end
-
 
 local function axis()
   local positive, p, step, band = { 0 }, 0, STEP, 512
@@ -100,26 +77,15 @@ local function textureFor(color)
   return ok and texture or nil
 end
 
-function WorldUnderlay.draw(state, cx, cy, resolvedColor)
-  if not state or not WorldUnderlay.enabled() then return false end
-  local material = WorldUnderlay.selected()
-  if material == "nature" then material = "cyan" end
-  local color = resolvedColor or COLORS[material] or COLORS[DEFAULT_FILL]
+function WorldUnderlay.draw(cx, cy, color)
   local mesh, texture = meshFor(), textureFor(color)
   if not (mesh and texture) then return false end
   Voxel3D.lighting(false)
-  Voxel3D.seams(false)
   Voxel3D.glass(false)
   Voxel3D.draw(mesh, texture, Mat4.translate(cx or 0, 0, cy or 0))
   Voxel3D.glass(true)
-  Voxel3D.seams(true)
   Voxel3D.lighting(true)
   return true
 end
-
-WorldUnderlay.COLORS = COLORS
-WorldUnderlay.HEIGHT = HEIGHT
-WorldUnderlay.STEP = STEP
-WorldUnderlay.RANGE = RANGE
 
 return WorldUnderlay
