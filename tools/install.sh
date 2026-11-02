@@ -7,7 +7,7 @@ set -eu
 E="$HOME/Documents/Emerald"
 AS="$HOME/Library/Application Support"
 TARGETS=("$AS/pokemon-love2d" "$AS/pokemon-love2d-rseqa")
-PAIRS=("mod:BATTLE_ART_VOXEL_FORK" "stadium2-importer:STADIUM2_IMPORTER")
+PAIRS=("mod:BATTLE_ART_VOXEL_FORK" "stadium2-importer:STADIUM2_IMPORTER" "overworld-wild-spawns:overworld_wild_spawns")
 # baseroms/ en colosseum/ zijn lokale ROM-gegevens in de spelmap: nooit kopieren of wissen.
 OPTS=(-a --delete --exclude .gitignore --exclude .modkitignore --exclude /docs --exclude /tests --exclude /tools
       --exclude /baseroms --exclude /colosseum --exclude __pycache__

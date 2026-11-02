@@ -27,6 +27,10 @@ FIX = {
                                  (14, 1): (1, 2, 'NE'), (15, 2): (1, 2, 'NE'), (16, 3): (1, 2, 'NE'),
                                  (17, 6): (1, 2, 'NE'), (18, 8): (1, 2, 'NE')},
 }
+# Cave doors that stand in a slope: the warp tile and the arch tile above it are flat on the warp's low end (Petya: a door is two tiles)
+DOORS = {'EM_GRANITE_CAVE_STEVENS_ROOM': [(7, 3)], 'EM_CAVE_OF_ORIGIN_ENTRANCE': [(9, 5)],
+         'EM_SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM': [(6, 2), (27, 2)], 'EM_SHOAL_CAVE_LOW_TIDE_INNER_ROOM': [(30, 25)],
+         'EM_MAGMA_HIDEOUT_4F': [(46, 7)], 'EM_MAGMA_HIDEOUT_3F_1R': [(21, 9)]}
 SLOPE = ('ramp', 'stairs', 'waterfall')
 
 
@@ -169,6 +173,11 @@ def bake(name):
     flipped = orient(W, H, T, Hm, R)
     for (x, y), (lo, hi, up) in FIX.get(name, {}).items():
         T[y][x], Hm[y][x], R[y][x] = 'ramp', (lo + hi) / 2, [lo, hi, up]
+    for x, y in DOORS.get(name, []):
+        lo = R[y][x][0] if T[y][x] in SLOPE and R[y][x] and R[y][x][0] is not None else Hm[y][x]
+        for yy in (y, y - 1):
+            if T[yy][x] in SLOPE:
+                T[yy][x], Hm[yy][x], R[yy][x] = 'flat', lo, None
     # floors and ramp feet below 0 are not built (black holes, Shoal Cave low tide, Navel Rock top):
     # heights are per map, so lift a dry map until its lowest floor or ramp foot is 0
     low = min([Hm[y][x] for y in range(H) for x in range(W) if T[y][x] in FLAT and Hm[y][x] is not None]

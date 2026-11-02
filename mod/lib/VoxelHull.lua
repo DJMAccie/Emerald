@@ -5,7 +5,8 @@ local M={}
 M.BACK_RATIO=.9
 M.INK=180
 M.TIER=.3
-M.LUMP=2.4
+M.LUMP=.8
+M.TRUNK_ROWS=.3 -- share of the card height, from the foot, where a non-green pixel is trunk
 local NEIGH={{-1,0},{1,0},{0,-1},{0,1}}
 function M.build(w,h,sample,step,bottom,depthLimit,organic,inflate,taper,seed)
  step=step or 1;bottom=bottom or 0
@@ -142,11 +143,40 @@ function M.build(w,h,sample,step,bottom,depthLimit,organic,inflate,taper,seed)
   end end
   local zBack=nx
   for _,z in pairs(zr0)do if z<zBack then zBack=z end end
+  local trunk={}
+  if seed then
+   local zFront=0
+   for _,z in pairs(zr1)do if z>zFront then zFront=z end end
+   for y=0,math.floor(ny*M.TRUNK_ROWS) do local row=rowK[y];if row then for x=0,nx-1 do local k=row[x];if k and not ink(k) then
+    if math.floor(k/65536)>=math.floor(k/256)%256 then trunk[y*nx+x]=true;zr1[y*nx+x]=zFront end
+   end end end end
+  end
+  local function rim(row,x,y)
+   local up,dn=rowK[y+1],rowK[y-1]
+   return not (row[x-1] and row[x+1] and up and up[x] and (dn and dn[x] or y==0))
+  end
+  if seed then
+   local wall={}
+   for y=0,ny-1 do local row=rowK[y];if row then for x=0,nx-1 do local k=row[x];if k and ink(k) and rim(row,x,y) and not trunk[y*nx+x] then
+    local a,b
+    for _,d in ipairs(NEIGH)do
+     local xx,yy=x+d[1],y+d[2]
+     local nr=rowK[yy];local nk=nr and nr[xx]
+     if nk and not (ink(nk) and rim(nr,xx,yy)) then
+      local n0,n1=zr0[yy*nx+xx],zr1[yy*nx+xx]
+      a=a and math.min(a,n0) or n0;b=b and math.max(b,n1) or n1
+     end
+    end
+    if a then wall[y*nx+x]={a,b} end
+   end end end end
+   for k,s in pairs(wall)do zr0[k],zr1[k]=s[1],s[2] end
+  end
   local bodies={}
   local function colourAt(x,y,z)
    local row=rowK[y]
    local z0,z1=zr0[y*nx+x],zr1[y*nx+x]
-   if z==z1 then return row[x] end
+   if z==z1 or trunk[y*nx+x] then return row[x] end
+   if seed and ink(row[x]) and rim(row,x,y) then return row[x] end
    local d=z>=math.floor(nx/2) and z1-z or z-z0
    local yy=y+d
    if yy>topRow then yy=math.max(0,2*topRow-yy-3) end

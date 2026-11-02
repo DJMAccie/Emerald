@@ -6,6 +6,7 @@ M.LID_REACH=3
 M.TOP_LUM=.06
 M.SHADE={[1]=.78,[2]=.78,[3]=.84,[4]=.72} -- east, west, south, north faces
 M.RAMPS=true
+M.STEPS=true -- an arrow tile is one step (wall art 1:1) instead of a 45-degree wedge (stretches the art 1.41x; Petya: no stretched tiles)
 M.STAIR_SIDES=false
 M.count=0
 local okP,PinData=pcall(V.require,'Gen3PinData')
@@ -99,7 +100,8 @@ function M.arrowRamps(cells,regions)
       elseif HIGH[a.dir] then q={lo,lo,lo,lo};for _,i in ipairs(HIGH[a.dir])do q[i]=hi end
       elseif a.inner then local o=(APEX[a.dir]+1)%4+1;q={hi,hi,hi,hi};q[o]=lo;q.cone={apex=o,D=hi-lo,inv=true}
       else local ap=APEX[a.dir];q={lo,lo,lo,lo};q[ap]=hi;q.cone={apex=ap,D=hi-lo} end
-      q.comp={c};c.ramp=q;c.arrow=a;n=n+1
+      if M.STEPS then c.base=hi;c.arrow=a else q.comp={c};c.ramp=q;c.arrow=a end
+      n=n+1
      end
     end
    end end
@@ -622,6 +624,16 @@ function M.append(c,cells,emit,uvFor)
   end
   if h and h<T-.25 then drops[i]=h end
  end
+ -- A doorway is two tiles: the arch (this face tile, at the foot of a higher wall) and the floor in front of it.
+ -- The arch stands once in the wall, one course high; above it plain rock, the floor inside it dark.
+ local function doorAt(q,qn)return faceMid(q,cells)==q.mid and qn[4] and qn[3] and not qn[3].blocks and (besideHeight(qn[4]) or (q.base or 0))>(q.base or 0)+15.75 end
+ local door=doorAt(c,nb)
+ if door then
+  -- the floor inside the opening is the arch's own dark (a patch from the middle of its hole)
+  local a=uvFor(c.ts,c.mid)
+  local function at(u,v)local function m(j)return a[1][j]*(1-u)*(1-v)+a[2][j]*u*(1-v)+a[3][j]*u*v+a[4][j]*(1-u)*v end;return {m(1),m(2)} end
+  lid={at(.45,.8),at(.55,.8),at(.55,.9),at(.45,.9)}
+ end
  local lean,R=M.LEAN,M.FILLET
  local function insetOwn(i,y)local h=drops[i];if not h then return 0 end;local drop=T-h;return insetAt(h,T,lean*drop,math.min(R,drop/2),y) end
  local function rampAt(o,px,py)local r=o.ramp;local dx,dy=px-o.cx,py-o.cy
@@ -658,6 +670,17 @@ function M.append(c,cells,emit,uvFor)
  end
  if drops[1] then face(emit,fuv,M.SHADE[1],x+16,z,x+16,z+16,-1,0,drops[1],T,ends(1,4,3)) end
  if drops[2] then face(emit,fuv,M.SHADE[2],x,z+16,x,z,1,0,drops[2],T,ends(2,3,4)) end
+ local below=nb[3]
+ if drops[3] and below and below.blocks and not below.ramp and math.abs(drops[3]-(below.base or 0))<.25 and T>drops[3]+16.25 then
+  local bn={}
+  for i,d in ipairs(DIRS)do bn[i]=cells[key(below.cx+d[1],below.cy+d[2])] end
+  if doorAt(below,bn) then
+   local e=ends(3,2,1)
+   face(emit,uvFor(below.ts,below.mid),M.SHADE[3],x,z+16,x+16,z+16,0,-1,drops[3],drops[3]+16,e)
+   face(emit,M.ledgeFaceUV(below,cells,uvFor) or fuv,M.SHADE[3],x,z+16,x+16,z+16,0,-1,drops[3]+16,T,e)
+   drops[3]=nil
+  end
+ end
  if drops[3] then face(emit,fuv,M.SHADE[3],x,z+16,x+16,z+16,0,-1,drops[3],T,ends(3,2,1)) end
  if drops[4] then face(emit,fuv,M.SHADE[4],x+16,z,x,z,0,1,drops[4],T,ends(4,1,2)) end
  if M.UP_FACES then
@@ -676,6 +699,9 @@ function M.append(c,cells,emit,uvFor)
      if i==1 then face(emit,fuv,M.SHADE[2],x+16,z+16,x+16,z,1,0,T,h,nil,true)
      elseif i==2 then face(emit,fuv,M.SHADE[1],x,z,x,z+16,-1,0,T,h,nil,true)
      elseif i==3 then face(emit,fuv,M.SHADE[4],x+16,z+16,x,z+16,0,1,T,h,nil,true)
+     elseif door then
+      face(emit,fuv,M.SHADE[3],x,z,x+16,z,0,-1,T,math.min(h,T+16),nil,true)
+      if h>T+16.25 then face(emit,M.ledgeFaceUV(c,cells,uvFor) or fuv,M.SHADE[3],x,z,x+16,z,0,-1,T+16,h,nil,true) end
      else face(emit,fuv,M.SHADE[3],x,z,x+16,z,0,-1,T,h,nil,true) end
     end
    end

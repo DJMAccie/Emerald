@@ -998,7 +998,15 @@ local function build(req,cache,previous)
   elseif shape.kind=='deckFace' or shape.kind=='deckBack' or shape.kind=='deckMixed' or shape.kind=='deckFloor' or shape.kind=='deckEdge' or shape.kind=='deckHead' or shape.kind=='deckRamp' then
    if not c.stageHidden then Decks.append(def,c,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor,cells) end
   elseif c.stairs or shape.kind=='steps' or shape.kind=='ladder' then
-   if shape.kind=='ladder' and not shape.down then plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)end
+   if shape.kind=='ladder' and not shape.down then
+    -- floor under a ladder: the floor tile beside it (a fixed mid is water in some cave tilesets)
+    local g
+    for _,d in ipairs({{0,1},{0,-1},{-1,0},{1,0}})do
+     local n=cells[(c.cx+d[1])..':'..(c.cy+d[2])]
+     if n and n.ts and n.mid and n.shape and n.shape.kind~='ladder' and n.shape.kind~='water' and not n.blocks then g=n;break end
+    end
+    plane(b.v,b.i,x,z,(g and uvFor(g.ts,g.mid)) or uvFor(ts,shape.ground) or uv)
+   end
    if shape.kind=='steps' and shape.down then
     local hi,lo=cells[c.cx..':'..(c.cy-1)],cells[c.cx..':'..(c.cy+1)]
     local top,bot=(hi and hi.base) or 16,(lo and lo.base) or 0

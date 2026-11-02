@@ -126,3 +126,7 @@ Source: Petya 2026-11-02: "ik heb het gevoel dat we heel vaak dezelfde shit hebb
 ### R-49 Uiteinden van rotsrijen zijn rond
 Rule: Een helling met lage vloer aan de ene zijkant en rots aan de andere is een kwart-kegel om de hoge hoek aan de rotskant, geen rechte wig met puntige zijkant (Gen3Blocks roundEnd).
 Source: Petya 2026-11-02: hoekjes van stenen zijn in de game rond
+
+### R-50 Een deur in een grotwand staat er een keer
+Rule: Een grotdeur is twee tegels: de boog (rechtop in de wand, een laag hoog, rotswand erboven, donkere vloer binnenin) en de drempel ervoor op de vloer; de boog nooit dubbel of per laag herhaald (Gen3Blocks door).
+Source: Petya 2026-11-02, Seafloor Cavern kamer 1: 'die moet nooit dubbel zijn', 'hij bestaat eigenlijk uit twee tiles'
