@@ -933,7 +933,16 @@ local function emitMass(mass,emit,uvOf,cell)
  end
  return true
 end
+-- a doorway in rock is never rock: its own dark tile flat on the ground, so the player walks into it
+local DOOR={[0x60]=true,[0x69]=true,[0x6E]=true,[0x6F]=true,[0x8D]=true}
+local function door(emit,uvFor,c)
+ local g=uvFor(c.ts,c.mid)
+ if not g then return end
+ local f,x,z=(c.floorHigh or c.base or 0)+.02,c.cx*16,c.cy*16
+ emit({{x,f,z},{x+16,f,z},{x+16,f,z+16},{x,f,z+16}},g,1)
+end
 function M.append(mass,cells,emit,uvFor,cell)
+ if cell and DOOR[cell.behavior or -1] then door(emit,uvFor,cell);return true end
  local Rock=V.require('Gen3Rock')
  if Rock.audit and not mass.audited then
   Rock.checkFloat(mass,cells,Rock.handles(mass,cells) and 'Gen3Rock.append' or 'Gen3Mass.emitMass',function(c,e)return M.append(mass,cells,e,uvFor,c)end)

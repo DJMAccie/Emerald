@@ -102,7 +102,7 @@ Sequence.FULLY_PARALYZED_ENTRY = 0x10C
 
 -- Non-move entries for battle events, from the event-code tables of
 -- 84118DD4 (family 9) and the battle-engine call sites that queue each code
--- (fragment79_393CA0; see docs/luna/research/battle-event-effects.md).
+-- (fragment79_393CA0).
 -- 84131AF8 residual damage: poison/toxic 0x3C/0x3D, burn 0x3E, Leech Seed
 -- 0x3F (on the seeded mon), Nightmare 0x40, Curse 0x43.
 Sequence.RESIDUAL_ENTRIES = {

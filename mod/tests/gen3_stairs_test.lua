@@ -1,6 +1,6 @@
-local recipes=dofile('data/gen3_stairs.lua')
-local S=assert(loadfile('lib/Gen3Stairs.lua'))({data=function()return recipes end,
- require=function(name)return dofile('lib/'..name..'.lua')end})
+local D=dofile('data/gen3_stairs.lua')
+local recipes=D.flights
+local S=assert(loadfile('lib/Gen3Stairs.lua'))({data=function()return D end})
 local function uv()return{{0,0},{1,0},{1,1},{0,1}}end
 local counts={up=0,down=0}
 for _,r in ipairs(recipes)do
@@ -20,4 +20,10 @@ end
 for _,kind in ipairs({'steps','ladder'})do for _,down in ipairs({false,true})do
  local n=0;S.append({cx=0,cy=0,mid=1,ts={},shape={kind=kind,down=down}},function()n=n+1 end,uv);assert(n>10)
 end end
-print('PASS native staircase assemblies '..counts.up..' up / '..counts.down..' down, whole-pattern guards and ladders')
+for mid,kind in pairs({[0x211]='up',[0x214]='down'})do
+ local c={cx=0,cy=0,pair='building__brendans_mays_house',mid=mid,ts={}}
+ assert(S.wallKind(c)==kind)
+ local n=0;assert(S.appendWall(c,function()n=n+1 end,uv));assert(n>10)
+ c.collision=7;assert(not S.wallKind(c),'a blocked doorway is no stair')
+end
+print('PASS native staircase assemblies '..counts.up..' up / '..counts.down..' down, wall doorways, whole-pattern guards and ladders')

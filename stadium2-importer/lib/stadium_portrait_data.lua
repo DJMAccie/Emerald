@@ -10,7 +10,6 @@
 -- 32 bytes per species at 0x4A0EB0, alternate records after them, up to
 -- 0x4A40F0. Layout: s16 pitch, s16 yaw, f32 distance, f32 target x,
 -- f32 target y, s16 idle start frame, s16 alternate index (0x200 = none).
--- Research: docs/luna/research/stadium2-battle-ui.md.
 local Rom = require("mods.STADIUM2_IMPORTER.lib.rom")
 local Discovery = require("mods.STADIUM2_IMPORTER.lib.discovery")
 

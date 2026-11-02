@@ -124,7 +124,7 @@ function M.profile(def)
   end
   if M.BACK_BY_MAP[def.id or ''] then b[2]=math.min(b[4]-16,(z0+M.BACK_BY_MAP[def.id])*16)-.12 end
   do
-   local WS=V.require('Gen3WallStairs');local t=WS.CELLS[def.midLayout.pair or '']
+   local t=V.require('Gen3Stairs').WALL[def.midLayout.pair or '']
    if t then
     for y=z0,math.min(z1-1,z0+3) do for x=x0,x1-1 do
      local mid=def.midLayout:midAt(x,y);local cell=def.midLayout:cellAt(x,y)
@@ -154,8 +154,8 @@ function M.profile(def)
  end
  local caveHeight
  if cave then
-  local okS,StairT=pcall(V.require,'Gen3StairTerraces')
-  local t=okS and type(StairT)=='table' and StairT[id]
+  local StairT=V.data('gen3_stair_terraces')
+  local t=StairT[id]
   if t and t.cave then
    local top=0
    for _,row in ipairs(t.pins)do top=math.max(top,row[3]) end

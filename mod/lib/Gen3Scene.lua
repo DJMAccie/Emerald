@@ -1037,9 +1037,9 @@ local function build(req,cache,previous)
    local on=Lamp.is(c,cells)
    plane(b.v,b.i,x,z,(on and uvFor(ts,shape.ground)) or uv)
    if on and not c.stageHidden then Lamp.append(c,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor,cells,lampNight) end
-  elseif V.require('Gen3WallStairs').kind(c) then
+  elseif Stairs.wallKind(c) then
    local w=cells[(c.cx-1)..':'..c.cy]
-   V.require('Gen3WallStairs').append(c,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor,w and w.mid)
+   Stairs.appendWall(c,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor,w and w.mid)
   elseif shape.kind=='stand' then
    local st=shape.stand
    local function sub(y0,y1)

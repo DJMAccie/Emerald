@@ -69,3 +69,18 @@ Rules: R-46
 Cause: qa_tryp shoots about 80 frames after the 3D turns on; the near area builds first, the whole area finishes around frame 50-100 (Route 104 75-96, noise +-30%), so a shot can show only the near part and look like a regression.
 Fix: Before calling a missing area a regression, rerun with wait 300 or compare two base runs with each other; measure build frames with S.streaming (completed/buildMs) per case.
 Rules: R-23,R-29
+
+### L-55 Same source can give different LuaJIT bytecode
+Cause: luajit -bs output depends on hash order for some files (stadium2 pack.lua, battle_fx_runtime.lua): compiling the same file twice differs, so 'bytecode equal' cannot prove a comment-only edit.
+Fix: Prove comment-only edits with git diff -U0 (no changed line outside '--' comments) plus the test suite; compare bytecode only after checking the file compiles the same twice.
+Rules: R-29
+
+### L-56 A pcall-wrapped data load fails silently
+Cause: Gen3Relief and Gen3Elevation loaded their tables in pcall(V.require,...): a wrong name or path just turns the feature off, with 0 fallback and no error in run.log.
+Fix: After moving or renaming a data file, compare QA pixels on maps that use it (two base runs + new); drop the pcall when the file always ships.
+Rules: R-29
+
+### L-57 Recipe tables can name tilesets Emerald does not have
+Cause: data/gen3_stairs.lua had 57 flight recipes, 55 for pairs like player_house, house and *rom_082d* (not Emerald); Gen3HouseStairs only drew those, so it never loaded. Static greps on module names missed it.
+Fix: Check every pair name in a table against the 80 pairs in the native manifest (~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native/manifest.lua); entries for other pairs are dead. Mind labels the mod sets itself (InteriorDiorama gives the Abandoned Ship secondary 'rom_082d4d94').
+Rules: R-44

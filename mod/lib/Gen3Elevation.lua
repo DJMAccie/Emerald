@@ -91,11 +91,9 @@ function M.field(def)
  local spec=Pairs.resolve(l.pair,require('src.import.gba.versions').TILESET_PAIRS)
  local shapes=V.require('Gen3TileShape')
  local drop={[0x38]={1,0},[0x39]={-1,0},[0x3A]={0,-1},[0x3B]={0,1}}
- local Terraces=V.require('Gen3EmeraldTerraces')
  local pins
- for _,row in ipairs(Terraces.enabled and (Terraces.on or {})[def.id] and Terraces.maps[def.id] or {})do pins=pins or {};pins[row[1]..':'..row[2]]=row[3]*Terraces.COURSE end
- local okS,StairT=pcall(V.require,'Gen3StairTerraces')
- local gen=okS and type(StairT)=='table' and Terraces.enabled and StairT[def.id] and ((Terraces.onStairs or {})[def.id] or StairT[def.id].cave or StairT[def.id].on) and StairT[def.id]
+ local StairT=V.data('gen3_stair_terraces')
+ local gen=StairT[def.id]
  local stairCells={}
  local zoneOf={}
  local keepRated=false
@@ -132,13 +130,13 @@ function M.field(def)
    end
   else
    for zi,row in ipairs(gen.pins)do pins=pins or {}
-    local h=row[3]*(gen.rise or StairT.rise or Terraces.COURSE)
+    local h=row[3]*(gen.rise or StairT.rise)
     if row[4]=='zone' then floodPin(zi,row,h) else pins[row[1]..':'..row[2]]=h end
    end
    for _,c in ipairs(gen.cells or {})do
     local x0,y0,x1,y1,lv=c[1],c[2],c[1],c[2],c[3]
     if c[5] then x1,y1,lv=c[3],c[4],c[5] end
-    for y=y0,y1 do for x=x0,x1 do pins[x..':'..y]=lv*(gen.rise or StairT.rise or Terraces.COURSE) end end
+    for y=y0,y1 do for x=x0,x1 do pins[x..':'..y]=lv*(gen.rise or StairT.rise) end end
    end
   end
  end

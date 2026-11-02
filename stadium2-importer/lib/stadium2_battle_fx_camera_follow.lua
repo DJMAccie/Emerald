@@ -5,7 +5,7 @@
 -- as the Vice Grip / Guillotine / Bite jaws. In Stadium the attack camera
 -- holds still while they play and then cuts to the defender, which takes
 -- them off screen while they are still alive (verified from a retail save
--- state: docs/luna/research/fx-clock-rate-2026-09-29.md). The port has a free
+-- state). The port has a free
 -- camera and no cut, so when a move's impact starts (where Stadium cuts),
 -- that move bank's camera-placed particles stop drawing.
 --

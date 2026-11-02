@@ -44,9 +44,8 @@ ok(#runtimeImage == 48 and runtimeImage:sub(33) == string.rep("\0", 16),
   "fragment relocation records become zeroed runtime scratch/BSS storage")
 ok(Extract.runtimeModelFragment("model") == "model",
   "non-fragment payloads retain their original runtime image")
-ok(Pack.validSpecies(254) and Pack.validSpecies(278)
-  and Pack.validSpecies(252) and not Pack.validSpecies(253) and not Pack.validSpecies(279),
-  "DSM parser accepts exactly the Stadium 2 Unown form record range")
+ok(Pack.validSpecies(1) and Pack.validSpecies(386) and not Pack.validSpecies(0) and not Pack.validSpecies(387),
+  "packs accept #1-386 (Stadium 2 and Colosseum), nothing past it")
 ok(type(Palette.recolour) == "function", "standalone shiny recoloring exists")
 local pidgeyRare = Palette.decodeRare(string.char(0x0A, 0x00, 0xFE, 0x01), 0)
 ok(pidgeyRare and pidgeyRare.hue == 40 and pidgeyRare.saturation == -2

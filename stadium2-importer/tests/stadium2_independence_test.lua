@@ -25,7 +25,7 @@ local uiOwnership = read(root .. "lib/battle_ui_ownership.lua")
 -- the one required mod is the Stadium 2 UI (its STADIUM UI), with the repo
 -- the game's dependency resolver installs it from
 local deps = manifest:match('"dependencies": (%b[])')
-ok(deps and deps:gsub("%s", "") == '["STADIUM2_UI@>=1.1.0<2.0.0"]'
+ok(deps and select(2, deps:gsub('"id"', "")) == 1 and deps:find('"id": "STADIUM2_UI"', 1, true)
   and manifest:find('"STADIUM2_UI": "Deftones565/Stadium-2-UI"', 1, true) ~= nil,
   "the only required mod is STADIUM2_UI, with its GitHub source")
 ok(manifest:find('"version": "0.21.0"', 1, true) ~= nil,

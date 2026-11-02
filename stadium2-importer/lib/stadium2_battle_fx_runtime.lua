@@ -124,7 +124,7 @@ end
 function Runtime.new(options)
   options = type(options) == "table" and options or {}
   -- One FX tick per 30 Hz battle logic tick (8413D37C -> 8410A608 once per
-  -- loop; docs/luna/research/fx-clock-rate-2026-09-29.md).
+  -- loop).
   local clockHz = tonumber(options.clockHz) or 30
   if clockHz <= 0 then error("battle FX clockHz must be positive", 2) end
   local catchUpLimit = options.catchUpLimit

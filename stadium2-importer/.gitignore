@@ -2,10 +2,6 @@
 /baseroms/*
 !/baseroms/.gitkeep
 
-# Local agent and Codex workspace metadata must never be committed.
-**/.agents/
-**/.codex/
-
 # Cartridge and disc image formats (case-insensitive via bracket patterns).
 *.[gG][bB]
 *.[gG][bB][cC]
@@ -20,16 +16,10 @@
 *.[bB][iI][nN]
 *.[iI][sS][oO]
 
-# Legacy picker names and archives that could conceal ROM payloads.
-picked_rom.*
-picked_stadium2.*
+# Archives that could hide a ROM.
 *.[zZ][iI][pP]
 *.[7][zZ]
 *.[rR][aA][rR]
 
-*.glb
-
-# Generated Stadium battle-field exports (contain ROM-derived assets).
-/stadium2_arena_dump/
-
-/install-local.sh
+# Colosseum models made from the user's disc (only in the game folder).
+/colosseum/
