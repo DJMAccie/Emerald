@@ -1,0 +1,8 @@
+# Local art for Fly (sheets and world fill), never in git; only copy is here and in the installed game.
+assets/flyers/
+assets/worldfill/
+# The engine writes these when tests run from the mod root.
+/options.lua
+/options.lua.bak
+/options.lua.tmp
+/mod_option_schemas.json

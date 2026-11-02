@@ -1,0 +1,13 @@
+# EM_FORTREE_CITY  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet
+# x y height  (cell of the mark; height in 16 px courses above ground 0; water = 0 always)
+# treehouse platforms and rope bridges = 2; the ground = 0
+11 4 2
+17 4 2
+25 4 2
+32 3 2
+12 14 2
+18 14 2
+32 14 2
+37 14 2
+9 9 0
+37 8 0

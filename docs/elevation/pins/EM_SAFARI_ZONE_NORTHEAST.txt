@@ -1,0 +1,25 @@
+# EM_SAFARI_ZONE_NORTHEAST  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet (tools/elevation/find_marks.py)
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0; water = 0 always)
+# (21,0) small loop on the top row read 0; (32,0) small digit read 6 (both at the top edge)
+12 1 5
+14 1 6
+17 1 5
+18 3 4
+21 0 6   # small loop on the top terrace = a 6 (user confirmed 2026-10-27; was read as 0)
+24 2 5
+32 0 6
+38 0 8
+12 8 3
+13 5 4
+30 7 3
+39 7 7
+9 10 3
+18 12 2
+25 10 2
+35 10 4
+38 13 6
+24 19 0   # was 1 (pale grass patch, no ridge: one plain, R-33) 2026-10-28
+38 16 5
+7 20 2
+14 27 0   # was 1 (pale grass patch, no ridge: one plain, R-33) 2026-10-28
+21 29 0

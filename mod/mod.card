@@ -1,0 +1,15 @@
+-- Sharing metadata (25-community-and-ecosystem.md 3.2).  Read by tooling
+-- and the manager detail pane; never by the loader's merge.
+return {
+  summary = "Pokemon Emerald as a 3D voxel world: free camera, Pokemon in the overworld, 3D battles with Stadium 2 models.",
+  author = "Petya",
+  tags = { "graphics", "3d", "voxel", "presentation", "battle" },
+  differences = {
+    changed = {
+      "the overworld draws as 3D geometry from Emerald's own tiles instead of flat tiles",
+      "occlusion comes from a depth buffer, so buildings really hide what is behind them",
+      "battles are staged in 3D with Stadium 2 models",
+    },
+  },
+  compat = { engine = ">=0.1.37 <2.0.0", modApi = 2, games = { "emerald" } },
+}

@@ -1,0 +1,25 @@
+# EM_SLATEPORT_CITY  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet (tools/elevation/find_marks.py)
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0; water = 0 always)
+# Slateport: the user's single slashes mean 0.5, not 1 (raised pavement / deck class, like Pacifidlog and Route 121); circles are 0. (32,1) is a short dash on trees, read 0.5.
+3 3 0.5
+18 4 0.5
+30 3 0.5
+32 1 0.5
+22 13 0.5
+36 14 0.5
+1 15 0
+14 15 0.5
+10 24 0.5
+20 23 0.5
+38 20 0
+30 28 0.5
+18 31 0.5
+35 33 0.5
+38 30 0
+32 40 0.5
+9 48 0.5
+38 46 0
+17 50 0.5
+30 52 0.5
+6 58 0
+24 57 0

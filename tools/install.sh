@@ -7,8 +7,7 @@ set -eu
 E="$HOME/Documents/Emerald"
 AS="$HOME/Library/Application Support"
 TARGETS=("$AS/pokemon-love2d" "$AS/pokemon-love2d-rseqa")
-OPTS=(-a --delete --exclude .git --exclude .github --exclude .gitignore --exclude .modkitignore
-      --exclude /docs --exclude /tests --exclude /tools --exclude /assets/docs
+OPTS=(-a --delete --exclude .gitignore --exclude /docs --exclude /tests --exclude /tools
       --include /THIRD_PARTY_NOTICES.md --exclude '*.md' --exclude .DS_Store)
 if [ "${1:-}" = "--check" ]; then
   bad=0

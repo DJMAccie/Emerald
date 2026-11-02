@@ -1,0 +1,15 @@
+# EM_ROUTE112  PROPOSED heights from the stair/cliff/ledge/shore graph (tools/elevation/learn/propose.py); not the user's drawing
+# x y height [? = unsure]
+31 10 10 ?
+23 19 7 ?
+20 23 7 ?
+31 23 6
+24 24 6 ?
+21 35 3 ?
+16 30 0 ?
+14 47 0 ?
+28 49 0
+16 48 0
+4 51 0
+11 49 0
+20 54 0 ?

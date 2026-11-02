@@ -1,11 +1,9 @@
-# Deze repo bewaart alleen: tools/, docs/, .claude/, CLAUDE.md, README.md.
+# Deze repo bewaart: mod/ (de mod), stadium2-importer/, tools/, docs/, .claude/, CLAUDE.md, README.md.
 
-# eigen git-repo's in deze map (niet in deze repo)
-/mod/
-/stadium2-importer/
+# de engine: eigen checkout, alleen naslag
 /gen1recomp/
 
-# oud werk, alleen lokaal (alles wat ooit in git stond zit nog in de geschiedenis)
+# oude losse git-geschiedenis van mod/ en stadium2-importer, alleen lokaal
 /archief/
 
 .DS_Store
@@ -17,6 +15,8 @@ __pycache__/
 *.iso
 *.rvz
 *.love
+# vrije Kenney-textures die de Stadium 2-importer nodig heeft (CC0, geen spelbeelden)
+!/stadium2-importer/assets/kenney_*/*.png
 
 # screenshots die Petya stuurt (spelbeelden)
 /docs/aanwijzingen/

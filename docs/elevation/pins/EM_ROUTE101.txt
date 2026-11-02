@@ -1,0 +1,6 @@
+# EM_ROUTE101  hand-drawn heights (user 2026-10-27), read by Claude from the drawn sheet (tools/elevation/find_marks.py)
+# x y height  (cell of the mark; height in 16 px courses above this map's ground 0; water = 0 always)
+9 4 0
+8 10 0
+16 10 0
+9 15 0

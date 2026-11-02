@@ -1,0 +1,1338 @@
+-- Gen 1 presentation adapter for the shared Stadium battle scene.
+--
+-- The host BattleState remains the sole owner of battle mechanics. This file
+-- reads its public/runtime presentation state and wraps drawing only: models,
+-- stage, camera, HUD composition and native animation placement. It never
+-- resolves a turn, changes damage, rolls capture odds, advances the queue,
+-- switches a party member, or writes battle RNG.
+local Importer = require("mods.STADIUM2_IMPORTER.lib.importer")
+local Actor = require("mods.STADIUM2_IMPORTER.lib.battle_actor")
+local Presentation = require("mods.STADIUM2_IMPORTER.lib.battle_scene")
+local Camera = require("mods.STADIUM2_IMPORTER.lib.battle_camera")
+local Hud = require("mods.STADIUM2_IMPORTER.lib.battle_hud")
+local TrainerSprite = require("mods.STADIUM2_IMPORTER.lib.trainer_sprite")
+local ArenaRuntime = require("mods.STADIUM2_IMPORTER.lib.arena_runtime")
+local UIOwnership = require("mods.STADIUM2_IMPORTER.lib.battle_ui_ownership")
+local BattleViewport = require("mods.STADIUM2_IMPORTER.lib.battle_viewport")
+local BattleFxAdapter = require(
+  "mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_battle_adapter")
+local RestPose = require("mods.STADIUM2_IMPORTER.lib.battle_rest_pose")
+local FxSequence = require("mods.STADIUM2_IMPORTER.lib.stadium2_battle_fx_sequence")
+local UILayers = require("mods.STADIUM2_IMPORTER.lib.battle_ui_layers")
+
+local Gen1={COUNT=251}
+local PatchScope=require("mods.STADIUM2_IMPORTER.lib.patch_scope")
+local patches
+local modRef,installed,session
+local configured=151
+local originals={}
+local gameRef
+local controlOriginals={}
+local pointerHookInstalled=false
+local freeTouches,pinch={},nil
+local unpack=table.unpack or unpack
+local function pack(...) return {n=select("#",...),...} end
+
+local SOURCE_ANCHOR={player={26,96},enemy={124,56}}
+local HUD_RECT={enemy={8,0,80,32},player={72,56,88,40}}
+local TEXT_RECT={box={0,96,160,48},moves={0,64,88,32},mimic={0,56,128,40}}
+local function clamp(v,lo,hi)
+  return math.max(lo,math.min(hi,tonumber(v) or lo))
+end
+
+local lastDiagnostic={}
+local function diagnostic(message)
+  message=tostring(message)
+  local category=message:sub(1,3)=="UI:" and "ui" or "error"
+  if lastDiagnostic[category]==message then return end
+  lastDiagnostic[category]=message
+  local storage=modRef and modRef.storage
+  if storage and storage.write then
+    pcall(storage.write,storage,gameRef,"battle-art-render-diagnostic-"..category,{message=message})
+  end
+end
+
+-- Gen 1 animation rows that stay visible with Stadium battle FX on: ball
+-- throws and catch shakes (engine BALL_ANIMS minus the send-out puff and pic
+-- toggles, which Stadium's send-out and recall effects replace).
+local NATIVE_ANIMS_WITH_FX={TOSS_ANIM=true,GREATTOSS_ANIM=true,
+  ULTRATOSS_ANIM=true,BLOCKBALL_ANIM=true,SHAKE_ANIM=true}
+
+local function warn(message)
+  diagnostic("render error: "..tostring(message))
+  local log=modRef and modRef.log
+  if log and log.warn then pcall(log.warn,log,"%s",tostring(message)) end
+end
+
+-- Gen1Recomp's intro/replacement party rows are emitted outside the
+-- statusHUDVisible guard. Stadium has already copied just their six ball tiles
+-- into its owned cards, so hide the two presentation flags from the following
+-- native text/effect pass. Restore exact raw values even when drawing fails;
+-- battle timing and state never observe this synchronous render-only scope.
+local function withNativePartyRowsSuppressed(scene,battle,fn)
+  if not (scene and scene.statusHudOwned and battle) then return fn() end
+  local intro=rawget(battle,"introBalls")
+  local enemy=rawget(battle,"showEnemyBalls")
+  battle.introBalls=nil
+  battle.showEnemyBalls=nil
+  local result=pack(pcall(fn))
+  battle.introBalls=intro
+  battle.showEnemyBalls=enemy
+  if not result[1] then error(result[2],0) end
+  return unpack(result,2,result.n)
+end
+
+local function dexOf(data,mon)
+  if not mon then return nil end
+  if type(mon.species)=="number" then
+    local dex=math.floor(mon.species)
+    return dex>=1 and dex<=Gen1.COUNT and dex or nil
+  end
+  local def=data and data.pokemon and data.pokemon[mon.species]
+  local dex=def and tonumber(def.dex or def.index)
+  dex=dex and math.floor(dex) or nil
+  return dex and dex>=1 and dex<=Gen1.COUNT and dex or nil
+end
+
+local Scene=setmetatable({},{__index=Presentation})
+Scene.__index=Scene
+
+local function actorOptions()
+  return {warn=warn,dexOf=dexOf,label="Gen 1 battle"}
+end
+
+function Scene.new(battle,context)
+  local opts=actorOptions()
+  local self=setmetatable({},Scene)
+  local selection=require('mods.STADIUM2_IMPORTER.lib.battle_environment').select(
+    context,Importer.environmentStyle(),Importer.betaArenaEnabled(),nil,
+    Importer.environmentTest and Importer.environmentTest(),
+    Importer.arenaTest and Importer.arenaTest())
+  local arena,err
+  if selection.mode=='arena' then
+    arena,err=ArenaRuntime.load(selection.arena,Importer)
+    if not arena then warn('Environment arena fallback failed; using classic: '..tostring(err)) end
+    if not arena and selection.fallback then selection=selection.fallback end
+  end
+  Presentation.init(self,{
+    actors={player=Actor.new("player",opts),enemy=Actor.new("enemy",opts)},
+    warn=warn,label="Gen 1 battle",arena=arena,arenaMode=arena~=nil,
+  })
+  self.battle=battle
+  self.environmentSelection=selection
+  self.battleContext=context
+  self.game=battle and battle.game
+  self.substituteActors={player=Actor.new("player",opts),enemy=Actor.new("enemy",opts)}
+  self.lastGrow={player=false,enemy=false}
+  self.lastFainted={player=false,enemy=false}
+  self.lastPicKind={player=nil,enemy=nil}
+  self.animWasPlaying=false
+  self.hudSnapped=false
+  -- The adapter owns the persistent FX player. A missing beta option or an
+  -- importer mock from an older host is intentionally a no-op.
+  local battleFx,battleFxError=BattleFxAdapter.new(Importer,{warn=warn})
+  if battleFx then self.battleFx=battleFx
+    -- The defender plays its own hit clip (context 254) at the impact.
+    battleFx.onImpact=function(target,_,moveId)
+      local actor=self.actors and self.actors[target]
+      if not actor or not actor.hit then return false,"no defender actor" end
+      return actor:hit(moveId)
+    end
+  elseif battleFxError then warn("Gen 1 battle FX unavailable: "..tostring(battleFxError)) end
+  return self
+end
+
+function Scene:release()
+  UIOwnership.release(self.battle)
+  self.substituteActors.player:release()
+  self.substituteActors.enemy:release()
+  Presentation.release(self)
+end
+
+function Scene:shownBattler(side)
+  return self.battle and self.battle[side] or nil
+end
+
+function Scene:shownMon(side)
+  local b=self:shownBattler(side)
+  return b and b.mon or nil
+end
+
+-- One native animation row starting: the attacker's Stadium clip, battle FX
+-- (move and impact banks, charge turns) and residual effects. `name` is the
+-- host animation key; `attackerIsPlayer` its attacker flag.
+-- Red plays Leech Seed's drain as an ABSORB row from the healing side, and
+-- the move Absorb as the battle's moveAnimRow. The host sets pendingHit only
+-- after AnimPlayer:start, so it cannot tell them apart. The move row has just
+-- left the queue when it starts; the first start that finds it gone claims
+-- it, and any other ABSORB start (a later drain, or after a miss cleared
+-- moveAnimRow) is the residual.
+local claimedMoveRows=setmetatable({},{__mode="k"})
+
+function Scene.isResidualAbsorb(battle,attackerIsPlayer)
+  local row=battle.moveAnimRow
+  if not (row and row.anim=="ABSORB" and (row.attackerIsPlayer and true or false)==attackerIsPlayer) then
+    return true
+  end
+  if claimedMoveRows[row] then return true end
+  for _,item in ipairs(battle.queue or {}) do
+    if item==row then return true end -- the move row has not started yet
+  end
+  claimedMoveRows[row]=true
+  return false
+end
+
+function Scene:presentAnimStart(name,attackerIsPlayer)
+  local battle=self.battle
+  if not battle then return end
+  local def=battle.data and battle.data.moves and battle.data.moves[name]
+  local rowSide=attackerIsPlayer and "player" or "enemy"
+  -- Red's residual rows (core.asm:490-517): BURN_PSN_ANIM on the suffering
+  -- side, and Leech Seed's drain as an ABSORB row from the healing side
+  -- with no hit data (a real Absorb carries its hit row). Stadium signals
+  -- 0x101/0x102 and 0x103 on the suffering (seeded) side instead.
+  local residual
+  if name=="BURN_PSN_ANIM" then
+    local b=self:shownBattler(rowSide)
+    local status=b and b.mon and b.mon.status
+    residual=status=="BRN" and FxSequence.RESIDUAL_ENTRIES.burn
+      or status=="PSN" and FxSequence.RESIDUAL_ENTRIES.poison or nil
+    if residual then residual={entry=residual,side=rowSide} end
+  elseif name=="ABSORB" and Scene.isResidualAbsorb(battle,rowSide=="player") then
+    residual={entry=FxSequence.RESIDUAL_ENTRIES.leechSeed,
+      side=rowSide=="player" and "enemy" or "player"}
+    def=nil
+  end
+  if residual and self.battleFx and self.battleFx.signalEffect then
+    pcall(self.battleFx.signalEffect,self.battleFx,residual.entry,residual.side)
+  end
+  -- Red's charge turn cancels the move row and queues a charge row
+  -- (XSTATITEM_ANIM / XSTATITEM_DUPLICATE_ANIM, TELEPORT for Fly,
+  -- SLIDE_DOWN_ANIM for Dig) while the battler holds `charging`. Stadium's
+  -- charge state plays the charge clip and the variant route instead.
+  local chargeRow={XSTATITEM_ANIM=true,XSTATITEM_DUPLICATE_ANIM=true,
+    TELEPORT=true,SLIDE_DOWN_ANIM=true}
+  local charger=self:shownBattler(rowSide)
+  local charging=charger and charger.charging
+  if chargeRow[name] and charging then
+    local cdef=battle.data and battle.data.moves and battle.data.moves[charging.id]
+    local chargeId=cdef and tonumber(cdef.index or cdef.number)
+    if chargeId and FxSequence.CHARGE_ENTRIES[chargeId] then
+      def=nil
+      local actor=self.actors[rowSide]
+      local model=actor and actor.renderer and actor.renderer.model
+      local entry,start=FxSequence.chargeFrames(model and model.fxDispatch,chargeId)
+      -- The species' charge row, or its own move clip when that is missing.
+      local charged=actor and actor.charge and actor:charge(entry,start)
+      if actor and not charged and actor.attack then actor:attack(chargeId) end
+      if self.battleFx and self.battleFx.playCharge then
+        pcall(self.battleFx.playCharge,self.battleFx,chargeId,rowSide,actor)
+      end
+    end
+  end
+  if def then
+    local side=rowSide
+    local moveId=tonumber(def.index or def.number)
+    if moveId then
+      self.actors[side]:attack(moveId)
+      if self.battleFx then
+        -- Gen 1 skips the move animation when a move misses, so a started
+        -- animation is presented as an ordinary result: move bank now and
+        -- impact bank at the dispatch hit frame. A host-supplied alternate
+        -- selector still plays that single bank.
+        if battle.animAlternate==true then
+          self.battleFx:trigger(moveId,side,true)
+        elseif self.battleFx.playMoveAndImpact then
+          self.battleFx:playMoveAndImpact(moveId,side,self.actors[side],nil,
+            self.actors[side=="player" and "enemy" or "player"])
+        else
+          self.battleFx:trigger(moveId,side,false)
+        end
+      end
+    end
+  end
+end
+
+function Scene:sync()
+  local data=self.battle and self.battle.data
+  for _,side in ipairs({"player","enemy"}) do
+    local actor=self.actors[side]
+    local mon=self:shownMon(side)
+    -- A different Pokemon is a fresh Stadium model: native colour/opacity
+    -- writes (a recall's fade-out) belong to the one it replaced.
+    self.shownMons=self.shownMons or {}
+    if mon~=self.shownMons[side] then
+      if self.shownMons[side]~=nil and self.battleFx and self.battleFx.modelChanged then
+        pcall(self.battleFx.modelChanged,self.battleFx,side)
+      end
+      self.shownMons[side]=mon
+    end
+    if mon and Importer.modelsEnabled() then
+      local battler=self:shownBattler(side)
+      local copied=self.transformSprites and self.transformSprites[battler.sprite]
+      actor:load(data,mon,copied or dexOf(data,mon))
+    else
+      actor:release()
+      actor.failedFor,actor.failedForm=nil,nil
+      self.substituteActors[side]:release()
+    end
+  end
+end
+
+local function safeCall(obj,name,...)
+  local fn=obj and obj[name]
+  if type(fn)~="function" then return nil end
+  local ok,value=pcall(fn,obj,...)
+  return ok and value or nil
+end
+
+function Scene:hostGrow(side)
+  local b=self:shownBattler(side)
+  return b and safeCall(self.battle,"growInScale",b) or nil
+end
+
+function Scene:hostHidden(side)
+  local battle,b=self.battle,self:shownBattler(side)
+  if not (battle and b) then return true end
+  if side=="enemy" and battle.enemyHidden then return true end
+  local pf=battle.picFx and battle.picFx[b]
+  if pf and pf.hidden then return true end
+  if safeCall(battle,"fxHidden",b) then return true end
+  return false
+end
+
+function Scene:substituteVisible(side)
+  local b=self:shownBattler(side)
+  return b and ((b.substituteHP and not b.substitutePending)
+    or (self.heldSubstitutes and self.heldSubstitutes[b])) or false
+end
+
+function Scene:ownsSlot(side)
+  if not self.readyFrame or self.defect then return false end
+  local providerMode=self.battlerMode and self:battlerMode(side) or "host"
+  if providerMode=="native" then return false end
+  if providerMode=="provider" then return true end
+  local battle=self.battle
+  if not battle then return false end
+  if side=="enemy" and battle.showEnemyTrainer and battle.trainerPic then return false end
+  if side=="player" and battle.showPlayerBack and battle.playerBackPic then return false end
+  if side=="player" and (battle.safari or battle.demo) then return false end
+  local b=self:shownBattler(side)
+  if not b then return false end
+  if self:substituteVisible(side) then return self:ensureSubstitute(side)~=nil end
+  return self.actors[side] and self.actors[side].renderer~=nil
+end
+
+function Scene:ensureSubstitute(side)
+  if not Importer.modelsEnabled() then return nil end
+  local actor=self.substituteActors[side]
+  if actor.renderer then return actor end
+  local renderer,err=Importer.newSpecialRenderer("substitute",{
+    textureFilter="nearest",anisotropy=4,flipY=false,anchorTravel=true,
+  })
+  if not renderer then
+    warn("Gen 1 Substitute model unavailable: "..tostring(err))
+    return nil
+  end
+  actor.renderer=renderer
+  actor.mon={hp=1,species=252}
+  actor.dex,actor.variant=252,"normal"
+  actor.callbackFrame=side=="enemy" and 4 or 0
+  actor:play("idle",true)
+  return actor
+end
+
+-- Condition for the Stadium resting pose (battle_rest_pose.lua). Red's
+-- engine runs in step with its queue, so the battler's live state is what is
+-- being presented. Fly/Dig count once the charge turn's animation is over.
+function Scene:restCondition(side)
+  local battle,b=self.battle,self:shownBattler(side)
+  local condition={}
+  if not b then return condition end
+  if b.invulnerable and b.charging and not (battle and battle.animPlaying) then
+    local id=b.charging.id
+    if id=="FLY" then condition.flying=true
+    elseif id=="DIG" then condition.underground=true end
+  end
+  local status=b.mon and b.mon.status
+  condition.asleep=status=="SLP"
+  condition.frozen=status=="FRZ"
+  return condition
+end
+
+function Scene:visualState(side)
+  local battle,b=self.battle,self:shownBattler(side)
+  if not self:ownsSlot(side) then return "native" end
+  if not b then return "empty" end
+
+  local actor=self.actors[side]
+  if b.fainted then
+    if actor.context=="faint" and not actor.faintFinished then return "pokemon" end
+    return actor.faintFinished and "empty" or "pokemon"
+  end
+
+  -- During the trainer/player send-out text the slot is still empty. Once the
+  -- host grow animation starts, the 3D model takes over at the exact same time.
+  local grow=self:hostGrow(side)
+  if side=="enemy" and battle.enemySendingOut and not grow then return "empty" end
+  if side=="player" and battle.sendingOut and not grow then return "empty" end
+  if self:hostHidden(side) then return "hidden" end
+  if (battle.introSlide or 0)>0 and side=="player" then return "empty" end
+  if self:substituteVisible(side) then return "substitute" end
+  -- 8411EE74: Stadium hides a species underground unless it has a dig pose.
+  if RestPose.select(self:restCondition(side),self.actors[side].dex).hidden then
+    return "hidden"
+  end
+  return actor.renderer and "pokemon" or "native"
+end
+
+function Scene:visualActor(side)
+  local state=self:visualState(side)
+  if state=="pokemon" then return self.actors[side],state end
+  if state=="substitute" then return self:ensureSubstitute(side),state end
+  return nil,state
+end
+
+function Scene:picScale(side)
+  local grow=self:hostGrow(side)
+  if grow then return clamp(grow,0,1) end
+  local battler=self:shownBattler(side)
+  local fx=battler and self.battle.picFx and self.battle.picFx[battler]
+  -- With battle FX on, Stadium's Minimize routine (sizeScale 0.8) applies.
+  return fx and fx.minimized and not self.battleFx
+    and not self:substituteVisible(side) and .35 or 1
+end
+
+function Scene:picElevation(side)
+  local b=self:shownBattler(side)
+  local pf=b and self.battle.picFx and self.battle.picFx[b]
+  if not pf then return 0 end
+  local t=tonumber(pf.t) or 0
+  local charging=b.charging
+  local move=type(charging)=="table" and charging.id or charging
+  if move=="FLY" and pf.kind=="squish" then
+    return 3*clamp(t/24,0,1)
+  end
+  if pf.kind=="slideDown" then return -clamp(t/21,0,1) end
+  if pf.kind=="slideUp" then return -(1-clamp(t/14,0,1)) end
+  return 0
+end
+
+function Scene:syncPresentationState()
+  local battle=self.battle
+  if not battle then return end
+
+  -- A host send-out grow is presentation state, so it only starts a Stadium
+  -- entrance clip; the host remains responsible for when the mon is actually
+  -- considered sent out.
+  for _,side in ipairs({"player","enemy"}) do
+    local grow=self:hostGrow(side)
+    local activeGrow=grow~=nil and grow>0 and grow<1
+    if grow and not self.lastGrow[side] then
+      self.actors[side]:play("entrance",false)
+      -- 8411BCC8: the send-out state signals entry 0x122 as it starts.
+      if self.battleFx and self.battleFx.signalEffect then
+        pcall(self.battleFx.signalEffect,self.battleFx,FxSequence.SEND_OUT_ENTRY,side)
+      end
+    end
+    self.lastGrow[side]=grow and true or false
+
+    -- Red's switch-out: RetreatMon's text, then AnimateRetreatingPlayerMon
+    -- (host shrinkOut) before the swap. Stadium's recall (8411ABAC) signals
+    -- 0x126 on the outgoing mon; the host's retreat is its only cue.
+    if side=="player" then
+      local shrink=battle.shrinkOut
+      local recalling=type(shrink)=="table" and shrink.battler==battle.player
+      if recalling and not self.lastRecall and self.battleFx and self.battleFx.signalEffect then
+        pcall(self.battleFx.signalEffect,self.battleFx,FxSequence.RECALL_ENTRY,"player")
+      end
+      self.lastRecall=recalling or false
+    end
+
+    local b=self:shownBattler(side)
+    local fainted=b and b.fainted and true or false
+    local faintFx=b and safeCall(battle,"fxFaintActive",b) or false
+    if (faintFx or fainted) and not self.lastFainted[side]
+        and self.actors[side].renderer then
+      if self.actors[side]:faint() and self.battleFx and self.battleFx.playFaint then
+        pcall(self.battleFx.playFaint,self.battleFx,side,self.actors[side])
+      end
+    end
+    self.lastFainted[side]=fainted or faintFx or false
+
+    local pf=b and battle.picFx and battle.picFx[b] or nil
+    local kind=pf and pf.kind or nil
+    if kind=="blink" and self.lastPicKind[side]~="blink" then
+      self.actors[side].flash=.12
+    end
+    self.lastPicKind[side]=kind
+  end
+
+  -- Move rows are already selected and ordered by the host. On the rising edge
+  -- of the native animation, ask only the attacking model to play its matching
+  -- Stadium move clip. Special host animations (ball toss, faint, send-out)
+  -- have no move definition and therefore do not trigger an attack clip.
+  local playing=battle.animPlaying and true or false
+  -- AnimPlayer:start (installHooks) presents each start as it happens; this
+  -- edge detector covers hosts without that hook.
+  if playing and not self.moveStartHooked and (not self.animWasPlaying
+      or battle.animName~=self.lastAnimName
+      or battle.animAttackerIsPlayer~=self.lastAnimAttacker) then
+    self:presentAnimStart(battle.animName,battle.animAttackerIsPlayer)
+  end
+  if self.animWasPlaying and not playing and self.battleFx and self.battleFx.finish then
+    self.battleFx:finish()
+  end
+  self.animWasPlaying=playing
+  self.lastAnimName=battle.animName
+  self.lastAnimAttacker=battle.animAttackerIsPlayer
+end
+
+function Scene:update(dt)
+  self:sync()
+  self:syncPresentationState()
+  self:stepArena(dt)
+  Camera.stickOrbit(self.stickX,dt)
+  Camera.stickPitch(-self.stickY,dt)
+  Camera.update(dt)
+  for _,which in ipairs({"player","enemy"}) do
+    local actor=self.actors[which]
+    if actor.setRest then actor:setRest(self:restCondition(which)) end
+  end
+  self.actors.player:update(dt)
+  self.actors.enemy:update(dt)
+  self.substituteActors.player:update(dt)
+  self.substituteActors.enemy:update(dt)
+  self:updateBattleFx(dt)
+  return self:render()
+end
+
+local function active(battle)
+  return session and battle and session.battle==battle and session or nil
+end
+
+
+-- Native trainer portraits use opaque cartridge paper. The shared helper
+-- removes only their edge-connected paper when they are drawn over Stadium.
+
+local function withFullPaperRemoved(fn)
+  local g=love and love.graphics
+  if not (g and g.rectangle and g.getColor) then return fn() end
+  local rectangle=g.rectangle
+  g.rectangle=function(mode,x,y,w,h,...)
+    if mode=="fill" and x==0 and y==0 and w==160 and h==144 then
+      local r,gg,b,a=g.getColor()
+      if r>.99 and gg>.99 and b>.99 and (a or 1)>.99 then return end
+    end
+    return rectangle(mode,x,y,w,h,...)
+  end
+  local ok,result=pcall(fn)
+  g.rectangle=rectangle
+  if not ok then error(result,0) end
+  return result
+end
+
+local function withBoxPaperRemoved(fn)
+  local g=love and love.graphics
+  if not (g and g.rectangle and g.getColor) then return fn() end
+  local rectangle=g.rectangle
+  g.rectangle=function(mode,...)
+    if mode=="fill" then
+      local r,gg,b,a=g.getColor()
+      if r>.99 and gg>.99 and b>.99 and (a or 1)>.99 then return end
+    end
+    return rectangle(mode,...)
+  end
+  local ok,result=pcall(fn)
+  g.rectangle=rectangle
+  if not ok then error(result,0) end
+  return result
+end
+
+local function hudLive(battle,slide)
+  local enemy=battle.enemy and not battle.showEnemyTrainer
+    and not battle.enemySendingOut and not safeCall(battle,"growInScale",battle.enemy)
+    and slide==0 and not battle.introBalls and not battle.enemy.fainted
+  local player=battle.player and not (battle.safari or battle.demo)
+    and not battle.showPlayerBack and slide==0
+  return enemy and true or false,player and true or false
+end
+
+-- DrawAllPokeballs and ReplaceFaintedEnemyMon reuse the native HUD bands, but
+-- their long black underline is Game Boy background chrome rather than part of
+-- a party-status indicator. Detached Stadium cards need only the six 8x8 ball
+-- tiles; the card itself supplies the modern background and edge treatment.
+local function partyRows(battle,slide)
+  if not battle or slide~=0 then return false,false end
+  local intro=battle.introBalls==true
+  local enemy=(battle.showEnemyBalls and battle.enemyParty)
+    or (intro and battle.enemyParty
+      and (battle.kind=="trainer" or battle.kind=="link"))
+  local player=intro and type(battle.playerPartyView)=="function"
+  return enemy and true or false,player and true or false
+end
+
+local function textRects(battle)
+  if not battle or battle.blankForAskName then return {} end
+  local out={TEXT_RECT.box}
+  if battle.phase=="moveSelect" then out[#out+1]=TEXT_RECT.moves end
+  if battle.phase=="mimicSelect" then out[#out+1]=TEXT_RECT.mimic end
+  return out
+end
+
+function Scene:captureHud(slide)
+  if not originals.drawHUDs then return nil end
+  local battle=self.battle
+  local had=rawget(battle,"colorMode")
+  battle.colorMode=function() return false end
+  local ok,layer=pcall(UIOwnership.withNativeStatus,battle,function()
+    return Hud.hudLayer(function()
+      originals.drawHUDs(battle,slide)
+      UIOwnership.drawStatusOverlay(battle)
+    end)
+  end)
+  battle.colorMode=had
+  if not ok then error(layer,0) end
+  return layer
+end
+
+-- Preserve Stadium's established glass-panel composition, but build each
+-- independently owned region only after the official visibility hooks leave
+-- it available. A foreign UI therefore removes the competing Stadium region
+-- without changing the 3D scene, camera, models or battle logic.
+function Scene:composeWorld()
+  if not (self.readyFrame and self.hudBox and love and love.graphics) then
+    return self.presentCanvas or self.canvas
+  end
+  local battle=self.battle
+  local slide=(battle.introSlide or 0)*4
+  self.battleArtUI=false
+  -- Battle Art owns presentation when installed; keep this an exported,
+  -- optional handoff so standalone Stadium retains its own HUD and glass.
+  local handle=modRef and modRef.find and modRef.find("BATTLE_ART_VOXEL_FORK")
+  local ui=handle and handle.exports and handle.exports.battlePresentation
+  if ui and type(ui.drawHostedUI)=="function" then
+    local statusAvailable=UIOwnership.claimStatus(battle)
+    local target,sx,sy=self:copyForComposite()
+    if target then
+      local handled=ui.drawHostedUI({battle=battle,canvas=target,box=self.hudBox,
+        width=self.width,sx=sx,sy=sy,statusAvailable=statusAvailable,
+        report=function(message)
+          diagnostic("UI: "..tostring(message).."; scene defect="..tostring(self.defect))
+        end,
+        drawHUDs=function()
+          return UIOwnership.withNativeStatus(battle,function()
+            local had=rawget(battle,"colorMode")
+            local shot=rawget(battle,"dramaticShapeShot")
+            local hosted=rawget(battle,"stadium2ImporterGen1Shot")
+            battle.dramaticShapeShot=nil
+            battle.stadium2ImporterGen1Shot=nil
+            battle.colorMode=function() return false end
+            local ok,result=pcall(function()
+              originals.drawHUDs(battle,slide)
+              UIOwnership.drawStatusOverlay(battle)
+            end)
+            battle.colorMode=had
+            battle.dramaticShapeShot=shot
+            battle.stadium2ImporterGen1Shot=hosted
+            if not ok then error(result,0) end
+            return result
+          end)
+        end})
+      if handled then
+        self.battleArtUI=true
+        self.statusHudOwned=statusAvailable
+        return target
+      end
+    end
+  end
+  local statusOwned=UIOwnership.claimStatus(battle)
+  local bottomVisible=UIOwnership.bottomVisible(battle) and UIOwnership.hudEnabled()
+  self.statusHudOwned=statusOwned
+  self.bottomUiVisible=bottomVisible
+  local hudLayer=statusOwned and self:captureHud(slide) or nil
+  local target,sx,sy=self:copyForComposite()
+  if not target then return self.presentCanvas or self.canvas end
+
+  local g=love.graphics
+  local previous=g.getCanvas and {g.getCanvas()} or nil
+  local oldBlend,oldAlpha=g.getBlendMode()
+  local ok,err=pcall(function()
+    g.setCanvas(target)
+    g.setBlendMode("alpha","alphamultiply")
+    g.push()
+    g.scale(sx,sy)
+    local box,s=self.hudBox,self.hudBox.scale
+    local enemyLive,playerLive=hudLive(battle,slide)
+    local enemyBalls,playerBalls=partyRows(battle,slide)
+    enemyLive=statusOwned and enemyLive
+    playerLive=statusOwned and playerLive
+    enemyBalls=statusOwned and enemyBalls
+    playerBalls=statusOwned and playerBalls
+    local er,pr=HUD_RECT.enemy,HUD_RECT.player
+    local viewport=BattleViewport.resolve(self.width,self.height,battle.game)
+    local panels=BattleViewport.statusPanels(viewport,box,s,er,pr)
+    local ps=panels.scale or s
+    local enemyPanelX,enemyPanelY=panels.enemyX,panels.enemyY
+    local playerPanelX,playerPanelY=panels.playerX,panels.playerY
+
+    -- STADIUM UI is the Stadium 2 UI mod (STADIUM2_UI): it hides the
+    -- host's status and bottom UI through the visibility hooks, so the
+    -- glass below stands aside for it as for any other UI mod.
+    if enemyLive or enemyBalls then
+      Hud.panel(self,{enemyPanelX,enemyPanelY,er[3]*ps,er[4]*ps})
+    end
+    if playerLive or playerBalls then
+      Hud.panel(self,{playerPanelX,playerPanelY,pr[3]*ps,pr[4]*ps})
+    end
+    if bottomVisible then
+      -- the host's text and menu windows on glass
+      for _,r in ipairs(textRects(battle)) do
+        Hud.panel(self,{box.lx+r[1]*s,box.ly+r[2]*s,r[3]*s,r[4]*s})
+      end
+    end
+
+    if hudLayer then
+      g.setColor(1,1,1,1)
+      local oldShader=g.getShader and g.getShader() or nil
+      local key=Hud.gaugeShader and Hud.gaugeShader() or nil
+      if key then g.setShader(key) end
+      if enemyBalls then
+        local row=g.newQuad(24,16,48,8,160,144)
+        g.draw(hudLayer,row,enemyPanelX+16*ps,enemyPanelY+16*ps,0,ps,ps)
+      elseif enemyLive then
+        local enemy=g.newQuad(0,0,160,48,160,144)
+        g.draw(hudLayer,enemy,enemyPanelX-er[1]*ps,
+          enemyPanelY-er[2]*ps,0,ps,ps)
+      end
+      if playerBalls then
+        local row=g.newQuad(88,80,48,8,160,144)
+        g.draw(hudLayer,row,playerPanelX+16*ps,playerPanelY+24*ps,0,ps,ps)
+      elseif playerLive then
+        local player=g.newQuad(0,48,160,48,160,144)
+        g.draw(hudLayer,player,playerPanelX-pr[1]*ps,
+          playerPanelY-(pr[2]-48)*ps,0,ps,ps)
+      end
+      if key then g.setShader(oldShader) end
+    end
+    g.pop()
+  end)
+  if previous and #previous>0 then g.setCanvas(unpack(previous)) else g.setCanvas() end
+  g.setBlendMode(oldBlend or "alpha",oldAlpha)
+  g.setColor(1,1,1,1)
+  if not ok then error(err,0) end
+  self.hudSnapped=statusOwned
+  return target
+end
+
+local function animationProjection(anchors)
+  if not (anchors and anchors.player and anchors.enemy) then return nil end
+  local p0,e0=SOURCE_ANCHOR.player,SOURCE_ANCHOR.enemy
+  local spx,spy=(p0[1]+e0[1])*.5,(p0[2]+e0[2])*.5
+  local dpx,dpy=(anchors.player[1]+anchors.enemy[1])*.5,
+    (anchors.player[2]+anchors.enemy[2])*.5
+  local svx,svy=e0[1]-p0[1],e0[2]-p0[2]
+  local dvx,dvy=anchors.enemy[1]-anchors.player[1],anchors.enemy[2]-anchors.player[2]
+  local sourceLength=math.sqrt(svx*svx+svy*svy)
+  local destLength=math.sqrt(dvx*dvx+dvy*dvy)
+  return {dx=dpx-spx,dy=dpy-spy,scale=clamp(destLength/sourceLength,.5,2),
+    originX=spx,originY=spy}
+end
+
+local function installHooks()
+  local BattleState=require("src.battle.BattleState")
+  if BattleState.stadium2ImporterGen1 then return true end
+  BattleState.stadium2ImporterGen1=true
+
+  -- Observe actual playback calls, not a sampled boolean: consecutive moves
+  -- can start between Stadium updates without an observable stopped frame.
+  local AnimPlayer=require("src.battle.AnimPlayer")
+  local start=AnimPlayer.start
+  function AnimPlayer:start(move,player,...)
+    local result=pack(start(self,move,player,...))
+    local scene=session
+    if scene and scene.battle.animPlayer==self then
+      scene.moveStartHooked=true
+      scene:sync()
+      scene:presentAnimStart(move,player and true or false)
+    end
+    return unpack(result,1,result.n)
+  end
+
+  if BattleState.applyHitFx then
+    local applyHit=BattleState.applyHitFx
+    function BattleState:applyHitFx(hit,...)
+      local result=pack(applyHit(self,hit,...))
+      local scene=active(self)
+      if scene and hit and hit.blink then
+        local side=hit.blink==self.player and "player" or hit.blink==self.enemy and "enemy"
+        if side then
+          local actor
+          if scene:substituteVisible(side) then actor=scene:ensureSubstitute(side)
+          else actor=scene.actors[side] end
+          if actor then actor:hit() end
+        end
+      end
+      return unpack(result,1,result.n)
+    end
+  end
+
+  if BattleState.applyDamage and BattleState.startMessage then
+    local damage,startMessage=BattleState.applyDamage,BattleState.startMessage
+    function BattleState:applyDamage(target,...)
+      local scene=active(self)
+      local hadSub=scene and target.substituteHP
+      local result=pack(damage(self,target,...))
+      if hadSub and not target.substituteHP then
+        -- applyDamage queues its break message after the impact. Retain the
+        -- doll until that exact row is presented, irrespective of its text.
+        local row=self.queue and self.queue[self.nextInsert]
+        if row and row.text then
+          scene.heldSubstitutes=scene.heldSubstitutes or setmetatable({},{__mode="k"})
+          scene.substituteBreaks=scene.substituteBreaks or setmetatable({},{__mode="k"})
+          scene.heldSubstitutes[target]=true
+          scene.substituteBreaks[row]=target
+        end
+      end
+      return unpack(result,1,result.n)
+    end
+    function BattleState:startMessage(item,...)
+      local scene=active(self)
+      local target=scene and scene.substituteBreaks and scene.substituteBreaks[item]
+      if target then
+        scene.heldSubstitutes[target]=nil
+        scene.substituteBreaks[item]=nil
+      end
+      return startMessage(self,item,...)
+    end
+  end
+
+  -- Transform leaves Gen 1's mon.species unchanged. Follow the sprite that
+  -- the host commits at its animation/queued-action boundary instead of
+  -- mutating battle data or swapping models at move selection time.
+  if BattleState.speciesSprite then
+    local speciesSprite=BattleState.speciesSprite
+    function BattleState:speciesSprite(species,...)
+      local result=pack(speciesSprite(self,species,...))
+      local scene=active(self)
+      if scene and result[1] then
+        scene.transformSprites=scene.transformSprites or setmetatable({},{__mode="k"})
+        scene.transformSprites[result[1]]=dexOf(self.data,{species=species})
+      end
+      return unpack(result,1,result.n)
+    end
+  end
+
+  originals.isWideBattleLayout=BattleState.isWideBattleLayout
+  function BattleState:isWideBattleLayout()
+    if active(self) then return false end
+    return originals.isWideBattleLayout(self)
+  end
+
+  originals.draw=BattleState.draw
+  function BattleState:draw(...)
+    local args={...}
+    local scene=active(self)
+    if not scene then return originals.draw(self,unpack(args)) end
+    scene.battle=self
+    scene.game=self.game
+    scene:sync()
+    if not scene.readyFrame then scene:render() end
+    if not scene.readyFrame or scene.defect then
+      UIOwnership.release(self)
+      return originals.draw(self,unpack(args))
+    end
+
+    local world=scene:composeWorld()
+    scene.composedWorld=world
+    scene.composeReady=world~=nil
+
+    -- The host battle contributes its centred native text/effect layer only.
+    -- composeWorld already placed every Stadium-owned glass/status region;
+    -- official visibility hooks suppress the corresponding native region.
+    love.graphics.clear(0,0,0,0)
+    self.stadium2ImporterGen1Shot=scene
+    scene.hudSnapped=false
+    scene.hudSnapped=scene.statusHudOwned==true
+
+    local hadColor=rawget(self,"colorMode")
+    self.colorMode=function() return false end
+    local ok,result=pcall(function()
+      return withNativePartyRowsSuppressed(scene,self,function()
+        return withFullPaperRemoved(function()
+          return originals.draw(self,unpack(args))
+        end)
+      end)
+    end)
+    self.colorMode=hadColor
+    self.stadium2ImporterGen1Shot=nil
+    if not ok then error(result,0) end
+    -- Instance wrappers (including QoL) append native-coordinate HUD ink
+    -- after this class method. The outer scope installed below collects it
+    -- exactly once before the final render.compose pass.
+    if scene.collectLateStatus and not scene.battleArtUI
+        and (scene.statusHudOwned or self:statusHUDVisible()==false) then
+      UILayers.begin(scene)
+      scene.closeLateStatus=UIOwnership.beginNativeStatus(self)
+      scene.lateStatusStarted=true
+    end
+    return result
+  end
+
+  originals.picImage=BattleState.picImage
+  function BattleState:picImage(img)
+    local rendered=originals.picImage(self,img)
+    if not active(self) then return rendered end
+    if self.showEnemyTrainer and img==self.trainerPic then
+      return TrainerSprite.keyed(self.trainerPic,rendered)
+    end
+    if self.showPlayerBack and img==self.playerBackPic then
+      return TrainerSprite.keyed(self.playerBackPic,rendered)
+    end
+    return rendered
+  end
+
+  originals.drawPicsLayer=BattleState.drawPicsLayer
+  function BattleState:drawPicsLayer(slide,sx,sy,onlySide,skipMenuClip)
+    local scene=active(self)
+    if not scene then
+      return originals.drawPicsLayer(self,slide,sx,sy,onlySide,skipMenuClip)
+    end
+    local ownP,ownE=scene:ownsSlot("player"),scene:ownsSlot("enemy")
+    if ownP and ownE then return end
+    if ownP and not ownE then
+      if onlySide=="player" then return end
+      return originals.drawPicsLayer(self,slide,sx,sy,"enemy",skipMenuClip)
+    end
+    if ownE and not ownP then
+      if onlySide=="enemy" then return end
+      return originals.drawPicsLayer(self,slide,sx,sy,"player",skipMenuClip)
+    end
+    return originals.drawPicsLayer(self,slide,sx,sy,onlySide,skipMenuClip)
+  end
+
+  originals.drawHUDs=BattleState.drawHUDs
+  originals.drawTextArea=BattleState.drawTextArea
+  function BattleState:drawTextArea(...)
+    local args={...}
+    local scene=active(self)
+    if not scene or scene.battleArtUI or not UIOwnership.hudEnabled()
+        or not UIOwnership.bottomVisible(self) then
+      return originals.drawTextArea(self,unpack(args))
+    end
+    return withBoxPaperRemoved(function()
+      return originals.drawTextArea(self,unpack(args))
+    end)
+  end
+
+  originals.drawAnimLayer=BattleState.drawAnimLayer
+  function BattleState:drawAnimLayer(colorized)
+    local scene=active(self)
+    -- With Stadium battle FX on, Stadium's effects replace the Game Boy
+    -- animation graphics; the host animation still runs for timing. Ball
+    -- throws and catch shakes have no Stadium effect and stay native.
+    if scene and scene.battleFx and self.animPlaying
+        and not NATIVE_ANIMS_WITH_FX[self.animName] then
+      return
+    end
+    local projection=animationProjection(scene and scene.uiAnchors)
+    if not projection then return originals.drawAnimLayer(self,colorized) end
+    local g=love.graphics
+    g.push()
+    g.translate(projection.dx,projection.dy)
+    if projection.scale~=1 then
+      g.translate(projection.originX,projection.originY)
+      g.scale(projection.scale,projection.scale)
+      g.translate(-projection.originX,-projection.originY)
+    end
+    local ok,result=pcall(originals.drawAnimLayer,self,false)
+    g.pop()
+    if not ok then error(result,0) end
+    return result
+  end
+
+  return true
+end
+
+-- Camera controls are presentation-only. Gen 1 and Gen 2 deliberately use
+-- the same interaction vocabulary: mouse hover steers, wheel/Q/E zoom, the
+-- controller right stick steers, stick clicks zoom, 0 recentres, one free
+-- touch drags, and two free touches pinch. None of these paths write GB input
+-- or battle state.
+local function resetControlState()
+  freeTouches,pinch={},nil
+  if session then session.stickX,session.stickY=0,0 end
+end
+
+local function mouseStep(value)
+  return clamp(tonumber(value) or 0,-40,40)
+end
+
+local function freeIds()
+  local ids={}
+  for id in pairs(freeTouches) do ids[#ids+1]=id end
+  return ids
+end
+
+local function touchGap(a,b)
+  local pa,pb=freeTouches[a],freeTouches[b]
+  if not (pa and pb) then return 0 end
+  local dx,dy=pa.x-pb.x,pa.y-pb.y
+  return math.sqrt(dx*dx+dy*dy)
+end
+
+local function startPinch()
+  if pinch then return end
+  local ids=freeIds()
+  if #ids<2 then return end
+  local distance=touchGap(ids[1],ids[2])
+  if distance>=16 then pinch={a=ids[1],b=ids[2],gap=distance} end
+end
+
+local function pointerControl(event)
+  if not (session and type(event)=="table") then return false end
+  local source,phase=event.source,event.phase
+  if source=="mouse" then
+    if phase=="moved" then
+      Camera.mouseOrbit(mouseStep(event.dx))
+      Camera.mousePitch(-mouseStep(event.dy))
+      return true
+    end
+    return false
+  end
+  if source~="touch" then return false end
+
+  local id=event.id
+  if phase=="pressed" then
+    freeTouches[id]={x=tonumber(event.x) or 0,y=tonumber(event.y) or 0}
+    startPinch()
+    return true
+  elseif phase=="moved" then
+    local point=freeTouches[id]
+    if not point then return false end
+    local x,y=tonumber(event.x) or point.x,tonumber(event.y) or point.y
+    local px,py=point.x,point.y
+    point.x,point.y=x,y
+    if pinch and (id==pinch.a or id==pinch.b) then
+      local distance=touchGap(pinch.a,pinch.b)
+      local factor=distance/math.max(1,pinch.gap)
+      if math.abs(factor-1)>.02 then
+        Camera.stepZoom(math.log(1/factor)/math.log(Camera.ZOOM_STEP))
+        pinch.gap=distance
+      end
+      return true
+    end
+    local width,height=1280,720
+    if love and love.graphics then
+      width=love.graphics.getWidth and love.graphics.getWidth() or width
+      height=love.graphics.getHeight and love.graphics.getHeight() or height
+    end
+    Camera.dragOrbit((x-px)/math.max(320,width))
+    Camera.dragPitch(-(y-py)/math.max(240,height))
+    return true
+  elseif phase=="released" or phase=="cancelled" then
+    if freeTouches[id] then freeTouches[id]=nil end
+    if pinch and (id==pinch.a or id==pinch.b) then pinch=nil end
+    return true
+  end
+  return false
+end
+
+local function installControls()
+  local game=gameRef or (modRef and modRef.game)
+  if type(game)~="table" then return false end
+  if game.stadium2ImporterGen1Controls then return true end
+  game.stadium2ImporterGen1Controls=true
+
+  controlOriginals.keypressed=game.keypressed
+  if type(game.keypressed)=="function" then
+    game.keypressed=function(self,name,...)
+      if session and (name=="0" or name=="kp0") then
+        Camera.recentre()
+        return
+      end
+      if session and (name=="q" or name=="e") then
+        Camera.stepZoom(name=="q" and 1 or -1)
+        return
+      end
+      return controlOriginals.keypressed(self,name,...)
+    end
+  end
+
+  controlOriginals.wheelmoved=game.wheelmoved
+  if type(game.wheelmoved)=="function" then
+    game.wheelmoved=function(self,x,y)
+      if session then
+        Camera.stepZoom(-(tonumber(y) or 0))
+        return
+      end
+      return controlOriginals.wheelmoved(self,x,y)
+    end
+  end
+
+  controlOriginals.gamepadpressed=game.gamepadpressed
+  if type(game.gamepadpressed)=="function" then
+    game.gamepadpressed=function(self,joystick,button)
+      if session and (button=="leftstick" or button=="rightstick") then
+        Camera.stepZoom(button=="leftstick" and 1 or -1)
+        return
+      end
+      return controlOriginals.gamepadpressed(self,joystick,button)
+    end
+  end
+
+  controlOriginals.gamepadaxis=game.gamepadaxis
+  if type(game.gamepadaxis)=="function" then
+    game.gamepadaxis=function(self,joystick,name,value)
+      if session and name=="rightx" then session.stickX=tonumber(value) or 0 end
+      if session and name=="righty" then session.stickY=tonumber(value) or 0 end
+      return controlOriginals.gamepadaxis(self,joystick,name,value)
+    end
+  end
+
+  controlOriginals.focus=game.focus
+  if type(game.focus)=="function" then
+    game.focus=function(self,value,...)
+      resetControlState()
+      return controlOriginals.focus(self,value,...)
+    end
+  end
+
+  -- Gen1Recomp's input.pointer seam is after TouchControls first refusal, so
+  -- touches on the virtual d-pad/buttons never become camera gestures. It also
+  -- gives ordinary desktop mouse hover deltas without stealing mouse input
+  -- from another mod: process the presentation gesture, then continue the hook
+  -- chain unchanged.
+  local hooks=modRef and modRef.hooks
+  if hooks and type(hooks.wrap)=="function" and not pointerHookInstalled then
+    local ok=pcall(hooks.wrap,hooks,"input.pointer",function(next,owner,event)
+      pointerControl(event)
+      return next(owner,event)
+    end,110)
+    pointerHookInstalled=ok
+  end
+  return true
+end
+
+local function installComposeHook()
+  local hooks=modRef and modRef.hooks
+  if not (hooks and type(hooks.wrap)=="function") then return false end
+  hooks:wrap("render.compose",function(next,renderer,ctx)
+    local scene=session
+    if not (scene and scene.composeReady and scene.composedWorld and ctx
+        and ctx.uiCanvas and ctx.ww and ctx.wh and love and love.graphics) then
+      return next(renderer,ctx)
+    end
+    scene.composeReady=false
+    local g=love.graphics
+    local dpiX,dpiY=tonumber(ctx.dpiX) or 1,tonumber(ctx.dpiY) or 1
+    if dpiX<=0 then dpiX=1 end
+    if dpiY<=0 then dpiY=1 end
+    g.setCanvas()
+    g.setColor(0,0,0,1)
+    g.rectangle("fill",0,0,ctx.ww,ctx.wh)
+    g.setColor(1,1,1,1)
+    local major=love.getVersion and select(1,love.getVersion()) or 11
+    -- The only shipped mobile backend on LÖVE 12 uses the flipped canvas
+    -- convention this branch corrects. Platform identity is intentionally
+    -- unavailable inside the mod sandbox.
+    if major>=12 then
+      g.draw(scene.composedWorld,0,ctx.wh,0,1/dpiX,-1/dpiY)
+    else
+      g.draw(scene.composedWorld,0,0,0,1/dpiX,1/dpiY)
+    end
+
+    local scale=Camera.fitScale(ctx.ww,ctx.wh)
+    local ox,oy=Camera.fitOrigin(ctx.ww,ctx.wh,scale)
+    if renderer and renderer.blitCanvas then
+      renderer:blitCanvas(ctx.uiCanvas,scale,scale,ctx.zones,scale,scale,
+        ox,oy,0,0,ctx.ww,ctx.wh,dpiX,dpiY)
+    else
+      g.draw(ctx.uiCanvas,ox,oy,0,scale,scale)
+    end
+    g.setColor(1,1,1,1)
+    return true
+  end,110)
+  return true
+end
+
+function Gen1.bind(mod)
+  modRef=mod
+  return Gen1
+end
+
+function Gen1.configureGame(game)
+  gameRef=game
+  local maxDex=151
+  local pokemon=game and game.data and game.data.pokemon
+  if type(pokemon)=="table" then
+    for _,def in pairs(pokemon) do
+      if type(def)=="table" then
+        local dex=tonumber(def.dex or def.index)
+        if dex and dex>maxDex and dex<=Gen1.COUNT then maxDex=math.floor(dex) end
+      end
+    end
+  end
+  configured=maxDex
+  Importer.configure({count=maxDex})
+  return maxDex
+end
+
+function Gen1.install()
+  if installed then return true end
+  patches=PatchScope.new()
+  local ok,err=pcall(function()
+    patches:capture({require("src.battle.BattleState"),require("src.battle.AnimPlayer")},installHooks)
+  end)
+  if not ok then warn(err); return false end
+  local composeOk,composeErr=pcall(installComposeHook)
+  if not composeOk or not composeErr then
+    patches:restore()
+    warn(composeOk and "render.compose hook unavailable" or composeErr)
+    return false
+  end
+  local controlsOk,controlsErr=pcall(function()
+    patches:capture({gameRef or modRef.game},installControls)
+  end)
+  if not controlsOk then warn(controlsErr);return false end
+  installed=true
+  return true
+end
+
+function Gen1.ensure(battle,context)
+  if not (installed and battle and Importer.battleEnabled() and Importer.available(configured)) then
+    return false
+  end
+  if session and session.battle==battle then return true end
+  Gen1.finish()
+  session=Scene.new(battle,context)
+  session:sync()
+  return true
+end
+
+function Gen1.update(dt)
+  if not session then return false end
+  local scene=session
+  local battle=scene.battle
+  local qos=modRef and modRef.find and modRef.find("quality_of_life")
+  if qos and battle and rawget(battle,"draw") and battle.draw~=scene.lateStatusWrapper then
+    local original=battle.draw
+    local wrapper
+    wrapper=function(self,...)
+      if not active(self) or scene.collectLateStatus then return original(self,...) end
+      scene.collectLateStatus=true
+      local result=pack(pcall(original,self,...))
+      scene.collectLateStatus=nil
+      if scene.lateStatusStarted then
+        scene.lateStatusStarted=nil
+        scene.closeLateStatus()
+        scene.closeLateStatus=nil
+        local rects={HUD_RECT.enemy,HUD_RECT.player}
+        UILayers.finish(scene,rects)
+        local g=love.graphics
+        g.push("all")
+        local ok,err=pcall(function()
+          -- Replacement status providers must not acquire late native ink.
+          if not scene.statusHudOwned then return end
+          g.setCanvas(scene.composedWorld)
+          g.origin();g.setScissor();g.setShader()
+          g.setColor(1,1,1,1)
+          g.setBlendMode("alpha","premultiplied")
+          local width,height=scene.composedWorld:getDimensions()
+          g.scale(width/scene.width,height/scene.height)
+          local box=scene.hudBox
+          local panels=BattleViewport.statusPanels(
+            BattleViewport.resolve(scene.width,scene.height,self.game),
+            box,box.scale,HUD_RECT.enemy,HUD_RECT.player)
+          local ps=panels.scale or box.scale
+          for _,side in ipairs({"enemy","player"}) do
+            local r=HUD_RECT[side]
+            local q=g.newQuad(r[1],r[2],r[3],r[4],160,144)
+            g.draw(scene.statusOverlay,q,panels[side.."X"],panels[side.."Y"],0,ps,ps)
+            if q.release then q:release() end
+          end
+        end)
+        g.pop()
+        if not ok then error(err,0) end
+      end
+      if not result[1] then error(result[2],0) end
+      return unpack(result,2,result.n)
+    end
+    scene.lateStatusWrapper=wrapper
+    scene.lateStatusOriginal=original
+    battle.draw=wrapper
+  end
+  return session:update(math.min(math.max(tonumber(dt) or 0,0),.1))
+end
+
+function Gen1.finish(battle)
+  if battle and session and session.battle~=battle then return false end
+  if session then
+    if session.battle then
+      if session.battle.draw==session.lateStatusWrapper then
+        session.battle.draw=session.lateStatusOriginal
+      end
+      session.battle.stadium2ImporterGen1Shot=nil
+    end
+    session:release()
+    session=nil
+  end
+  resetControlState()
+  return true
+end
+
+function Gen1.enabled()
+  return Importer.battleEnabled()
+end
+
+function Gen1.ready()
+  return Importer.available(configured)
+end
+
+function Gen1.status()
+  return {
+    enabled=Gen1.enabled(),ready=Gen1.ready(),count=configured,generation=1,
+    active=session~=nil,
+    betaArena=session and session.arenaMode or false,
+    arenaIndex=session and session.arenaIndex or nil,
+    ui=session and {statusHudOwned=session.statusHudOwned==true,
+      bottomUiVisible=session.bottomUiVisible~=false} or nil,
+    shot=session and (session.compositeCanvas or session.presentCanvas or session.canvas) or nil,
+    defect=session and session.defect or nil,
+    cameraInput=session and {stickX=session.stickX or 0,stickY=session.stickY or 0} or nil,
+    visual=session and {
+      player=session:visualState("player"),enemy=session:visualState("enemy"),
+    } or nil,
+  }
+end
+
+function Gen1.currentScene()
+  return session
+end
+
+function Gen1.uninstall()
+  if patches then patches:restore();patches=nil end
+  installed=false
+  pointerHookInstalled=false
+  Gen1.finish()
+end
+
+function Gen1.resetForTests()
+  Gen1.uninstall()
+  ArenaRuntime.resetForTests()
+  installed=false
+  modRef=nil
+  gameRef=nil
+  configured=151
+  resetControlState()
+end
+
+Gen1.Actor=Actor
+Gen1.Scene=Scene
+Gen1._animationProjection=animationProjection
+Gen1._hudLive=hudLive
+Gen1._partyRows=partyRows
+Gen1._textRects=textRects
+Gen1._withNativePartyRowsSuppressed=withNativePartyRowsSuppressed
+
+return Gen1
