@@ -2,6 +2,7 @@
 
 local V = ...
 
+local ModSetting = V.require("ModSetting")
 local Sky = V.require("Sky")
 local DayNight = V.require("DayNight")
 local ShadowMap = V.require("ShadowMap")
@@ -9,8 +10,20 @@ local Mat4 = V.require("Mat4")
 
 local Water = {}
 
+-- OFF = classic 2D water (default, lightest on the GPU); new key so old saves start at OFF
+Water.setting = ModSetting.new("water_mode", "WATER",
+                               { "off", "sky", "full" },
+                               { "OFF", "SKY", "FULL" }, 1)
+
+function Water.level()
+  local v = Water.setting:get()
+  if v == "off" then return 0 end
+  if v == "sky" then return 1 end
+  return 2
+end
+
 function Water.enabled()
-  return true
+  return Water.level() > 0
 end
 
 Water.FRESNEL_FLOOR = 0.34
@@ -800,6 +813,8 @@ function Water.begin(ctx, skyOnly)
     local edge = ctx.skyEdge
     if not (ramp and count and edge and edge > 0) then return false end
   end
+  local level = Water.level()
+  if level <= 0 then return false end
   local sh = Water.shader(skyOnly)
   if not sh then return false end
 
@@ -845,7 +860,7 @@ function Water.begin(ctx, skyOnly)
   local castBound = castTex or ctx.reflect or Sky.ramp()
   if castBound then send("castTex", castBound) end
 
-  if not skyOnly then send("rays", 1) end
+  if not skyOnly then send("rays", level >= 2 and 1 or 0) end
   send("lookFlat", ctx.lookFlat or { 0, 0, -1 })
   send("lean", Water.lean(ctx.descent))
   send("leanElev", Water.LEAN_ELEV)

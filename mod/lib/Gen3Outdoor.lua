@@ -47,6 +47,7 @@ function M.mask(ts,mid,ground)
  end)
 end
 M.HEDGE_HULL_MIN=100
+M.HEDGE_JOIN=6 -- widest gap of ground, in pixels, that is filled between two hedges in one tile
 local function solidPlant(c,emit,uv,anchor)
  local ts=c.ts
  local at=ts.midToSlot[c.mid];if not at then return 0 end
@@ -105,7 +106,7 @@ local function solidPlant(c,emit,uv,anchor)
  end
  return n
 end
-function M.plant(c,emit,uv,uvFor)
+function M.plant(c,emit,uv,uvFor,cells)
  local x,z=c.cx*16,c.cy*16
  if c.shape.kind=='shrub' and V.require('TreePresentation').props:get()=='modeled' then
   local mask=M.mask(c.ts,c.mid,c.shape.ground);local slot=c.ts.midToSlot[c.mid]
@@ -124,11 +125,43 @@ function M.plant(c,emit,uv,uvFor)
   end
   if mask and slot then
    local hedge=c.shape.hedge
+   local join={}
+   if hedge and cells then -- a narrow strip of ground between two hedges (also across a tile edge) is filled: one wall
+    local function edgeRun(m,py,fromRight)
+     local n=0
+     for q=0,15 do
+      local px=fromRight and 15-q or q
+      if m[py*16+px] then return n end
+      n=n+1
+     end
+     return 16
+    end
+    for _,side in ipairs({{-1,false},{1,true}})do
+     local n=cells[(c.cx+side[1])..':'..c.cy]
+     local nm=n and n.pair==c.pair and n.shape and n.shape.hedge and M.mask(n.ts,n.mid,n.shape.ground)
+     if nm then for py=0,15 do
+      local own,theirs=edgeRun(mask,py,side[2]),edgeRun(nm,py,not side[2])
+      if own<16 and theirs<16 and own+theirs<=M.HEDGE_JOIN then
+       local dir,first=side[2] and -1 or 1,side[2] and 15-own or own
+       local best,lum=first,-1
+       for k=0,8 do -- the leaf green of the hedge (the brightest pixel), not the pale rim of the art
+        local sx=first+dir*k
+        if sx>=0 and sx<=15 and mask[py*16+sx] then
+         local r,g,b=pixel(c.ts,slot%c.ts.cols*16+sx,math.floor(slot/c.ts.cols)*16+py)
+         if r+g+b>lum then lum,best=r+g+b,sx end
+        end
+       end
+       for q=0,math.min(15,own+3) do local px=side[2] and 15-q or q;join[py*16+px]=best end -- the ground and the pale rim pixel at the edge
+      end
+     end end
+    end
+   end
    local faces=V.require('VoxelHull').build(16,16,function(px,py)
-    local r,g,b,a=pixel(c.ts,slot%c.ts.cols*16+px,math.floor(slot/c.ts.cols)*16+py)
-    local t=sub(uv,px+.5,py+.5,px+.5,py+.5)[1]
-    return r,g,b,mask[py*16+px] and a or 0,t[1],t[2]
-   end,1,0,hedge and 10 or nil,(not hedge) and 'bush' or nil)
+    local src=join[py*16+px] or px
+    local r,g,b,a=pixel(c.ts,slot%c.ts.cols*16+src,math.floor(slot/c.ts.cols)*16+py)
+    local t=sub(uv,src+.5,py+.5,src+.5,py+.5)[1]
+    return r,g,b,(mask[py*16+px] or join[py*16+px]) and a or 0,t[1],t[2]
+   end,1,0,hedge and 10 or nil,(not hedge) and 'bush' or nil,nil,nil,nil,hedge)
    for _,q in ipairs(faces)do
     local p={};for _,v in ipairs(q)do p[#p+1]={x+8+v[1],v[2],z+8+v[3]}end
     local t={q.u,q.v};emit(p,{t,t,t,t},q.shade)
@@ -563,7 +596,7 @@ function tufts(c,emit,uv,groundUv,info)
  end
  return true
 end
-function M.append(c,emit,uvFor)
+function M.append(c,emit,uvFor,cells)
  local s,x,z=c.shape,c.cx*16,c.cy*16
  local uv=assert(uvFor(c.ts,c.mid))
  local function box(x0,y0,z0,x1,y1,z1,tex,frontTex)
@@ -678,7 +711,7 @@ function M.append(c,emit,uvFor)
    emit({{x+16,h,z},{x,h,z},{x,h-3,z},{x+16,h-3,z}},sub(uv,0,0,16,3),.7)
   end
  elseif s.kind=='flowers' or s.kind=='grass' or s.kind=='shrub' then
-  M.plant(c,emit,uv,uvFor)
+  M.plant(c,emit,uv,uvFor,cells)
  end
 end
 -- Never ship or read private imported pixels.

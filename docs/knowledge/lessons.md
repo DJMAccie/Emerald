@@ -106,3 +106,7 @@ Rules: R-29
 Cause: Victory Road bridge cells (layer 15 plus end caps, collision 43) got ramp arrows and floor pins so they became solid boxes; Scene.isDeck refused collision 43; the cave stair metatile 0x204 (elev 0) was no step, so a plate over a void. Dark caves also fall back to 2D in QA.
 Fix: A layer-15 run plus its end-cap metatiles stays a deck (no pin, no arrow); isDeck accepts layer 15 with collision 0 or >7; general__cave 0x204 is a step (PAIR_STEP_MIDS); QA drivers take EM_NODARK=1
 Rules: R-13,R-18,R-43
+
+### L-63 QA-opnamen zijn 's nachts donker en qa_tryp wist *.png in de outdir
+Cause: het spel volgt de echte klok (DayNight.hours); qa_tryp doet rm *.png in de outdir
+Fix: daglicht: QA_SRC-kopie van DayNight.lua met 'do return 12 end'; lage camera: kopie van em_views_driver.lua met C.pitch=EM_PITCH + EM_DRIVER; referentiebeelden buiten de outdir bewaren

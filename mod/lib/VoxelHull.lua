@@ -6,10 +6,169 @@ M.BACK_RATIO=.9
 M.INK=180
 M.TIER=.3
 M.LUMP=.8
+M.LATHE=true
+M.LATHE_SKEW=3 -- widest the row centres of a card may drift for it to be turned into a round tree
+M.FOOT_R=3 -- trunk radius, in card pixels
+M.BELLY=8 -- rows from the foot over which the underside of the crown rounds off
+M.TOP=6 -- rows from the top over which the crown rounds off into a dome
+M.BUMP=.1 -- how far the crown outline wobbles in and out (share of the radius), so it reads as leaf clumps
+M.JIT=2 -- rows the pattern may be taken from above or below, so the colour bands break up
+M.SEAM=4 -- columns at the card edge left out of the wrap, so no outline stripe where front and back meet
+M.CAP_FROM=.8 -- rows above this share of the height have a top that shows the pattern of one lower row (spokes, like the art)
+M.CAP_ROW=.85 -- that row, as a share of the height
 M.TRUNK_ROWS=.3 -- share of the card height, from the foot, where a non-green pixel is trunk
 local NEIGH={{-1,0},{1,0},{0,-1},{0,1}}
-function M.build(w,h,sample,step,bottom,depthLimit,organic,inflate,taper,seed)
+local function meshVox(vox,paints,nx,ny,nz,step,w,bottom)
+ local out={}
+ local lo,hi={nx,ny,nz},{-1,-1,-1}
+ for k in pairs(vox)do
+  local z=k%nz;local r=(k-z)/nz;local x=r%nx;local y=(r-x)/nx
+  if x<lo[1] then lo[1]=x end;if x>hi[1] then hi[1]=x end
+  if y<lo[2] then lo[2]=y end;if y>hi[2] then hi[2]=y end
+  if z<lo[3] then lo[3]=z end;if z>hi[3] then hi[3]=z end
+ end
+ local strides={nz,nx*nz,1}
+ for axis=1,3 do for _,sign in ipairs({-1,1})do
+  local limits={nx,ny,nz};local uaxis=axis%3+1;local vaxis=(axis+1)%3+1
+  local sa,su,sv=strides[axis],strides[uaxis],strides[vaxis]
+  for plane=lo[axis],hi[axis] do
+   Budget.check()
+   local grid={};local nw,nh=limits[uaxis],limits[vaxis]
+   local inside=plane+sign>=0 and plane+sign<limits[axis]
+   local across=sign*sa
+   for v=lo[vaxis],hi[vaxis] do local rowk=plane*sa+v*sv;for u=lo[uaxis],hi[uaxis] do
+    local k=rowk+u*su
+    local colour=vox[k]
+    if colour and not (inside and vox[k+across]) then grid[v*nw+u]=colour end
+   end end
+   for v=lo[vaxis],hi[vaxis] do for u=lo[uaxis],hi[uaxis] do
+    local colour=grid[v*nw+u]
+    if colour then
+     local ww,hh=1,1
+     while u+ww<nw and grid[v*nw+u+ww]==colour do ww=ww+1 end
+     while v+hh<nh do
+      local whole=true
+      for du=0,ww-1 do if grid[(v+hh)*nw+u+du]~=colour then whole=false;break end end
+      if not whole then break end;hh=hh+1
+     end
+     for dv=0,hh-1 do for du=0,ww-1 do grid[(v+dv)*nw+u+du]=nil end end
+     local q={u=paints[colour][1],v=paints[colour][2],shade=axis==2 and (sign>0 and 1 or .68) or axis==1 and .85 or .94}
+     for _,uv in ipairs({{u,v},{u+ww,v},{u+ww,v+hh},{u,v+hh}})do
+      local p={};p[axis]=(plane+(sign>0 and 1 or 0))*step;p[uaxis]=uv[1]*step;p[vaxis]=uv[2]*step
+      p[1]=p[1]-w/2;p[2]=math.max(0,p[2]-bottom);p[3]=p[3]-nz*step/2
+      q[#q+1]=p
+     end
+     if sign<0 then q[2],q[4]=q[4],q[2] end
+     out[#out+1]=q
+    end
+   end end
+  end
+ end end
+ return out
+end
+-- A tree as a body of revolution: each row is a disc as wide as the card row, and the card row's
+-- pattern is wrapped round it (front art on the front, mirrored on the back), so every angle shows leaves
+local function wobble(phi,y,a,b)return (math.sin(phi*3+y*.9+a)+math.sin(phi*5-y*.55+b))/2 end
+local function lathe(w,h,sample)
+ local nx,ny,nz=w,h,w
+ local rows,paints,vox={}, {}, {}
+ for y=0,ny-1 do
+  local sy=h-1-y
+  local row={};local L,R=nil,nil
+  for x=0,nx-1 do
+   local r,g,b,a,u,v=sample(x,sy)
+   if a and a>.5 then
+    local k=math.floor(r*255+.5)*65536+math.floor(g*255+.5)*256+math.floor(b*255+.5)
+    paints[k]=paints[k] or {u,v};row[x]=k;L=L or x;R=x
+   end
+  end
+  if L then
+   local r={row=row,L=L,R=R,cx=(L+R+1)/2,rho=(R-L+1)/2}
+   r.shape=r.rho
+   if y<ny*M.TRUNK_ROWS then
+    for x=L,R do local k=row[x];if k and not trunk then
+     local rr,gg,bb=math.floor(k/65536),math.floor(k/256)%256,k%256
+     if rr+gg+bb>=M.INK and rr>=gg then r.trunk=k end
+    end end
+   end
+   rows[y]=r
+  end
+ end
+ local lo,hi
+ for _,r in pairs(rows)do lo=math.min(lo or r.cx,r.cx);hi=math.max(hi or r.cx,r.cx) end
+ if lo and hi-lo>M.LATHE_SKEW then return nil end -- a leaning or lopsided tree (clumps on a bent trunk) is not round
+ local ybot
+ for y in pairs(rows)do if not ybot or y<ybot then ybot=y end end
+ for y,r in pairs(rows)do
+  local d=y-ybot
+  if d<M.BELLY then r.shape=math.max(.5,r.rho*math.sqrt(1-((M.BELLY-d)/M.BELLY)^2)) end
+ end
+ local top=0
+ for y in pairs(rows)do if y>top then top=y end end
+ for y,r in pairs(rows)do
+  local e=top-y
+  if e<M.TOP then r.shape=math.min(r.shape,math.max(.5,r.rho*math.sqrt(1-((M.TOP-e)/M.TOP)^2*.8))) end
+ end
+ local function key(x,y,z)return (y*nx+x)*nz+z end
+ local solid={}
+ for y,r in pairs(rows)do
+  Budget.check()
+  for x=0,nx-1 do for z=0,nz-1 do
+   local dx,dz=x+.5-r.cx,z+.5-nz/2
+   local lim=r.shape
+   if y-ybot>=M.BELLY then lim=lim*(1+M.BUMP*wobble(math.atan2(dx,dz),y,0,1.7)) end
+   if r.trunk and M.FOOT_R>lim then lim=M.FOOT_R end
+   if dx*dx+dz*dz<=lim*lim then solid[key(x,y,z)]=true end
+  end end
+ end
+ local hp=math.pi/2
+ local topY=0
+ for y in pairs(rows)do if y>topY then topY=y end end
+ local capFrom=math.floor(topY*M.CAP_FROM)
+ local capRow
+ for yy=math.floor(topY*M.CAP_ROW),0,-1 do local c=rows[yy]
+  local k=c and c.row[math.floor(c.cx)]
+  if k and math.floor(k/65536)+math.floor(k/256)%256+k%256>=M.INK then capRow=c;break end
+ end
+ capRow=capRow or rows[topY]
+ for y,r in pairs(rows)do
+  Budget.check()
+  for x=0,nx-1 do for z=0,nz-1 do
+   local k=key(x,y,z)
+   if solid[k] and not (solid[key(x-1,y,z)] and solid[key(x+1,y,z)] and solid[key(x,y-1,z)] and solid[key(x,y+1,z)]
+    and solid[k-1] and solid[k+1]) then
+    local dx0,dz0=x+.5-r.cx,z+.5-nz/2
+    if r.trunk and dx0*dx0+dz0*dz0<=M.FOOT_R*M.FOOT_R and (dx0*dx0+dz0*dz0>r.shape*r.shape or y-ybot<M.BELLY) then vox[k]=r.trunk else
+    local dx,dz=x+.5-r.cx,z+.5-nz/2
+    local phi=math.atan2(dx,dz)
+    local a=math.abs(phi);if a>hp then a=math.pi-a end
+    local src=r
+    if not r.trunk then
+     local j=math.floor(M.JIT*wobble(phi,y,2.3,.4)+.5);src=rows[y+j] or r
+     if src.trunk then src=r end
+    end
+    if y>=capFrom and not solid[key(x,y+1,z)] then src=capRow end
+    local span=math.max(.5,src.rho-M.SEAM)
+    local u=src.cx+(phi<0 and -1 or 1)*span*a/hp
+    local sx=math.max(src.L,math.min(src.R,math.floor(u)))
+    local c=src.row[sx]
+    if not c then
+     for d=1,nx do c=src.row[sx-d] or src.row[sx+d];if c then break end end
+    end
+    vox[k]=c
+    end
+    Budget.tick()
+   end
+  end end
+ end
+ return vox,paints,nx,ny,nz
+end
+function M.build(w,h,sample,step,bottom,depthLimit,organic,inflate,taper,seed,flat)
  step=step or 1;bottom=bottom or 0
+ if inflate and seed and M.LATHE and step==1 then
+  local vox,paints,nx,ny,nz=lathe(w,h,sample)
+  if vox then return meshVox(vox,paints,nx,ny,nz,1,w,bottom) end
+ end
  local nx,ny=math.ceil(w/step),math.ceil(h/step)
  local depth=w
  local nz=math.ceil(depth/step)
@@ -100,6 +259,7 @@ function M.build(w,h,sample,step,bottom,depthLimit,organic,inflate,taper,seed)
    local center=(runL[x]+runR[x]+1)/2;local radius=(runR[x]-runL[x]+1)/2
    local dx=x+.5-center
    local depth=math.sqrt(math.max(0,radius*radius-dx*dx))*.88
+   if flat and depthLimit then depth=depthLimit/(2*step) end -- hedges: the same depth right to the tile edge, so tiles join
    if inflate then depth=math.max(.5,halfDepth(x,y)*(taper and (1-(1-taper)*y/math.max(1,ny-1)) or 1)) elseif depthLimit then depth=math.min(depth,depthLimit/(2*step)) end
    local z0=math.max(0,math.floor(nx/2-depth*(inflate and M.BACK_RATIO or 1)));local z1=math.min(nx-1,math.ceil(nx/2+depth)-1)
    if relief then
@@ -291,52 +451,7 @@ function M.build(w,h,sample,step,bottom,depthLimit,organic,inflate,taper,seed)
    end
   end end end
  end
- local out={}
- local lo,hi={nx,ny,nz},{-1,-1,-1}
- for k in pairs(vox)do
-  local z=k%nz;local r=(k-z)/nz;local x=r%nx;local y=(r-x)/nx
-  if x<lo[1] then lo[1]=x end;if x>hi[1] then hi[1]=x end
-  if y<lo[2] then lo[2]=y end;if y>hi[2] then hi[2]=y end
-  if z<lo[3] then lo[3]=z end;if z>hi[3] then hi[3]=z end
- end
- local strides={nz,nx*nz,1}
- for axis=1,3 do for _,sign in ipairs({-1,1})do
-  local limits={nx,ny,nz};local uaxis=axis%3+1;local vaxis=(axis+1)%3+1
-  local sa,su,sv=strides[axis],strides[uaxis],strides[vaxis]
-  for plane=lo[axis],hi[axis] do
-   Budget.check()
-   local grid={};local nw,nh=limits[uaxis],limits[vaxis]
-   local inside=plane+sign>=0 and plane+sign<limits[axis]
-   local across=sign*sa
-   for v=lo[vaxis],hi[vaxis] do local rowk=plane*sa+v*sv;for u=lo[uaxis],hi[uaxis] do
-    local k=rowk+u*su
-    local colour=vox[k]
-    if colour and not (inside and vox[k+across]) then grid[v*nw+u]=colour end
-   end end
-   for v=lo[vaxis],hi[vaxis] do for u=lo[uaxis],hi[uaxis] do
-    local colour=grid[v*nw+u]
-    if colour then
-     local ww,hh=1,1
-     while u+ww<nw and grid[v*nw+u+ww]==colour do ww=ww+1 end
-     while v+hh<nh do
-      local whole=true
-      for du=0,ww-1 do if grid[(v+hh)*nw+u+du]~=colour then whole=false;break end end
-      if not whole then break end;hh=hh+1
-     end
-     for dv=0,hh-1 do for du=0,ww-1 do grid[(v+dv)*nw+u+du]=nil end end
-     local q={u=paints[colour][1],v=paints[colour][2],shade=axis==2 and (sign>0 and 1 or .68) or axis==1 and .85 or .94}
-     for _,uv in ipairs({{u,v},{u+ww,v},{u+ww,v+hh},{u,v+hh}})do
-      local p={};p[axis]=(plane+(sign>0 and 1 or 0))*step;p[uaxis]=uv[1]*step;p[vaxis]=uv[2]*step
-      p[1]=p[1]-w/2;p[2]=math.max(0,p[2]-bottom);p[3]=p[3]-nz*step/2
-      q[#q+1]=p
-     end
-     if sign<0 then q[2],q[4]=q[4],q[2] end
-     out[#out+1]=q
-    end
-   end end
-  end
- end end
- return out
+ return meshVox(vox,paints,nx,ny,nz,step,w,bottom)
 end
 function M.card(w,h,sample,bottom,height)
  local out={};local scale=(height or h)/h

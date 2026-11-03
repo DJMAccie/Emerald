@@ -9,6 +9,8 @@ M.MIN_INK=40
 M.GREEN=.6 -- share of those that must be foliage-green
 M.HEDGE_HEIGHT=13
 M.HEDGE_INK=12
+M.HEDGE_RIM=3 -- outline pixels of each hedge, next to the gap, that are painted over too
+M.HEDGE_JOIN=6 -- widest gap of ground, in pixels, filled between two hedges across a tile edge
 M.SKIP={['general__fortree']=true,
  ['general__battle_frontier']=true,['general__battle_palace']=true}
 
@@ -167,19 +169,55 @@ function M.append(c,emit,uvFor,cells)
   return ns and ns[((y+16)%16)*16+((x+16)%16)]
  end
  local zs=hedge and 0 or (H+T/2)*math.tan(M.TILT)
+ -- two hedges a few pixels apart across a tile edge become one wall: the ground and rim between them is
+ -- drawn with the hedge's own leaf green
+ local fill={}
+ if hedge then
+  local function run(m,y,fromRight)
+   for q=0,15 do if m[y*16+(fromRight and 15-q or q)] then return q end end
+   return 16
+  end
+  for _,side in ipairs({{-1,false},{1,true}})do
+   local ns=neighbour(side[1],0)
+   if ns then for y=0,15 do
+    local own,theirs=run(set,y,side[2]),run(ns,y,not side[2])
+    if own<16 and theirs<16 and own+theirs<=M.HEDGE_JOIN then
+     local dir,first=side[2] and -1 or 1,side[2] and 15-own or own
+     local best,lum=first,-1
+     for k=0,M.HEDGE_RIM+5 do
+      local sx=first+dir*k
+      if sx>=0 and sx<=15 and set[y*16+sx] then
+       local r,g,b=c.ts.overImageData:getPixel((c.ts.midToSlot[c.mid]%c.ts.cols)*16+sx,math.floor(c.ts.midToSlot[c.mid]/c.ts.cols)*16+y)
+       if r+g+b>lum then lum,best=r+g+b,sx end
+      end
+     end
+     for q=0,math.min(15,own+M.HEDGE_RIM) do fill[y*16+(side[2] and 15-q or q)]=best end
+    end
+   end end
+  end
+  local plain=has
+  has=function(x,y)return plain(x,y) or (x>=0 and x<16 and y>=0 and y<16 and fill[y*16+x]~=nil) end
+ end
+ local function S(i,y)return fill[y*16+i] or i end
  for y=0,15 do
   local x=0
   while x<16 do
    if has(x,y) then
-    local e=x+1;while e<16 and has(e,y)do e=e+1 end
-    emit({{x0+x,H+T,z0+y+zs},{x0+e,H+T,z0+y+zs},{x0+e,H+T,z0+y+1+zs},{x0+x,H+T,z0+y+1+zs}},sub(x,y,e,y+1),1)
+    local e=x+1
+    if fill[y*16+x] then
+     local sx=fill[y*16+x]
+     emit({{x0+x,H+T,z0+y+zs},{x0+e,H+T,z0+y+zs},{x0+e,H+T,z0+y+1+zs},{x0+x,H+T,z0+y+1+zs}},sub(sx,y,sx+1,y+1),1)
+    else
+     while e<16 and has(e,y) and not fill[y*16+e] do e=e+1 end
+     emit({{x0+x,H+T,z0+y+zs},{x0+e,H+T,z0+y+zs},{x0+e,H+T,z0+y+1+zs},{x0+x,H+T,z0+y+1+zs}},sub(x,y,e,y+1),1)
+    end
     if not hedge then emit({{x0+x,H,z0+y+1+zs},{x0+e,H,z0+y+1+zs},{x0+e,H,z0+y+zs},{x0+x,H,z0+y+zs}},sub(x,y,e,y+1),.58) end
     for i=x,e-1 do
-     if not has(i,y-1) then emit({{x0+i+1,H+T,z0+y+zs},{x0+i,H+T,z0+y+zs},{x0+i,H,z0+y+zs},{x0+i+1,H,z0+y+zs}},sub(i,y,i+1,y+1),.55) end
-     if not has(i,y+1) then emit({{x0+i,H+T,z0+y+1+zs},{x0+i+1,H+T,z0+y+1+zs},{x0+i+1,H,z0+y+1+zs},{x0+i,H,z0+y+1+zs}},sub(i,y,i+1,y+1),.62) end
+     if not has(i,y-1) then emit({{x0+i+1,H+T,z0+y+zs},{x0+i,H+T,z0+y+zs},{x0+i,H,z0+y+zs},{x0+i+1,H,z0+y+zs}},sub(S(i,y),y,S(i,y)+1,y+1),.55) end
+     if not has(i,y+1) then emit({{x0+i,H+T,z0+y+1+zs},{x0+i+1,H+T,z0+y+1+zs},{x0+i+1,H,z0+y+1+zs},{x0+i,H,z0+y+1+zs}},sub(S(i,y),y,S(i,y)+1,y+1),.62) end
     end
-    if not has(x-1,y) then emit({{x0+x,H+T,z0+y+zs},{x0+x,H+T,z0+y+1+zs},{x0+x,H,z0+y+1+zs},{x0+x,H,z0+y+zs}},sub(x,y,x+1,y+1),.78) end
-    if not has(e,y) then emit({{x0+e,H+T,z0+y+1+zs},{x0+e,H+T,z0+y+zs},{x0+e,H,z0+y+zs},{x0+e,H,z0+y+1+zs}},sub(e-1,y,e,y+1),.84) end
+    if not has(x-1,y) and not (x==0 and fill[y*16]) then emit({{x0+x,H+T,z0+y+zs},{x0+x,H+T,z0+y+1+zs},{x0+x,H,z0+y+1+zs},{x0+x,H,z0+y+zs}},sub(x,y,x+1,y+1),.78) end
+    if not has(e,y) and not (e==16 and fill[y*16+15]) then emit({{x0+e,H+T,z0+y+1+zs},{x0+e,H+T,z0+y+zs},{x0+e,H,z0+y+zs},{x0+e,H,z0+y+1+zs}},sub(e-1,y,e,y+1),.84) end
     x=e
    else x=x+1 end
   end

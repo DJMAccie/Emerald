@@ -67,7 +67,15 @@ G.treeArt={{0x1CE,0x1CF},{0x1D4,0x1D5},{0x1DC,0x1DD}}
 G.canopyTree=set({0x0C6,0x0C7,0x0CE})
 G.narrowTreeTop={[0x00E]=0x016,[0x00F]=0x017}
 G.narrowTreeRoot={[0x016]=0x00E,[0x017]=0x00F}
-G.flowers=set({0x004})
+-- Every flower metatile, by tileset: all of them become 3D tufts (kind 'flowers', Gen3Outdoor.plant)
+local FLOWERS={
+ general={0x004},
+ mauville={0x205,0x207,0x208,0x209,0x20A,0x20B,0x20C,0x20D,0x20E,0x20F,0x210,0x211,0x212,0x213,0x214,0x215,0x216,0x217},
+ ever_grande={0x290,0x291,0x292,0x293,0x294,0x295,0x296,0x297},
+ dewford={0x2C8},
+ lavaridge={0x21E,0x21F},
+}
+G.flowers=set(FLOWERS.general)
 G.shrub=set({0x193})
 G.sign=set({0x003,0x01B,0x131})
 G.rockInWater=set({0x0CD,0x18C,0x194})
@@ -81,6 +89,7 @@ local S={}
 local function secondary(name,t)
  t.ground=t.ground or G.grass
  for _,k in ipairs({'roof','wall','treeTop','treeRootLeft','treeRootRight','hedge','shrub','surface'})do t[k]=t[k] or {} end
+ t.flowers=set(FLOWERS[name] or {})
  S[name]=t
 end
 secondary('petalburg',{
@@ -336,6 +345,7 @@ function M.of(primary,secondary,mid,behavior,collision)
   if sec.roof[mid] then return {kind='roof',ground=sec.ground,roofType=(sec.roofTypes and sec.roofTypes[mid]) or sec.roofType or 'front'} end
   if sec.wall[mid] then return {kind='wall',ground=sec.ground} end
   local t=tree(sec,mid,ground);if t then return t end
+  if sec.flowers[mid] then return {kind='flowers',ground=ground,height=6} end
   if sec.hedge[mid] then return {kind='shrub',ground=ground,height=8,hedge=true} end
   if sec.shrub[mid] then
    if collision==BLOCKED then return {kind='shrub',ground=ground,height=10} end
