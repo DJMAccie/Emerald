@@ -1,0 +1,1 @@
+{"name":"EM_ROUTE104_PROTOTYPE","layout":"EM_ROUTE104_PROTOTYPE","width":1,"height":1,"tile_px_gba":16,"screenshot_tile_px":48,"units":"courses; 1 course = 16 GBA pixels","generator":"tools/heightmaps.py --complete","type":[["flat"]],"height_map":[[0]],"ramp":[[null]],"source":[["pin-field"]],"user_marks":[],"warnings":[]}

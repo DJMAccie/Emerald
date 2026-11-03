@@ -110,3 +110,12 @@ Rules: R-13,R-18,R-43
 ### L-63 QA-opnamen zijn 's nachts donker en qa_tryp wist *.png in de outdir
 Cause: het spel volgt de echte klok (DayNight.hours); qa_tryp doet rm *.png in de outdir
 Fix: daglicht: QA_SRC-kopie van DayNight.lua met 'do return 12 end'; lage camera: kopie van em_views_driver.lua met C.pitch=EM_PITCH + EM_DRIVER; referentiebeelden buiten de outdir bewaren
+
+### L-64 Inkt boven tellen leverde fouten op
+Cause: Agents namen Petya's nummers als heilig, ook waar de wanden iets anders zeiden (Route 103 1 vs 3, Mt Pyre 16 vs 19, Safari North 1 vs 5), en lazen zijbanden als rechte hellingen.
+Fix: Twijfelplekken als uitsnede (hoogtes over de screenshot) aan Petya voorleggen; wandtelling volgen als hij het niet weet; schuine banden en piramide-rotsjes volgens zijn pijlen.
+Rules: R-48
+
+### L-65 QA zonder tour en camera 7 mist Petya's fouten
+Cause: Petya speelt met tour=true en camera 7; QA draaide zonder tour op level 4, dus 2D-flits en ontbrekende buurkaarten waren niet te zien
+Fix: Reproduceer met EM_TOUR=1 en level 7 (em_views_driver, em_cross_driver); lees modOptions in zijn options.lua

@@ -15,10 +15,9 @@
 -- field) should still stub that one module explicitly; this covers the rest.
 local M = {}
 
-local loaded = {}
-
 -- The mod namespace, or nil so a caller can build its own.
 function M.namespace(overrides)
+  local loaded = {}
   local V
   V = {
     require = function(name)

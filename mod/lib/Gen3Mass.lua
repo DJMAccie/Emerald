@@ -224,6 +224,7 @@ local function picture(mass,cells)
   local mask=mass.masks and mass.masks[c]
   if not mask and not mass.masks then
    local g=c.shape.ground or 1
+   if type(g)=='table' then g=g[1] or 1 end
    local sea=mass.seaBoulders and seaGround(mass,cells)
    if sea then g=sea end
    local grounds={g};if g~=1 then grounds[#grounds+1]=1 end
@@ -241,7 +242,7 @@ local function picture(mass,cells)
    local byColour
    local set,water=colours(c.ts,g)
    if water then byColour=set end
-   mask=Objects.cut(c.ts,c.mid,grounds,nil,byColour)
+   mask=Objects.cut(c.ts,c.mid,grounds,c.looseStone or nil,byColour)
   end
   local ox,oy=origin(c.ts,c.mid)
   if mask then
@@ -490,7 +491,7 @@ end
 local function emitDome(mass,d,emit,uvOf,base)
  local W=mass.W
  if M.SOLID_STONES and (mass.seaBoulders or mass.boulder) and not d.solid then
-  local reject=mass.boulder and mass.groundMid and not mass.groundWater and colours(mass.ts,mass.groundMid) or nil
+  local reject=mass.boulder and not mass.owner.looseStone and mass.groundMid and not mass.groundWater and colours(mass.ts,mass.groundMid) or nil
   if reject and mass.groundTiles then
    local own={};for k in pairs(reject)do own[k]=true end;reject=own -- (colours() is shared: add to a copy)
    for mid in pairs(mass.groundTiles)do for k in pairs(colours(mass.ts,mid) or {})do reject[k]=true end end

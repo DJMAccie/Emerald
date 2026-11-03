@@ -61,15 +61,21 @@ function M.prepare(cells,def,claim)
      if (c.shape and c.shape.kind=='tree') or c.cy<from or (m.claimBlocked and (c.collision or 0)~=7) then c.bldModel=nil;c.civic=nil else kept[#kept+1]=c end
     end
     bld.claimed=kept
-    local votes,best,bn={},nil,0
+    local votes,best,bn,tpl={},nil,0,{}
     for x=bld.cx-1,bld.cx+bld.width do for y=bld.cy,bld.cy+bld.depth do
      local n=cells[x..':'..y]
      if n and not n.bldModel and (n.collision or 0)==0 and n.shape and n.shape.kind=='flat' then
-      votes[n.mid]=(votes[n.mid] or 0)+1
+      votes[n.mid]=(votes[n.mid] or 0)+1;tpl[n.mid]=n
       if votes[n.mid]>bn then best,bn=n.mid,votes[n.mid] end
      end
     end end
     bld.groundMid=best
+    for _,r in ipairs(m.groundRows or {})do -- ledge rows below the model: plain ground instead of a flat yellow plate
+     for x=bld.cx,bld.cx+bld.width-1 do
+      local c,t=cells[x..':'..(bld.cy+r)],tpl[best]
+      if c and t and not c.bldModel then c.mid,c.shape=t.mid,t.shape end
+     end
+    end
     out[#out+1]=bld
    end
   end

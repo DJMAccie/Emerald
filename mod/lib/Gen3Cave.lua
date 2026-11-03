@@ -43,9 +43,18 @@ function M.positionMask(ts,mid,floor)
 end
 local rockMemo=setmetatable({},{__mode='k'})
 local function rockHull(c,uvFor)
- local mask=c.shape.floorTile and M.positionMask(c.ts,c.mid,c.shape.floorTile) or V.require('Gen3Outdoor').mask(c.ts,c.mid,c.shape.ground)
- if not mask then return end
- mask=boulderMask(mask)
+ local rows=c.shape.stoneMask
+ local mask
+ if rows then
+  mask={}
+  for y=0,15 do for x=0,15 do
+   mask[y*16+x]=math.floor(rows[y+1]/2^x)%2==1
+  end end
+ else
+  mask=c.shape.floorTile and M.positionMask(c.ts,c.mid,c.shape.floorTile) or V.require('Gen3Outdoor').mask(c.ts,c.mid,c.shape.ground)
+  if not mask then return end
+  mask=boulderMask(mask)
+ end
  local uv=assert(uvFor(c.ts,c.mid))
  local function tex(x,y)
   return {uv[1][1]+(uv[2][1]-uv[1][1])*x/16,
@@ -62,7 +71,7 @@ local function rockHull(c,uvFor)
  end end
  if maxX<minX or maxY<minY then return end
  local hw,hh=maxX-minX,maxY-minY
- local bottom=15-maxY
+ local bottom=hh*.4 -- bury the lower 40% of the cropped stone
  local H=V.require('VoxelHull')
  local sample=function(x,y)
   local sx,sy=minX+x,minY+y
@@ -71,9 +80,119 @@ local function rockHull(c,uvFor)
   return r,g,b,mask[sy*16+sx]and a or 0,uvx,uvy
  end
  local card=V.require('TreePresentation').props:get()=='cards'
- local hull=card and H.card(hw,hh,sample,bottom,c.shape.height or 16)
-  or H.build(hw,hh,sample,1,bottom,nil,'rock')
- return {hull=hull,ox=minX+hw/2,oz=minY+hh/2,card=card}
+ local ox,oz=minX+hw/2,minY+hh/2
+ if card then
+  local hull=H.card(hw,hh,sample,bottom,c.shape.height or 16)
+  return {hull=hull,ox=ox,oz=oz,card=true}
+ end
+ -- Build a 3D rounded voxel boulder with the lower 40% buried (60% above ground)
+ -- and paint it with the stone's own non-outline palette tones.
+ local samples={}
+ local paints={}
+ for sy=minY,maxY-1 do for sx=minX,maxX-1 do
+  if mask[sy*16+sx] then
+   local r,g,b,a=c.ts.imageData:getPixel(px+sx,py+sy)
+   if (a or 1)>.5 then
+    local k=math.floor(r*255+.5)*65536+math.floor(g*255+.5)*256+math.floor(b*255+.5)
+    if not paints[k] then
+     local uvx,uvy=unpack(tex(sx+.5,sy+.5))
+     paints[k]={uvx,uvy}
+    end
+    local lum=.299*r+.587*g+.114*b
+    samples[#samples+1]={k=k,lum=lum}
+   end
+  end
+ end end
+ if #samples==0 then return end
+ table.sort(samples,function(a,b)return a.lum<b.lum end)
+ local tones={}
+ local startIdx=math.max(1,math.floor(#samples*.35)+1)
+ for i=startIdx,#samples do
+  local k=samples[i].k
+  if #tones==0 or tones[#tones]~=k then tones[#tones+1]=k end
+ end
+ if #tones==0 then tones[1]=samples[#samples].k end
+ local rowL,rowR={},{}
+ for z=0,hh-1 do
+  local sy=minY+z
+  local l,r=hw,-1
+  for x=0,hw-1 do
+   if mask[sy*16+(minX+x)] then
+    if x<l then l=x end
+    if x>r then r=x end
+   end
+  end
+  rowL[z],rowR[z]=l,r
+ end
+ local ny=math.max(4,math.floor(hh*.6+.5))
+ local rx,rz=math.max(1,hw/2),math.max(1,hh/2)
+ local vox={}
+ for y=0,ny-1 do
+  local u=(y+.5)/ny
+  local s=1.15*u-.15
+  local scale=math.sqrt(math.max(0,1-s*s))
+  for z=0,hh-1 do
+   local l,r=rowL[z],rowR[z]
+   if l<=r then
+    local rcx,rrx=(l+r+1)/2,(r-l+1)/2
+    local dz=(z+.5-hh/2)/rz
+    for x=0,hw-1 do
+     local dxRow=(x+.5-rcx)/math.max(1,rrx+.35)
+     local dx=(x+.5-hw/2)/rx
+     local rad2=math.max(dx*dx+dz*dz,dxRow*dxRow*.85+dz*dz*.85)
+     if rad2<=scale*scale then
+      local light=.52+.34*u-.26*dx-.18*dz
+      local idx=math.max(1,math.min(#tones,math.floor(light*#tones)+1))
+      vox[(y*hw+x)*hh+z]=tones[idx]
+     end
+    end
+   end
+  end
+ end
+ local hull={}
+ local strides={hh,hw*hh,1}
+ local limits={hw,ny,hh}
+ for axis=1,3 do for _,sign in ipairs({-1,1})do
+  local uaxis=axis%3+1;local vaxis=(axis+1)%3+1
+  local sa,su,sv=strides[axis],strides[uaxis],strides[vaxis]
+  local nw,nh=limits[uaxis],limits[vaxis]
+  for plane=0,limits[axis]-1 do
+   if not (axis==2 and sign<0 and plane==0) then
+    local grid={}
+    local inside=plane+sign>=0 and plane+sign<limits[axis]
+    local across=sign*sa
+    for v=0,nh-1 do local rowk=plane*sa+v*sv;for u=0,nw-1 do
+     local k=rowk+u*su
+     local col=vox[k]
+     if col and not (inside and vox[k+across]) then grid[v*nw+u]=col end
+    end end
+    for v=0,nh-1 do for u=0,nw-1 do
+     local col=grid[v*nw+u]
+     if col then
+      local ww,hh2=1,1
+      while u+ww<nw and grid[v*nw+u+ww]==col do ww=ww+1 end
+      while v+hh2<nh do
+       local whole=true
+       for du=0,ww-1 do if grid[(v+hh2)*nw+u+du]~=col then whole=false;break end end
+       if not whole then break end;hh2=hh2+1
+      end
+      for dv=0,hh2-1 do for du=0,ww-1 do grid[(v+dv)*nw+u+du]=nil end end
+      local q={u=paints[col][1],v=paints[col][2],shade=axis==2 and (sign>0 and 1 or .68) or axis==1 and .85 or .94}
+      for _,uvc in ipairs({{u,v},{u+ww,v},{u+ww,v+hh2},{u,v+hh2}})do
+       local p={}
+       p[axis]=plane+(sign>0 and 1 or 0)
+       p[uaxis]=uvc[1];p[vaxis]=uvc[2]
+       p[1]=p[1]-hw/2;p[3]=p[3]-hh/2
+       q[#q+1]=p
+      end
+      if sign<0 then q[2],q[4]=q[4],q[2] end
+      hull[#hull+1]=q
+     end
+    end end
+   end
+  end
+ end end
+ return {hull=hull,ox=ox,oz=oz,card=false}
 end
 function M.rock(c,emit,uvFor)
  local card=V.require('TreePresentation').props:get()=='cards'
@@ -83,14 +202,15 @@ function M.rock(c,emit,uvFor)
  if r==nil then r=rockHull(c,uvFor) or false;memo[key]=r;memo.n=memo.n+1 end
  if not r then return end
  local hull,ox,oz=r.hull,r.ox,r.oz
+ local scale=card and 1 or (c.shape.height or 16)/16
  for _,q in ipairs(hull)do
-  local points={};local t={q.u,q.v}
+  local points={}
   for _,p in ipairs(q)do
-   points[#points+1]={c.cx*16+ox+p[1],
-    p[2]*(card and 1 or (c.shape.height or 16)/16),
-    c.cy*16+oz+p[3]}
+   points[#points+1]={c.cx*16+ox+p[1],p[2]*scale,c.cy*16+oz+p[3]}
   end
-  emit(points,{t,t,t,t},q.shade,card and {c.cx*16+8,c.cy*16+8,.001} or nil)
+  local uvs=q.uvs
+  if not uvs then local t={q.u,q.v};uvs={t,t,t,t} end
+  emit(points,uvs,q.shade,card and {c.cx*16+8,c.cy*16+8,.001} or nil)
  end
 end
 M.UNDERWATER_FILL={[0x213]=true}

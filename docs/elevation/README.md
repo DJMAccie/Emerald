@@ -63,6 +63,5 @@ One course = 16 px everywhere (`Gen3Elevation.PIN_PX`, `Gen3Rock.COURSE`).
 ## How the pins are used
 Gen3Elevation floods each pin over its connected flat area (same GBA level, stopped by stairs, ledges and rock);
 on a pinned map Gen3Blocks builds the rock between the areas. Gen3Relief (counted relief) is gone since 2026-11-02.
-Caves and indoor maps with a drawn height map (`draw/claude_heightmaps`, baked by `tools/heightmaps.py` into
-`mod/data/gen3_heightmaps.lua`) skip the flood: every floor cell takes its drawn height, and every ramp tile is a 45-degree wedge
-rising toward its arrow (R-48).
+Terrain maps with a drawn height map (`draw/claude_heightmaps`, baked by `tools/heightmaps.py` into
+`mod/data/gen3_heightmaps.lua`) skip the flood: every floor cell takes its drawn height directly, stairs retain their uphill direction, and rock ramps retain their arrows (R-48). Waterfalls are vertical sheets at their upper pool level. See `draw/claude_heightmaps/README.md` for generation, validation and review provenance.

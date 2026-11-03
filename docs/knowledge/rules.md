@@ -130,3 +130,13 @@ Source: Petya 2026-11-02: hoekjes van stenen zijn in de game rond
 ### R-50 Een deur in een grotwand staat er een keer
 Rule: Een grotdeur is twee tegels: de boog (rechtop in de wand, een laag hoog, rotswand erboven, donkere vloer binnenin) en de drempel ervoor op de vloer; de boog nooit dubbel of per laag herhaald (Gen3Blocks door).
 Source: Petya 2026-11-02, Seafloor Cavern kamer 1: 'die moet nooit dubbel zijn', 'hij bestaat eigenlijk uit twee tiles'
+
+### R-51 Losse stenen zijn ronde keien
+Rule: Een steentegel uit Gen3Blocks.STONES (vaste lijst per tegelset, met de hand nagekeken) in een groep van hooguit 2x2 op vlakke vloer wordt een koepel (Gen3Mass), geen blok. Nooit zoeken op vorm of kleur: dat pakt rotsranden mee.
+Source: Petya 2026-11-03: 'alle steen tiles een (vaak ronde) 3d vorm'; over de automatische lijst: 'het grootste gedeelte ... zijn dat niet'
+
+## Hoogtekaarten
+
+### R-52 Hoogtekaarten lezen: Petya's inkt
+Rule: Rode pijl op een tegel = de kant waar die tegel omhoog gaat (pijlpunt = hoog); schuine pijl = hoekhelling (NE/NW/SE/SW). Zijbanden van bergen zijn vaak schuin, niet recht E/W. Kleine rotsjes met pijlen naar het midden = piramide (hoektegels naar de top, top 1). Een verticale streep '|' = het cijfer 1. Een omkaderd vlak = dat hele vlak heeft het getal erin. Een streep door een oud getal = doorgestreept. Tel bij twijfel de wanden: 1 wandtegel = 1 hoogte; oude inkt kan een verschrijving zijn (Mt Pyre plein 16 was 19).
+Source: Petya 2026-11-03: "ik hoop dat je er ook van leert" / "meeste suggesties die je had klopten"

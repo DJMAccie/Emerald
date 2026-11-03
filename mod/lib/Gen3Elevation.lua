@@ -18,7 +18,7 @@ M.PIN_PX=16
 M.PIN_SKIP={}
 M.BLOCKS_ON=true
 M.BLOCKS_SLACK=2
-M.RAMP_EXT=false;M.SLOPE_DEG=45;M.RAMP_EXT_MAX=3;M.RAMP_EXT_TREES=false -- OFF (R-33): grass and sand are never a slope.
+M.SLOPE_DEG=45
 M.PLAIN_GRASS_MIDS={[0x001]=true,[0x002]=true}
 M.ORPHAN_MAX=24
 M.STAIR_EXT=true -- the foot extension of steep flights
@@ -85,12 +85,31 @@ local opposite={2,1,4,3}
 function M.field(def)
  local l=def and def.midLayout;if not l then return end
  local keys={};for k in pairs(l.overrides or {})do keys[#keys+1]=k end;table.sort(keys)
- local edits={tostring(l.cells)};for _,k in ipairs(keys)do local c=l.overrides[k];edits[#edits+1]=table.concat({k,c.mid or 0,c.coll or 255,c.elev or 0},',')end
+ local edits={tostring(l.cells),tostring(l.width),tostring(l.height),tostring(l.pair),tostring(def.id)};for _,k in ipairs(keys)do local c=l.overrides[k];edits[#edits+1]=table.concat({k,c.mid or 0,c.coll or 255,c.elev or 0},',')end
  local signature=table.concat(edits,';');local old=cache[l]
  if old and old.signature==signature then return old end
  local behaviors=require('src.core.game3.scripting.interaction_scripts').behaviors[l.pair]or{}
  local spec=Pairs.resolve(l.pair,require('src.import.gba.versions').TILESET_PAIRS)
  local shapes=V.require('Gen3TileShape')
+ local drawn=M.PINS_ON and not M.PIN_SKIP[def.id] and PinData and PinData.MAPS[def.id]
+ if drawn and drawn.cells then
+  assert(l.width>=drawn.w and l.width<=drawn.w+1 and l.height>=drawn.h and l.height<=drawn.h+1,'Height-map dimensions disagree with '..def.id)
+  local f={width=l.width,height=l.height,cells={},groups={},flights={},conflicts={},classes={},signature=signature}
+  local dirs={N={0,-1},S={0,1},E={1,0},W={-1,0}}
+  for y=0,l.height-1 do for x=0,l.width-1 do
+   local raw=l:cellAt(x,y);local k=math.min(x,drawn.w-1)..':'..math.min(y,drawn.h-1)
+   local zi,a,fall=drawn.cells[k],drawn.arrows[k],drawn.waterfalls[k]
+   local h=zi and drawn[zi][3]*M.PIN_PX or a and (a.lo+a.hi)*M.PIN_PX/2 or 0
+   local shape=shapes.of(spec.primary,spec.secondary,raw.mid,behaviors[raw.mid],raw.coll)
+   local cls=a and 'FACE' or shape.kind=='water' and 'WATER' or raw.elev==15 and 'DECK' or shape.kind=='cliff' and 'MASS' or 'PLATEAU'
+   if not (zi or a) then cls='OTHER' end
+   local c={x=x,y=y,height=h,pin=h,anchor=true,kind=shape.kind,layer=raw.elev,behavior=behaviors[raw.mid],
+    floor=zi~=nil and raw.coll~=7,cls=cls,waterfall=fall~=nil,object=drawn.objects[k],zone=zi,step=a and a.stairs or false}
+   if c.step then c.low=a.lo*M.PIN_PX;c.high=a.hi*M.PIN_PX;c.height=c.low;c.stairUp=dirs[a.dir];c.treads=4 end
+   f.cells[Levels.key(x,y)]=c;f.classes[cls]=(f.classes[cls] or 0)+1
+  end end
+  M.classes[def.id]=f.classes;cache[l]=f;return f
+ end
  local drop={[0x38]={1,0},[0x39]={-1,0},[0x3A]={0,-1},[0x3B]={0,1}}
  local pins
  local StairT=V.data('gen3_stair_terraces')
@@ -195,7 +214,9 @@ function M.field(def)
  local function elevAt(x,y,n)return flatIn[x..':'..y] or n.elev end
  local climb={}
  -- Elevation-0 plain grass between floors is a walk-through, not a stair.
- local plainGrass=M.PLAIN_GRASS_MIDS and M.PINS_ON and not M.PIN_SKIP[def.id] and PinData and PinData.MAPS[def.id] and M.PLAIN_GRASS_MIDS or {}
+ local sparse=V.sparseHeightmaps
+ local userPins=sparse and sparse.marks[def.id]
+ local plainGrass=userPins and M.PLAIN_GRASS_MIDS or {}
  do
   local decks={{1,0},{-1,0},{0,1},{0,-1}}
   for y=0,l.height-1 do for x=0,l.width-1 do
@@ -270,175 +291,9 @@ function M.field(def)
    end
   end end
  end
- local userPins=M.PINS_ON and not M.PIN_SKIP[def.id] and PinData and PinData.MAPS[def.id]
- local asDeck={}
  if userPins then
-  pins={};zoneOf={};keepRated=true
-  local barrier=function(n,x,y,noClimb)
-   local beh=behaviors[n.mid]
-   return beh==0x13 or beh==0x113 or stairCells[x..':'..y] or (not noClimb and climb[x..':'..y]) or n.mid==0xAF or n.mid==0xCF or n.mid==0xE8 or (beh and ((beh>=0x38 and beh<=0x3F) or beh==0x2A or beh==0x1D0))
-    or (M.STEP_MIDS[def.id] and M.STEP_MIDS[def.id][n.mid] and n.coll==0)
-  end
-  local function waterAt(n)return shapes.of(spec.primary,spec.secondary,n.mid,behaviors[n.mid],n.coll).kind=='water' end
-  local function treeAt(n)return shapes.of(spec.primary,spec.secondary,n.mid,behaviors[n.mid],n.coll).kind=='tree' end
-  local function riverAt(n)return shapes.of(spec.primary,spec.secondary,n.mid,behaviors[n.mid],n.coll).river==true end
-  local front,claimed,info={},{},{}
-  for zi,row in ipairs(userPins)do
-   local x,y,h=row[1],row[2],row[3]*M.PIN_PX
-   local n=x>=0 and y>=0 and x<l.width and y<l.height and l:cellAt(x,y)
-   if n then
-    local k=x..':'..y
-    if not claimed[k] then
-     claimed[k]=zi;pins[k]=h;zoneOf[k]=zi
-     if n.coll~=7 and not row[4] then info[zi]={elev=elevAt(x,y,n),water=waterAt(n)};front[#front+1]={x,y,zi}
-     elseif M.BLOCKED_WATER and not row[4] and riverAt(n) then info[zi]={elev=elevAt(x,y,n),water=true,blockedWater=true};front[#front+1]={x,y,zi} end
-    end
-   end
-  end
-  local hw,hh=userPins.w,userPins.h
-  if userPins.cells and l.width>=hw and l.height>=hh and l.width<=hw+1 and l.height<=hh+1 then -- drawn height map: every floor cell is set; an odd map's padding repeats its last row/column
-   -- A bridge is not a drawn floor (R-13, R-18): the cells of a layer-15 bridge, with its end caps (the metatiles beside its own in the tileset row), stay a flat deck over the ground.
-   local bm={}
-   for y=0,l.height-1 do for x=0,l.width-1 do local r=l:cellAt(x,y);if r and r.elev==15 and r.coll~=7 then bm[r.mid-1]=true;bm[r.mid]=true;bm[r.mid+1]=true end end end
-   local q={}
-   for y=0,l.height-1 do for x=0,l.width-1 do local r=l:cellAt(x,y);if r and r.elev==15 and r.coll~=7 then asDeck[x..':'..y]=true;q[#q+1]={x,y} end end end
-   while #q>0 do
-    local p=table.remove(q)
-    for _,d in ipairs({{1,0},{-1,0},{0,1},{0,-1}})do
-     local nx,ny=p[1]+d[1],p[2]+d[2];local nk=nx..':'..ny
-     local r=nx>=0 and ny>=0 and nx<l.width and ny<l.height and l:cellAt(nx,ny)
-     if r and r.coll~=7 and not asDeck[nk] and bm[r.mid] then asDeck[nk]=true;q[#q+1]={nx,ny} end
-    end
-   end
-   for y=0,l.height-1 do for x=0,l.width-1 do
-    local k,zi=x..':'..y,userPins.cells[math.min(x,hw-1)..':'..math.min(y,hh-1)]
-    if zi and not claimed[k] and not asDeck[k] then claimed[k]=zi;pins[k]=userPins[zi][3]*M.PIN_PX;zoneOf[k]=zi end
-   end end
-  end
-  local head=1
-  local passed={}
-  while front[head]do
-   local q=front[head];head=head+1
-   local zi=q[3];local inf=info[zi]
-   for _,d in ipairs({{1,0},{-1,0},{0,1},{0,-1}})do
-    local nx,ny=q[1]+d[1],q[2]+d[2];local k=nx..':'..ny
-    local inMapN=nx>=0 and ny>=0 and nx<l.width and ny<l.height
-    local nd=inf.blockedWater and inMapN and not passed[k] and l:cellAt(nx,ny)
-    local n=not claimed[k] and inMapN and l:cellAt(nx,ny)
-    if n and n.coll~=7 and not q[4] and elevAt(nx,ny,n)==inf.elev and waterAt(n)==inf.water and not barrier(n,nx,ny) then
-     claimed[k]=zi;pins[k]=userPins[zi][3]*M.PIN_PX;zoneOf[k]=zi;front[#front+1]={nx,ny,zi}
-    elseif n and n.coll==7 and inf.blockedWater and (riverAt(n) or (M.WATER_LEGS[spec.secondary] or {})[n.mid]) and not barrier(n,nx,ny) then
-     claimed[k]=zi;pins[k]=userPins[zi][3]*M.PIN_PX;zoneOf[k]=zi;front[#front+1]={nx,ny,zi}
-    elseif nd and nd.coll~=7 and (M.WATER_DECKS[spec.secondary] or {})[nd.mid] then
-     passed[k]=true;front[#front+1]={nx,ny,zi}
-    elseif n and n.coll==7 and not inf.water and treeAt(n) then
-     claimed[k]=zi;pins[k]=userPins[zi][3]*M.PIN_PX;zoneOf[k]=zi;front[#front+1]={nx,ny,zi,true}
-    end
-   end
-  end
-  for _,b in ipairs(M.TREE_SETTLE[def.id] or {})do
-   for y=b[3],b[4]do for x=b[1],b[2]do
-    local n=x>=0 and y>=0 and x<l.width and y<l.height and l:cellAt(x,y)
-    if n and n.coll==7 and treeAt(n) then local k=x..':'..y;claimed[k]=claimed[k] or 0;pins[k]=b[5]*M.PIN_PX;zoneOf[k]=nil end
-   end end
-  end
-  if M.BLOCKED_MARK_REACH>0 then
-   local ring={}
-   for zi,row in ipairs(userPins)do
-    local x,y=row[1],row[2]
-    local n=x>=0 and y>=0 and x<l.width and y<l.height and l:cellAt(x,y)
-    if n and n.coll==7 and claimed[x..':'..y]==zi then
-     local kind=shapes.of(spec.primary,spec.secondary,n.mid,behaviors[n.mid],n.coll).kind
-     if kind~='cliff' and kind~='water' then ring[#ring+1]={x,y,zi} end
-    end
-   end
-   for _=1,M.BLOCKED_MARK_REACH do
-    local nxt={}
-    for _,q in ipairs(ring)do for _,d in ipairs({{1,0},{-1,0},{0,1},{0,-1}})do
-     local nx,ny=q[1]+d[1],q[2]+d[2];local k=nx..':'..ny
-     local n=not claimed[k] and nx>=0 and ny>=0 and nx<l.width and ny<l.height and l:cellAt(nx,ny)
-     if n and n.coll==7 then
-      local kind=shapes.of(spec.primary,spec.secondary,n.mid,behaviors[n.mid],n.coll).kind
-      if kind~='cliff' and kind~='water' and not barrier(n,nx,ny) then
-       claimed[k]=q[3];pins[k]=userPins[q[3]][3]*M.PIN_PX;zoneOf[k]=q[3];nxt[#nxt+1]={nx,ny,q[3]}
-      end
-     end
-    end end
-    ring=nxt;if #ring==0 then break end
-   end
-  end
-  do
-   local dirs={{1,0},{-1,0},{0,1},{0,-1}}
-   local function loose(n,x,y)return n and n.coll~=7 and n.elev~=1 and not claimed[x..':'..y] and not waterAt(n) end -- level 1 = water level
-   local done={}
-   for y0=0,l.height-1 do for x0=0,l.width-1 do
-    local n0=l:cellAt(x0,y0)
-    if loose(n0,x0,y0) and not done[x0..':'..y0] then
-     local comp,stack,bad,height,zone,zones={},{{x0,y0}},false,nil,nil,{}
-     done[x0..':'..y0]=true
-     while #stack>0 do
-      local q=table.remove(stack);comp[#comp+1]=q
-      local nq=l:cellAt(q[1],q[2])
-      if barrier(nq,q[1],q[2],true) or #comp>M.CONNECTOR_MAX then bad=true end
-      for _,d in ipairs(dirs)do
-       local nx,ny=q[1]+d[1],q[2]+d[2];local k=nx..':'..ny
-       local nn=nx>=0 and ny>=0 and nx<l.width and ny<l.height and l:cellAt(nx,ny)
-       if nn then
-        if claimed[k] then
-         if nn.coll~=7 then
-          if height==nil then height,zone=pins[k],claimed[k] elseif height~=pins[k] then bad=true end
-          zones[claimed[k]]=true
-         end
-        elseif loose(nn,nx,ny) and not done[k] then done[k]=true;stack[#stack+1]={nx,ny} end
-       end
-      end
-     end
-     local nz=0;for _ in pairs(zones)do nz=nz+1 end
-     if not bad and nz>=2 and #comp<=M.CONNECTOR_MAX then
-      for _,q in ipairs(comp)do local k=q[1]..':'..q[2];claimed[k]=zone;pins[k]=height;zoneOf[k]=zone end
-     end
-    end
-   end end
-  end
-  if next(plainGrass) then
-   local dirs={{1,0},{-1,0},{0,1},{0,-1}}
-   for y0=0,l.height-1 do for x0=0,l.width-1 do
-    local t=l:cellAt(x0,y0);local tk=x0..':'..y0
-    if t and t.coll==0 and t.elev==0 and plainGrass[t.mid] and not claimed[tk] then
-     local hh,zone,bad
-     local starts={}
-     for _,d in ipairs(dirs)do
-      local nx,ny=x0+d[1],y0+d[2];local nk=nx..':'..ny;local n=nx>=0 and ny>=0 and nx<l.width and ny<l.height and l:cellAt(nx,ny)
-      if n and n.coll==0 then
-       if claimed[nk] then
-        if hh==nil then hh,zone=pins[nk],claimed[nk] elseif hh~=pins[nk] then bad=true end
-       elseif n.elev>=3 and not waterAt(n) and not barrier(n,nx,ny) then starts[#starts+1]={nx,ny} end
-      end
-     end
-     if hh and not bad and #starts>0 then
-      local comp,seen,stack={}, {[tk]=true},{}
-      for _,s in ipairs(starts)do local sk=s[1]..':'..s[2];if not seen[sk] then seen[sk]=true;stack[#stack+1]=s end end
-      while #stack>0 and #comp<=M.ORPHAN_MAX and not bad do
-       local q=table.remove(stack);comp[#comp+1]=q
-       local qn=l:cellAt(q[1],q[2])
-       if q[1]==0 or q[2]==0 or q[1]==l.width-1 or q[2]==l.height-1 then bad=true end
-       for _,d in ipairs(dirs)do
-        local nx,ny=q[1]+d[1],q[2]+d[2];local nk=nx..':'..ny;local n=nx>=0 and ny>=0 and nx<l.width and ny<l.height and l:cellAt(nx,ny)
-        if n and n.coll==0 and not seen[nk] then
-         if claimed[nk] then if pins[nk]~=hh then bad=true end
-         elseif elevAt(nx,ny,n)==elevAt(q[1],q[2],qn) and not waterAt(n) and not barrier(n,nx,ny) then seen[nk]=true;stack[#stack+1]={nx,ny} end
-        end
-       end
-      end
-      if not bad and #comp<=M.ORPHAN_MAX then
-       claimed[tk]=zone;pins[tk]=hh;zoneOf[tk]=zone
-       for _,q in ipairs(comp)do local k=q[1]..':'..q[2];claimed[k]=zone;pins[k]=hh;zoneOf[k]=zone end
-      end
-     end
-    end
-   end end
-  end
-  M.pinZones[def.id]=zoneOf
+  pins,zoneOf=sparse.prepare(M,def,l,userPins,behaviors,stairCells,climb,shapes,spec,elevAt,plainGrass)
+  keepRated=true
  end
  local flightPair=def.midLayout and def.midLayout.pair
  Levels.mapId=def.id
@@ -453,7 +308,7 @@ function M.field(def)
   local step=((dz or (dais and dais.anySteps)) and dais.steps[raw.mid]) or beh==0x2A or beh==0x1D0 or climb[x..':'..y]==true or stairCells[x..':'..y]==true or (M.STEP_MIDS[def.id] and M.STEP_MIDS[def.id][raw.mid] and raw.coll==0) or (userPins and (M.PAIR_STEP_MIDS[l.pair] or {})[raw.mid] and raw.coll==0) or false;local jump=beh and beh>=0x38 and beh<=0x3F -- 0x1D0: Emerald MUDDY_SLOPE
   local shape=shapes.of(spec.primary,spec.secondary,raw.mid,beh,raw.coll)
   local pinned=raw.coll~=7 and not step and not jump and raw.elev>=3 and shape.kind~='water'
-  return {floor=(dz and not step) or (raw.coll~=7 and not step and not jump),step=step,drop=drop[beh],layer=asDeck[x..':'..y] and 15 or raw.elev,behavior=beh,
+  return {floor=(dz and not step) or (raw.coll~=7 and not step and not jump),step=step,drop=drop[beh],layer=raw.elev,behavior=beh,
    treads=step and ((FLIGHT_TREADS[flightPair] or {})[raw.mid] or 4) or nil,
    waterfall=beh==0x13 or beh==0x113,
    kind=shape.kind,seed=0,anchor=(pins and pins[x..':'..y]~=nil) or nil,zone=zoneOf[x..':'..y],
@@ -483,27 +338,7 @@ function M.field(def)
    end
   end end
  end
- if userPins then
-  local dirs={{1,0},{-1,0},{0,1},{0,-1}}
-  for y=0,l.height-1 do for x=0,l.width-1 do
-   local c=f.cells[Levels.key(x,y)]
-   if c and c.step and c.high~=nil and not stairCells[x..':'..y] then
-    local raw=l:cellAt(x,y);local beh=behaviors[raw.mid]
-    local hard=beh==0x13 or beh==0x113 or raw.mid==0xAF or raw.mid==0xCF or raw.mid==0xE8 or (beh and ((beh>=0x38 and beh<=0x3F) or beh==0x2A or beh==0x1D0))
-     or (M.STEP_MIDS[def.id] and M.STEP_MIDS[def.id][raw.mid] and raw.coll==0)
-    if not hard and raw.elev==0 then
-     local H,n,same=nil,0,true
-     for _,d in ipairs(dirs)do
-      local q=f.cells[Levels.key(x+d[1],y+d[2])]
-      if q and q.floor and not q.step and q.kind~='water' and q.height then
-       n=n+1;if H==nil then H=q.height elseif H~=q.height then same=false end
-      end
-     end
-     if same and n>=2 then c.height=H;c.high=H;c.low=H end
-    end
-   end
-  end end
- end
+ if userPins then sparse.settle(M,def,l,f,Levels,behaviors,stairCells) end
  if gen and gen.ramps then
   local function edgeHeight(x0,x1,y0,y1)
    local hs={}
@@ -551,429 +386,7 @@ function M.field(def)
    end
   end
  end
- -- Waterfalls are vertical: a fall stands at its upper pool's level.
- if userPins then
-  local seen={}
-  for y=0,l.height-1 do for x=0,l.width-1 do
-   local c=f.cells[Levels.key(x,y)]
-   if c and c.waterfall and not seen[c] then
-    local run,stack,top={},{c},nil;seen[c]=true
-    while #stack>0 do
-     local a=table.remove(stack);run[#run+1]=a
-     for _,d in ipairs({{1,0},{-1,0},{0,1},{0,-1}})do
-      local n=f.cells[Levels.key(a.x+d[1],a.y+d[2])]
-      if n and n.kind=='water' and n.floor then
-       if n.waterfall then if not seen[n] then seen[n]=true;stack[#stack+1]=n end
-       elseif n.height then top=math.max(top or n.height,n.height) end
-      end
-     end
-    end
-    if top then for _,q in ipairs(run)do q.height=top;q.high=nil;q.low=nil end end
-   end
-  end end
- end
-
- -- Runs twice: before the classifier and last, after the ledges.
- local function stairProfile(late,kindAt,cnt)
-  local okKind={flat=true,sand=true}
-  local markSet={}
-  for _,m in ipairs(userPins)do markSet[m[1]..':'..m[2]]=true end
-  local function C(x,y)return x>=0 and y>=0 and x<l.width and y<l.height and f.cells[Levels.key(x,y)] or nil end
-  local function isStep(c)return c and c.step and not c.connector end
-  local function endFloor(c)return c and c.floor and (not c.step or c.connector) and c.kind~='water' and c.cls~='WATER' and c.height~=nil and not c.treeLoose end
-  local function plain(c) -- true, or false + the reason (STAIR_STEEP lines)
-   if not c then return false,'none' end
-   if c.cls~='PLATEAU' then return false,'cls='..tostring(c.cls) end
-   if not c.floor or c.step or c.height==nil or c.layer==15 or c.kind=='water' or c.treeLoose or c.connector then return false,'floor/step/deck/water/tree' end
-   if c.relief or c.rampExt then return false,'relief' end
-   if c.ledge then return false,'ledge' end
-   if c.bareDrop then return false,'bareDrop' end
-   local k=c.x..':'..c.y
-   if markSet[k] then return false,'user mark' end
-   if not okKind[kindAt[k] or ''] then return false,'kind='..tostring(kindAt[k]) end
-   if (l:cellAt(c.x,c.y).coll or 0)~=0 then return false,'coll='..tostring(l:cellAt(c.x,c.y).coll) end
-   return true
-  end
-  local runs,done,runOf={},{},{}
-  local nSteep,nNoEnd,nExt,nFlat,nClimb=0,0,0,0,0
-  if late then f.stairSteep={} end
-  for y=0,l.height-1 do for x=0,l.width-1 do
-   local c=C(x,y)
-   if isStep(c) and not done[c] then
-    local y0=y;while isStep(C(x,y0-1))do y0=y0-1 end
-    local y1=y;while isStep(C(x,y1+1))do y1=y1+1 end
-    local x0=x;while isStep(C(x0-1,y))do x0=x0-1 end
-    local x1=x;while isStep(C(x1+1,y))do x1=x1+1 end
-    local cand={}
-    for _,a in ipairs({
-     {axis='v',n=y1-y0+1,a=C(x,y0-1),b=C(x,y1+1),first={x,y0},d={0,1}},
-     {axis='h',n=x1-x0+1,a=C(x0-1,y),b=C(x1+1,y),first={x0,y},d={1,0}}})do
-     if endFloor(a.a) and endFloor(a.b) then
-      a.R=math.abs(a.a.height-a.b.height);cand[#cand+1]=a
-     end
-    end
-    local pick
-    if #cand==1 then pick=cand[1]
-    elseif #cand==2 then
-     local v,h=cand[1],cand[2]
-     if (v.R>=.25)==(h.R>=.25) then pick=(h.n<v.n) and h or v
-     else pick=(v.R>=.25) and v or h end
-    end
-    if not pick then
-     nNoEnd=nNoEnd+1
-     done[c]=true
-    else
-     local lowA=pick.a.height<=pick.b.height -- a = the north / west end
-     local cells={}
-     for i=0,pick.n-1 do cells[#cells+1]=C(pick.first[1]+pick.d[1]*i,pick.first[2]+pick.d[2]*i) end
-     local up={-pick.d[1],-pick.d[2]}
-     local lo,hi=pick.a.height,pick.b.height
-     if lowA then up={pick.d[1],pick.d[2]} else lo,hi=hi,lo;local r={};for i=#cells,1,-1 do r[#r+1]=cells[i] end;cells=r end
-     for _,q in ipairs(cells)do done[q]=true end
-     runs[#runs+1]={cells=cells,up=up,lo=lo,hi=hi,R=hi-lo,n=#cells,axis=pick.axis}
-     for _,q in ipairs(cells)do runOf[q]=runs[#runs] end
-    end
-   end
-  end end
-  local function room(r,need)
-   local q0=r.cells[1];local j=0
-   r.why=nil
-   while j<need do
-    local q=C(q0.x-r.up[1]*(j+1),q0.y-r.up[2]*(j+1))
-    local beyond=C(q0.x-r.up[1]*(j+2),q0.y-r.up[2]*(j+2))
-    local ok,why=plain(q)
-    local fl=beyond and runOf[beyond]
-    if ok and not((endFloor(beyond) and math.abs(beyond.height-r.lo)<.25) or (fl and fl.R<.25 and math.abs(fl.lo-r.lo)<.25)) then ok=false;why='nothing at the level beyond' end
-    if ok then j=j+1 else r.why=why;break end
-   end
-   return j
-  end
-  for _,r in ipairs(runs)do
-   r.need=0
-   if late and M.STAIR_EXT and r.R>=.25 and r.R>16*r.n+.25 then r.need=math.ceil(r.R/16-1e-6)-r.n end
-   r.room=room(r,r.need)
-   r.group=r
-  end
-  local function find(r)while r.group~=r do r.group=r.group.group;r=r.group end return r end
-  for i=1,#runs do for j=i+1,#runs do
-   local a,b=runs[i],runs[j]
-   if a.axis==b.axis and a.up[1]==b.up[1] and a.up[2]==b.up[2] and a.n==b.n and math.abs(a.lo-b.lo)<.25 and math.abs(a.hi-b.hi)<.25 then
-    local ca,cb=a.cells[1],b.cells[1]
-    local lineDist=(a.axis=='v') and math.abs(ca.x-cb.x) or math.abs(ca.y-cb.y)
-    local same=(a.axis=='v') and ca.y==cb.y or ca.x==cb.x
-    if lineDist==1 and same then local ra,rb=find(a),find(b);if ra~=rb then rb.group=ra end end
-   end
-  end end
-  local gmin={}
-  for _,r in ipairs(runs)do local g=find(r);gmin[g]=math.min(gmin[g] or r.room,r.room) end
-  for _,r in ipairs(runs)do
-   local ext=r.need>0 and math.min(gmin[find(r)],r.need) or 0
-   local q0=r.cells[1]
-   local all={}
-   for j=ext,1,-1 do
-    local q=C(q0.x-r.up[1]*j,q0.y-r.up[2]*j)
-    q.step=true;q.floor=true;q.cls='DECK';q.stepExt=true;q.stepMid=l:cellAt(q0.x,q0.y).mid;q.treads=q0.treads
-    all[#all+1]=q;nExt=nExt+1
-   end
-   for _,q in ipairs(r.cells)do all[#all+1]=q end
-   local N=#all
-   if r.R<.25 then
-    for _,q in ipairs(all)do q.height=r.lo;q.low=r.lo;q.high=r.lo;q.stairUp=nil end
-    nFlat=nFlat+1
-   else
-    for k,q in ipairs(all)do
-     q.low=r.lo+r.R*(k-1)/N;q.high=r.lo+r.R*k/N;q.height=q.low;q.stairUp=r.up
-    end
-    nClimb=nClimb+1
-    if late and r.R>16*N+.25 then
-     nSteep=nSteep+1
-     f.stairSteep[#f.stairSteep+1]=string.format('%s run x=%d y=%d n=%d R=%.1f axis=%s ext=%d why=%s',def.id,q0.x,q0.y,N,r.R,r.axis,ext,tostring(r.why or (ext<r.need and 'group limited' or '?')))
-    end
-   end
-  end
-  if late then cnt.STAIR_RUNS=#runs;cnt.STAIR_CLIMB=nClimb;cnt.STAIR_FLAT=nFlat;cnt.STAIR_EXT=nExt;cnt.STAIR_STEEP=nSteep;cnt.STAIR_NOEND=nNoEnd end
- end
-
- if userPins and M.STAIR_PROFILE then stairProfile(false) end
-
- if userPins and M.BLOCKS_ON then
-  local isRock,rockK={},{}
-  local cnt={PLATEAU=0,FACE=0,MASS=0,WATER=0,DECK=0,OTHER=0,TREE_FIX=0,ROCK_FAR=0}
-  local kindAt={}
-  for y=0,l.height-1 do for x=0,l.width-1 do
-   local raw=l:cellAt(x,y);local k=x..':'..y;local c=f.cells[Levels.key(x,y)]
-   local shape=shapes.of(spec.primary,spec.secondary,raw.mid,behaviors[raw.mid],raw.coll)
-   kindAt[k]=shape.seaRock and 'seaRock' or shape.kind
-   c.cls=nil;c.srcMax=nil;c.srcPin=nil
-   if raw.coll==7 and shape.kind=='cliff' and not shape.seaRock then isRock[k]=true;rockK[#rockK+1]=k
-   elseif c.layer==15 or c.step then c.cls='DECK'
-   elseif c.kind=='water' and (c.floor or (M.BLOCKED_WATER and pins[k]~=nil and shape.river)) then c.cls='WATER'
-   elseif c.floor or pins[k]~=nil then c.cls='PLATEAU'
-   elseif shape.kind=='tree' then c.cls='PLATEAU';c.treeLoose=true
-   else c.cls='OTHER' end
-  end end
-  local dirs={{1,0},{-1,0},{0,1},{0,-1}}
-  local SLACK,RMAX=M.BLOCKS_SLACK,M.BLOCKS_RMAX
-  local function sourceOf(k,c)
-   if isRock[k] then if pins[k]~=nil then return pins[k],true end return nil end
-   if c.cls=='PLATEAU' or c.cls=='WATER' or c.cls=='DECK' then return c.height,false end
-   if c.cls=='OTHER' and c.height then return c.height,false,true end
-   return nil
-  end
-  for _,k0 in ipairs(rockK)do
-   local c0=f.cells[k0]
-   if pins[k0]~=nil then c0.height=pins[k0];c0.high=nil;c0.low=nil;c0.cls='MASS';c0.srcPin=k0;c0.srcMax=pins[k0];cnt.MASS=cnt.MASS+1
-   else
-    local x0,y0=c0.x,c0.y
-    local seen={[k0]=true};local ring={{x0,y0}};local d=0;local dmin
-    local bestNum,bestNumK,bestMax,bestOther,bestMin
-    while #ring>0 and d<=RMAX and (not dmin or d<=dmin+SLACK) do
-     local nxt={}
-     for _,q in ipairs(ring)do
-      for _,dd in ipairs(dirs)do
-       local nx,ny=q[1]+dd[1],q[2]+dd[2];local k=nx..':'..ny
-       if not seen[k] and nx>=0 and ny>=0 and nx<l.width and ny<l.height then
-        seen[k]=true
-        local c=f.cells[Levels.key(nx,ny)]
-        local lv,num,weak=sourceOf(k,c)
-        if lv~=nil and weak then if not bestOther or lv>bestOther then bestOther=lv end
-        elseif lv~=nil then
-         if not dmin then dmin=d+1 end
-         if num then if not bestNum or lv>bestNum then bestNum,bestNumK=lv,k end
-         else if not bestMax or lv>bestMax then bestMax=lv end;if not bestMin or lv<bestMin then bestMin=lv end end
-        end
-        if isRock[k] then nxt[#nxt+1]={nx,ny} end
-       end
-      end
-     end
-     ring=nxt;d=d+1
-    end
-    if bestNum then c0.height=bestNum;c0.cls='MASS';c0.srcPin=bestNumK;c0.srcMax=bestNum;cnt.MASS=cnt.MASS+1
-    elseif bestMax then c0.height=(M.BAND_LEVEL=='lower') and bestMin or bestMax;c0.cls='FACE';c0.srcMax=bestMax;c0.srcMin=bestMin;cnt.FACE=cnt.FACE+1
-    elseif bestOther then c0.height=bestOther;c0.cls='FACE';c0.srcMax=bestOther;cnt.FACE=cnt.FACE+1
-    else c0.cls='FACE';c0.srcMax=c0.height;cnt.FACE=cnt.FACE+1;cnt.ROCK_FAR=cnt.ROCK_FAR+1 end
-    c0.high=nil;c0.low=nil
-   end
-  end
-  cnt.OTHER_FIX=0;cnt.POCKET_FIX=0
-  local function orphan(n,nk)return n.cls=='PLATEAU' and n.floor and pins[nk]==nil and not n.step and not n.treeLoose end
-  local pocketOf={}
-  for y=0,l.height-1 do for x=0,l.width-1 do
-   local k=x..':'..y;local c=f.cells[Levels.key(x,y)]
-   local isOther=c.cls=='OTHER' and kindAt[k]=='flat'
-   local isPocket=false
-   if not isOther and orphan(c,k) then
-    if pocketOf[k]==nil then
-     local comp,stack,seen={},{{x,y}},{[k]=true}
-     while #stack>0 and #comp<=M.POCKET_MAX do
-      local q=table.remove(stack);comp[#comp+1]=q
-      for _,dd in ipairs(dirs)do
-       local nx,ny=q[1]+dd[1],q[2]+dd[2];local nk=nx..':'..ny
-       if not seen[nk] and nx>=0 and ny>=0 and nx<l.width and ny<l.height then
-        seen[nk]=true
-        local n=f.cells[Levels.key(nx,ny)]
-        if orphan(n,nk) then stack[#stack+1]={nx,ny} end
-       end
-      end
-     end
-     local small=#comp<=M.POCKET_MAX
-     for _,q in ipairs(comp)do pocketOf[q[1]..':'..q[2]]=small end
-    end
-    isPocket=pocketOf[k]==true
-   end
-   if isOther or isPocket then
-    local seen={[k]=true};local ring={{x,y}};local found
-    for _=1,8 do
-     local nxt={}
-     for _,q in ipairs(ring)do for _,dd in ipairs(dirs)do
-      local nx,ny=q[1]+dd[1],q[2]+dd[2];local nk=nx..':'..ny
-      if not seen[nk] and nx>=0 and ny>=0 and nx<l.width and ny<l.height and not isRock[nk] then
-       seen[nk]=true
-       local n=f.cells[Levels.key(nx,ny)]
-       local src=(n.cls=='PLATEAU' and pins[nk]~=nil) or n.cls=='WATER' or (n.cls=='PLATEAU' and n.floor and not orphan(n,nk))
-       if src and n.height and not n.treeLoose then found=math.min(found or n.height,n.height)
-       elseif n.cls=='OTHER' or n.treeLoose or orphan(n,nk) then nxt[#nxt+1]={nx,ny} end
-      end
-     end end
-     if found then break end
-     ring=nxt;if #ring==0 then break end
-    end
-    if not found then
-     for _,dd in ipairs(dirs)do
-      local nk=(x+dd[1])..':'..(y+dd[2])
-      if isRock[nk] then local n=f.cells[Levels.key(x+dd[1],y+dd[2])];if n and n.height then found=math.min(found or n.height,n.height) end end
-     end
-    end
-    if found and found~=c.height then
-     c.height=found;c.high=nil;c.low=nil
-     if isPocket then cnt.POCKET_FIX=cnt.POCKET_FIX+1 else cnt.OTHER_FIX=cnt.OTHER_FIX+1 end
-    end
-   end
-  end end
-  for y=0,l.height-1 do for x=0,l.width-1 do
-   local k=x..':'..y;local c=f.cells[Levels.key(x,y)]
-   if c.treeLoose then
-    local seen={[k]=true};local ring={{x,y}};local found
-    for _=1,8 do
-     local nxt={}
-     for _,q in ipairs(ring)do for _,dd in ipairs(dirs)do
-      local nx,ny=q[1]+dd[1],q[2]+dd[2];local nk=nx..':'..ny
-      if not seen[nk] and nx>=0 and ny>=0 and nx<l.width and ny<l.height and not isRock[nk] then
-       seen[nk]=true
-       local n=f.cells[Levels.key(nx,ny)]
-       if n.floor and n.height and n.cls~='DECK' then found=math.min(found or n.height,n.height)
-       elseif not n.floor then nxt[#nxt+1]={nx,ny} end
-      end
-     end end
-     if found then break end
-     ring=nxt;if #ring==0 then break end
-    end
-    if found and found~=c.height then c.height=found;c.high=nil;c.low=nil;cnt.TREE_FIX=cnt.TREE_FIX+1 end
-   end
-  end end
-  if M.RAMP_EXT then
-   local tanc=math.tan(math.rad(M.SLOPE_DEG))
-   local sPx=16*tanc
-   local okKind={flat=true,grass=true,flowers=true,sand=true}
-   local orig={}
-   local markSet={}
-   for _,m in ipairs(userPins)do markSet[m[1]..':'..m[2]]=true end
-   for y=0,l.height-1 do for x=0,l.width-1 do local c=f.cells[Levels.key(x,y)];orig[c]=c.height end end
-   local function eligible(n,nk,hl)
-    if n and n.cls=='OTHER' then return kindAt[nk]=='flat' and orig[n] and math.abs(orig[n]-hl)<.25 and not markSet[nk] end
-    if not (n and n.cls=='PLATEAU' and orig[n] and math.abs(orig[n]-hl)<.25 and not markSet[nk] and not n.step and n.layer~=15) then return false end
-    if M.RAMP_EXT_TREES and kindAt[nk]=='tree' then return true end
-    return n.floor and not n.treeLoose and n.kind~='water' and okKind[kindAt[nk] or ''] and (l:cellAt(n.x,n.y).coll or 0)==0
-   end
-   local target,seeds={},{}
-   for _,k0 in ipairs(rockK)do
-    local c0=f.cells[Levels.key(tonumber(k0:match('^(%-?%d+)')),tonumber(k0:match(':(%-?%d+)$')))]
-    if c0.cls=='FACE' then
-     for _,dd in ipairs(dirs)do
-      local nx,ny=c0.x+dd[1],c0.y+dd[2];local nk=nx..':'..ny
-      local n=f.cells[Levels.key(nx,ny)]
-      if n and n.cls~='FACE' and n.cls~='MASS' and orig[n] then
-       local hl=orig[n]
-       local r,qx,qy=0,c0.x,c0.y
-       local u
-       while true do
-        local q=f.cells[Levels.key(qx,qy)]
-        if q and q.cls=='FACE' then r=r+1;qx,qy=qx-dd[1],qy-dd[2]
-        else u=q;break end
-        if r>8 then break end
-       end
-       if u and (u.cls=='PLATEAU' or u.cls=='WATER' or u.cls=='DECK') and orig[u] and orig[u]>hl+.25 then
-        local need=math.ceil((orig[u]-hl)/sPx-1e-6)
-        local why
-        if need<=r then why='OK_ALREADY'
-        elseif need-r>M.RAMP_EXT_MAX then why='TALL'
-        elseif n.cls~='PLATEAU' and n.cls~='OTHER' then why='LOWER_'..n.cls
-        elseif not eligible(n,nk,hl) then why=markSet[nk] and 'MARK' or 'INELIGIBLE'
-        else why='PLACED';seeds[#seeds+1]={n=n,hl=hl,hu=orig[u],r=r,need=need} end
-        cnt['EXT_'..why]=(cnt['EXT_'..why] or 0)+1
-       end
-      end
-     end
-    end
-   end
-   for _,sd in ipairs(seeds)do
-    local seen={[sd.n]=true};local ring={sd.n}
-    for k=1,sd.need-sd.r do
-     local nxt={}
-     for _,n in ipairs(ring)do
-      local h=math.max(sd.hl,sd.hu-sPx*(sd.r+k-1))
-      if h>(target[n] or sd.hl) then target[n]=h end
-      if k<sd.need-sd.r then
-       for _,dd in ipairs(dirs)do
-        local m=f.cells[Levels.key(n.x+dd[1],n.y+dd[2])];local mk=(n.x+dd[1])..':'..(n.y+dd[2])
-        if m and not seen[m] and eligible(m,mk,sd.hl) then seen[m]=true;nxt[#nxt+1]=m end
-       end
-      end
-     end
-     ring=nxt
-    end
-   end
-   local ext=0
-   for n,h in pairs(target)do if h>n.height+.25 then n.height=h;n.relief=true;n.rampExt=true;n.high=nil;n.low=nil;ext=ext+1 end end
-   cnt.RAMP_EXT=ext
-  end
-  if M.LEDGES and not M.LEDGE_SKIP[def.id] then
-   local sPx=16*math.tan(math.rad(M.SLOPE_DEG))
-   local okKind={flat=true,sand=true}
-   local markSet={}
-   for _,m in ipairs(userPins)do markSet[m[1]..':'..m[2]]=true end
-   for _,c in pairs(f.cells)do c.ledge=nil;c.bareDrop=nil end
-   local plainKind={flat=true,grass=true,flowers=true,sand=true,tree=true,shrub=true,rock=true,seaRock=true,sign=true,fence=true}
-   local function upper(c)return c and c.height and (c.cls=='PLATEAU' or c.cls=='OTHER') and not c.step and c.layer~=15 and c.kind~='water' and not c.rampExt and plainKind[kindAt[c.x..':'..c.y] or ''] end
-   local function lowerPlain(n,hu)return n and n.height and (n.cls=='PLATEAU' or n.cls=='OTHER' or (n.cls=='WATER' and hu-n.height>=32)) and not n.step and n.layer~=15 and (plainKind[kindAt[n.x..':'..n.y] or ''] or n.cls=='WATER') end
-   local function eligible(n,nk)
-    return n and n.cls=='PLATEAU' and n.floor and n.height and not n.step and n.layer~=15 and n.kind~='water' and not n.treeLoose
-     and not n.relief and not markSet[nk] and okKind[kindAt[nk] or ''] and (l:cellAt(n.x,n.y).coll or 0)==0
-   end
-   local vh={}
-   local function vkey(x,y)return x..','..y end
-   local placed,bare,tall=0,0,0
-   local cellsHit={}
-   for y=0,l.height-1 do for x=0,l.width-1 do
-    local u=f.cells[Levels.key(x,y)]
-    if upper(u) then
-     local hu=u.height
-     for _,dd in ipairs(dirs)do
-      local nx,ny=x+dd[1],y+dd[2];local nk=nx..':'..ny
-      local n=f.cells[Levels.key(nx,ny)]
-      if lowerPlain(n,hu) and hu-n.height>=M.LEDGE_MIN then
-       local hl=n.height
-       if not eligible(n,nk) then u.bareDrop=true;bare=bare+1
-       else
-        local need=math.ceil((hu-hl)/sPx-1e-6)
-        if need>M.LEDGE_MAX then tall=tall+1;u.bareDrop=true;goto nextdir end
-        local s=(hu-hl)/need
-        placed=placed+1
-        local seen={[u]=true};local ring={u}
-        for _=1,need do
-         local nxt={}
-         for _,q in ipairs(ring)do
-          for ox=-1,1 do for oy=-1,1 do
-           local mx,my=q.x+ox,q.y+oy
-           if math.max(math.abs(mx-x),math.abs(my-y))<=need then
-            local m=f.cells[Levels.key(mx,my)]
-            if m and not seen[m] and eligible(m,mx..':'..my) and math.abs(m.height-hl)<.25 then seen[m]=true;nxt[#nxt+1]=m end
-           end
-          end end
-         end
-         for _,m in ipairs(nxt)do
-          cellsHit[m]=true
-          for _,v in ipairs({{m.x,m.y},{m.x+1,m.y},{m.x+1,m.y+1},{m.x,m.y+1}})do
-           local ddx=math.max(x-v[1],0,v[1]-(x+1));local ddy=math.max(y-v[2],0,v[2]-(y+1))
-           local h=hu-s*math.sqrt(ddx*ddx+ddy*ddy)
-           local k=vkey(v[1],v[2])
-           if h>hl+1e-6 and h>(vh[k] or -1e9) then vh[k]=h end
-          end
-         end
-         ring=nxt
-        end
-       end
-      end
-      ::nextdir::
-     end
-    end
-   end end
-   local ledges=0
-   for m in pairs(cellsHit)do
-    local hl=m.height
-    local o={}
-    for i,v in ipairs({{m.x,m.y},{m.x+1,m.y},{m.x+1,m.y+1},{m.x,m.y+1}})do
-     local h=vh[vkey(v[1],v[2])]
-     o[i]=h and math.max(0,h-hl) or 0
-    end
-    if o[1]>.25 or o[2]>.25 or o[3]>.25 or o[4]>.25 then m.ledge=o;ledges=ledges+1 end
-   end
-   cnt.LEDGE_EDGES=placed;cnt.LEDGE_CELLS=ledges;cnt.LEDGE_BARE=bare;cnt.LEDGE_TALL=tall
-  end
-  if M.STAIR_PROFILE then stairProfile(true,kindAt,cnt) end
-  for _,c in pairs(f.cells)do if c.cls=='PLATEAU' or c.cls=='WATER' or c.cls=='DECK' or c.cls=='OTHER' then cnt[c.cls]=cnt[c.cls]+1 end end
-  f.classes=cnt;M.classes[def.id]=cnt
- end
+ if userPins then sparse.finish(M,def,l,userPins,f,Levels,shapes,spec,behaviors,pins) end
  f.signature=signature
  cache[l]=f;return f
 end

@@ -14,6 +14,8 @@ return function(game)
  local ns=export and (export.gen3 or export.firered)
  local C=ns and ns.camera
  print('[EM QA] gen3 camera:',C and 'yes' or 'NO')
+
+ if os.getenv('EM_TOUR') and export then export.lib.require('Gen3SceneOptions').tour:setIndex(2,game) end -- TOUR as in the player's game
  local Map=require('src.core.game3.map');local Player=require('src.core.game3.player')
  local cases=os.getenv('EM_CASES') and dofile(os.getenv('EM_CASES')) or {{'EM_LITTLEROOT_TOWN',10,10}}
  for _,case in ipairs(cases) do

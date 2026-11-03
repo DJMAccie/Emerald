@@ -291,7 +291,7 @@ M.NEAR_STREAM=.014
 M.STREAM=.008
 M.DEBUG_REACH=32
 M.DEBUG_PAD=16
-M.DEBUG_CELLS=12000
+M.DEBUG_CELLS=40000
 M.DEBUG_COLD=.120
 local function walkGate(cam)
  return DebugWalk.on() and not (cam and (cam.battle or cam.replay))
@@ -416,7 +416,7 @@ end
 do
  local R={}
  for _,m in ipairs({0x338,0x339,0x33A,0x340,0x341,0x342,0x348,0x349,0x34A})do R[m]={kind='extrude',h=10,ground=0x2BB,cool=true,reviewedSurface=true} end
- for _,m in ipairs({0x17A,0x175})do R[m]={kind='rock',ground=0x170,height=8} end
+ for _,m in ipairs({0x17A})do R[m]={kind='rock',ground=0x170,height=8} end
  SHAPE_BY_MAP.EM_RUSTBORO_CITY=R
 end
 do
@@ -963,8 +963,8 @@ local function build(req,cache,previous)
    end
   end
  end
- V.require('Gen3Waterfall').prepare(cells,def)
  mark('mass')
+ V.require('Gen3Blocks').restoreHeights(cells)
  M.propCount=#props
  for _,p in ipairs(props)do p.stageHidden=BattleClear.hits(cam,p.cx*16,p.cy*16,p.cx*16+p.w,p.cy*16+p.d)end
  for _,c in pairs(cells)do
@@ -2078,11 +2078,109 @@ local function build(req,cache,previous)
  cache.terrainKey=SceneCache.key(regions,x0,z0,x1,z1,Tiles._pairs,cam)
  return cache
 end
+-- Crossing a map edge must not wait for a cold build: the connected map is built while the player is still near its edge.
+M.WARM_REACH=10
+M.WARM_REACH_TOUR=14
+M.WARM=.006
+local Connections=require('src.core.game3.connections')
+local aheadMemo={}
+local function aheadRequest(game,cam,entry,reach)
+ local def=entry.def
+ local maps=game.data and game.data.maps
+ if not (def.midLayout and maps)then return end
+ local tour=walkGate(cam)
+ local memo=aheadMemo
+ if memo.from~=Map.current or memo.reach~=reach then memo={from=Map.current,reach=reach};aheadMemo=memo end
+ local m=memo[entry.id]
+ if not m then
+  local world=Map.computeWorld(maps,entry.id,Map.WORLD_HOPS,reach,reach,function(id,d)Map.ensureMidLayout(game,id,d)end)
+  local list,ids={},{}
+  for _,conn in ipairs(Connections.each(def))do
+   local d=maps[conn.map];if d then list[#list+1]={dir=conn.dir,map=conn.map,mapId=conn.map,def=d,offset=conn.offset};ids[conn.map]=true end
+  end
+  local regions={{def=def,x=0,y=0,w=def.midLayout.width,h=def.midLayout.height}}
+  for _,e in ipairs(world)do
+   if e.def.midLayout and (not tour or ids[e.id])then regions[#regions+1]={def=e.def,x=e.ox,y=e.oy,w=e.def.midLayout.width,h=e.def.midLayout.height}end
+  end
+  if tour then -- as debugRegions: the map and its direct neighbours, or the map alone when that is too many cells
+   local x0,z0,x1,z1=BoundarySelect.bounds(regions,0)
+   if (x1-x0+M.DEBUG_PAD*2)*(z1-z0+M.DEBUG_PAD*2)>M.DEBUG_CELLS then regions={regions[1]}end
+  end
+  m={world=world,list=list,regions=regions};memo[entry.id]=m
+ end
+ -- where the player will stand on the other side: the nearest cell of that map
+ local rw,rh=def.midLayout.width,def.midLayout.height
+ local cx=math.max(entry.ox,math.min(entry.ox+rw-1,math.floor(((Player.px or 0)+8)/16)))
+ local cz=math.max(entry.oy,math.min(entry.oy+rh-1,math.floor(((Player.py or 0)+8)/16)))
+ local px,pz=(cx-entry.ox)*16,(cz-entry.oy)*16
+ local radius,budget,x0,z0,x1,z1=M.NEAR,M.NEAR*16
+ if tour then
+  radius,budget=64,nil
+  x0,z0,x1,z1=BoundarySelect.bounds(m.regions,M.DEBUG_PAD)
+ else
+  local bx,bz=math.floor(px/96)*6,math.floor(pz/96)*6
+  local north=(cam.level or 0)<6 and M.NEAR_NORTH or 0
+  x0,z0,x1,z1=bx-radius,bz-radius-north,bx+radius+6,bz+radius+6-north
+ end
+ local tiles=tileIdentity(m.regions)
+ local context=SceneCache.key(m.regions,0,0,0,0,tiles,cam)
+ local key=SceneCache.key(m.regions,x0,z0,x1,z1,tiles,cam)
+ if not (key and context)then return end
+ return {game=game,cam=cam,def=def,regions=m.regions,key=key,tiles=tiles,context=context,x0=x0,z0=z0,x1=x1,z1=z1,px=px,pz=pz,
+  radius=radius,budget=budget,world=m.world,list=m.list,id=entry.id}
+end
+local function aheadHooks(r)
+ return {
+  enter=function(p)
+   if not p.adopted then p.saved={Map.world,Map.neighborList,Map.current};Map.world,Map.neighborList,Map.current=r.world,r.list,r.id end
+   if p.value.firstAreaBuilt~=nil then firstArea=p.value.firstAreaBuilt end
+  end,
+  leave=function(p)
+   local s=p.saved
+   if s then Map.world,Map.neighborList,Map.current=s[1],s[2],s[3];p.saved=nil end
+  end}
+end
+local function warmAhead(game,cam)
+ if cam.battle or cam.replay or M.flySlice or not Map.world then return end
+ local tour=walkGate(cam)
+ local budget=Distance.radius()
+ local reach=tour and M.DEBUG_REACH or (budget and math.ceil(budget/16) or 64)*2+12
+ local px,pz=math.floor(((Player.px or 0)+8)/16),math.floor(((Player.py or 0)+8)/16)
+ local near={}
+ for _,e in ipairs(Map.world)do
+  local L=e.def.midLayout
+  if e.id~=Map.current and L then
+   local dx=math.max(e.ox-px,0,px-(e.ox+L.width-1));local dz=math.max(e.oy-pz,0,pz-(e.oy+L.height-1))
+   local d=math.max(dx,dz)
+   if d<=(tour and M.WARM_REACH_TOUR or M.WARM_REACH) then
+    local direct=tour
+    for _,n in ipairs(Map.neighborList or {})do if n.map==e.id then direct=true end end
+    if direct then near[#near+1]={e=e,d=d}end
+   end
+  end
+ end
+ table.sort(near,function(a,b)return a.d<b.d end)
+ for _,n in ipairs(near)do
+  local req=aheadRequest(game,cam,n.e,reach)
+  if req and not stream:has(req.context)then
+   local ready=true
+   for i,r in ipairs(req.regions)do
+    local pair=r.def.midLayout.pair
+    local touches=i==1 or (r.x<=req.x1+1 and r.x+r.w>=req.x0-1 and r.y<=req.z1+1 and r.y+r.h>=req.z0-1)
+    if pair and touches and not req.tiles[pair]then ready=false;Tiles.prefetch(pair,1)end
+   end
+   if ready then
+    stream:warm(req.key,req.context,function(candidate)return build(req,candidate,nil)end,tour and M.WARM*2 or M.WARM,aheadHooks(req))
+    return
+   end
+  end
+ end
+end
 local SCENE_FIELDS={'sceneDef','distance','fadeExtent','fillCounts','forestTrees','stairCount','propCount','cliffCount','objectCount'}
 local function prepare(game,vw,vh,cam)
  local req=request(game,cam);if not req then return false end
  local debugWalk=walkGate(cam)
- stream.capacity=debugWalk and 1 or 3
+ stream.capacity=debugWalk and 3 or 4
  -- Cold build is spread over frames; until ready, prepare returns false and the flat map draws.
  local same=stream.active~=nil and req.context~=nil and req.context==stream.context
  local near=not debugWalk and M.NEAR and req.context and not same and not cam.battle
@@ -2120,6 +2218,7 @@ local function prepare(game,vw,vh,cam)
   return false
  end
  if (near or req.upgrade) and stream.pending==nil and scene.nearOnly==nil then scene.nearOnly=true end
+ if stream.pending==nil and not (near or req.upgrade) then pcall(warmAhead,game,cam)end
  cache=scene
  for _,name in ipairs(SCENE_FIELDS)do M[name]=cache[name]end
  return true

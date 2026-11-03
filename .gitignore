@@ -23,3 +23,15 @@ __pycache__/
 
 # invoer van tools/tilerules (ROM-afgeleid: world.json + tegelatlassen), alleen lokaal
 /tools/tilerules/input/
+
+# hoogtekaarten: alleen de bron-JSONs, _same.txt en README horen in git; screenshots, inkt, kopieën en afgeleide bestanden blijven lokaal
+/docs/elevation/draw/*.png
+/docs/elevation/draw/*.zip
+/docs/elevation/draw/*.tgz
+/docs/elevation/draw/claude_marked/
+/docs/elevation/draw/claude_heightmaps_codex_*/
+/docs/elevation/draw/claude_heightmaps/*.csv
+/docs/elevation/draw/claude_heightmaps/*_preview.png
+/docs/elevation/draw/claude_heightmaps/_report.json
+/docs/elevation/draw/claude_heightmaps/REVIEW_codex_pass.md
+/docs/elevation/draw/claude_heightmaps/_audit.json

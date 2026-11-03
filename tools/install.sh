@@ -4,7 +4,7 @@
 #   tools/install.sh --check  alleen controleren of spel en testkopie gelijk zijn aan de bron
 # Weigert zolang het spel (of een testrun) draait: het spel schrijft bij afsluiten zijn bestanden terug.
 set -eu
-E="$HOME/Documents/Emerald"
+E="$(cd "$(dirname "$0")/.." && pwd)"
 AS="$HOME/Library/Application Support"
 TARGETS=("$AS/pokemon-love2d" "$AS/pokemon-love2d-rseqa")
 PAIRS=("mod:BATTLE_ART_VOXEL_FORK" "stadium2-importer:STADIUM2_IMPORTER" "overworld-wild-spawns:overworld_wild_spawns")
@@ -16,7 +16,8 @@ if [ "${1:-}" = "--check" ]; then
   bad=0
   for t in "${TARGETS[@]}"; do
     for p in "${PAIRS[@]}"; do
-      n=$(rsync -n -c "${OPTS[@]}" --itemize-changes "$E/${p%%:*}/" "$t/mods/${p#*:}/" | grep -vc '^\.d' || true)
+      changes=$(rsync -n -c "${OPTS[@]}" --itemize-changes "$E/${p%%:*}/" "$t/mods/${p#*:}/") || { bad=1; continue; }
+      n=$(printf '%s\n' "$changes" | awk 'NF && !/^\.d/ {n++} END {print n+0}')
       echo "$(basename "$t") ${p#*:}: $n verschillen"; [ "$n" = 0 ] || bad=1
     done
   done

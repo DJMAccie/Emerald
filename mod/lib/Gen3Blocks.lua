@@ -26,9 +26,10 @@ function M.prepare(cells,regions,def)
  local on=M.pinned(def)
  for _,c in pairs(cells)do c.blocks=nil end
  if not on then return 0 end
+ M.looseStones(cells)
  for _,c in pairs(cells)do
   local s=c.shape
-  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.seaRock and not c.masonry and not c.bedPlanter and c.ts and c.ts.midToSlot[c.mid] then
+  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not (c.floor and c.floor.object) and not c.masonry and not c.bedPlanter and not c.looseStone and c.ts and c.ts.midToSlot[c.mid] then
    local mine=c.boundary and true or false
    if not mine then
     for _,r in ipairs(regions)do
@@ -56,6 +57,49 @@ function M.prepare(cells,regions,def)
  if M.RAMPS then M.buildRamps(cells) end
  if M.SLOPES then M.buildSlopes(cells) end
  return M.count
+end
+-- Loose stones (Petya 2026-11-03): a stone tile from M.STONES, in a group of at most 2x2 on level floor, is no block
+-- but a round boulder (Gen3Mass domes). Tiles under 0x200 are listed under the primary tileset, the rest under the secondary.
+M.LOOSE=true
+local function set(t)local r={};for _,v in ipairs(t)do r[v]=true end;return r end
+M.STONES={
+ fallarbor=set({0x219,0x21A,0x223,0x225}), -- ash stones (Route 113); general 0E0/0E2 and the cone rocks are already low and round as blocks
+}
+function M.isStone(c)
+ local t=M.STONES[c.mid<0x200 and (c.primary or 'general') or (c.secondary or '')]
+ return t and t[c.mid] or false
+end
+function M.looseStones(cells)
+ if not M.LOOSE then return end
+ local function stone(c)local s=c and c.shape
+  return s and (s.kind=='cliff' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not c.masonry and c.ts and c.ts.midToSlot[c.mid] and M.isStone(c) end
+ local seen={}
+ for _,c in pairs(cells)do if not seen[c] and stone(c) then
+  local g,stack={},{c};seen[c]=true
+  while #stack>0 do
+   local q=table.remove(stack);g[#g+1]=q
+   for _,d in ipairs(DIRS)do local n=cells[key(q.cx+d[1],q.cy+d[2])]
+    if n and not seen[n] and stone(n) then seen[n]=true;stack[#stack+1]=n end end
+  end
+  local x0,y0,x1,y1=1e9,1e9,-1e9,-1e9
+  for _,q in ipairs(g)do x0,y0,x1,y1=math.min(x0,q.cx),math.min(y0,q.cy),math.max(x1,q.cx),math.max(y1,q.cy) end
+  local ok=x1-x0<=1 and y1-y0<=1
+  local lo,hi
+  if ok then
+   local inside={}
+   for _,q in ipairs(g)do inside[q]=true end
+   for _,q in ipairs(g)do for _,d in ipairs(DIRS)do local n=cells[key(q.cx+d[1],q.cy+d[2])]
+    if n and not inside[n] then
+     if n.boundary then ok=false end
+     local f=n.base or 0;lo=math.min(lo or f,f);hi=math.max(hi or f,f)
+    end end end
+   ok=ok and lo~=nil and hi-lo<.25 -- level floor all round (a stone beside a ledge stays a block for now)
+  end
+  if ok then for _,q in ipairs(g)do
+   q.looseStone=true;q.base=lo;q.floorHigh=nil
+   if q.shape.kind=='rock' then local s={};for k,v in pairs(q.shape)do s[k]=v end;s.kind='cliff';q.shape=s end
+  end end
+ end end
 end
 -- Drawn arrows (Gen3PinData height maps): each arrow tile is a 45-degree wedge rising toward the arrow; a diagonal is a corner cone.
 local HIGH={N={1,2},S={3,4},E={2,3},W={1,4}}
@@ -91,8 +135,11 @@ function M.arrowRamps(cells,regions)
     local c=cells[key(r.x+lx,r.y+ly)]
     if c then
      c.hmap=true
+     c.heightmapBase=(c.floor and c.floor.height or 0)+off;c.heightmapHigh=c.floorHigh
      local a=p.arrows[math.min(lx,p.w-1)..':'..math.min(ly,p.h-1)]
-     if a and c.blocks and c.layer~=15 then
+     if a and c.shape and c.shape.stoneMask then
+      local lo=a.lo*px+off;c.base=lo;c.heightmapBase=lo;c.floorHigh=nil;c.heightmapHigh=nil
+     elseif a and c.blocks and c.layer~=15 then
       local lo,hi=a.lo*px+off,a.hi*px+off
       local q
       local ap=HIGH[a.dir] and roundEnd(p,lx,ly,a)
@@ -100,14 +147,44 @@ function M.arrowRamps(cells,regions)
       elseif HIGH[a.dir] then q={lo,lo,lo,lo};for _,i in ipairs(HIGH[a.dir])do q[i]=hi end
       elseif a.inner then local o=(APEX[a.dir]+1)%4+1;q={hi,hi,hi,hi};q[o]=lo;q.cone={apex=o,D=hi-lo,inv=true}
       else local ap=APEX[a.dir];q={lo,lo,lo,lo};q[ap]=hi;q.cone={apex=ap,D=hi-lo} end
-      if M.STEPS then c.base=hi;c.arrow=a else q.comp={c};c.ramp=q;c.arrow=a end
+      if M.STEPS then c.base=hi;c.heightmapBase=hi;c.arrow=a else q.comp={c};c.ramp=q;c.arrow=a end
       n=n+1
      end
     end
    end end
   end
  end
+ local seen={}
+ for _,c in pairs(cells)do
+  if c.hmap and c.shape and c.shape.stoneMask and not seen[c] then
+   local g,stack={},{c};seen[c]=true
+   while #stack>0 do
+    local q=table.remove(stack);g[#g+1]=q
+    for _,d in ipairs(DIRS)do
+     local nb=cells[key(q.cx+d[1],q.cy+d[2])]
+     if nb and not seen[nb] and nb.hmap and nb.shape and nb.shape.stoneMask then seen[nb]=true;stack[#stack+1]=nb end
+    end
+   end
+   local clo,wlo
+   for _,q in ipairs(g)do
+    local hb=q.heightmapBase or q.base or 0
+    clo=clo and math.min(clo,hb) or hb
+    for _,d in ipairs(DIRS)do
+     local nb=cells[key(q.cx+d[1],q.cy+d[2])]
+     if nb and not (nb.shape and nb.shape.stoneMask) and ((nb.collision or 0)==0 or (nb.shape and nb.shape.kind=='water')) then
+      local nh=nb.heightmapBase or nb.base or 0
+      wlo=wlo and math.min(wlo,nh) or nh
+     end
+    end
+   end
+   local lo=(wlo and clo and math.min(clo,wlo)) or clo or 0
+   for _,q in ipairs(g)do q.base=lo;q.heightmapBase=lo;q.floorHigh=nil;q.heightmapHigh=nil end
+  end
+ end
  M.arrowCells=n
+end
+function M.restoreHeights(cells)
+ for _,c in pairs(cells)do if c.hmap then c.base=c.heightmapBase;c.floorHigh=c.heightmapHigh end end
 end
 -- Ramp levels come from what lies beside it, never from the field's lo/hi.
 function M.buildRamps(cells)
@@ -598,6 +675,38 @@ local function appendRamp(c,cells,emit,uvFor)
  end
  return true
 end
+-- A seawall tile is drawn with a strip of its water on one side (Rustboro 0x17A): on a wall face or lid that strip shows as a blue sheet, so crop it off.
+M.BLUE_COL=.6
+local function waterCols(ts,mid)
+ ts.blocksWater=ts.blocksWater or {}
+ local w=ts.blocksWater[mid]
+ if w then return w[1],w[2] end
+ w={0,0}
+ local slot=ts.imageData and ts.midToSlot and ts.midToSlot[mid]
+ if slot then
+  local gx,gy=slot%ts.cols*16,math.floor(slot/ts.cols)*16
+  local blue={}
+  for x=0,15 do
+   local n=0
+   for y=0,15 do local r,g,b=ts.imageData:getPixel(gx+x,gy+y);if b>r+.15 and b>g-.05 then n=n+1 end end
+   blue[x]=n/16>=M.BLUE_COL
+  end
+  local a,b=0,0
+  while a<16 and blue[a] do a=a+1 end
+  while b<16-a and blue[15-b] do b=b+1 end
+  if a+b<=4 then w={a,b} end
+ end
+ ts.blocksWater[mid]=w
+ return w[1],w[2]
+end
+local function cropWater(ts,mid,uv)
+ if not (uv and ts) then return uv end
+ local a,b=waterCols(ts,mid)
+ if a==0 and b==0 then return uv end
+ local t0,t1=a/16,1-b/16
+ local function lerp(p,q,t)return {p[1]+(q[1]-p[1])*t,p[2]+(q[2]-p[2])*t} end
+ return {lerp(uv[1],uv[2],t0),lerp(uv[1],uv[2],t1),lerp(uv[4],uv[3],t1),lerp(uv[4],uv[3],t0)}
+end
 function M.append(c,cells,emit,uvFor)
  if c.ramp then return appendRamp(c,cells,emit,uvFor) end
  local T=c.base or 0
@@ -605,7 +714,7 @@ function M.append(c,cells,emit,uvFor)
  local fm=faceMid(c,cells)
  local E=V.require('Gen3Elevation')
  local lid=(E.BAND_LEVEL=='lower' and c.floor and c.floor.cls=='FACE') and uvFor(c.ts,c.mid) or lidUV(c,cells,uvFor,c.mass and massStats(c.mass) or nil)
- local fuv=fm and uvFor(c.ts,fm) or uvFor(c.ts,c.mid)
+ local fuv=cropWater(c.ts,fm or c.mid,fm and uvFor(c.ts,fm) or uvFor(c.ts,c.mid))
  local drops={}
  local nb,top={},{}
  for i,d in ipairs(DIRS)do
