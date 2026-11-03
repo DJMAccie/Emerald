@@ -25,6 +25,27 @@ M.RAISE={b003_petalburgcity_gym=GYM_RAISE,b017_mauvillecity_gym=GYM_RAISE,b024_r
 local SHADE={0.90,0.68,1.00,0.84,0.72} -- south, north, top, east, west
 
 local unpack=unpack or table.unpack
+local function raise(q,r)
+ local out,P,n={},r.hA-r.hB,0
+ local function put(i,a,b)
+  for j=0,9 do out[n+1+j]=q[i+j] end
+  out[n+4]=a;out[n+5]=b;n=n+10
+ end
+ for i=1,#q,10 do
+  local h0,h1=q[i+3],q[i+4]
+  if q[i]==3 then put(i,h0>=r.hA and h0+r.n*P or h0,h1>=r.hA and h1+r.n*P or h1)
+  elseif h0>=r.hA then put(i,h0+r.n*P,h1+r.n*P)
+  elseif h1<=r.hB then put(i,h0,h1)
+  else
+   if h0<r.hB then put(i,h0,r.hB) end
+   local a,b=math.max(h0,r.hB),math.min(h1,r.hA)
+   if a<b then for k=0,r.n do put(i,a+k*P,b+k*P) end end
+   if h1>r.hA then put(i,r.hA+r.n*P,h1+r.n*P) end
+  end
+ end
+ return out
+end
+
 local function deepen(m,d)
  local out,sh,q={},d.rows*16,m.quads
  local wpx=(m.x1-m.x0+1)*16

@@ -783,16 +783,23 @@ local function cloudImage()
  if cloudImg~=nil then return cloudImg or nil end
  cloudImg=false
  pcall(function()
-  local cache=eng('src.core.game3.dataset').cache()
-  local raw=cache and cache:read('data/generated/gba/weather/cloud.rgba')
-  if raw and #raw>=64*64*4 then
-   local d=love.image.newImageData(64,64,'rgba8',raw:sub(1,64*64*4))
-   d:mapPixel(function(_,_,r,g,b,a)
-    if a<=0 then return 0,0,0,0 end
-    return r+(1-r)*.62,g+(1-g)*.62,b+(1-b)*.62,a
-   end)
-   local img=love.graphics.newImage(d);img:setFilter('nearest','nearest');cloudImg=img
+  local puffs={{22,38,13},{38,34,15},{50,41,11},{32,44,16},{14,44,9},{44,46,12}}
+  local d=love.image.newImageData(64,64)
+  local function inside(cx,cy)
+   for _,p in ipairs(puffs)do
+    local dx,dy=cx-p[1],cy-p[2]
+    if dx*dx+dy*dy<=p[3]*p[3] then return true end
+   end
   end
+  d:mapPixel(function(x,y)
+   local cx,cy=math.floor(x/4)*4+2,math.floor(y/4)*4+2
+   if not inside(cx,cy) then return 0,0,0,0 end
+   local depth=0
+   while depth<5 and inside(cx,cy-4*(depth+1)) do depth=depth+1 end
+   local t=depth/5
+   return 1-.14*t,1-.10*t,1-.04*t,1
+  end)
+  local img=love.graphics.newImage(d);img:setFilter('nearest','nearest');cloudImg=img
  end)
  return cloudImg or nil
 end

@@ -1,5 +1,60 @@
 # Emerald 3D
 
+Pokémon Emerald, rebuilt as a 3D voxel world. A mod for gen1recomp (the Gen 1-3 native recompilation engine).
+You walk the same Hoenn, but the maps stand up in three dimensions, with a camera you can turn.
+
+**Status: alpha 0.1.0.** The overworld is the finished part. Battles with 3D Stadium 2 models are still being built.
+Project page: <https://petyabouianov.com/emerald-voxel>
+
+## What it does
+
+- **Voxel overworld.** Routes, towns, buildings, caves and interiors are built from Emerald's own tiles, block by block. Heights come
+  from height maps checked tile by tile (165 maps), so cliffs, stairs and caves are drawn from the art, not guessed.
+- **Free camera.** Several camera levels, from the classic overview to a close orbit and first person.
+- **Pokémon in the overworld.** Wild Pokémon walk the routes (`overworld_wild_spawns`), and your lead Pokémon follows you.
+- **Day and night.** The sky follows your computer's clock: sun, moon, and street lamps that come on after dark.
+- **Cinematic Fly.** HM Fly lifts into an aerial camera over the whole region.
+- **No border flash.** Neighbouring maps are built before you reach the edge.
+- **3D battles (unfinished).** Stadium 2 models for #1-251 are imported from your own ROM; the Colosseum set (#252-386) is in progress.
+
+## What is in the download
+
+`Emerald 3D.zip` holds three mods, one folder each:
+
+| Folder | What it is |
+|---|---|
+| `BATTLE_ART_VOXEL_FORK` | The 3D voxel world (this repo's `mod/`). |
+| `STADIUM2_IMPORTER` | Builds the 3D battle models from your own Stadium 2 ROM or Colosseum disc. |
+| `overworld_wild_spawns` | Wild Pokémon walking around the overworld. |
+
+## Install
+
+1. Install gen1recomp and import your own legally owned **Pokémon Emerald** ROM.
+2. Unzip `Emerald 3D.zip` and copy the three folders into the game's `mods` folder
+   (macOS: `~/Library/Application Support/pokemon-love2d/mods/`).
+3. Start the game. Turn the mod on in the launcher's mods tab if it is not on already.
+
+For 3D battles you also need your own **Stadium 2** ROM and/or **Pokémon Colosseum** disc.
+
+**No ROMs, game data or Nintendo models are included or ever will be.** Everything the mod shows comes from files you supply.
+This is an independent fan project, not affiliated with Nintendo, Game Freak or The Pokémon Company.
+
+## Known rough edges (alpha)
+
+- Not every map has been looked at from every angle; expect odd edges on some cliffs, coasts and caves.
+- 3D battles are unfinished, so the 2D Emerald battle still runs for anything without a model.
+- The first visit to a new region can stutter for a moment while layouts load.
+- Tested on macOS only so far.
+
+## Credits
+
+Built on the Pokémon Gen 1 Recompilation Project by BOIS CLUB GAMES, LLC. See `mod/THIRD_PARTY_NOTICES.md` and
+`overworld-wild-spawns/THIRD_PARTY_ASSETS.md` for everything else. Licence: not chosen yet.
+
+---
+
+## Development notes (Dutch)
+
 Pokémon Emerald in gen1recomp met een 3D-voxelwereld, Pokémon in de overworld, een volger en 3D-gevechten
 (Stadium 2-modellen). Alle code is van Petya.
 
