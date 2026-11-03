@@ -287,7 +287,7 @@ end
 M.NEAR=14
 local CROWN={edges=.45}
 M.NEAR_NORTH=8
-M.NEAR_STREAM=.014
+M.NEAR_STREAM=.005
 M.STREAM=.008
 M.DEBUG_REACH=32
 M.DEBUG_PAD=16
@@ -306,11 +306,15 @@ local function debugRegions(def)
  local ids=directNeighbours()
  local world={}
  for _,e in ipairs(Map.world or {})do if ids[e.id]then world[#world+1]=e end end
- local regions=Boundary.regions(def,world)
- local x0,z0,x1,z1=BoundarySelect.bounds(regions,0)
- local pad=M.DEBUG_PAD
- if (x1-x0+pad*2)*(z1-z0+pad*2)>M.DEBUG_CELLS then regions=Boundary.regions(def,{})end
- return regions
+ return Boundary.regions(def,world)
+end
+local function tourBounds(regions,bx,bz)
+ local x0,z0,x1,z1=BoundarySelect.bounds(regions,M.DEBUG_PAD)
+ if (x1-x0)*(z1-z0)>M.DEBUG_CELLS then
+  local reach=M.DEBUG_REACH
+  return math.max(x0,bx-reach),math.max(z0,bz-reach),math.min(x1,bx+reach+6),math.min(z1,bz+reach+6)
+ end
+ return x0,z0,x1,z1
 end
 local function request(game,cam,near)
  local replay=cam and cam.replay
@@ -337,7 +341,8 @@ local function request(game,cam,near)
   regions=Boundary.regions(def,Map.world)
  end
  local x0,z0,x1,z1=bx-radius,bz-radius,bx+radius+6,bz+radius+6
- if not budget then x0,z0,x1,z1=BoundarySelect.bounds(regions,debugWalk and M.DEBUG_PAD or 16)end
+ if debugWalk then x0,z0,x1,z1=tourBounds(regions,bx,bz)
+ elseif not budget then x0,z0,x1,z1=BoundarySelect.bounds(regions,16)end
  if near and not debugWalk and not replay and near<radius then
   radius=near;budget=near*16
   local north=(cam and (cam.level or 0)<6) and M.NEAR_NORTH or 0
@@ -520,13 +525,13 @@ do
  SHAPE_BY_MAP.EM_SAFARI_ZONE_SOUTH={[0x313]=top,[0x31D]=top,[0x316]=top,[0x31E]=top,[0x321]=foot,[0x315]=foot}
 end
 do
- local AWNING_UP=14
- local ob={auto=7,over=true,noGap=true,floor={},floorMids={0x001},hBy={[0x263]=16+AWNING_UP,[0x264]=16+AWNING_UP},
+ local AWNING_UP=24
+ local ob={auto=7,over=true,noGap=true,floor={},floorMids={0x001},hBy={[0x263]=16+AWNING_UP-8,[0x264]=16+AWNING_UP-8},
   overOnly={},liftBy={},liftUp={}}
  local cloth={kind='obwall',ground=0x001,ob=ob,walkOk=true,overArt=true}
  local pole={kind='obwall',ground=0x001,ob=ob}
  local S=SHAPE_BY_MAP.EM_SLATEPORT_CITY or {};SHAPE_BY_MAP.EM_SLATEPORT_CITY=S
- for _,m in ipairs({0x270,0x271,0x272,0x278,0x279,0x27A,0x216,0x21E})do S[m]=cloth;ob.overOnly[m]=true;ob.liftBy[m]=16;ob.liftUp[m]=AWNING_UP end
+ for _,m in ipairs({0x270,0x271,0x272,0x278,0x279,0x27A,0x216,0x21E})do S[m]=cloth;ob.overOnly[m]=true;ob.liftBy[m]=16+AWNING_UP-14;ob.liftUp[m]=AWNING_UP end
  S[0x263]=pole;S[0x264]=pole
 end
 do
@@ -2081,7 +2086,7 @@ end
 -- Crossing a map edge must not wait for a cold build: the connected map is built while the player is still near its edge.
 M.WARM_REACH=10
 M.WARM_REACH_TOUR=14
-M.WARM=.006
+M.WARM=.003
 local Connections=require('src.core.game3.connections')
 local aheadMemo={}
 local function aheadRequest(game,cam,entry,reach)
@@ -2102,10 +2107,6 @@ local function aheadRequest(game,cam,entry,reach)
   for _,e in ipairs(world)do
    if e.def.midLayout and (not tour or ids[e.id])then regions[#regions+1]={def=e.def,x=e.ox,y=e.oy,w=e.def.midLayout.width,h=e.def.midLayout.height}end
   end
-  if tour then -- as debugRegions: the map and its direct neighbours, or the map alone when that is too many cells
-   local x0,z0,x1,z1=BoundarySelect.bounds(regions,0)
-   if (x1-x0+M.DEBUG_PAD*2)*(z1-z0+M.DEBUG_PAD*2)>M.DEBUG_CELLS then regions={regions[1]}end
-  end
   m={world=world,list=list,regions=regions};memo[entry.id]=m
  end
  -- where the player will stand on the other side: the nearest cell of that map
@@ -2116,7 +2117,7 @@ local function aheadRequest(game,cam,entry,reach)
  local radius,budget,x0,z0,x1,z1=M.NEAR,M.NEAR*16
  if tour then
   radius,budget=64,nil
-  x0,z0,x1,z1=BoundarySelect.bounds(m.regions,M.DEBUG_PAD)
+  x0,z0,x1,z1=tourBounds(m.regions,math.floor(px/96)*6,math.floor(pz/96)*6)
  else
   local bx,bz=math.floor(px/96)*6,math.floor(pz/96)*6
   local north=(cam.level or 0)<6 and M.NEAR_NORTH or 0
@@ -2170,7 +2171,7 @@ local function warmAhead(game,cam)
     if pair and touches and not req.tiles[pair]then ready=false;Tiles.prefetch(pair,1)end
    end
    if ready then
-    stream:warm(req.key,req.context,function(candidate)return build(req,candidate,nil)end,tour and M.WARM*2 or M.WARM,aheadHooks(req))
+    stream:warm(req.key,req.context,function(candidate)return build(req,candidate,nil)end,M.WARM,aheadHooks(req))
     return
    end
   end
@@ -2603,12 +2604,25 @@ function M.restore()
   saved,savedCanvas=false,nil
  end
 end
+local function presentField(canvas,vw,vh)
+ local Renderer=require('src.render.Renderer')
+ if Renderer.setWorldOverride and Renderer.frameRects and not require('src.core.game3.display').planesBroken then Renderer:setWorldOverride(canvas) end
+ love.graphics.push('all');love.graphics.origin();love.graphics.setShader();love.graphics.setColor(1,1,1,1)
+ love.graphics.setBlendMode('alpha','premultiplied');love.graphics.draw(canvas,0,0,0,vw/canvas:getWidth(),vh/canvas:getHeight())
+ love.graphics.pop()
+end
 function M.draw(game,vw,vh,cam)
  local Fly=V.require('Gen3FlyOver')
  local flying=Fly.active() and not cam.battle and not cam.replay
  M.flySlice=flying and Fly.slice() or nil
  local built=prepare(game,vw,vh,cam)
- if not built and not flying then return false end
+ if not built and not flying then
+  if M.lastFieldCanvas and not (cam.battle or cam.replay) and directNeighbours()[M.lastFieldMap] then
+   presentField(M.lastFieldCanvas,vw,vh)
+   return true
+  end
+  return false
+ end
  -- Script camera panning belongs to the flat renderer; it must not move the 3D eye.
  local focus=cam.replay and cam.replay.frame or Player
  local cx,cz=(focus.px or focus.x or 0)+8,(focus.py or focus.y or 0)+8
@@ -2738,14 +2752,15 @@ function M.draw(game,vw,vh,cam)
  R.fog=nil
  R.tint={1,1,1}
  love.graphics.pop();love.graphics.setCanvas(savedCanvas);saved=false;savedCanvas=nil
- if override then Renderer:setWorldOverride(canvas) end
- love.graphics.push('all');love.graphics.origin();love.graphics.setShader();love.graphics.setColor(1,1,1,1)
- love.graphics.setBlendMode('alpha','premultiplied');love.graphics.draw(canvas,0,0,0,vw/width,vh/height)
- love.graphics.pop()
+ if not (cam.battle or cam.replay or flying) then
+  M.lastFieldCanvas,M.lastFieldMap=canvas,Map.current
+ else M.lastFieldCanvas=nil end
+ presentField(canvas,vw,vh)
  return true
 end
-function M.invalidate()Boundary.clear();stream:clear();cache={}end
+function M.invalidate()M.lastFieldCanvas=nil;Boundary.clear();stream:clear();cache={}end
 function M.release()
+ M.lastFieldCanvas=nil
  -- The debug radius override must not outlive the scene that set it.
  Distance.forceFull=false
  if dustMesh then dustMesh:release();dustMesh=nil end

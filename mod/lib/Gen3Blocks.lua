@@ -21,15 +21,27 @@ function M.pinned(def)
  return M.enabled and E.BLOCKS_ON and E.PINS_ON and def and def.id and not E.PIN_SKIP[def.id] and PinData and PinData.MAPS[def.id] and true or false
 end
 
+-- Petya 2026-11-03: Lilycove's south peninsula edge is all rock (no raised water block, no grass wall): these cells take
+-- the rock tile of the rim beside them, keeping their height.
+M.ROCK_PATCH={EM_LILYCOVE_CITY={from={18,33},cells={{16,32},{17,32},{18,32},{14,33},{15,33},{16,33},{17,33},{14,34},{15,34},{16,34},{17,34},{14,35},{15,35},{16,35},{17,35}}}}
+function M.rockPatch(cells,def)
+ local p=def and def.id and M.ROCK_PATCH[def.id];if not p then return end
+ local src=cells[key(p.from[1],p.from[2])]
+ if not (src and src.shape and src.ts) then return end
+ for _,q in ipairs(p.cells)do local c=cells[key(q[1],q[2])]
+  if c then c.mid,c.ts,c.shape=src.mid,src.ts,src.shape end
+ end
+end
 function M.prepare(cells,regions,def)
  M.count=0
  local on=M.pinned(def)
+ M.rockPatch(cells,def)
  for _,c in pairs(cells)do c.blocks=nil end
  if not on then return 0 end
  M.looseStones(cells)
  for _,c in pairs(cells)do
   local s=c.shape
-  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not (c.floor and c.floor.object) and not c.masonry and not c.bedPlanter and not c.looseStone and c.ts and c.ts.midToSlot[c.mid] then
+  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not s.sea and not (c.floor and c.floor.object) and not c.masonry and not c.bedPlanter and not c.looseStone and c.ts and c.ts.midToSlot[c.mid] then
    local mine=c.boundary and true or false
    if not mine then
     for _,r in ipairs(regions)do
@@ -56,6 +68,7 @@ function M.prepare(cells,regions,def)
  M.arrowRamps(cells,regions)
  if M.RAMPS then M.buildRamps(cells) end
  if M.SLOPES then M.buildSlopes(cells) end
+ M.lowerArches(cells)
  return M.count
 end
 -- Loose stones (Petya 2026-11-03): a stone tile from M.STONES, in a group of at most 2x2 on level floor, is no block
@@ -327,6 +340,16 @@ function M.liftSpots(cells)
 end
 
 M.SLOPES=true
+-- A cave door outdoors is two tiles (R-50): the threshold on the floor and the arch behind it, standing in the wall.
+-- The arch tile sits at the threshold's floor so doorAt draws it once, one course high, rock above and dark inside.
+M.DOOR_BEHAVIOR={[0x60]=true,[0x69]=true,[0x6E]=true,[0x6F]=true,[0x8D]=true}
+function M.lowerArches(cells)
+ for _,c in pairs(cells)do
+  local s=c.blocks and c.base and cells[key(c.cx,c.cy+1)]
+  if s and not s.blocks and s.base and M.DOOR_BEHAVIOR[s.behavior or -1] and c.base>s.base then c.base=s.base;if c.heightmapBase then c.heightmapBase=s.base end end
+ end
+end
+
 M.SLOPE_RUN=1e9 -- px a wedge may drop in its own cell: 1e9 = whole drop in one cell, 16 = true 45 degrees.
 function M.buildSlopes(cells)
  local n=0

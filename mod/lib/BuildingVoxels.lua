@@ -2,6 +2,7 @@
 local V=...
 local Budget=V.require('BuildBudget')
 local FlatMesh=V.require('FlatMesh')
+local Dome=V.require('BuildingDome')
 local M={}
 M.REPAINT_GROUND=8
 
@@ -11,7 +12,44 @@ do
  local ok,idx=pcall(V.data,'buildings/index')
  if ok and type(idx)=='table' then for _,n in ipairs(idx)do M.MODELS[#M.MODELS+1]=n end end
 end
+-- The export only holds the facade rows; the roof rows above it stay map tiles lying on the ground.
+-- rows = extra tile rows above the model (their art becomes the roof on top of the box, no stretch),
+-- n = copies of the side walls behind the front slice (back wall ends at the top row), top = height of the roof plane;
+-- the roof art repeats over the whole top.
+M.DEEPEN={b055_lilycovecity_harbor={rows=3,n=5,top=32}}
+-- Taller than the export: repeat the wall band hB..hA n more times and lift everything above it (gym roofs).
+local GYM_RAISE={hB=27,hA=29,n=1}
+M.RAISE={b003_petalburgcity_gym=GYM_RAISE,b017_mauvillecity_gym=GYM_RAISE,b024_rustborocity_gym=GYM_RAISE,
+ b037_fortreecity_gym=GYM_RAISE,b057_mossdeepcity_gym=GYM_RAISE,b068_sootopoliscity_gym=GYM_RAISE,
+ b089_dewfordtown_gym={hB=21,hA=23,n=1},b093_lavaridgetown_gym=GYM_RAISE}
 local SHADE={0.90,0.68,1.00,0.84,0.72} -- south, north, top, east, west
+
+local unpack=unpack or table.unpack
+local function deepen(m,d)
+ local out,sh,q={},d.rows*16,m.quads
+ local wpx=(m.x1-m.x0+1)*16
+ local function put(f,xa,xb,h0,h1,za,zb,px,py,shade)
+  local n=#out
+  out[n+1],out[n+2],out[n+3],out[n+4],out[n+5],out[n+6],out[n+7],out[n+8],out[n+9],out[n+10]=f,xa,xb,h0,h1,za,zb,px,py,shade
+ end
+ local back0=0
+ for i=1,#q,10 do if q[i]==2 then back0=math.min(back0,q[i+5]) end end
+ for i=1,#q,10 do
+  local f,xa,xb,h0,h1,za,zb,px,py,shade=unpack(q,i,i+9)
+  if h0<d.top then
+   py=py+sh
+   if f==2 then put(f,xa,xb,h0,h1,za-d.n*(-back0),zb-d.n*(-back0),px,py,shade)
+   elseif f==1 then put(f,xa,xb,h0,h1,za,zb,px,py,shade)
+   elseif f>=4 then
+    put(f,xa,xb,h0,h1,za,zb,px,py,shade)
+    if za<0 then for r=1,d.n do put(f,xa,xb,h0,h1,za+r*back0,zb+r*back0,px,py,shade) end end
+   end
+  end
+ end
+ local zr=back0*(d.n+1)
+ for z=zr,-1 do for x=0,wpx-1 do put(3,x,x+1,d.top,d.top,z,z+1,x,(z-zr)%sh,0) end end
+ return out
+end
 
 local loaded={}
 -- Vertex lists are a pool: a build that yields mid-mesh never shares one.
@@ -20,6 +58,8 @@ local function model(name)
  if loaded[name]==nil then
   local ok,m=pcall(V.data,'buildings/'..name)
   loaded[name]=ok and type(m)=='table' and m or false
+  local d=loaded[name] and M.DEEPEN[name]
+  if d then m.quads=deepen(m,d);m.y0=m.y0-d.rows end
  end
  return loaded[name] or nil
 end
@@ -102,6 +142,10 @@ function M.mesh(bld,data,img)
  local oy=bld.groundHeight or 0
  local oz=(bld.cy+bld.depth)*16
  local q=m.quads
+ local rs=M.RAISE[m.name]
+ if rs then m.tall=m.tall or raise(q,rs);q=m.tall end
+ local rp=Dome.MODELS[m.name]
+ if rp then m.dome=m.dome or Dome.build(q,rp);q=m.dome end
  local repaint={}
  do
   local ts=bld.ts
