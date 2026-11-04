@@ -67,6 +67,7 @@ function M.prepare(cells,regions,def)
  M.liftSpots(cells)
  M.arrowRamps(cells,regions)
  if M.RAMPS then M.buildRamps(cells) end
+ V.require('Gen3Parapet').shoulders(cells) -- the shoulders beside Sootopolis' stair flights slope down with them
  if M.SLOPES then M.buildSlopes(cells) end
  M.lowerArches(cells)
  return M.count
@@ -661,6 +662,8 @@ local function appendRamp(c,cells,emit,uvFor)
  local r=c.ramp;local x,z=c.cx*16,c.cy*16
  local lid=uvFor(c.ts,c.mid);local fm=faceMid(c,cells);local fuv=fm and uvFor(c.ts,fm) or lid
  if r.slope and not M.SPOT_MIDS[c.mid] then lid=fuv end
+ local Parapet=V.require('Gen3Parapet');local par=Parapet.is(c)
+ if par then lid,fuv=Parapet.lid(c,uvFor) or lid,Parapet.face(c,uvFor) or fuv end
  if r.cone then
   local ax,az=({x,x+16,x+16,x})[r.cone.apex],({z,z,z+16,z+16})[r.cone.apex]
   local D=r.cone.D;local k=D/16;local T=r[1]>r[2] and r[1] or r[2];T=math.max(r[1],r[2],r[3],r[4])
@@ -697,6 +700,7 @@ local function appendRamp(c,cells,emit,uvFor)
    end
   end
  end
+ if par then Parapet.append(c,cells,emit,uvFor,c.base or r[1]) end
  return true
 end
 -- Terrain beside the rock belongs on the floor, not repeated down its wall.

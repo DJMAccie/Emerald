@@ -64,7 +64,28 @@ end
 -- the floor tile the block's lid shows under the railing
 -- the walls of the block under a railing are the ridge's rock face, not the railing art
 function M.face(c,uvFor)return uvFor(c.ts,M.ROCK)end
-function M.lid(c,uvFor)return uvFor(c.ts,M.SPEC[c.mid].lid or M.GROUND)end
+function M.lid(c,uvFor)
+ local uv=uvFor(c.ts,M.SPEC[c.mid].lid or M.GROUND)
+ if c.ramp and uv then -- on the slope the lid is 1.41 longer: take that many fewer art rows so a pixel stays a pixel
+  local v0,v1=uv[1][2],uv[3][2];v1=v0+(v1-v0)*.7071
+  return {{uv[1][1],v0},{uv[2][1],v0},{uv[3][1],v1},{uv[4][1],v1}}
+ end
+ return uv
+end
+
+-- A post beside a stair flight (0x262 west of it, 0x263 east of it): its shoulder slopes down with the flight, from the
+-- plateau at the north edge to the flight's foot at the south edge, and the post follows it (Gen3Blocks.appendRamp).
+local STEP_SIDE={[0x262]=1,[0x263]=-1}
+function M.shoulders(cells)
+ for _,c in pairs(cells)do
+  local s=M.is(c)
+  local d=s and s.endFace and STEP_SIDE[c.mid]
+  local f=d and cells[(c.cx+d)..':'..c.cy]
+  if f and f.shape and f.shape.kind=='steps' and f.base and c.base and f.base<c.base-.25 then
+   c.ramp={c.base,c.base,f.base,f.base,comp={c}}
+  end
+ end
+end
 
 -- the gate's ring hangs at the height of the back row's lid (the beams stand on it); the side and front beams float over the terraces
 local BACK={[0x251]=true,[0x252]=true,[0x253]=true,[0x25B]=true}
@@ -120,12 +141,33 @@ end
 -- the arch cell stays at the plateau's height: the hole is cut into its south face (Gen3Blocks.lowerArches would sink it into an alcove)
 function M.keepsHeight(c)return c.mid==0x25B and c.secondary==M.SECONDARY and true or false end
 
+-- the post on a sloped shoulder: a wall of constant height H on the slope, as wide as the post it continues from the north,
+-- its end face at the flight's foot
+local function sloped(c,cells,emit,uvFor,spec,uv,side)
+ local X,Z=c.cx*16,c.cy*16
+ local r=c.ramp;local hN,hS=r[1],r[4]
+ local p=spec.posts[1];local xa,xb=p[1],p[2]
+ local north=cells[c.cx..':'..(c.cy-1)]
+ local ns=north and M.is(north) and M.SPEC[north.mid]
+ local np=ns and ns.posts and ns.posts[1]
+ local top
+ if np then xa,xb=np[1],np[2];local nuv=uvFor(north.ts,north.mid);top=nuv and up(nuv,np[5],3,np[6],13) end
+ top=top or up(uv,p[5],0,p[6],4)
+ local x0,x1,y,z1=X+xa,X+xb,M.H,Z+16
+ local sideUV=up(side,0,M.FACE0,16,M.FACE1)
+ emit({{x0,hN+y,Z},{x1,hN+y,Z},{x1,hS+y,z1},{x0,hS+y,z1}},top,1)
+ emit({{x0,hN+y,Z},{x0,hS+y,z1},{x0,hS,z1},{x0,hN,Z}},sideUV,SH.west)
+ emit({{x1,hS+y,z1},{x1,hN+y,Z},{x1,hN,Z},{x1,hS,z1}},sideUV,SH.east)
+ emit({{x0,hS+y,z1},{x1,hS+y,z1},{x1,hS,z1},{x0,hS,z1}},up(uv,p[5],M.FACE0,p[6],M.FACE1),SH.south)
+end
+
 -- c: the railing cell, T: its base height; emit as in Gen3Blocks
 function M.append(c,cells,emit,uvFor,T)
  local spec=M.SPEC[c.mid];if not spec then return end
  if spec.gate then return gate(c,cells,emit,uvFor,T) end
  local uv=uvFor(c.ts,c.mid);if not uv then return end
  local side=uvFor(c.ts,M.SIDE) or uv
+ if c.ramp and spec.endFace then return sloped(c,cells,emit,uvFor,spec,uv,side) end
  local X,Z=c.cx*16,c.cy*16
  local y0,y1=T,T+M.H
  for _,b in ipairs(spec.bars or {})do
