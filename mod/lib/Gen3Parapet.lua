@@ -8,6 +8,7 @@ M.H=8 -- face rows 6-13 of the bar art
 M.Z0,M.Z1=2,6 -- the bar's depth in the cell: the art's top rows 2-5; its face (8 rows) is the height
 M.TOP0,M.TOP1,M.FACE0,M.FACE1=2,6,6,14 -- art rows of the bar's top and face
 M.SIDE=0x241 -- art for the walls' ends and sides
+M.PINK=0x71 -- the pink floor of the steps in front of the gate
 -- bars {x0,x1}: along the cell; posts {x0,x1,z0,z1,art column from,to}: running north-south, the end face is at z1
 M.SPEC={
  [0x240]={bars={{0,16}},capL=true},
@@ -18,6 +19,22 @@ M.SPEC={
  [0x247]={bars={{6,16}},posts={{1,6,2,16,1,6}}},
  [0x262]={posts={{9,15,0,5,9,15}},endFace=true,lid=M.ROCK},
  [0x263]={posts={{1,7,0,5,1,7}},endFace=true,lid=M.ROCK},
+ -- the gate frame round the cave door: a level ring of stone beams hanging round the entrance (see gate)
+ [0x251]={gate=true},[0x252]={gate=true},[0x253]={gate=true},
+ [0x220]={gate=true,lid=M.ROCK},[0x222]={gate=true,lid=M.ROCK},
+ [0x228]={gate=true,lid=M.PINK},[0x22A]={gate=true,lid=M.PINK},[0x230]={gate=true,lid=M.PINK},[0x232]={gate=true,lid=M.PINK},
+}
+M.GH=5 -- the gate's beams: 5 deep (the art's 5 top rows) and 5 high (its 4-5 face rows)
+-- members per tile, cell-local px: bar {x0,x1} along the back beam (z 1-6); side {x0,x1,z0,z1} beam running north-south;
+-- front {x0,x1} the front beam (z 1-6) over the walkable cells; leg {x0,x1} a post from the floor up to the ring
+M.GATE={
+ [0x251]={bar={15,16},side={10,15,1,16}},
+ [0x252]={bar={0,16},arch=true},
+ [0x253]={bar={0,1},side={1,6,1,16}},
+ [0x220]={side={10,15,0,16}},
+ [0x222]={side={1,6,0,16}},
+ [0x228]={side={10,15,0,6},front={15,65},leg={10,15,0x230}},
+ [0x22A]={side={1,6,0,6},leg={1,6,0x232}},
 }
 
 function M.is(c)
@@ -34,8 +51,9 @@ local function up(uv,px0,py0,px1,py1)
 end
 local SH={east=.78,west=.78,south=.84,north=.72}
 
-local function box(emit,x0,x1,z0,z1,y0,y1,top,south,north,west,east)
- emit({{x0,y1,z0},{x1,y1,z0},{x1,y1,z1},{x0,y1,z1}},top,1)
+local function box(emit,x0,x1,z0,z1,y0,y1,top,south,north,west,east,bottom)
+ if top then emit({{x0,y1,z0},{x1,y1,z0},{x1,y1,z1},{x0,y1,z1}},top,1) end
+ if bottom then emit({{x0,y0,z0},{x0,y0,z1},{x1,y0,z1},{x1,y0,z0}},bottom,.6) end
  if south then emit({{x0,y1,z1},{x1,y1,z1},{x1,y0,z1},{x0,y0,z1}},south,SH.south) end
  if north then emit({{x1,y1,z0},{x0,y1,z0},{x0,y0,z0},{x1,y0,z0}},north,SH.north) end
  if west then emit({{x0,y1,z0},{x0,y1,z1},{x0,y0,z1},{x0,y0,z0}},west,SH.west) end
@@ -47,9 +65,52 @@ end
 function M.face(c,uvFor)return uvFor(c.ts,M.ROCK)end
 function M.lid(c,uvFor)return uvFor(c.ts,M.SPEC[c.mid].lid or M.GROUND)end
 
+-- the gate's ring hangs at the height of the back row's lid (the beams stand on it); the side and front beams float over the terraces
+local BACK={[0x251]=true,[0x252]=true,[0x253]=true}
+local function ringLevel(c,cells)
+ for d=0,3 do local n=cells[c.cx..':'..(c.cy-d)];if n and BACK[n.mid] and n.secondary==M.SECONDARY then return n.base or 0 end end
+ return (c.base or 0)+32
+end
+local function gate(c,cells,emit,uvFor,T)
+ local g=M.GATE[c.mid];if not g then return end
+ local ts=c.ts
+ local a,f=uvFor(ts,0x252),uvFor(ts,0x229);if not(a and f) then return end
+ local own=uvFor(ts,c.mid) or a
+ local X,Z=c.cx*16,c.cy*16
+ local y0=ringLevel(c,cells);local y1=y0+M.GH
+ local face,faceN=up(a,0,6,16,9),up(a,16,6,0,9)
+ if g.bar then
+  local xa,xb=g.bar[1],g.bar[2]
+  local e=cells[(c.cx+1)..':'..c.cy]
+  if g.arch and e and e.mid==0x25B then xb=32 end -- the lintel carries on over the door
+  box(emit,X+xa,X+xb,Z+1,Z+6,y0,y1,up(a,0,1,16,6),face,faceN,nil,nil,face)
+ end
+ if g.side then
+  local xa,xb,za,zb=g.side[1],g.side[2],g.side[3],g.side[4]
+  box(emit,X+xa,X+xb,Z+za,Z+zb,y0,y1,up(own,xa,za,xb,zb),
+   zb==6 and up(f,xa-xa,7,xb-xa,12) or nil,za==1 and faceN or nil,face,face,face)
+ end
+ if g.front then
+  local xa,xb=g.front[1],g.front[2]
+  box(emit,X+xa,X+xb,Z+1,Z+6,y0,y1,up(f,0,1,16,7),up(f,0,7,16,12),up(f,16,7,0,12),nil,nil,up(f,0,7,16,12))
+ end
+ if g.leg then
+  local xa,xb=g.leg[1],g.leg[2]
+  local l=uvFor(ts,g.leg[3]);if not l then return end
+  local lu=up(l,xa,0,xb,12)
+  box(emit,X+xa,X+xb,Z+1,Z+6,T,y0,nil,lu,lu,lu,lu)
+ end
+end
+
+-- the pink floor under the gate's front beam (the art's beam lies on it)
+function M.floorUV(c,uvFor)
+ if c.mid==0x229 and c.secondary==M.SECONDARY then return uvFor(c.ts,M.PINK) end
+end
+
 -- c: the railing cell, T: its base height; emit as in Gen3Blocks
 function M.append(c,cells,emit,uvFor,T)
  local spec=M.SPEC[c.mid];if not spec then return end
+ if spec.gate then return gate(c,cells,emit,uvFor,T) end
  local uv=uvFor(c.ts,c.mid);if not uv then return end
  local side=uvFor(c.ts,M.SIDE) or uv
  local X,Z=c.cx*16,c.cy*16

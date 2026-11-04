@@ -986,7 +986,7 @@ local function build(req,cache,previous)
   local ts,x,z,shape=c.ts,c.cx*16,c.cy*16,c.shape
   local b=batches[c.pair]
   if not b then b={pair=c.nativePair,secondary=c.secondary,v={},i={},rv={},ri={},pv={},pi={},wv={},wi={},roofMids={},skipOver={},underSkip={},deckV={},cv={},ci={}};batches[c.pair]=b end
-  local uv=uvFor(ts,c.mid)
+  local uv=V.require('Gen3Parapet').floorUV(c,uvFor) or uvFor(ts,c.mid)
   local ledgeUV=c.floor and (c.floor.ledge or c.floor.bareDrop) and not c.boundary and V.require('Gen3Blocks').ledgeFaceUV(c,cells,uvFor) or nil
   if ledgeUV and c.floor.ledge then uv=ledgeUV end
   local column=c.column
