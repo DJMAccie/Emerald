@@ -132,3 +132,7 @@ Fix: Model flag flatten=true in BuildingVoxels.place turns claimed cliff cells i
 ### L-69 Fortree palm crown must sit over the trunk and use its own bark
 Cause: The crown was centred on its own tile one cell north of the trunk (looked bent backwards) and the trunk sampled whole tile columns, which include the bush art beside the bark
 Fix: Gen3Fortree.palmCrown centres on the trunk cell and builds a 2px voxel shell; prism() uses trunk-tile columns 3-13 only, scaled to the trunk width
+
+### L-70 Fortree rope bridges: tile art is two layers, and three scene walls hid it
+Cause: Bridge tile 0x256/0x24E is leaf art (under) plus planks/ropes (over layer, ts.overImageData); the scene drew it flat with a 3px slab, a 6px deck band wall and a 32px ground-coloured wall on the canopy cells south of it, and no floor under raised cells (pale backdrop showed under huts). os.getenv is nil inside lib code, so QA flags must be driver-side or edit a QA_SRC copy.
+Fix: Gen3Fortree.bridge builds plank + rope boxes, Gen3Fortree.bridgeDrop lowers the leaf plane and the scene skips its over layer, deck band and canopy wall for bridge cells; Gen3Fortree.floor lays grass under raised cells. Scene hunks are in Gen3Scene (committed alone via update-index).

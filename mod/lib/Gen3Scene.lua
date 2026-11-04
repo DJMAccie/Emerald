@@ -1581,7 +1581,7 @@ local function build(req,cache,previous)
      local n=cells[(c.cx+d[1])..':'..(c.cy+d[2])]
      local nk=n and n.shape and n.shape.kind
      if n and not (n.shape and n.shape.canopy) and (nk=='flat' or nk=='grass' or nk=='flowers' or nk=='sand') and not (n.mass or n.bldModel or n.civic or n.column)
-       and (n.base or 0)>treeY+.01 then
+       and (n.base or 0)>treeY+.01 and not (fv2 and V.require('Gen3Fortree').bridgeDrop(n)) then -- no wall under a rope bridge
       local x0,z0,x1,z1
       if d[2]==1 then x0,z0,x1,z1=x+16,z+16,x,z+16 elseif d[2]==-1 then x0,z0,x1,z1=x,z,x+16,z
       elseif d[1]==-1 then x0,z0,x1,z1=x,z+16,x,z else x0,z0,x1,z1=x+16,z,x+16,z+16 end
@@ -1821,7 +1821,10 @@ local function build(req,cache,previous)
    if c.objectOwner and not c.stageHidden and not (o.merged and c.mass and Mass.usable(c.mass,cells)) then Standing.append(o,function(v,t,shade)quad(b.v,b.i,v,t,shade)end,function(v,t,shade)quad(leaf,li,v,t,shade,{0,0,0})end) end
   else
    if shape.planks then V.require('Gen3Fence').extrude(c,cells,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor,1,shape.planks)
-   elseif not flight then plane(b.v,b.i,x,z,(shape.groundMid and uvFor(ts,shape.groundMid)) or uv) end
+   elseif not flight then
+    local drop=FORTREE_V2 and def and def.id=='EM_FORTREE_CITY' and V.require('Gen3Fortree').bridgeDrop(c) -- a rope bridge's planks are real boxes; its leaf layer hangs below
+    if drop then b.skipOver[#b.skipOver+1]=#b.v end
+    plane(b.v,b.i,x,z,(shape.groundMid and uvFor(ts,shape.groundMid)) or uv,drop or nil) end
    if shape.underWater then plane(b.wv,b.wi,x,z,uvFor(ts,shape.underWater) or uv,.05+(c.riverLevel or 0)-(c.base or 0)) end
   end
   local base=c.base or 0
@@ -1921,7 +1924,7 @@ local function build(req,cache,previous)
       local cs,ns,e=c.slope or NO_SLOPE,n.slope or NO_SLOPE,SLOPE_EDGE[d[1]..':'..d[2]]
       local sloped=not deck and not ftree and c.primary~='secret_base' and low==(n.base or 0) and base==c.base
        and (cs[e[1]]~=0 or cs[e[2]]~=0 or ns[e[3]]~=0 or ns[e[4]]~=0)
-      if deck and shape.planks then
+      if deck and (shape.planks or (FORTREE_V2 and def and def.id=='EM_FORTREE_CITY' and V.require('Gen3Fortree').bridgeDrop(c))) then -- a Fortree rope bridge has no side wall
       elseif deck then
        local t=math.min(DECK_THICKNESS,base-low)
        band(base-t,base,t)

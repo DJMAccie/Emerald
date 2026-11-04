@@ -6,6 +6,9 @@ M.BRIDGE={[0x256]=true,[0x24E]=true}
 M.RUNG,M.RAIL_TOP,M.RAIL_FOOT=0x24D,0x245,0x261
 M.SLAB=3 -- deck thickness (px)
 M.POST=4 -- post size (px)
+M.PLANK_H=2.5 -- bridge plank thickness (px)
+M.ROPE=2 -- bridge rope section (px)
+M.DROP=M.PLANK_H+M.ROPE -- the leaf layer hangs this far under a bridge's walking surface
 M.WALL=0x235 -- the hut's wall art: the posts' brown
 M.HUT_MID=0x235
 M.TRUNK=0x241
@@ -16,6 +19,7 @@ M.RISE=20 -- the crown's height over the rim
 M.SHELL=8 -- crown thickness
 M.CROWN_RX,M.CROWN_RZ=42,28 -- crown half-size (px)
 M.COL,M.STEP=2,4 -- crown column size and layer height (px)
+M.GROUND=0x001 -- the grass tile: the floor under the treetop cells (huts, decks, bridges)
 
 local function tex(uv,px,py)
  return {uv[1][1]+(uv[2][1]-uv[1][1])*px/16,uv[1][2]+(uv[3][2]-uv[1][2])*py/16}
@@ -32,13 +36,47 @@ local function slab(c,cells,emit,uvFor)
  local X,Z=c.cx*16,c.cy*16
  local S=M.SLAB
  local edge=up(uv,0,16-S,16,16)
- local function open(dx,dz)return not isDeck(cells[(c.cx+dx)..':'..(c.cy+dz)])end
+ local function open(dx,dz)local n=cells[(c.cx+dx)..':'..(c.cy+dz)];return not isDeck(n) or isBridge(n)end -- a bridge hangs on the deck's end
  if open(0,-1)then emit({{X+16,0,Z},{X,0,Z},{X,-S,Z},{X+16,-S,Z}},edge,.62)end
  if open(0,1)then emit({{X,0,Z+16},{X+16,0,Z+16},{X+16,-S,Z+16},{X,-S,Z+16}},edge,.82)end
  if open(-1,0)then emit({{X,0,Z},{X,0,Z+16},{X,-S,Z+16},{X,-S,Z}},edge,.7)end
  if open(1,0)then emit({{X+16,0,Z+16},{X+16,0,Z},{X+16,-S,Z},{X+16,-S,Z+16}},edge,.7)end
  emit({{X,-S,Z},{X+16,-S,Z},{X+16,-S,Z+16},{X,-S,Z+16}},up(uv,0,0,16,16),.45)
 end
+
+local function texel(uv,px,py)return up(uv,px+.25,py+.25,px+.75,py+.75)end
+
+local function box(emit,x0,x1,y0,y1,z0,z1,top,side,ends)
+ emit({{x0,y1,z0},{x1,y1,z0},{x1,y1,z1},{x0,y1,z1}},top,1)
+ emit({{x0,y0,z1},{x1,y0,z1},{x1,y0,z0},{x0,y0,z0}},side,.45)
+ emit({{x0,y1,z1},{x1,y1,z1},{x1,y0,z1},{x0,y0,z1}},side,.82)
+ emit({{x1,y1,z0},{x0,y1,z0},{x0,y0,z0},{x1,y0,z0}},side,.62)
+ if ends~=false then
+  emit({{x0,y1,z0},{x0,y1,z1},{x0,y0,z1},{x0,y0,z0}},side,.7)
+  emit({{x1,y1,z1},{x1,y1,z0},{x1,y0,z0},{x1,y0,z1}},side,.7)
+ end
+end
+
+-- A rope bridge cell: two cream planks lashed on two navy ropes (the tile's over art: planks x1-7 and 9-15, ropes at rows 4 and 10).
+local function bridge(c,cells,emit,uvFor)
+ local uv=uvFor(c.ts,c.mid);if not uv then return end
+ local X,Z=c.cx*16,c.cy*16
+ local H,R=M.PLANK_H,M.ROPE
+ local navy=texel(uv,6,6)
+ local function bridgeAt(dx)return isBridge(cells[(c.cx+dx)..':'..c.cy])end
+ for _,x in ipairs({1,9})do
+  box(emit,X+x,X+x+6,-H,0,Z+1,Z+15,up(uv,x,1,x+6,15),navy)
+ end
+ for _,zc in ipairs({4.5,10.5})do
+  local z0=Z+zc-R/2
+  box(emit,X,X+16,-H-R,-H,z0,z0+R,up(uv,0,zc-.5,16,zc+.5),navy,false)
+  if not bridgeAt(-1)then emit({{X,-H,z0},{X,-H,z0+R},{X,-H-R,z0+R},{X,-H-R,z0}},navy,.7)end
+  if not bridgeAt(1)then emit({{X+16,-H,z0+R},{X+16,-H,z0},{X+16,-H-R,z0},{X+16,-H-R,z0+R}},navy,.7)end
+ end
+end
+
+-- Gen3Scene lowers a bridge cell's leaf layer by this much (nil: not a bridge).
+function M.bridgeDrop(c)return isBridge(c)and -M.DROP or nil end
 
 local function column(emit,uv,x0,z0,ya,yb,w)
  w=w or M.POST
@@ -69,8 +107,8 @@ local function posts(c,cells,emit,uvFor)
  if bridge then
   local along=(isBridge(cells[(c.cx-1)..':'..c.cy])or isBridge(cells[(c.cx+1)..':'..c.cy]))
   local across=(isBridge(cells[c.cx..':'..(c.cy-1)])or isBridge(cells[c.cx..':'..(c.cy+1)]))
-  if along and not across and c.cx%4==0 then column(emit,uv,X+6,Z+6,-32,-S)end
-  if across and not along and c.cy%4==0 then column(emit,uv,X+6,Z+6,-32,-S)end
+  if along and not across and c.cx%4==0 then column(emit,uv,X+6,Z+5.5,-32,-M.DROP-.5)end
+  if across and not along and c.cy%4==0 then column(emit,uv,X+6,Z+5.5,-32,-M.DROP-.5)end
   return
  end
  if (mw or me)and(mn or ms)then
@@ -114,8 +152,6 @@ local function ladder(c,cells,emit,uvFor)
   emit({{x1,yt,z1},{x1,yt,z0},{x1,yb,z0},{x1,yb,z1}},uvS,.7)
  end
 end
-
-local function texel(uv,px,py)return up(uv,px+.25,py+.25,px+.75,py+.75)end
 
 -- A box of the trunk's own pixels (tile columns 3-13, the bark between the bush edges), scaled to the trunk's width.
 local function prism(emit,uv,X,Z,x0,x1,ya,yb,z0,z1)
@@ -194,10 +230,18 @@ local function palmCrown(c,cells,emit,uvFor)
  end end
 end
 
+-- Under a raised cell the scene has no floor: the pale backdrop showed through. Lay the grass at ground level.
+local function floor(c,emit,uvFor)
+ local uv=uvFor(c.ts,M.GROUND);if not uv then return end
+ local X,Z,y=c.cx*16,c.cy*16,-(c.base or 0)
+ emit({{X,y,Z},{X+16,y,Z},{X+16,y,Z+16},{X,y,Z+16}},uv)
+end
+
 function M.append(c,cells,emit,uvFor)
  if not c.ts then return end
+ if (c.base or 0)>0 and (c.collision or 0)~=0 or isDeck(c)then floor(c,emit,uvFor)end
  if isDeck(c)then
-  slab(c,cells,emit,uvFor)
+  if isBridge(c)then bridge(c,cells,emit,uvFor)else slab(c,cells,emit,uvFor)end
   posts(c,cells,emit,uvFor)
   return
  end
