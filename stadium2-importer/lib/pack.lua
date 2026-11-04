@@ -371,6 +371,8 @@ function Pack.parse(bytes)
     end
     readBones(r, m)
     readPrims(r, m)
+    -- Flame cards (0x81000038/68) blend normally on the ROM; old caches flagged them additive.
+    for _, prim in ipairs(m.prims) do prim.additive = false end
     readTextures(r, m)
     normalizeFlameTextures(m)
     readAnimations(r, m)

@@ -1740,8 +1740,7 @@ function StadiumFragment.extract(data, name, options)
           or authoredSampler,
         textureScale = callbackTextureRequired and callbackState
           and callbackState.textureScale or p.textureScale,
-        blend = (p.callbackDescriptor == 0x81000038 or p.callbackDescriptor == 0x81000068)
-          and "add" or "alpha",
+        blend = "alpha",
         materialOffset = p.mat, callbackOffset = callbackOffset,
         material = callbackMaterialBySite[callbackOffset]
           or rdpMaterial(p.rdpState, p.nodeColor),
@@ -1785,7 +1784,7 @@ function StadiumFragment.extract(data, name, options)
           },
           callbackOffset = node.commandOffset,
           callbackDescriptor = node.handler,
-          generated = true, effect = "fire", blend = "add", fxFrames = slots,
+          generated = true, effect = "fire", blend = "alpha", fxFrames = slots,
           vertexSemantics = "color", color = geo.color,
           materialOffset = nil,
           pos = geo.pos, uv = geo.uv, nrm = geo.nrm, skin = geo.skin,

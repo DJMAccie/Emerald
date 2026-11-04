@@ -135,7 +135,7 @@ ok(model.handlers and #model.handlers.records == 2, "handler extension")
 ok(Pack.contextIndex(model, "idle") == 1, "idle context")
 ok(Pack.moveIndex(model, 1) == 1, "move mapping")
 ok(Pack.textureIndex(model, model.prims[1], 1, 0) == 2, "texture animation mapping")
-ok(model.prims[1].cull == true and model.prims[1].additive == true, "render state")
+ok(model.prims[1].cull == true and model.prims[1].additive == false, "render state (flame cards blend normally)")
 
 local carrierPrim = { callbackOffset = 0x1118, cull = true }
 local carrierState = Renderer.primitiveRenderState({ species = 109, handlers = { records = {

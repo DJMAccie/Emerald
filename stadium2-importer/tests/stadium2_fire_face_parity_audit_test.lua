@@ -112,8 +112,8 @@ for _, dex in ipairs({4, 5, 6, 146}) do
     check(prim.color and prim.color[1] == 255 and prim.color[3] == 0
         and prim.color[33] == 255 and prim.color[35] == 128,
       ("dex %03d flame colors are not raw N64 RGBA bytes"):format(dex))
-    check(prim.blend == "add" and #(prim.fxFrames or {}) == 8,
-      ("dex %03d flame lost additive eight-frame animation"):format(dex))
+    check(prim.blend == "alpha" and #(prim.fxFrames or {}) == 8,
+      ("dex %03d flame lost eight-frame animation"):format(dex))
     check(prim.sampler and prim.sampler.cms == Flame.SAMPLER.cms
         and prim.sampler.cmt == Flame.SAMPLER.cmt
         and prim.sampler.masks == 0 and prim.sampler.maskt == 0,
