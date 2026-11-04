@@ -160,3 +160,13 @@ Rules: R-48
 Cause: The four flights (0x244/0x245, 16 px drop in one cell, two cells at (9,8)-(9,9)) have a post cell on each side (0x262 west, 0x263 east: rock block at the plateau height, hmap cell). The post was a level 5 px stub on that flat block while the stairs dropped beside it (Petya 2026-11-04, 'all three'). Heightmap (hmap) cells never get buildSlopes wedges, so the block stayed flat.
 Fix: Gen3Parapet.shoulders (called in Gen3Blocks.prepare after buildRamps) gives each post cell next to a steps cell c.ramp={T,T,foot,foot}; appendRamp takes the rock lid (Parapet.lid compresses the art rows by 0.7071 so a pixel stays a pixel on the 45 degree slope) and rock faces and calls Parapet.append, whose sloped() builds a constant-height wall on the slope (width of the post it continues from the north, end face at the foot). The flight's own treads and the neighbour block's triangle wall (Gen3Blocks.append ramp branch) needed no change.
 Rules: R-48
+
+### L-76 Slateport Fan Club: back wall, hip roof on a box, front eave ledge
+Cause: The exported model x_slateport_fanclub (quads f,x0,x1,h0,h1,z0,z1,px,py,shade; f 1 S,2 N,3 top,4 E,5 W) built its back and sides by repeating ONE front column of texels by height, so the back carried the window stripe, 1 px slots between 16 px segments, and the plan narrowed like a trapezoid down to the ground (Petya 2026-11-04: 'the back isnt done and the front needs a little ledge thingy').
+Fix: Data edit only (no builder code): rectangle walls x1..79, z-39..0 up to the eave (h32); back and rear sides use the plain wall texels (grey base 0-6, navy line 1, yellow wall 7-23, navy 24-25, olive eave band 26-31); the stepped hip steps are clipped to h>=32 and a flat eave shelf (66,10) fills the corners the hip leaves open; the front eave band h25-31 is copied 4 px forward (z4) with a top at h32 and end caps, so the roof overhangs the facade. Texel colours were read from the ortho45 shot, not guessed.
+Rules: R-08
+
+### L-77 Slateport sailboats: mast bits are not hull
+Cause: Gen3Boat.template classed every non-sail, non-green pixel as hull, so the mast pole and rigging pixels (cols 26-33, rows 5-23, cut off from the hull body by sail pixels) made hull columns 30 px long: deck planks and side walls sticking out of the boat like legs.
+Fix: Gen3Boat.template keeps only the hull pixels 4-connected to the lowest hull pixel as T.hull; the rest become T.pole, still drawn as mast boxes. Dump the pixel classes (S/H/.) with a QA_SRC copy that prints them, not by eye.
+Rules: R-29

@@ -87,7 +87,20 @@ local function template(ts,uvFor)
   end
  end
  if not best then return end
- local T={uv=uv,sail=sail,hull=hull,body=uv[best]}
+ -- Hull pixels not joined to the hull body are mast and rigging bits: they become mast boxes, not 30 px deck planks.
+ local low=nil
+ for k in pairs(hull)do if not low or k>low then low=k end end
+ local body,st2={[low]=true},{low}
+ while #st2>0 do
+  local k=table.remove(st2);local x,y=k%48,math.floor(k/48)
+  for _,d in ipairs({{1,0},{-1,0},{0,1},{0,-1}})do
+   local nx,ny=x+d[1],y+d[2];local n=ny*48+nx
+   if nx>=0 and nx<48 and hull[n] and not body[n] then body[n]=true;st2[#st2+1]=n end
+  end
+ end
+ local pole={}
+ for k in pairs(hull)do if not body[k] then pole[k]=true end end
+ local T={uv=uv,sail=sail,hull=body,pole=pole,body=uv[best]}
  ts.boatTemplate=T
  return T
 end
@@ -150,7 +163,7 @@ function M.append(c,cells,quad,uvFor)
    if py<=limit then
     for px=M.MAST_X0,M.MAST_X1-1 do
      local k=py*48+px
-     if T.sail[k] or T.hull[k] then box(X0+px,h,zm-.9,X0+px+1,h+1,zm+.9,T.uv[k] or T.body) end
+     if T.sail[k] or T.hull[k] or T.pole[k] then box(X0+px,h,zm-.9,X0+px+1,h+1,zm+.9,T.uv[k] or T.body) end
     end
    end
   end
