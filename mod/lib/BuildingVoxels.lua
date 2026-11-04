@@ -131,9 +131,14 @@ function M.prepare(cells,def,claim)
       end end
       if best then c.mid,c.shape=best.mid,best.shape end
      end
-     if (c.shape and c.shape.kind=='tree') or c.cy<from or (m.claimBlocked and (c.collision or 0)~=7) then c.bldModel=nil;c.civic=nil else kept[#kept+1]=c end
+     if (c.shape and c.shape.kind=='tree' and not m.keepTrees) or c.cy<from or (m.claimBlocked and (c.collision or 0)~=7) then c.bldModel=nil;c.civic=nil else kept[#kept+1]=c end
     end
     bld.claimed=kept
+    if m.flatten then -- tiles of the model's own walls that read as rock bands stay flat floor under it
+     local flat
+     for _,c in ipairs(kept)do if c.shape and c.shape.kind=='flat' then flat=c.shape;break end end
+     if flat then for _,c in ipairs(kept)do if c.shape and c.shape.kind=='cliff' then c.shape=flat end end end
+    end
     local votes,best,bn,tpl={},nil,0,{}
     for x=bld.cx-1,bld.cx+bld.width do for y=bld.cy,bld.cy+bld.depth do
      local n=cells[x..':'..y]
