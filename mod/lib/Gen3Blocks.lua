@@ -742,6 +742,8 @@ function M.append(c,cells,emit,uvFor)
  local lid=(E.BAND_LEVEL=='lower' and c.floor and c.floor.cls=='FACE') and uvFor(c.ts,c.mid) or lidUV(c,cells,uvFor,c.mass and massStats(c.mass) or nil)
  local fuv=cropWater(c.ts,fm or c.mid,fm and uvFor(c.ts,fm) or uvFor(c.ts,c.mid))
  local drops={}
+ local Parapet=V.require('Gen3Parapet');local par=Parapet.is(c)
+ if par then lid,fuv=Parapet.lid(c,uvFor) or lid,Parapet.face(c,uvFor) or fuv end -- a stone railing: plain floor under it, rock walls, the rail stands on top
  local nb,top={},{}
  for i,d in ipairs(DIRS)do
   local n=cells[key(c.cx+d[1],c.cy+d[2])];nb[i]=n
@@ -843,5 +845,6 @@ function M.append(c,cells,emit,uvFor)
   end
  end
  return true
+ if par then Parapet.append(c,cells,emit,uvFor,T) end
 end
 return M
