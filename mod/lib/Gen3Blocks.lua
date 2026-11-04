@@ -346,7 +346,7 @@ M.DOOR_BEHAVIOR={[0x60]=true,[0x69]=true,[0x6E]=true,[0x6F]=true,[0x8D]=true}
 function M.lowerArches(cells)
  for _,c in pairs(cells)do
   local s=c.blocks and c.base and cells[key(c.cx,c.cy+1)]
-  if s and not s.blocks and s.base and M.DOOR_BEHAVIOR[s.behavior or -1] and c.base>s.base then c.base=s.base;if c.heightmapBase then c.heightmapBase=s.base end end
+  if s and not s.blocks and s.base and M.DOOR_BEHAVIOR[s.behavior or -1] and c.base>s.base and not V.require('Gen3Parapet').keepsHeight(c) then c.base=s.base;if c.heightmapBase then c.heightmapBase=s.base end end
  end
 end
 

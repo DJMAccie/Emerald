@@ -20,7 +20,7 @@ M.SPEC={
  [0x262]={posts={{9,15,0,5,9,15}},endFace=true,lid=M.ROCK},
  [0x263]={posts={{1,7,0,5,1,7}},endFace=true,lid=M.ROCK},
  -- the gate frame round the cave door: a level ring of stone beams hanging round the entrance (see gate)
- [0x251]={gate=true},[0x252]={gate=true},[0x253]={gate=true},
+ [0x251]={gate=true},[0x252]={gate=true},[0x253]={gate=true},[0x25B]={gate=true,door=true},
  [0x220]={gate=true,lid=M.ROCK},[0x222]={gate=true,lid=M.ROCK},
  [0x228]={gate=true,lid=M.PINK},[0x22A]={gate=true,lid=M.PINK},[0x230]={gate=true,lid=M.PINK},[0x232]={gate=true,lid=M.PINK},
 }
@@ -29,7 +29,8 @@ M.GH=5 -- the gate's beams: 5 deep (the art's 5 top rows) and 5 high (its 4-5 fa
 -- front {x0,x1} the front beam (z 1-6) over the walkable cells; leg {x0,x1} a post from the floor up to the ring
 M.GATE={
  [0x251]={bar={15,16},side={10,15,1,16}},
- [0x252]={bar={0,16},arch=true},
+ [0x252]={bar={0,16}},
+ [0x25B]={bar={0,16}},
  [0x253]={bar={0,1},side={1,6,1,16}},
  [0x220]={side={10,15,0,16}},
  [0x222]={side={1,6,0,16}},
@@ -66,7 +67,7 @@ function M.face(c,uvFor)return uvFor(c.ts,M.ROCK)end
 function M.lid(c,uvFor)return uvFor(c.ts,M.SPEC[c.mid].lid or M.GROUND)end
 
 -- the gate's ring hangs at the height of the back row's lid (the beams stand on it); the side and front beams float over the terraces
-local BACK={[0x251]=true,[0x252]=true,[0x253]=true}
+local BACK={[0x251]=true,[0x252]=true,[0x253]=true,[0x25B]=true}
 local function ringLevel(c,cells)
  for d=0,3 do local n=cells[c.cx..':'..(c.cy-d)];if n and BACK[n.mid] and n.secondary==M.SECONDARY then return n.base or 0 end end
  return (c.base or 0)+32
@@ -81,9 +82,17 @@ local function gate(c,cells,emit,uvFor,T)
  local face,faceN=up(a,0,6,16,9),up(a,16,6,0,9)
  if g.bar then
   local xa,xb=g.bar[1],g.bar[2]
-  local e=cells[(c.cx+1)..':'..c.cy]
-  if g.arch and e and e.mid==0x25B then xb=32 end -- the lintel carries on over the door
   box(emit,X+xa,X+xb,Z+1,Z+6,y0,y1,up(a,0,1,16,6),face,faceN,nil,nil,face)
+ end
+ if c.mid==0x25B then
+  -- the cave entrance is two tiles: the hole (0x221) one course high in the wall's south face, the arch (0x25B's stone band) above it
+  local s=cells[c.cx..':'..(c.cy+1)];local fl=s and s.base
+  local h=uvFor(ts,0x221)
+  if fl and fl<T-16 and h then
+   local zz=Z+16.3
+   emit({{X,fl+16,zz},{X+16,fl+16,zz},{X+16,fl,zz},{X,fl,zz}},up(h,0,0,16,16),SH.south)
+   emit({{X,T,zz},{X+16,T,zz},{X+16,fl+16,zz},{X,fl+16,zz}},up(a,0,0,16,9),SH.south)
+  end
  end
  if g.side then
   local xa,xb,za,zb=g.side[1],g.side[2],g.side[3],g.side[4]
@@ -104,8 +113,12 @@ end
 
 -- the pink floor under the gate's front beam (the art's beam lies on it)
 function M.floorUV(c,uvFor)
- if c.mid==0x229 and c.secondary==M.SECONDARY then return uvFor(c.ts,M.PINK) end
+ if c.secondary~=M.SECONDARY then return nil end
+ if c.mid==0x229 then return uvFor(c.ts,M.PINK) end
+ if c.mid==0x221 then return uvFor(c.ts,M.ROCK) end -- the hole is the wall's now: the floor in front of it is rock
 end
+-- the arch cell stays at the plateau's height: the hole is cut into its south face (Gen3Blocks.lowerArches would sink it into an alcove)
+function M.keepsHeight(c)return c.mid==0x25B and c.secondary==M.SECONDARY and true or false end
 
 -- c: the railing cell, T: its base height; emit as in Gen3Blocks
 function M.append(c,cells,emit,uvFor,T)
