@@ -8,6 +8,8 @@ M.REPAINT_GROUND=8
 
 M.MODELS={'frontier_gate','ferry_birth_island','ferry_navel_rock','trainer_hill_penthouse','abandoned_ship_wreck','littleroot_house_brendan','littleroot_house_may','birch_lab','devon_corp','lilycove_museum','weather_institute','fortree_treehouse','sootopolis_cone','sootopolis_box','sootopolis_box2','pacifidlog_hut','pokemon_center','poke_mart'}
 M.FAMILY={pokemon_center=true,poke_mart=true,fortree_treehouse=true,sootopolis_cone=true,sootopolis_box=true,sootopolis_box2=true,pacifidlog_hut=true}
+-- Door and window variants of a house share its roof row: match that row only, and take the facade art from the map cells.
+M.LOOSE={sootopolis_cone=true,sootopolis_box=true,sootopolis_box2=true}
 do
  local ok,idx=pcall(V.data,'buildings/index')
  if ok and type(idx)=='table' then for _,n in ipairs(idx)do M.MODELS[#M.MODELS+1]=n end end
@@ -95,11 +97,19 @@ function M.prepare(cells,def,claim)
   if indoorMap and not (m and m.indoor and m.map==mapId) then m=nil end
   local anchor=m and m.anchor or {}
   if m and M.FAMILY[name] then
-   local lo,hi=math.huge,-math.huge
-   for _,a in ipairs(anchor)do lo=math.min(lo,a[1]);hi=math.max(hi,a[1])end
-   local inner={}
-   for _,a in ipairs(anchor)do if a[1]>lo and a[1]<hi then inner[#inner+1]=a end end
-   if #inner>=2 then anchor=inner end
+   if M.LOOSE[name] then
+    local top=math.huge
+    for _,a in ipairs(anchor)do top=math.min(top,a[2])end
+    local row={}
+    for _,a in ipairs(anchor)do if a[2]==top then row[#row+1]=a end end
+    anchor=row
+   else
+    local lo,hi=math.huge,-math.huge
+    for _,a in ipairs(anchor)do lo=math.min(lo,a[1]);hi=math.max(hi,a[1])end
+    local inner={}
+    for _,a in ipairs(anchor)do if a[1]>lo and a[1]<hi then inner[#inner+1]=a end end
+    if #inner>=2 then anchor=inner end
+   end
   end
   local function matches(dx,dy)
    for _,a in ipairs(anchor)do
@@ -114,8 +124,15 @@ function M.prepare(cells,def,claim)
    return true
   end
   local function place(dx,dy)
+   local same=true
+   if M.LOOSE[name] then
+    for _,a in ipairs(m.anchor)do
+     local c=cells[(a[1]+dx)..':'..(a[2]+dy)]
+     if not (c and c.mid==a[3]) then same=false;break end
+    end
+   end
    local bld=claim(cells,{cx=m.x0+dx,cy=m.y0+dy,width=m.x1-m.x0+1,depth=m.y1-m.y0+1,name=name,voxels=m,
-    tiles=m.tiles})
+    tiles=same and m.tiles or nil})
    if bld then
     local kept={}
     local from=bld.cy+(m.claimFrom or 0)

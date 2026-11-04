@@ -41,7 +41,7 @@ function M.prepare(cells,regions,def)
  M.looseStones(cells)
  for _,c in pairs(cells)do
   local s=c.shape
-  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not s.sea and not (c.floor and c.floor.object) and not c.masonry and not c.bedPlanter and not c.looseStone and c.ts and c.ts.midToSlot[c.mid] then
+  if s and (s.kind=='cliff' or s.kind=='caveWall' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not s.sea and not (c.floor and c.floor.object) and not c.bedPlanter and not c.looseStone and c.ts and c.ts.midToSlot[c.mid] then
    local mine=c.boundary and true or false
    if not mine then
     for _,r in ipairs(regions)do
@@ -58,7 +58,7 @@ function M.prepare(cells,regions,def)
    mass.blocksMass=true
    for _,m in ipairs(mass.members)do
     if not m.blocks then
-     if m.shape and m.shape.kind=='cliff' and m.ts and m.ts.midToSlot[m.mid] and not m.masonry and not m.bedPlanter then m.blocks=true;M.count=M.count+1
+     if m.shape and m.shape.kind=='cliff' and m.ts and m.ts.midToSlot[m.mid] and not m.bedPlanter then m.blocks=true;M.count=M.count+1
      else m.blocksSkip=true;local o=m.object or m.objectTop;if o then o.merged=nil end end
     end
    end
@@ -85,7 +85,7 @@ end
 function M.looseStones(cells)
  if not M.LOOSE then return end
  local function stone(c)local s=c and c.shape
-  return s and (s.kind=='cliff' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and not c.masonry and c.ts and c.ts.midToSlot[c.mid] and M.isStone(c) end
+  return s and (s.kind=='cliff' or s.kind=='rock') and (c.collision==nil or c.collision==7) and not s.stoneMask and not s.seaRock and c.ts and c.ts.midToSlot[c.mid] and M.isStone(c) end
  local seen={}
  for _,c in pairs(cells)do if not seen[c] and stone(c) then
   local g,stack={},{c};seen[c]=true
@@ -475,6 +475,7 @@ local function faceMid(c,cells)
    local best,bn=nil,0
    for mid,n in pairs(st.votes)do if faceLike(st.ts,mid,st) and (n>bn or (n==bn and mid<best)) then best,bn=mid,n end end
    mass.blocksFace=best or false
+   if best and bn<3 and bn*10<#mass.members then best=nil end -- one stray dark tile (a door, a shadow) is not the wall of a mass of hundreds (Sootopolis faces went navy)
   end
   if mass and mass.blocksFace then return mass.blocksFace end
  end

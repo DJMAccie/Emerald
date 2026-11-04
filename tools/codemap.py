@@ -6,7 +6,7 @@ import os, re, glob
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GROUPS = [
  ('Scene building (Gen 3 overworld)', r'^Gen3(Scene|SceneCache|SceneOptions|Integration|Tilesets|TileShape|EmeraldShapes|EmeraldInteriors|Outdoor|PinData|Elevation|Boundary|Recap|CamClear)$|^SceneStream$|^TerrainLevels$|^BoundaryScenery$|^RenderDistance$|^RenderRecovery$'),
- ('Terrain, rock, water edges', r'^Gen3(Blocks|Rock|RockSprites|Mass|Hills|Terrain|Cave|Reef|Decks|Stairs|Masonry|AshPine)$|^VoxelHull$|^Water|^WorldUnderlay$'),
+ ('Terrain, rock, water edges', r'^Gen3(Blocks|Rock|RockSprites|Mass|Hills|Terrain|Cave|Reef|Decks|Stairs|AshPine)$|^VoxelHull$|^Water|^WorldUnderlay$'),
  ('Buildings and interiors', r'^Building|^Gen3(VoxelBuildings|RoofDetails|ObliqueWall|Partition|Furniture|PixelFurniture|PixelFurnitureB|Planter|Market|LeagueGate)$|^RoofEaves$|^InteriorDiorama$|^LandmarkModels$'),
  ('Objects, trees, props', r'^Gen3(Objects|Fence|Lamp|Boat|CableCar|CyclingRoad|Fortree|Canopy|Forest|TreeStamps|Lathe)$|^NativeTreeArt$|^TreePresentation$|^CanopyBillboard$|^SpriteVoxel$|^TowerGraveMist$'),
  ('Fly, camera, tour', r'^Gen3(Fly\w*)$|^FlyMotion$|^Camera|^AtmosphereCamera$|^Tour|^BattleCam$|^DebugWalk$'),

@@ -894,9 +894,7 @@ local function build(req,cache,previous)
  end
  mark('settle')
  local bedPlanter=V.require('Gen3Planter').prepare(cells,def)
- local masonry=V.require('Gen3Masonry').prepare(cells,def)
  M.massCount=#Mass.prepare(cells,Pairs.outdoor(def))
- V.require('Gen3Masonry').restore(masonry)
  V.require('Gen3Planter').restore(bedPlanter)
  if Decks.MAPS[def.id or ''] then for _,c in pairs(cells)do c.mass=nil end end
  if def and (tonumber(def.mapType)==4 or tonumber(def.mapType)==9) and V.require('Gen3Blocks').pinned(def) then for _,c in pairs(cells)do if c.mass and not c.blocks then c.mass.blocksOwned=true end end end
@@ -1340,8 +1338,6 @@ local function build(req,cache,previous)
   elseif shape.kind=='rock' then
    plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
    if not c.stageHidden then V.require('Gen3Cave').rock(c,function(v,t,shade,anchor)quad(anchor and b.pv or b.v,anchor and b.pi or b.i,v,t,shade,anchor)end,uvFor)end
-  elseif shape.kind=='cliff' and c.masonry then
-   V.require('Gen3Masonry').append(c,cells,function(v,t,shade)quad(b.v,b.i,v,t,shade)end,uvFor)
   elseif shape.kind=='cliff' and c.blocks then
    M.cliffCount=M.cliffCount+1
    if not c.stageHidden then V.require('Gen3Blocks').append(c,cells,function(v,t,sh)quad(b.v,b.i,v,t,sh)end,uvFor) end

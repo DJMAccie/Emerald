@@ -57,7 +57,7 @@ Fix: at most 3 runs at once (xargs -P3); start long sweeps with nohup and wait w
 Rules: R-27
 
 ### L-53 Rocks are a per-cell priority chain, not stacked systems
-Cause: Gen3Scene picks ONE rock system per cell: cave wall -> Gen3Cave, masonry, c.blocks -> Gen3Blocks, else Gen3Mass or Gen3Terrain -> Gen3Rock -> Hills; on pinned maps Blocks takes almost every rock cell.
+Cause: Gen3Scene picks ONE rock system per cell: cave wall -> Gen3Cave, c.blocks -> Gen3Blocks, else Gen3Mass or Gen3Terrain -> Gen3Rock -> Hills; on pinned maps Blocks takes almost every rock cell.
 Fix: count cells per system before merging or removing one (docs/dubbel-werk.md).
 Rules: R-46
 
@@ -136,3 +136,8 @@ Fix: Gen3Fortree.palmCrown centres on the trunk cell and builds a 2px voxel shel
 ### L-70 Fortree rope bridges: tile art is two layers, and three scene walls hid it
 Cause: Bridge tile 0x256/0x24E is leaf art (under) plus planks/ropes (over layer, ts.overImageData); the scene drew it flat with a 3px slab, a 6px deck band wall and a 32px ground-coloured wall on the canopy cells south of it, and no floor under raised cells (pale backdrop showed under huts). os.getenv is nil inside lib code, so QA flags must be driver-side or edit a QA_SRC copy.
 Fix: Gen3Fortree.bridge builds plank + rope boxes, Gen3Fortree.bridgeDrop lowers the leaf plane and the scene skips its over layer, deck band and canopy wall for bridge cells; Gen3Fortree.floor lays grass under raised cells. Scene hunks are in Gen3Scene (committed alone via update-index).
+
+### L-71 Sootopolis ridges were drawn by a per-map masonry list, not the drawn arrows
+Cause: Gen3Masonry (hand lists of top/face mids for EM_SOOTOPOLIS_CITY) took ~1000 ridge cells before Gen3Blocks.arrowRamps, so the height map's 45-degree ramps were never built and faces were vertical courses (Petya 2026-11-04: 'the ridges arent read'). Also only 12 of ~28 huts/houses got a model: BuildingVoxels family anchors demanded the door row, window variants (0x211/0x204/0x213, 0x225/0x237) never matched and drew as draped rock.
+Fix: Gen3Masonry deleted with its Gen3Scene/Gen3Blocks hooks; BuildingVoxels.LOOSE matches only the roof row (209/20A/20B cone, 20E+25A box, 20D/20E/20F box2) and takes facade art from the cells. Side effect found: once huts left the one 931-cell rock mass, Gen3Blocks.faceMid's mass fallback (mass.blocksFace = face-like tile with most votes) picked ONE stray dark door tile (0x221, 1 vote of 245) for every face of the east masses, so ridges rendered navy with tan swirls (before: 0x210, 2 votes, dark grey). Fix: a fallback winner needs >=3 votes or a tenth of the mass, else the cell's own tan tile is the face (swept 38 QA maps: no other map has such a winner).
+Rules: R-38,R-43,R-46,R-48
