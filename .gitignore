@@ -35,3 +35,11 @@ __pycache__/
 /docs/elevation/draw/claude_heightmaps/_report.json
 /docs/elevation/draw/claude_heightmaps/REVIEW_codex_pass.md
 /docs/elevation/draw/claude_heightmaps/_audit.json
+
+# local working notes and agent setup (kept on disk, not published)
+/CLAUDE.md
+/.claude/
+/docs/dubbel-werk.md
+/docs/elevation/tekenronde3.md
+/docs/knowledge/journal.md
+/release/

@@ -51,38 +51,23 @@ This is an independent fan project, not affiliated with Nintendo, Game Freak or 
 Built on the Pokémon Gen 1 Recompilation Project by BOIS CLUB GAMES, LLC. See `mod/THIRD_PARTY_NOTICES.md` and
 `overworld-wild-spawns/THIRD_PARTY_ASSETS.md` for everything else. Licence: not chosen yet.
 
----
+## Repository layout
 
-## Development notes (Dutch)
-
-Pokémon Emerald in gen1recomp met een 3D-voxelwereld, Pokémon in de overworld, een volger en 3D-gevechten
-(Stadium 2-modellen). Alle code is van Petya.
-
-## Wat staat waar
-
-| Map | Wat |
+| Folder | What |
 |---|---|
-| `mod/` | **De mod.** Hoort bij deze repo. Wordt in het spel geïnstalleerd als `BATTLE_ART_VOXEL_FORK`. |
-| `stadium2-importer/` | Tweede mod: haalt de 3D-Pokémonmodellen voor gevechten uit de Stadium 2-ROM. Hoort bij deze repo (ROM's nooit in git: `baseroms/` is genegeerd). |
-| `gen1recomp/` | De spelengine (alleen naslag; de testscripts starten vanuit deze map). |
-| `tools/` | `install.sh` (installeren), `qa_tryp.sh` (testfoto's), `qa_battle.sh` (gevechtstest), `drivers/` (views, battle, fly, ortho), `ortho45/` (rotsen naast de 2D-art), `knowledge/learn.py`, `crop.py`, `sheet.py`, `colosseum/` (Colosseum-modellen #252-386 maken, zie de README daar), `tilerules/` (tegelregels die de tegeltabellen van de mod genereren). |
-| `docs/knowledge/` | Regels, lessen en het dagboek. |
-| `archief/` | Alleen de oude losse git-geschiedenis van mod/ en stadium2-importer (oude hashes in PLAN.md: `git --git-dir=archief/mod-git-2026-11-02 show <hash>`). Alleen lokaal. Al het andere oude werk staat sinds 2026-11-02 in de Prullenmand (Emerald-opruimen-2026-11-02). |
+| `mod/` | The voxel mod, installed in the game as `BATTLE_ART_VOXEL_FORK` (`lib/` Lua code, `data/` generated tables, `tests/`). |
+| `stadium2-importer/` | Builds the 3D battle models from your own Stadium 2 ROM. ROMs are never stored in git (`baseroms/` is ignored). |
+| `overworld-wild-spawns/` | Wild Pokémon walking the overworld. |
+| `tools/` | Install script, QA capture scripts and drivers, height-map and tile-rule generators, the Colosseum model converter. |
+| `docs/` | Design rules and lessons (`docs/knowledge/`), and the hand-drawn height maps (`docs/elevation/`). |
 
-## Het spel
+## Working on the mod
 
-- Echte spelmap: `~/Library/Application Support/pokemon-love2d` (niets aanraken terwijl het spel draait).
-- Testkopie: `~/Library/Application Support/pokemon-love2d-rseqa`.
-- Mods die aan staan voor Emerald: `BATTLE_ART_VOXEL_FORK` (deze mod), `STADIUM2_IMPORTER`, `overworld_wild_spawns`
-  (Pokémon in de overworld, geen gras-encounters), `wild_skies` (vogels), `animated_menu_pokemon`.
+You need a gen1recomp checkout next to the repo (or a path to one) and your own ROMs; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Werken aan de mod
-
-1. Pas `mod/lib/*.lua` aan.
-2. Test zonder het echte spel te raken (eigen testkopie, draait op de achtergrond):
-   `tools/qa_tryp.sh "Bestand1.lua Bestand2.lua" /tmp/test "{'EM_RUSTBORO_CITY',20,30},{'EM_ROUTE116',30,10}" 4`
-   Kijk in `/tmp/test/run.log`: de laatste regel moet `fallback 0` zeggen.
-3. Leg vast (`git commit` in deze repo), sluit het spel en installeer: `tools/install.sh`. Push `main` naar `origin` (DJMAccie/Emerald, privé).
-   `tools/install.sh --check` laat zien of spel en testkopie gelijk zijn aan de bron.
-
-Gevechten testen: `tools/qa_battle.sh /tmp/gevecht 252 270` (speler- en tegenstander-nummer uit de Pokédex).
+1. Edit `mod/lib/*.lua`.
+2. Run the tests: `cd mod && tools/run_tests.sh <path-to-gen1recomp>`.
+3. Look at the result in a private copy of the game, without touching your real install:
+   `tools/qa_tryp.sh "Gen3Blocks.lua" /tmp/shots "{'EM_RUSTBORO_CITY',20,30}" 4`.
+   The last line of `/tmp/shots/run.log` must say `fallback 0` (no map fell back to 2D).
+4. Install into your game with `tools/install.sh` (close the game first; `--check` only compares).
