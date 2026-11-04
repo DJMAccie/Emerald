@@ -844,7 +844,7 @@ function M.append(c,cells,emit,uvFor)
    end
   end
  end
- return true
  if par then Parapet.append(c,cells,emit,uvFor,T) end
+ return true
 end
 return M
