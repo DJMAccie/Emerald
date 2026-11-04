@@ -1,0 +1,11 @@
+# ripgrep (and so the Grep/Glob tools) skips bulk data; name the path to search it on purpose.
+/mod/data/buildings/
+/mod/data/gen3_heightmaps.lua
+/mod/data/gen3_pixel_furniture_b.lua
+/docs/elevation/
+/docs/aanwijzingen/
+/tools/colosseum/
+/tools/tilerules/input/
+/stadium2-importer/hoenn/addon/
+/overworld-wild-spawns/assets/
+/release/
