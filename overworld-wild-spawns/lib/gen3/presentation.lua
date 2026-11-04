@@ -34,7 +34,7 @@ return function(mod,Actors)
   local nat=Pokemon.national and Pokemon.national(species)or species
   if water then
    for _,kind in ipairs({'swimming','levitates'})do
-    local img=imageAt(('assets/generated/water_runtime/%s/%03d-%s.png'):format(kind,nat,variant))
+    local img=imageAt(('assets/water_runtime/%s/%03d-%s.png'):format(kind,nat,variant))
     if img then return register(key,img,16,16,{0,1,2,3,3,4,4,5,5})end
    end
   end
