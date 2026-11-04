@@ -474,8 +474,8 @@ local function faceMid(c,cells)
   if mass and mass.blocksFace==nil then
    local best,bn=nil,0
    for mid,n in pairs(st.votes)do if faceLike(st.ts,mid,st) and (n>bn or (n==bn and mid<best)) then best,bn=mid,n end end
-   mass.blocksFace=best or false
    if best and bn<3 and bn*10<#mass.members then best=nil end -- one stray dark tile (a door, a shadow) is not the wall of a mass of hundreds (Sootopolis faces went navy)
+   mass.blocksFace=best or false
   end
   if mass and mass.blocksFace then return mass.blocksFace end
  end
