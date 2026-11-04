@@ -147,3 +147,7 @@ Cause: the railing tiles (0x240-0x243 bar, 0x246/0x247 bar+post corner, 0x262/0x
 Fix: Gen3Parapet (SPEC per tile) gives the block a plain floor lid (0x2D9, or rock 0x2E1 beside posts), rock faces (0x2E1) and stands bar/post boxes from the tile's own rows on top; hooked in Gen3Blocks.append (par). Not done: the stair-flank posts stay level while the stairs drop 16 px; the gate frame 0x251-0x253 around the pink door is still flat paint.
 Rules: R-48
 
+### L-73 Zero-context patches land insertions on the wrong line when others' hunks sit above
+Cause: committing only my hunks of a shared file with `git diff -U0` + `git apply --cached --unidiff-zero` uses the WORKING-TREE line numbers; the other party's uncommitted hunks above shift them, so a pure insertion (my `if par then ... end`) landed after `return true` in HEAD's blob (8c93e280 did not compile, fixed in 0ab86896). Deleting hunks were fine because they carry the removed text.
+Fix: after every partial stage, compile the STAGED blob (`git show :path > t.lua; luajit -bl t.lua`) before committing, and compile every `git ls-tree HEAD mod/lib` file after; if wrong, build the blob from HEAD in python and `git update-index --cacheinfo`.
+
