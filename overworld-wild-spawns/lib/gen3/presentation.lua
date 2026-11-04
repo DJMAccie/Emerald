@@ -5,7 +5,6 @@ return function(mod,Actors)
  local Collision=require('src.core.game3.collision')
  local Dex=require('src.core.game3.dex')
  local cache,nextId={},Actors.base+10000
- local pmd=assert((loadstring or load)(assert(mod:read('assets/pmdcollab/sprite_table.lua'))))()
  local P={}
  local function imageAt(path)
   local bytes=mod:read(path);if not bytes then return end
@@ -40,23 +39,10 @@ return function(mod,Actors)
    end
   end
   if style=='pokedex' then cache[key]=Actors.front(species);return cache[key]end
-  if style=='pmdcollab' then
-   local meta=pmd[nat]and(pmd[nat][variant]or pmd[nat].normal)
-   if meta then
-    local img=imageAt(meta.rel)
-    if img then
-     local b,n=meta.walkCycleBase,meta.walkFrameCount
-     local gid=register(key,img,meta.frameWidth,meta.frameHeight,{b,b+n,b+2*n,b+1,b+math.floor(n/2),b+n+1,b+n+math.floor(n/2),b+2*n+1,b+2*n+math.floor(n/2)},meta.anchorX,meta.anchorY)
-     return gid
-    end
-   end
-  end
-  if style=='pokemmo' or style=='pmdcollab' then
+  if style=='pokemmo' then
    local img=imageAt(('assets/hgss/%d-%s-9.png'):format(nat,variant))or imageAt(('assets/hgss/%d-normal-9.png'):format(nat))
    if img then return register(key,img,32,32,{0,1,2,3,4,5,6,7,8})end
   end
-  local img=imageAt(('assets/enhanced_overworld/poke_followers/follower_%03d_%s.png'):format(nat,variant))or imageAt(('assets/enhanced_overworld/poke_followers/follower_%03d_normal.png'):format(nat))
-  if img then return register(key,img,16,16,{0,1,2,3,3,4,4,5,5})end
   cache[key]=Actors.front(species);return cache[key]
  end
  local shader
