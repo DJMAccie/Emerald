@@ -1,15 +1,15 @@
 # Lessons (L-nn)
 
 Mistakes that cost a round, and still apply. Per lesson `Cause:`, `Fix:` and optionally `Rules:`. Ids never change (gaps are
-retired lessons). Add with `tools/knowledge/learn.py lesson`.
+retired lessons). Add with `tools/knowledge/learn.py lesson`. Full wording before 2026-11-04: archief/knowledge-2026-11-04/.
 
 ### L-05 Scene cells keep the kind under c.shape.kind
-Cause: cache cells have no c.kind; a test on it never matches, so before and after look identical because the test reads the wrong field.
+Cause: cache cells have no c.kind; a test on it never matches, so before and after look identical.
 Fix: read c.shape.kind; identical before/after shots mean the test is wrong, not the fix.
 
 ### L-06 A capture run can fall back to 2D without the change being wrong
-Cause: transient QA-copy state (every spot fell back, then reran clean); dark Flash caves always fall back in QA; a trainer spotting the player or an entry dialog drops all later cases of the run to 2D; a new local named `Objects` in Gen3Scene shadows the NPC module.
-Fix: treat a run with unexpected fallbacks as void and rerun; check `active true` counts in run.log; use quiet spots, one map per run when in doubt.
+Cause: transient QA-copy state; dark Flash caves always fall back in QA; a trainer spotting the player or an entry dialog drops all later cases of the run to 2D; a new local named `Objects` in Gen3Scene shadows the NPC module.
+Fix: treat a run with unexpected fallbacks as void and rerun; check `active true` counts in run.log; quiet spots, one map per run when in doubt.
 Rules: R-23
 
 ### L-07 A dark slab beside tall rock on water is its shadow
@@ -21,7 +21,7 @@ Cause: LuaJIT randomises pairs() over string-keyed tables per process, so floods
 Fix: make every flood or grouping order-independent; two dumps of the same code must be identical.
 
 ### L-16 zsh and macOS gotchas
-Cause: the tool shell is zsh: no export -f, a word starting with `=` expands, unquoted $VAR does not split (use ${=VAR}), an unquoted `--include=*.md` is a glob error; macOS has sed -i '' and no `timeout`; Pillow is in user site-packages.
+Cause: the tool shell is zsh: no export -f, a word starting with `=` expands, unquoted $VAR does not split (use ${=VAR} or an array), an unquoted `--include=*.md` is a glob error; macOS has sed -i '' and no `timeout`; Pillow is in user site-packages.
 Fix: quote globs, put parallel workers in a script file, run the image tools with python3 without -I.
 
 ### L-19 A tall object appears north of where it stands
@@ -30,25 +30,25 @@ Fix: find the drawing cell with a probe (quads above a height in a box) and trus
 Rules: R-29
 
 ### L-42 A local defined below its caller is a nil global
-Cause: a `local function` declared after the function that calls it is a global lookup there (nil at run time); the unit tests never load the draw path, so they still pass.
-Fix: forward-declare the local above its caller; the smoke test for the draw path is a QA run's log (fallback 0), not the unit tests.
+Cause: a `local function` declared after its caller is a global lookup there (nil at run time); the unit tests never load the draw path, so they pass.
+Fix: forward-declare the local above its caller; the smoke test for the draw path is a QA run's log (fallback 0).
 
 ### L-43 Measure the layer before fixing the guess; warm QA before comparing
-Cause: a cost guess in a handoff was wrong (the cost was allocations in VoxelHull.build, not texture uploads), and the first run of a QA copy is ~1.6x slower (cold caches).
-Fix: time the layer in parts before choosing a fix; for before/after run both the same day with the same probe and discard the first run as warm-up.
+Cause: a cost guess was wrong (allocations in VoxelHull.build, not texture uploads); the first run of a QA copy is ~1.6x slower.
+Fix: time the layer in parts before choosing a fix; run before and after the same day with the same probe and discard the first run.
 Rules: R-29
 
 ### L-44 Bench two Lua modules in separate processes
-Cause: two versions of hot code in one LuaJIT process share the trace cache, and other load on the machine swings a reading 2-3x.
-Fix: one module per process, three runs each, keep the best reading.
+Cause: two versions of hot code in one LuaJIT process share the trace cache, and machine load swings a reading 2-3x.
+Fix: one module per process, three runs each, keep the best.
 
 ### L-49 The mod sandbox hides debug, os.getenv and plain require
 Cause: lib/ modules run in a sandbox: `debug` is nil (debug.traceback -> scene fallback), os.getenv sees nothing the QA command sets, a plain `require` of a mod module never resolves. Drivers (EM_DRIVER) do have `debug`.
-Fix: load mod modules with V.require, use a module flag (M.log=true) for diagnostics, and put hooks in a driver or tools/probe_main.lua.
+Fix: load mod modules with V.require, use a module flag (M.log=true) for diagnostics, put hooks in a driver or tools/probe_main.lua.
 
 ### L-50 dead.py counts by name, so common names look used
-Cause: tools/deadcode/dead.py counts any `.update` or `.apply` anywhere as a use of every module's `update`/`apply`.
-Fix: tools/deadcode/deadq.py counts `M.f` only through aliases of M (`local A=V.require('M')`); grep qualified (`Name\.update`).
+Cause: tools/deadcode/dead.py counts any `.update` or `.apply` anywhere as a use of every module's `update`/`apply`; it also counts tests as users, so test-only helpers look alive.
+Fix: tools/deadcode/deadq.py counts `M.f` only through aliases of M; grep qualified (`Name\.update`); check tests/ before calling a function dead.
 Rules: R-45
 
 ### L-51 Too many QA runs or background shells vanish silently
@@ -56,66 +56,63 @@ Cause: more than ~4 waiting tools/qa_tryp.sh runs drop out without a run.log; a 
 Fix: at most 3 runs at once (xargs -P3); start long sweeps with nohup and wait with Monitor.
 Rules: R-27
 
-### L-52 Compare tests with the base, not with zero
-Cause: the mod's test suite has red tests in the base (17 on 2026-11-02), so "N red" after a change says nothing on its own.
-Fix: run the suite with the change stashed (git stash) and without; only new reds count.
-
 ### L-53 Rocks are a per-cell priority chain, not stacked systems
-Cause: Gen3Scene (~line 1330) picks ONE rock system per cell: cave wall -> Gen3Cave, masonry, c.blocks -> Gen3Blocks, else Gen3Mass or Gen3Terrain -> Gen3Rock -> Relief/Hills; on pinned maps Blocks takes almost every rock cell.
+Cause: Gen3Scene picks ONE rock system per cell: cave wall -> Gen3Cave, masonry, c.blocks -> Gen3Blocks, else Gen3Mass or Gen3Terrain -> Gen3Rock -> Hills; on pinned maps Blocks takes almost every rock cell.
 Fix: count cells per system before merging or removing one (docs/dubbel-werk.md).
 Rules: R-46
 
 ### L-54 A QA shot can catch the whole-area build half done
-Cause: qa_tryp shoots about 80 frames after the 3D turns on; the near area builds first, the whole area finishes around frame 50-100 (Route 104 75-96, noise +-30%), so a shot can show only the near part and look like a regression.
-Fix: Before calling a missing area a regression, rerun with wait 300 or compare two base runs with each other; measure build frames with S.streaming (completed/buildMs) per case.
+Cause: qa_tryp shoots ~80 frames after the 3D turns on; the whole area finishes around frame 50-100, so a shot can show only the near part and look like a regression.
+Fix: rerun with wait 300 or compare two base runs before calling a missing area a regression; measure with S.streaming (completed/buildMs).
 Rules: R-23,R-29
 
 ### L-55 Same source can give different LuaJIT bytecode
-Cause: luajit -bs output depends on hash order for some files (stadium2 pack.lua, battle_fx_runtime.lua): compiling the same file twice differs, so 'bytecode equal' cannot prove a comment-only edit.
-Fix: Prove comment-only edits with git diff -U0 (no changed line outside '--' comments) plus the test suite; compare bytecode only after checking the file compiles the same twice.
+Cause: luajit -bs output depends on hash order for some files (stadium2 pack.lua, battle_fx_runtime.lua), so 'bytecode equal' cannot prove a comment-only edit.
+Fix: prove comment-only edits with git diff -U0 (no changed line outside '--' comments) plus the test suite.
 Rules: R-29
 
 ### L-56 A pcall-wrapped data load fails silently
-Cause: Gen3Relief and Gen3Elevation loaded their tables in pcall(V.require,...): a wrong name or path just turns the feature off, with 0 fallback and no error in run.log.
-Fix: After moving or renaming a data file, compare QA pixels on maps that use it (two base runs + new); drop the pcall when the file always ships.
+Cause: Gen3Relief and Gen3Elevation loaded tables in pcall(V.require,...): a wrong name or path turns the feature off with 0 fallback and no error.
+Fix: after moving or renaming a data file, compare QA pixels on maps that use it (two base runs + new); drop the pcall when the file always ships.
 Rules: R-29
 
 ### L-57 Recipe tables can name tilesets Emerald does not have
-Cause: data/gen3_stairs.lua had 57 flight recipes, 55 for pairs like player_house, house and *rom_082d* (not Emerald); Gen3HouseStairs only drew those, so it never loaded. Static greps on module names missed it.
-Fix: Check every pair name in a table against the 80 pairs in the native manifest (~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native/manifest.lua); entries for other pairs are dead. Mind labels the mod sets itself (InteriorDiorama gives the Abandoned Ship secondary 'rom_082d4d94').
+Cause: data/gen3_stairs.lua had 55 of 57 recipes for pairs Emerald lacks (player_house, house, *rom_082d*); static greps on module names missed it.
+Fix: check every pair name in a table against the native manifest (~/Library/Application Support/pokemon-love2d-rseqa/emerald/data/generated/gba/native/manifest.lua); mind labels the mod sets itself (InteriorDiorama gives the Abandoned Ship secondary 'rom_082d4d94').
 Rules: R-44
 
-### L-58 Andere sessie commit jouw klaargezette bestanden mee
-Cause: Twee sessies in een checkout: een 'git add -A' of 'commit -a' van de ene neemt de gestagede bestanden van de andere mee (importer-opruiming landde in 63e4710 'PLAN: ...').
-Fix: Zet niets klaar voor later (ook git rm/git mv zetten klaar: gebruik rm/mv); commit alleen eigen paden in een keer: git commit -m ... -- <paden>. Gebeurde weer 2026-11-02: sprite-verwijderingen landden in 0cf0897 'Aqua Map2'.
+### L-58 Another session commits your staged files
+Cause: two sessions in one checkout: `git add -A` or `commit -a` takes the other's staged files (also git rm/git mv stage). Happened twice (63e4710, 0cf0897). The mod/ tree may hold another party's uncommitted work.
+Fix: stage nothing for later (use rm/mv); commit only your own paths: git commit -m ... -- <paths>; check git status before and never add or install what you did not change.
 
 ### L-59 Pinned caves: black holes and domes after pinning
-Cause: Gen3Scene caveWall/rock draw branches skip Gen3Blocks.append, and Mass.prepare runs after Blocks.prepare so Mass still drew domes
-Fix: branch (caveWall|rock + c.blocks -> Blocks.append) and mass.blocksOwned on pinned caves (039c94e)
+Cause: Gen3Scene caveWall/rock draw branches skip Gen3Blocks.append, and Mass.prepare runs after Blocks.prepare so Mass still drew domes.
+Fix: branch (caveWall|rock + c.blocks -> Blocks.append) and mass.blocksOwned on pinned caves.
 
-### L-60 Mod-instellingen staan alleen onder MODS, niet in het opties-menu
-Cause: Engine 0.3.99: het Emerald-opties-menu (rse/option_menu) bouwt rijen via Rows.withCart -> lokale buildRows, dus een mod die Rows.build vervangt komt nooit in beeld (InGameOptions/OptionSupport waren dood). Alleen de hook ui.options.rows werkt (zo doet de importer zijn STADIUM 2 ROM-regel).
-Fix: Kijk wat Petya ziet in het spel zelf: MODS -> BATTLE ART VOXEL FORK -> opties = het schema van mod.options:define. Uitlezen met een driver die ModManager.show + openOptions doet en m.optionRows print (730db30).
+### L-60 Mod settings live only under MODS, not in the options menu
+Cause: engine 0.3.99: the Emerald options menu builds its rows locally, so a mod replacing Rows.build never shows; only the ui.options.rows hook works (the importer's STADIUM 2 ROM line).
+Fix: look at what Petya sees: MODS -> BATTLE ART VOXEL FORK -> options = the mod.options:define schema; read it with a driver (ModManager.show + openOptions, print m.optionRows).
 
 ### L-61 Odd-sized maps are padded by one row or column
-Cause: native_pack pads a layout with an odd side to even by repeating its last row/column, so l.width/l.height can be one more than the art (Granite Cave 1F: art 42x15, layout 42x16); an exact size check silently skipped 72 of 96 height maps
-Fix: compare per-cell data to the true size and clamp x,y to the last row/column for the padding (Gen3Elevation height-map branch, Gen3Blocks.arrowRamps)
+Cause: native_pack pads an odd side to even by repeating the last row/column, so l.width/l.height can be one more than the art (Granite Cave 1F 42x15 vs 42x16); an exact size check silently skipped 72 of 96 height maps.
+Fix: compare per-cell data to the true size and clamp x,y to the last row/column (Gen3Elevation height-map branch, Gen3Blocks.arrowRamps).
 Rules: R-29
 
 ### L-62 Cave bridges and stairs under a drawn height map
-Cause: Victory Road bridge cells (layer 15 plus end caps, collision 43) got ramp arrows and floor pins so they became solid boxes; Scene.isDeck refused collision 43; the cave stair metatile 0x204 (elev 0) was no step, so a plate over a void. Dark caves also fall back to 2D in QA.
-Fix: A layer-15 run plus its end-cap metatiles stays a deck (no pin, no arrow); isDeck accepts layer 15 with collision 0 or >7; general__cave 0x204 is a step (PAIR_STEP_MIDS); QA drivers take EM_NODARK=1
+Cause: Victory Road bridge cells (layer 15 plus end caps, collision 43) got ramp arrows and pins and became boxes; Scene.isDeck refused collision 43; cave stair metatile 0x204 (elev 0) was no step. Dark caves also fall back to 2D in QA.
+Fix: a layer-15 run plus its end caps stays a deck (no pin, no arrow); isDeck accepts layer 15 with collision 0 or >7; general__cave 0x204 is a step (PAIR_STEP_MIDS); QA drivers take EM_NODARK=1.
 Rules: R-13,R-18,R-43
 
-### L-63 QA-opnamen zijn 's nachts donker en qa_tryp wist *.png in de outdir
-Cause: het spel volgt de echte klok (DayNight.hours); qa_tryp doet rm *.png in de outdir
-Fix: daglicht: QA_SRC-kopie van DayNight.lua met 'do return 12 end'; lage camera: kopie van em_views_driver.lua met C.pitch=EM_PITCH + EM_DRIVER; referentiebeelden buiten de outdir bewaren
+### L-63 QA shots are dark at night and qa_tryp wipes *.png in the outdir
+Cause: the game follows the real clock (DayNight.hours); qa_tryp does rm *.png in the outdir.
+Fix: daylight: a QA_SRC copy of DayNight.lua with 'do return 12 end'; low camera: a copy of em_views_driver.lua with C.pitch=EM_PITCH; keep reference shots outside the outdir.
 
-### L-64 Inkt boven tellen leverde fouten op
-Cause: Agents namen Petya's nummers als heilig, ook waar de wanden iets anders zeiden (Route 103 1 vs 3, Mt Pyre 16 vs 19, Safari North 1 vs 5), en lazen zijbanden als rechte hellingen.
-Fix: Twijfelplekken als uitsnede (hoogtes over de screenshot) aan Petya voorleggen; wandtelling volgen als hij het niet weet; schuine banden en piramide-rotsjes volgens zijn pijlen.
+### L-64 Counting the ink led to errors
+Cause: agents took Petya's numbers as sacred even where the walls said otherwise (Route 103 1 vs 3, Mt Pyre 16 vs 19, Safari North 1 vs 5), and read side bands as straight slopes.
+Fix: put doubtful spots to Petya as a crop (heights over the screenshot); follow the wall count if he does not know; slanted bands and pyramid rocks follow his arrows.
 Rules: R-48
 
-### L-65 QA zonder tour en camera 7 mist Petya's fouten
-Cause: Petya speelt met tour=true en camera 7; QA draaide zonder tour op level 4, dus 2D-flits en ontbrekende buurkaarten waren niet te zien
-Fix: Reproduceer met EM_TOUR=1 en level 7 (em_views_driver, em_cross_driver); lees modOptions in zijn options.lua
+### L-65 QA without tour and camera 7 misses Petya's faults
+Cause: Petya plays with tour=true and camera 7; QA ran without tour at level 4, so 2D flashes and missing neighbour maps did not show.
+Fix: reproduce with EM_TOUR=1 and level 7 (em_views_driver, em_cross_driver); read modOptions in his options.lua.
+Rules: R-23
