@@ -1,9 +1,7 @@
 -- Peaceful ambient Town Pokémon (NPC-like, never battleable).
 --
 -- Separate from wild spawn / battle managers. Uses native SpriteRenderer via
--- the shared sprite style resolver. Concepts adapted from
--- Gen1PC-OverworldEncounters (NPC.new + ow.npcs/entities) without copying its
--- parallel sprite registry or encounter manager.
+-- the shared sprite style resolver.
 local V = ...
 local Config = V.require("config")
 local AmbientCries = V.require("ambient_cries")

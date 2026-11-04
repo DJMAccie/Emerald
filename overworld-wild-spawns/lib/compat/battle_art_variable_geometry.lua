@@ -47,7 +47,7 @@ local function logFail(mod, why)
   if DebugLog and DebugLog.warn then
     DebugLog.warn(mod, "%s", msg)
   elseif mod and mod.log and mod.log.warn then
-    mod.log:warn("[WildsOfKanto][WARN] %s", msg)
+    mod.log:warn("[Wilds][WARN] %s", msg)
   end
 end
 

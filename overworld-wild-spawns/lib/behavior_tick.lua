@@ -176,7 +176,7 @@ function BehaviorTick:register()
   self:hideFromEngineOptions()
 end
 
---- The WILDS AI toggle lives in the Wilds of Kanto submenu, so drop the
+--- The WILDS AI toggle lives in the Wilds submenu, so drop the
 -- redundant "WILDS AI" row from the engine's main Options → Display list
 -- (every registered render pipeline otherwise gets a row there).  The
 -- pipeline itself stays registered — it is the per-frame AI driver — only

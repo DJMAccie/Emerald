@@ -1,0 +1,46 @@
+from __future__ import annotations
+from ...Node import Node
+
+# Texture (aka TObject)
+class Texture(Node):
+    class_name = "Texture"
+    fields = [
+        ('name', 'string'),
+        ('next', 'Texture'),
+        ('texture_id', 'uint'),
+        ('source', 'uint'),
+        ('rotation', 'vec3'),
+        ('scale', 'vec3'),
+        ('translation', 'vec3'),
+        ('wrap_s', 'uint'),
+        ('wrap_t', 'uint'),
+        ('repeat_s', 'uchar'),
+        ('repeat_t', 'uchar'),
+        ('flags', 'uint'),
+        ('blending', 'float'),
+        ('mag_filter', 'uint'),
+        ('image', 'Image'),
+        ('palette', 'Palette'),
+        ('lod', 'TextureLOD'),
+        ('tev', 'TextureTEV'),
+    ]
+
+    def loadFromBinary(self, parser):
+        super().loadFromBinary(parser)
+        self.id = self.address
+        # Pixel decoding is deferred to the describe phase (Node -> IR), which
+        # calls Image.decodeFromRawData behind a per-scene image cache. Parse
+        # only captures raw bytes (Image.raw_image_data / Palette.raw_data).
+        if self.image:
+            wrap_names = {0: 'CLAMP', 1: 'REPEAT', 2: 'MIRROR'}
+            parser.logger.debug("Texture 0x%X: image at 0x%X, palette=%s, flags=0x%08X, source=%d, "
+                                "wrap_s=%s, wrap_t=%s, repeat_s=%d, repeat_t=%d",
+                                self.address, self.image.address,
+                                ("0x%X" % self.palette.address) if self.palette else "None",
+                                self.flags, self.source,
+                                wrap_names.get(self.wrap_s, str(self.wrap_s)),
+                                wrap_names.get(self.wrap_t, str(self.wrap_t)),
+                                self.repeat_s, self.repeat_t)
+        else:
+            parser.logger.debug("Texture 0x%X: no image", self.address)
+

@@ -1,0 +1,58 @@
+from __future__ import annotations
+from ...Node import Node
+from ....Constants import *
+from .Image import *
+
+# Palette (aka Texture Lookup Table, aka TLUT)
+class Palette(Node):
+    class_name = "Palette"
+    fields = [
+        ('data', 'uint'),
+        ('format', 'uint'),
+        ('table_name', 'string'),
+        ('entry_count', 'ushort'),
+    ]
+
+    def loadFromBinary(self, parser):
+        super().loadFromBinary(parser)
+        # If the lookup table gets set to a proper value rather than just the pointer
+        # then make sure the id is still the address of the table
+        self.id = self.data
+
+        if self.format not in palette_format_dict:
+            parser.logger.warning("Palette 0x%X: unknown format %d", self.address, self.format)
+            self.raw_data = b''
+            return
+
+        bits_per_pixel, _ = palette_format_dict[self.format]
+        bytes_per_color = bits_per_pixel // 8
+        data_size = self.entry_count * bytes_per_color
+
+        parser.logger.debug("Palette 0x%X: format=%d, entries=%d, data_size=%d bytes",
+                            self.address, self.format, self.entry_count, data_size)
+
+        # Read palette as raw bytes — the image converter's get_palette_color()
+        # decodes colors directly from byte data
+        self.raw_data = parser.read_chunk(data_size, self.data, parser._startOffset(True))
+
+    def writePaletteData(self, builder):
+        """Write palette data. Runs after parsed structs so palettes land near
+        the end of the data section (just before images), matching Sysdolphin's
+        compiler layout. Identical LUTs across Palette instances share one
+        data block (32-byte aligned for GX hardware).
+        """
+        if not hasattr(self, '_raw_pointer_fields'):
+            self._raw_pointer_fields = set()
+        raw = getattr(self, 'raw_data', None)
+        self.data = builder.write_dedup_blob(raw, 'palette', align=32)
+        if raw:
+            # Gate on the buffer, not the returned offset: a buffer legitimately
+            # at data offset 0 must still record a relocation.
+            self._raw_pointer_fields.add('data')
+
+palette_format_dict = {
+    #                 bits per pixel | type
+    0:    (BITSPPX_IA8   ,  'IA8Color'   ),
+    1:    (BITSPPX_RGB565,  'RGB565Color'),
+    2:    (BITSPPX_RGB5A3,  'RGB5A3Color'),
+}

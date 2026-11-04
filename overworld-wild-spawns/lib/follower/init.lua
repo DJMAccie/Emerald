@@ -2,10 +2,6 @@
 --
 -- Owns: selection, persistence, control modes, trailers, talk, sprite refresh.
 -- No Followers EX / PokéPC runtime dependency.
---
--- Concepts adapted from:
---   * PokéPC Followers (gamecorner-033) — selection, fingerprint, talk
---   * Followers EX (masterwebx) — ControlEngine pack / modes / trailers
 -- Assets: Wilds HGSS/PokeMMO runtime sheets (no external sprite pack required).
 local V = ...
 local Constants = V.require("follower/constants")

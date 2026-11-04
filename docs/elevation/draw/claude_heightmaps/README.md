@@ -7,7 +7,7 @@ and `user_marks`, and fails if the Lua is stale. The script converts only, it re
 - 165 maps carry `"reviewed": true`: every cave/indoor map and every overworld map with a screenshot in `draw/`, checked tile by tile
   against the screenshot and Petya's ink (2026-11-03, including his correction round, rule R-52).
 - 32 maps without a screenshot (Abandoned Ship, Underwater, New Mauville, Southern Island Interior, Sky Pillar Top, Route 125,
-  Aqua Hideout Map3, Route 104 Prototype) carry `"generator"`: Codex's generated grids, not yet seen by Petya.
+  Aqua Hideout Map3, Route 104 Prototype) carry `"generator"`: generated grids, not yet seen by Petya.
 
 ## Units
 Grid = metatiles (16 GBA px), (0,0) top-left. 1 height unit = 1 tile = 16 GBA px; the view is ~45° oblique, so a cliff face drawn over

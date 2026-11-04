@@ -1,4 +1,4 @@
--- Central world-cell occupancy for Wilds of Kanto.
+-- Central world-cell occupancy for Wilds.
 -- Tracks current cells, movement targets, and in-flight spawn reservations.
 -- No renderer dependency.
 local V = ...

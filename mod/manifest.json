@@ -1,7 +1,7 @@
 {
   "id": "BATTLE_ART_VOXEL_FORK",
-  "name": "BATTLE ART VOXEL FORK",
-  "version": "1.28.9",
+  "name": "Emerald 3D",
+  "version": "0.1.0-alpha",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",
@@ -15,18 +15,10 @@
   "optional_dependencies": [
     "STADIUM2_IMPORTER"
   ],
-  "conflicts": [
-    "DRAMATIC_SHAPE",
-    "DRAMALESS_SHAPE",
-    "potato_voxel",
-    "VOXEL_ASCENDANT",
-    "crystal_animated_sprites_with_shiny_visuals",
-    "crystal_animated_sprites"
-  ],
+  "conflicts": [],
   "permissions": [
     "engine_internals"
   ],
   "affects_link": false,
-  "description": "Pokemon Emerald as a 3D voxel world: free camera, Pokemon in the overworld, 3D battles with Stadium 2 models.",
-  "github": "notquiteog/DramaticShapeVoxelMod"
+  "description": "Pokemon Emerald as a 3D voxel world: free camera, Pokemon in the overworld, 3D battles with Stadium 2 models."
 }

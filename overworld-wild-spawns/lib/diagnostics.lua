@@ -547,7 +547,7 @@ end
 function Diagnostics.hudLines(logic)
   local s = Diagnostics.hudSnapshot(logic)
   local lines = {
-    "Wilds of Kanto Debug",
+    "Wilds Debug",
     ("Map: %s"):format(tostring(s.mapName)),
     ("Surface: %s"):format(tostring(s.surface)),
     ("Encounter species: %d"):format(s.encounterSpecies),

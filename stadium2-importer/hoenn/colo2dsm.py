@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
 """Convert Pokemon Colosseum PKX models (via the addon's Blender-free IR) into
 Stadium 2 importer DSM5 packs, so the importer's own renderer/animation player
-draws Hoenn Pokemon in gen1recomp battles.
-
-  colo2dsm.py <out-dir> [name ...]        (default: every mapped Pokemon model)
+draws Hoenn Pokemon in gen1recomp battles. Used by make_hoenn_models.py.
 
 Conventions (verified against lib/pack.lua, build.lua, renderer.lua):
   * bone/vertex units: GameCube units x100 as int16, rootScale = S/100 where S
-    is the global Colosseum->Stadium size factor (calibrated after a full run,
-    see --calibrate in tools/calibrate.py); rotations are binary angles
+    is the global Colosseum->Stadium size factor (make_hoenn_models.SIZE);
+    rotations are binary angles
     (65536 = 360 deg), Euler XYZ composed as Rz*Ry*Rx; scale is 16.16 fixed;
     hierarchy uses aligned scale inheritance (HSD == Stadium, checked 1e-16).
   * vertices are stored bone-local (max-weight bone for envelopes); UVs are
     normalized x512 with GameCube's top-left origin, textures top-to-bottom.
   * animations are baked at 30 fps from the 60 fps keyframes over [0,end_frame].
 """
-import os, sys, json, math, struct, csv
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import pkx_to_ir, fsys
+import os, json, math, struct
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.join(HERE, '..')
 UNITS = 100.0            # int16 units per GameCube unit
 GC_PER_METER = 10.0      # the addon stores metres (GC * 0.1)
 N_MOVES, N_CTX, NONE16 = 251, 20, 0xFFFF
@@ -99,15 +94,7 @@ class W:
 # ---------------------------------------------------------------- move tables
 def move_categories():
     """move id (1..251) -> 'physical' | 'special' | 'status' by Gen 3 rules."""
-    tclass = {int(r['id']): int(r['damage_class_id'] or 0) for r in csv.DictReader(open(os.path.join(ROOT, 'types.csv')))}
-    out = {}
-    for r in csv.DictReader(open(os.path.join(ROOT, 'moves.csv'))):
-        mid = int(r['id'])
-        if mid > N_MOVES: continue
-        dc = int(r['damage_class_id'] or 1)
-        if dc == 1: out[mid] = 'status'
-        else: out[mid] = 'physical' if tclass.get(int(r['type_id']), 2) == 2 else 'special'
-    return out
+    return {int(k): v for k, v in json.load(open(os.path.join(HERE, 'move_categories.json'))).items()}
 
 # ---------------------------------------------------------------- conversion
 def convert(model, header, categories):
@@ -328,38 +315,3 @@ def pack(species, data, root_scale):
                     else:
                         w.u8(0); write(conv(ch))
     return bytes(w.b)
-
-# ---------------------------------------------------------------- driver
-def main():
-    out_dir = sys.argv[1]; only = set(sys.argv[2:])
-    mapping = json.load(open(os.path.join(ROOT, 'name_to_dex.json')))
-    categories = move_categories()
-    os.makedirs(out_dir, exist_ok=True)
-    report = {}
-    for name, dex in sorted(mapping.items(), key=lambda kv: (kv[1], kv[0])):
-        if only and name not in only: continue
-        path = os.path.join(ROOT, 'fs', f'pkx_{name}.fsys')
-        if not os.path.exists(path): continue
-        try:
-            d = open(path, 'rb').read()
-            e = fsys.entries(d)[0]
-            raw = fsys.payload(d, e)
-            tmp = os.path.join(out_dir, name + '.pkx'); open(tmp, 'wb').write(raw)
-            (meta, scene), = pkx_to_ir.load(tmp, name + '.pkx')
-            data = convert(scene.models[0], meta.pkx_header, categories)
-            blob = pack(dex, data, 1.0/UNITS)
-            open(os.path.join(out_dir, f'{name}.dsm'), 'wb').write(blob)
-            os.remove(tmp)
-            report[name] = dict(dex=dex, bones=len(data['bones']), prims=len(data['prims']), textures=len(data['textures']),
-                                anims=[(a['name'], a['frames']) for a in data['anims']], ctx=data['ctx'][:6],
-                                height_gc=data['metrics']['height']/UNITS, bytes=len(blob))
-            print(f"{name:24s} #{dex:03d} bones={len(data['bones'])} prims={len(data['prims'])} tex={len(data['textures'])} anims={len(data['anims'])} h={data['metrics']['height']/UNITS:.2f}gc {len(blob)//1024}KB", flush=True)
-        except Exception as ex:
-            import traceback
-            report[name] = dict(dex=dex, error=str(ex)[:300])
-            print(f"{name:24s} #{dex:03d} ERROR {ex}", flush=True)
-            if only: traceback.print_exc()
-    json.dump(report, open(os.path.join(out_dir, 'report.json'), 'w'), indent=1)
-
-if __name__ == '__main__':
-    main()

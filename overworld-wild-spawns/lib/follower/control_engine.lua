@@ -1,7 +1,4 @@
--- Control / pack / trailer engine for Wilds of Kanto standalone use.
---
--- Credits: masterwebx / Followers EX ControlEngine concepts adapted for Wilds;
--- assets via Wilds sprite service (no PokePCFollowers_VoxelMerge dependency).
+-- Control / pack / trailer engine for Wilds standalone use.
 --
 -- Ownership (exactly one driver; never both):
 --   * Gen1 trailer movement: ControlEngine:update via OverworldController.update

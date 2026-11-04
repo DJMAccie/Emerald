@@ -1,4 +1,4 @@
--- Optional overworld Poké Ball catching for Wilds of Kanto.
+-- Optional overworld Poké Ball catching for Wilds.
 -- Extends existing wild entity / battle / occupancy lifecycle — no second
 -- encounter manager. Safari sessions disable throws (native Safari only).
 local V = ...

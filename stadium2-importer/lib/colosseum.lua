@@ -1,6 +1,6 @@
 -- Pokemon Colosseum models for #252-386, pre-converted to DSM5 packs by
--- tools/colo2dsm.py (from the user's own Colosseum disc) and shipped inside
--- this mod folder as colosseum/<variant>/<dex>.dsm. They flow through the
+-- hoenn/make_hoenn_models.py (from the user's own Colosseum disc) into
+-- this mod folder: colosseum/<variant>/<dex>.dsm. They flow through the
 -- same Pack.parse -> Renderer path as the Stadium 2 packs, so Battle Art's
 -- Gen 3 stage draws Hoenn Pokemon with no further special casing.
 local Colosseum = {}

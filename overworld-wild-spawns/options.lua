@@ -1,4 +1,4 @@
--- Option schema for Wilds of Kanto (id: overworld_wild_spawns).
+-- Option schema for Wilds (id: overworld_wild_spawns).
 -- Loaded via mod.options:define() from main.lua and referenced by
 -- manifest options_schema for Mod Manager lazy-load.
 --
@@ -16,7 +16,7 @@
 -- UI submenu mapping (both write the SAME mod.options keys):
 --   Poke Followers EX -> follow_control, trainer_trail, follower_count
 --                       (+ Leader via party menu hint)
---   Wilds of Kanto    -> enabled, spawn_density, random_encounters,
+--   Wilds    -> enabled, spawn_density, random_encounters,
 --                       water_spawns, cave_spawns, sprite_style, sprite_fade,
 --                       town_pokemon, pokemon_grass_render_mode,
 --                       wild_silhouettes,
@@ -48,11 +48,8 @@ return {
     default = "followers",
     choices = {
       { "Poke Followers / GSC", "followers" },
-      { "HGSS / PokeMMO", "pokemmo" },
-      { "Pokedex", "pokedex" },
-      { "PMDCollab", "pmdcollab" },
     },
-    description = "Overworld sprite style for wild Pokemon and followers. Poke Followers / GSC is the built-in default. Sprite size follows the style: GSC Classic (16x16), HGSS True Size, Pokedex Classic, PMDCollab native imported geometry with directional walk and occasional idle animations. PMDCollab dialogue portraits are separate and appear for Wilds Pokemon talk regardless of Sprite Style. Water Pokemon still use Swimming or Levitates sprites when available.",
+    description = "Overworld sprite style for wild Pokemon and followers. Water Pokemon use Swimming or Levitates sprites when available.",
   },
   {
     key = "sprite_fade",

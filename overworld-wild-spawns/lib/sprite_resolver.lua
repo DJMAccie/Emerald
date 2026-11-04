@@ -1,4 +1,4 @@
--- Central land/water sprite resolution for Wilds of Kanto.
+-- Central land/water sprite resolution for Wilds.
 --
 -- Land: existing SpriteProviders style chains (unchanged).
 -- Water: optional provider water API → Wilds swimming/levitates → PokeMMO →

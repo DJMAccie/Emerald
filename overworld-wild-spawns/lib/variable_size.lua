@@ -5,7 +5,7 @@
 -- effectiveMode  = what rendering actually uses (Classic while Voxel + incompatible DS)
 --
 -- Dramatic Shape without variable geometry → effective Classic.
--- Battle Art / Potato / Dramaless / Stadium2: a small in-memory
+-- Battle Art / Stadium2: a small in-memory
 -- SpriteBillboards.mesh wrap may enable True Size when that provider is
 -- the ACTIVE Voxel renderer and exposes exports.lib.require("SpriteBillboards").
 -- Capability is never borrowed from a Voxel mod that is installed but not
@@ -23,8 +23,6 @@ VariableSize.MODE_TRUE_SIZE = "true_size"
 
 VariableSize.PROVIDER_DRAMATIC_SHAPE = "DRAMATIC_SHAPE"
 VariableSize.PROVIDER_BATTLE_ART = "BATTLE_ART_VOXEL_FORK"
-VariableSize.PROVIDER_POTATO = "potato_voxel"
-VariableSize.PROVIDER_DRAMALESS = "DRAMALESS_SHAPE"
 VariableSize.PROVIDER_STADIUM2 = "STADIUM2_OVERWORLD_MODELS"
 
 local _loggedFallback = false
@@ -38,15 +36,11 @@ local _lastProviderId = nil
 VariableSize.VOXEL_RENDERER_IDS = {
   "DRAMATIC_SHAPE",
   "BATTLE_ART_VOXEL_FORK",
-  "potato_voxel",
-  "DRAMALESS_SHAPE",
   "STADIUM2_OVERWORLD_MODELS",
 }
 
 local ADAPTER_MODULE = {
   BATTLE_ART_VOXEL_FORK = "compat/battle_art_variable_geometry",
-  potato_voxel = "compat/potato_voxel_variable_geometry",
-  DRAMALESS_SHAPE = "compat/dramaless_variable_geometry",
   STADIUM2_OVERWORLD_MODELS = "compat/stadium2_variable_geometry",
 }
 
@@ -352,7 +346,7 @@ function VariableSize.logVoxelFallback(mod, reason)
   if _loggedFallback then return end
   _loggedFallback = true
   local msg = string.format(
-    "[WildsOfKanto][DEV] True Size suspended while Voxel renderer is active (%s). "
+    "[Wilds][DEV] True Size suspended while Voxel renderer is active (%s). "
       .. "Sprite size follows Sprite Style (HGSS→True Size); Flat restores it automatically.",
     tostring(reason))
   if DebugLog and DebugLog.warn then

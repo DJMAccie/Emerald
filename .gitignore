@@ -43,3 +43,6 @@ __pycache__/
 /docs/elevation/tekenronde3.md
 /docs/knowledge/journal.md
 /release/
+
+# local Colosseum disc files and old converter output (players use stadium2-importer/hoenn)
+/tools/colosseum/

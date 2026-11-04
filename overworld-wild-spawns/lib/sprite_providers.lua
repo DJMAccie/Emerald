@@ -1,4 +1,4 @@
--- Sprite source providers for Wilds of Kanto overworld Pokemon.
+-- Sprite source providers for Wilds overworld Pokemon.
 --
 -- Architecture: swap SpriteRenderer definitions only. Rendering stays native
 -- (frames/walker/pose → Gen1Recomp / Dramatic Shape). No overlay bodies.
@@ -608,7 +608,7 @@ function SpriteProviders:_makeBlackProvider()
 end
 
 ------------------------------------------------------------------------
--- Gold Sprites read-only adapter (OtaconRevengeance / Gold_Silver_Sprites)
+-- Gold Sprites read-only adapter
 --
 -- Release 1.0.1 facts (verified from Pokemon.Gold.Silver.Sprites.1.0.1.zip):
 --   * Mod ID: Gold_Silver_Sprites  version: 1.0.1  entry: main.lua

@@ -1,6 +1,6 @@
 {
   "id": "overworld_wild_spawns",
-  "name": "Wilds of Kanto",
+  "name": "Emerald 3D overworld Pokemon",
   "version": "2.4.3",
   "api": 2,
   "entry": "main.lua",
@@ -8,9 +8,7 @@
   "category": "MECHANIC",
   "game_version": ">=0.0.0-0 <2.0.0",
   "games": [
-    "gen1",
-    "gen2",
-    "gen3"
+    "emerald"
   ],
   "priority": 80,
   "dependencies": [],
@@ -21,6 +19,5 @@
   ],
   "affects_link": false,
   "options_schema": "options.lua",
-  "description": "Visible wild Pokemon, followers, and direct catching across Gen 1, Gen 2, and native Gen 3.",
-  "github": "notquiteog/overworld-spawn-mod"
+  "description": "Wild Pokemon walking around the overworld, a follower and overworld catching."
 }

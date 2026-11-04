@@ -1,5 +1,4 @@
 -- Follower selection state + persistence (no renderer logic).
--- Concepts adapted from PokéPC Followers (gamecorner-033).
 local V = ...
 local Constants = V.require("follower/constants")
 

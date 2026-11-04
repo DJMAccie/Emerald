@@ -1,5 +1,4 @@
 -- Follower entity lifecycle (spawn/despawn/map/update/bike/surf).
--- Adapted from PokéPC Followers + Followers EX stability ideas.
 -- No direct asset paths; sprite refresh goes through a injectable handler.
 local V = ...
 local Constants = V.require("follower/constants")

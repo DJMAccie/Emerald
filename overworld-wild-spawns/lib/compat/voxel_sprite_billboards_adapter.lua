@@ -2,7 +2,7 @@
 -- the same public module table Battle Art does: exports.lib.require.
 --
 -- Battle Art keeps its own adapter (lib/compat/battle_art_variable_geometry.lua)
--- and is not routed through this factory. Potato / Dramaless / Stadium2 use
+-- and is not routed through this factory. Stadium2 use
 -- this so their wrap contract stays aligned without touching the known-good
 -- Battle Art path.
 --

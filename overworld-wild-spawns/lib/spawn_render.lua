@@ -281,7 +281,7 @@ function SpawnRender:_notice(fmt, ...)
   if select("#", ...) > 0 then
     msg = string.format(fmt, ...)
   end
-  self.mod.log:info("[WildsOfKanto][INFO] %s", msg)
+  self.mod.log:info("[Wilds][INFO] %s", msg)
 end
 
 function SpawnRender:_warn(fmt, ...)
@@ -289,7 +289,7 @@ function SpawnRender:_warn(fmt, ...)
   if select("#", ...) > 0 then
     msg = string.format(fmt, ...)
   end
-  self.mod.log:info("[WildsOfKanto][WARN] %s", msg)
+  self.mod.log:info("[Wilds][WARN] %s", msg)
 end
 
 local function isResolvedWaterKind(kind)

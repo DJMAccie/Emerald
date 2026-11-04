@@ -805,7 +805,7 @@ local function sampleComponent(c, frame, fallback)
 end
 
 -- Pose values reach the skeleton unchanged, as in the game: the ROM sampler
--- (ModelAnim_EvaluateTranslationChannel and siblings, michiiik 204b7d8)
+-- (ModelAnim_EvaluateTranslationChannel and siblings)
 -- divides by 1000 with no clamp. Dig clips scale Diglett/Dugtrio heads to
 -- -1 and 0 to hide them underground; a former clamp to the bind scale drew
 -- them at full size. Only a missing value falls back to the bind pose.

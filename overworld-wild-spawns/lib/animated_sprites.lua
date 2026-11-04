@@ -236,17 +236,17 @@ end
 
 function AnimatedSprites:_notice(fmt, ...)
   local msg = (select("#", ...) > 0) and string.format(fmt, ...) or fmt
-  self.mod.log:info("[WildsOfKanto][INFO] %s", msg)
+  self.mod.log:info("[Wilds][INFO] %s", msg)
 end
 
 function AnimatedSprites:_warn(fmt, ...)
   local msg = (select("#", ...) > 0) and string.format(fmt, ...) or fmt
-  self.mod.log:info("[WildsOfKanto][WARN] %s", msg)
+  self.mod.log:info("[Wilds][WARN] %s", msg)
 end
 
 function AnimatedSprites:_error(fmt, ...)
   local msg = (select("#", ...) > 0) and string.format(fmt, ...) or fmt
-  self.mod.log:info("[WildsOfKanto][ERROR] %s", msg)
+  self.mod.log:info("[Wilds][ERROR] %s", msg)
 end
 
 function AnimatedSprites:_modPath(rel)

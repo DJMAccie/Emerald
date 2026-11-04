@@ -4,7 +4,7 @@
 -- Stadium2 (manifest id STADIUM2_OVERWORLD_MODELS) is the Gen 2 voxel
 -- renderer. Current versions expose exports.lib = V with V.require, the
 -- same public SpriteBillboards / Voxel3D / VoxelScene contract as Battle
--- Art, Potato, and Dramaless. Wilds wraps mesh() and re-points shadowQuad
+-- Art. Wilds wraps mesh() and re-points shadowQuad
 -- so body, occlusion silhouette, and sprite-mesh shadows agree.
 -- Stadium2 source is not copied and is not patched on disk.
 --

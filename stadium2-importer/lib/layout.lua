@@ -38,10 +38,6 @@ Layout.ROM_END = 0x4000000
 Layout.SPECIES_META_RECORD_SIZE = 0x10
 Layout.HISTORICAL_SPECIES_META_RECORDS = 253
 Layout.CURRENT_DECOMP_COMMIT = "c0e10f23d90cc4f335b654711f13e53c2c07323b"
-Layout.CURRENT_DECOMP_REPOSITORY = "pret/pokestadiumgs"
-Layout.HISTORICAL_REPOSITORY = "pret/pokestadium"
-Layout.HISTORICAL_LAYOUT_PATH = "oldnotes/stadiumgs/main.s"
-Layout.HISTORICAL_ARCHIVE_TOOL_PATH = "oldnotes/utils/cattbl.c"
 Layout.PERSSZP_TOOL_PATH = "tools/decompress_persszp.py"
 
 return Layout

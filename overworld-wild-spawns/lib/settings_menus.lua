@@ -2,7 +2,7 @@
 --
 -- START → OPTIONS →
 --   POKE FOLLOW EX  → follower control options
---   WILDS OF KANTO  → wild spawn / sprite / ambient / overlay options
+--   WILDS  → wild spawn / sprite / ambient / overlay options
 --
 -- Both share the same mod.options keys as Mod Settings.
 -- No duplicate save keys. No top-level START menu entries.
@@ -19,11 +19,11 @@ SettingsMenus.SCREEN_WILDS = "overworld_wild_spawns:wilds_menu"
 
 -- Gen1 ListMenu truncates past 14 characters; full names live in README.
 SettingsMenus.LABEL_FOLLOWERS = "POKE FOLLOW EX"
-SettingsMenus.LABEL_WILDS = "WILDS OF KANTO"
+SettingsMenus.LABEL_WILDS = "WILDS"
 
 -- OPTIONS activate-row labels (same 14-char budget).
 SettingsMenus.OPTIONS_LABEL_FOLLOWERS = "POKE FOLLOW EX"
-SettingsMenus.OPTIONS_LABEL_WILDS = "WILDS OF KANTO"
+SettingsMenus.OPTIONS_LABEL_WILDS = "WILDS"
 
 local function markCurrent(label, isCurrent)
   if not isCurrent then return label end
@@ -479,13 +479,10 @@ function SettingsMenus:_openWildsRoot(game)
       wrap = true,
       choices = {
         { label = "GSC",  value = "followers" },
-        { label = "HGSS", value = "pokemmo" },
-        { label = "DEX",  value = "pokedex" },
-        { label = "PMD",  value = "pmdcollab" },
       },
       current = Config.spriteStyle(mod),
       right = ({
-        followers = "GSC", pokemmo = "HGSS", pokedex = "DEX", pmdcollab = "PMD",
+        followers = "GSC",
       })[tostring(Config.spriteStyle(mod))] or "GSC",
       apply = function(v)
         Config.setSpriteStyle(mod, v, "options_menu", {
@@ -1071,9 +1068,6 @@ function SettingsMenus:register()
     new = function(game)
       return menus:_openChoice(game, "SPRITE STYLE", {
         { label = "FOLLOWERS/GSC", value = "followers" },
-        { label = "HGSS / POKEMMO", value = "pokemmo" },
-        { label = "POKEDEX", value = "pokedex" },
-        { label = "PMDCOLLAB", value = "pmdcollab" },
       }, Config.spriteStyle(mod), function(v)
         Config.setSpriteStyle(mod, v, "options_menu", {
           game = game,
@@ -1174,7 +1168,7 @@ function SettingsMenus:register()
 
   self._registered = true
   if Config.debug(mod) then
-    DebugLog.info(mod, "OPTIONS menus registered: POKE FOLLOW EX + WILDS OF KANTO")
+    DebugLog.info(mod, "OPTIONS menus registered: POKE FOLLOW EX + WILDS")
   end
 end
 

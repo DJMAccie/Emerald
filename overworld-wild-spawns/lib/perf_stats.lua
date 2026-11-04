@@ -1,4 +1,4 @@
--- Lightweight DEV-only performance counters for Wilds of Kanto.
+-- Lightweight DEV-only performance counters for Wilds.
 --
 -- Nearly allocation-free per frame: numeric fields only, one snapshot log
 -- per second when Config.debug / Dev Overlay is on. Disabled in release.

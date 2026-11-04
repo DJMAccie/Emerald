@@ -1,4 +1,4 @@
--- Wilds of Kanto (id: overworld_wild_spawns): visible wild Pokemon in the overworld.
+-- Wilds (id: overworld_wild_spawns): visible wild Pokemon in the overworld.
 --
 -- Architecture
 --   lib/spawn_state.lua     - fail-safe readiness flags (vanilla suppress gate)

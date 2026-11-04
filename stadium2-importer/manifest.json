@@ -1,6 +1,6 @@
 {
   "id": "STADIUM2_IMPORTER",
-  "name": "Pokemon Stadium 2 Importer",
+  "name": "Emerald 3D battle models",
   "version": "0.23.0",
   "api": 2,
   "games": [
@@ -18,7 +18,6 @@
   "dependencies": [],
   "optional_dependencies": [],
   "conflicts": [],
-  "github": "Deftones565/gen1recomp-mod-stadium2-importer",
   "affects_link": false,
   "description": "Pokemon Stadium 2 model importer for Emerald: serves the 3D Pokemon models (and Colosseum models #252-386) that Battle Art places in its battles.",
   "required_imports": [
