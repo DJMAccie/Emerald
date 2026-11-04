@@ -120,3 +120,7 @@ Rules: R-23
 ### L-66 A mod folder must not use assets/generated
 Cause: assets/generated is where the engine keeps the player's ROM-derived cache; modkit lint MK301 (and the community mod index CI) fail any mod shipping files there, and any lib file naming that path.
 Fix: Ship art under another folder such as assets/water_runtime and run: python3 gen1recomp/tools/modkit.py lint <mod folder> and validate <mod folder> --strict for all three mods.
+
+### L-67 A mod's version must equal the release tag's x.y.z
+Cause: The launcher updater and the mod index take a mod's latest version from the release tag (v0.1.0-alpha becomes 0.1.0) and compare it with the installed manifest version. 0.1.0-alpha sorts below 0.1.0, and 0.23.0 or 2.4.3 never trail a 0.1.x tag, so updates loop or never come.
+Fix: Keep the three manifests, MOD_BUILD in stadium2-importer/main.lua and exports.version in overworld-wild-spawns/main.lua at the release x.y.z; put alpha only in the tag and the GitHub prerelease flag; attach <id>-<x.y.z>.zip for every mod to each release (tools/build_release.sh).
