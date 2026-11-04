@@ -5,7 +5,6 @@ local Cache = require("mods.STADIUM2_IMPORTER.lib.cache")
 local Colosseum = require("mods.STADIUM2_IMPORTER.lib.colosseum")
 local Discovery = require("mods.STADIUM2_IMPORTER.lib.discovery")
 local Palette = require("mods.STADIUM2_IMPORTER.lib.palette")
-local Handlers = require("mods.STADIUM2_IMPORTER.lib.model_handlers")
 local Pack = require("mods.STADIUM2_IMPORTER.lib.pack")
 local Renderer = require("mods.STADIUM2_IMPORTER.lib.renderer")
 
@@ -165,7 +164,6 @@ local function rendererOptions(options)
   return out
 end
 
-
 -- Species served beyond the Stadium 2 range come from the Colosseum packs in
 -- the mod folder (lib/colosseum.lua); the persistent cache never sees them.
 local function speciesServed(species)
@@ -269,20 +267,6 @@ function Importer.createSpecialModel(name)
   return model
 end
 
-function Importer.loadSpecial(name)
-  local key="special:"..tostring(name)
-  local hit=modelCache[key]
-  if hit then touchModel(key);return hit end
-  local bytes=Cache.readSpecial(name)
-  if not bytes then return nil,"special battle pack unavailable" end
-  local model,err=Pack.parse(bytes)
-  if not model then return nil,err end
-  model.variant="normal"
-  modelCache[key]=model
-  touchModel(key)
-  return model
-end
-
 function Importer.releaseModels()
   for _, model in pairs(modelCache) do Pack.release(model) end
   modelCache, modelOrder = {}, {}
@@ -292,12 +276,6 @@ function Importer.parsePack(bytes)
   local model,err=Pack.parse(bytes)
   if model then ownedModels[model]=true end
   return model,err
-end
-
-function Importer.readHandlers(species, variant)
-  local bytes = Importer.readPack(species, variant)
-  if not bytes then return nil end
-  return Handlers.readExtension(bytes)
 end
 
 function Importer.beginFrom(bytes, label, options)

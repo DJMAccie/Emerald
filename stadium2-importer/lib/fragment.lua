@@ -27,10 +27,6 @@ function StadiumFragment.setBase(value)
   BASE = assert(tonumber(value), "fragment base must be numeric")
 end
 
-function StadiumFragment.getBase()
-  return BASE
-end
-
 local CMD_SIZES = {
   [0x00] = 0x08, [0x01] = 0x04, [0x02] = 0x08, [0x03] = 0x08, [0x04] = 0x04,
   [0x05] = 0x04, [0x06] = 0x04, [0x07] = 0x08, [0x08] = 0x0C, [0x09] = 0x04,
@@ -44,7 +40,6 @@ local CMD_SIZES = {
 }
 
 StadiumFragment.CMD_SIZES = CMD_SIZES
-
 
 local function roundHalfEven(x)
   local f = floor(x)
@@ -93,7 +88,6 @@ local function unique(seq, n)
   end
   return out, m
 end
-
 
 local Frag = {}
 Frag.__index = Frag
@@ -175,7 +169,6 @@ function StadiumFragment.open(data, name)
   end
   return setmetatable({ d = data, name = name or "<bytes>" }, Frag)
 end
-
 
 local Model = {}
 Model.__index = Model
@@ -973,7 +966,6 @@ function Model:mergePrimitivesByCallback()
   self.prims = merged
 end
 
-
 local function bitfield(f, base, index, bits)
   local bitpos = index * bits
   local word
@@ -1175,7 +1167,6 @@ function Aux:track(chan)
   return out, n
 end
 
-
 local function rgba5551(p)
   return floor(floor(p / 2048) % 32 * 255 / 31),
          floor(floor(p / 64) % 32 * 255 / 31),
@@ -1268,7 +1259,6 @@ local function decodeTexture(f, tex, tlut, palette)
 end
 
 StadiumFragment.decodeTexture = decodeTexture
-
 
 local function compress(values, n, nd)
   local first = roundTo(values[1], nd)
@@ -1583,7 +1573,6 @@ function StadiumFragment.extract(data, name, options)
       end
     end
   end
-
 
   local callbackTextureBySite, callbackStateBySite, callbackMaterialBySite = {}, {}, {}
   for _, row in ipairs(handlerTextures) do
@@ -1905,7 +1894,6 @@ function StadiumFragment.extractStage(data, name, stageIndex)
   return ArenaLighting.attach(model)
 end
 
-
 local function crystal251Inside(frag, off, size)
   return type(off) == "number" and off >= 0
     and off + (size or 1) <= #frag.d
@@ -2151,7 +2139,6 @@ function StadiumFragment.extractAnimationsAny(data, bones, name)
   local species = root and crystal251Inside(frag, root, 2) and frag:u16(root) or 0
   return { species=species, anims=anims, auxAnims={}, errors=errors }
 end
-
 
 local RawFrag = {}
 RawFrag.__index = RawFrag

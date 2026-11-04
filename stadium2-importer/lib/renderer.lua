@@ -2232,11 +2232,6 @@ function Renderer:worldMetrics(out)
   return out
 end
 
-function Renderer:attachmentPosition(label)
-  local p=self.attachmentPositions and self.attachmentPositions[label]
-  return p and {p[1],p[2],p[3]} or nil
-end
-
 -- Draw into the caller's currently-bound color/depth target. The battle scene
 -- uses this path so every actor shares the same camera and depth buffer.
 function Renderer.koffingGasGeometryState(particle, anchor, sourceGeometry, textureWidth, textureHeight, axes)

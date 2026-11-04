@@ -51,10 +51,6 @@ local SUPPORTED = {
   [0xFE] = true, [0xFF] = true, [0xB9] = true, [0xBA] = true,
 }
 
-local function byte(data, offset)
-  return string.byte(data, offset + 1)
-end
-
 local function u32(data, offset)
   local a, b, c, d = string.byte(data, offset + 1, offset + 4)
   if not d then return nil end
