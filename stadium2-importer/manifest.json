@@ -1,7 +1,8 @@
 {
   "id": "STADIUM2_IMPORTER",
   "name": "Emerald 3D battle models",
-  "version": "0.23.0",
+  "version": "0.1.0",
+  "github": "DJMAccie/Emerald",
   "api": 2,
   "games": [
     "emerald"

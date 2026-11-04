@@ -1,7 +1,8 @@
 {
   "id": "BATTLE_ART_VOXEL_FORK",
   "name": "Emerald 3D",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0",
+  "github": "DJMAccie/Emerald",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",

@@ -1,6 +1,6 @@
 -- The host keeps a mod's modules in package.loaded across game sessions; evict them when the build changes.
 -- MOD_BUILD must match manifest.json's version.
-local MOD_BUILD = "0.23.0"
+local MOD_BUILD = "0.1.0"
 do
   local PREFIX = "mods.STADIUM2_IMPORTER."
   local STAMP = PREFIX .. "__build"
