@@ -135,8 +135,7 @@ local function lathe(w,h,sample)
   Budget.check()
   for x=0,nx-1 do for z=0,nz-1 do
    local k=key(x,y,z)
-   if solid[k] and not (solid[key(x-1,y,z)] and solid[key(x+1,y,z)] and solid[key(x,y-1,z)] and solid[key(x,y+1,z)]
-    and solid[k-1] and solid[k+1]) then
+   if solid[k] then
     local dx0,dz0=x+.5-r.cx,z+.5-nz/2
     if r.trunk and dx0*dx0+dz0*dz0<=M.FOOT_R*M.FOOT_R and (dx0*dx0+dz0*dz0>r.shape*r.shape or y-ybot<M.BELLY) then vox[k]=r.trunk else
     local dx,dz=x+.5-r.cx,z+.5-nz/2

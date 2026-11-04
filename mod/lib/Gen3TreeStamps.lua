@@ -1,6 +1,9 @@
 -- Which tiles draw a tree and how each is stood up
 local M={}
-M.FAMILIES={dewford=true,lavaridge=true}
+M.FAMILIES={dewford=true,lavaridge=true,mossdeep=true}
+M.CLUSTERS={mossdeep={art={{0x31A,0x31B},{0x322,0x323}},
+ roots={[0x31A]=true,[0x31C]=true,[0x31E]=true,[0x324]=true,[0x355]=true},
+ parts={[0x31B]=true,[0x31D]=true,[0x31F]=true,[0x322]=true,[0x323]=true,[0x325]=true,[0x326]=true,[0x327]=true,[0x356]=true}}}
 
 M.NARROW={
  dewford={crown=0x243,foot=0x23A,over={0x239,0x219}},
@@ -16,6 +19,10 @@ M.PINE={
 
 function M.of(secondary,mid,collision,behavior,ground,surf)
  if not M.FAMILIES[secondary] then return nil end
+ local cluster=M.CLUSTERS[secondary]
+ if cluster and (cluster.roots[mid] or cluster.parts[mid]) then
+  return {kind='tree',root=cluster.roots[mid] or false,ground=ground,anchorX=16,anchorZ=31,art=cluster.art}
+ end
  local p=M.PINE[secondary]
  if p then
   if mid==p.tip then return {kind='flat',groundMid=p.ground,ashTop=true,reviewedSurface=true} end

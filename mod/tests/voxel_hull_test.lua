@@ -37,4 +37,12 @@ for _,kind in ipairs({'bush','rock'})do
  assert(far-near>20 and right-left>20,kind..' collapsed into a slab')
  assert(#body<3000,'balanced organic volume exceeded mesh budget')
 end
-print('PASS closed grounded voxel volume, native contour, merged surfaces, depth cap and fixed orientation')
+local bump=H.BUMP;H.BUMP=0
+local crown=H.build(16,16,function(x,y)return .2,.7,.2,1,(x+.5)/16,(y+.5)/16 end,1,0,28,nil,true,nil,1)
+H.BUMP=bump
+for _,f in ipairs(crown)do
+ local a,b,c=f[1],f[2],f[3]
+ local ny=(b[3]-a[3])*(c[1]-a[1])-(b[1]-a[1])*(c[3]-a[3])
+ assert(not (ny<0 and a[2]>8),'crown contains an inward-facing ceiling from a hollow voxel shell')
+end
+print('PASS closed grounded voxel volume, solid crown, native contour, merged surfaces, depth cap and fixed orientation')

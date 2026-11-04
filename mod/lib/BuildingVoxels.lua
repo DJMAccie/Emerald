@@ -81,6 +81,7 @@ local function model(name)
   loaded[name]=ok and type(m)=='table' and m or false
   local d=loaded[name] and M.DEEPEN[name]
   if d then m.quads=deepen(m,d);m.y0=m.y0-d.rows end
+  if loaded[name] then m.quads=V.require('BuildingRoof').build(m) end
  end
  return loaded[name] or nil
 end
@@ -114,11 +115,22 @@ function M.prepare(cells,def,claim)
   end
   local function place(dx,dy)
    local bld=claim(cells,{cx=m.x0+dx,cy=m.y0+dy,width=m.x1-m.x0+1,depth=m.y1-m.y0+1,name=name,voxels=m,
-    tiles=M.FAMILY[name] and m.tiles or nil})
+    tiles=m.tiles})
    if bld then
     local kept={}
     local from=bld.cy+(m.claimFrom or 0)
     for _,c in ipairs(bld.claimed)do
+     -- Art above the footprint is already on the model; restore its actual floor.
+     if c.cy<from and c.mid>=0x200 and c.shape and c.shape.kind=='flat' then
+      local best,dist
+      for dy=-8,8 do for dx=-8,8 do
+       local n=cells[(c.cx+dx)..':'..(c.cy+dy)]
+       local k=n and n.shape and n.shape.kind
+       local d=dx*dx+dy*dy
+       if n and n.mid<0x200 and n.base==c.base and (k=='water' or k=='flat') and (not dist or d<dist) then best,dist=n,d end
+      end end
+      if best then c.mid,c.shape=best.mid,best.shape end
+     end
      if (c.shape and c.shape.kind=='tree') or c.cy<from or (m.claimBlocked and (c.collision or 0)~=7) then c.bldModel=nil;c.civic=nil else kept[#kept+1]=c end
     end
     bld.claimed=kept

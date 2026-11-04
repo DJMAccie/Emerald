@@ -455,14 +455,14 @@ local function faceMid(c,cells)
  local mass=c.mass
  local st=mass and massStats(mass)
  if faceLike(c.ts,c.mid,st) then return c.mid end
- if mass then
+ do
   local seen={[c]=true};local ring={c}
   for _=1,M.FACE_REACH do
    local nxt={};local votes,best,bn={},nil,0
    for _,q in ipairs(ring)do
     for _,d in ipairs(DIRS)do
      local n=cells[key(q.cx+d[1],q.cy+d[2])]
-     if n and not seen[n] and n.blocks and n.mass==mass and n.ts then
+     if n and not seen[n] and n.blocks and n.ts==c.ts and (not mass or n.mass==mass) then
       seen[n]=true;nxt[#nxt+1]=n
       if faceLike(n.ts,n.mid,st) then votes[n.mid]=(votes[n.mid] or 0)+1;if votes[n.mid]>bn or (votes[n.mid]==bn and n.mid<best) then best,bn=n.mid,votes[n.mid] end end
      end
@@ -471,12 +471,12 @@ local function faceMid(c,cells)
    if best then return best end
    ring=nxt;if #ring==0 then break end
   end
-  if mass.blocksFace==nil then
+  if mass and mass.blocksFace==nil then
    local best,bn=nil,0
    for mid,n in pairs(st.votes)do if faceLike(st.ts,mid,st) and (n>bn or (n==bn and mid<best)) then best,bn=mid,n end end
    mass.blocksFace=best or false
   end
-  if mass.blocksFace then return mass.blocksFace end
+  if mass and mass.blocksFace then return mass.blocksFace end
  end
  return c.mid
 end
@@ -698,7 +698,7 @@ local function appendRamp(c,cells,emit,uvFor)
  end
  return true
 end
--- A seawall tile is drawn with a strip of its water on one side (Rustboro 0x17A): on a wall face or lid that strip shows as a blue sheet, so crop it off.
+-- Terrain beside the rock belongs on the floor, not repeated down its wall.
 M.BLUE_COL=.6
 local function waterCols(ts,mid)
  ts.blocksWater=ts.blocksWater or {}
@@ -711,7 +711,9 @@ local function waterCols(ts,mid)
   local blue={}
   for x=0,15 do
    local n=0
-   for y=0,15 do local r,g,b=ts.imageData:getPixel(gx+x,gy+y);if b>r+.15 and b>g-.05 then n=n+1 end end
+   for y=0,15 do local r,g,b=ts.imageData:getPixel(gx+x,gy+y)
+    if (b>r+.15 and b>g-.05) or (g>r+.12 and g>b+.04) then n=n+1 end
+   end
    blue[x]=n/16>=M.BLUE_COL
   end
   local a,b=0,0
