@@ -124,3 +124,11 @@ Fix: Ship art under another folder such as assets/water_runtime and run: python3
 ### L-67 A mod's version must equal the release tag's x.y.z
 Cause: The launcher updater and the mod index take a mod's latest version from the release tag (v0.1.0-alpha becomes 0.1.0) and compare it with the installed manifest version. 0.1.0-alpha sorts below 0.1.0, and 0.23.0 or 2.4.3 never trail a 0.1.x tag, so updates loop or never come.
 Fix: Keep the three manifests, MOD_BUILD in stadium2-importer/main.lua and exports.version in overworld-wild-spawns/main.lua at the release x.y.z; put alpha only in the tag and the GitHub prerelease flag; attach <id>-<x.y.z>.zip for every mod to each release (tools/build_release.sh).
+
+### L-68 Fortree treehouse 'pillars' were cliff cells, not model strips
+Cause: Tiles 0x22C/0x22E/0x234/0x236 beside each hut door classify as kind=cliff, so the scene drew rock-band pillars next to the model; deleting the model's own post strips did not remove them (found with scene.debugRaw via a probe driver)
+Fix: Model flag flatten=true in BuildingVoxels.place turns claimed cliff cells into the model's flat shape; keepTrees=true keeps claimed tree cells (leaf-corner tiles) out of the bush-tree pass
+
+### L-69 Fortree palm crown must sit over the trunk and use its own bark
+Cause: The crown was centred on its own tile one cell north of the trunk (looked bent backwards) and the trunk sampled whole tile columns, which include the bush art beside the bark
+Fix: Gen3Fortree.palmCrown centres on the trunk cell and builds a 2px voxel shell; prism() uses trunk-tile columns 3-13 only, scaled to the trunk width
