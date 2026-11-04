@@ -155,7 +155,6 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `firefly_lighting` 20: Four tiny local sources, no shadow maps or additional render passes.
 - `fragment` 2312: 
   - setBase@26 roundHalfEven@44 roundTo@53 signed@71 unique@79 Frag:u8@95 Frag:s8@99 Frag:u16@105 Frag:s16@110 Frag:u32@117 Frag:s32@122 Frag:off@128 Frag:ptr@133 Frag:root@137 Frag:ptrList@152 open@163 newModel@176 Model:readTextureTable@223 Model:readTlutTable@235 Model:curBone@259 Model:build@265 Model:prescanBones@290 Model:walk@318 Model:nodeCallbackState@511 modelCombiner@542 Model:setRdpState@555 Model:applyNodeMaterial@572 Model:resetNodeMaterial@590 Model:runNodeDL@597 Model:primFor@624 band@684 bor@693 emit@702 Model:runDL@725 Model:tilePalette@825 decodeTileSampler@842 Model:tileSampler@856 Model:bakePhase5Geometry@876 Model:mergePrimitivesByCallback@931 bitfield@969 newAnim@991 Anim:chan@1006 Anim:transPacked@1014 Anim:rotPacked@1026 Anim:scalePacked@1033 Anim:hermite@1040 Anim:transKey@1069 Anim:rotKey@1075 Anim:scaleKey@1087 Anim:sampleTrs@1102 newAux@1134 Aux:sample@1148 Aux:track@1163 rgba5551@1170 decodeTexture@1177 compress@1263 dedupeFx@1275 stitchPolitoedTorsoBoundary@1307 inspectFxLayout@1336 inspectFx@1421 rdpColor@1449 rdpMaterial@1458 extract@1475 stageRoot@1860 extractStage@1884 crystal251Inside@1897 crystal251LooksLikeAnim@1902 crystal251RawAnimationOffsets@1955 crystal251DecodeOne@1978 crystal251DecodeOffsets@2025 crystal251DecodeModelAnimations@2041 inspect@2067 inspectAny@2083 extractAnimations@2112 extractAnimationsAny@2126 RawFrag:off@2147 RawFrag:ptr@2155 crystal251HexPrefix@2159 crystal251RawModes@2167 crystal251RawU32@2209 crystal251RawCandidates@2215 inspectRawAnimations@2257 extractRawAnimations@2282
-- `fragment26` 279: 
 - `fx` 197: 
 - `handler_registry` 105: Fragment 26 callback catalogue.  Keep this file declarative: extraction, cache codecs, runtime simulation and 
 - `importer` 493: 
@@ -165,7 +164,6 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `model_api` 405: 
 - `model_handlers` 704: 
   - byte@16 u16be@20 i16be@26 u32be@32 u16le@38 i16le@44 u32le@50 p16@56 p32@61 pi16@67 phaseMask@71 phasesFromMask@79 hasPhase@87 flagsFor@94 semanticBytes@113 renderBytes@124 readRenderBytes@168 decodeSemantic@236 info@251 family@255 compile@259 evaluate@307 resolvePointer@395 pointerWords@405 dynamicObjectGeometry@422 prepare@461 runExtension@500 koffingGasRenderState@508 koffingGasInitialize@512 run@516 packExtension@603 readExtension@635
-- `model_parity` 340: Semantic model-completeness checks shared by the ROM-wide parity audit and focused species investigations. The
 - `pack` 490: 
 - `palette` 290: 
 - `patch_scope` 48: Own direct engine replacements, including raw/inherited fields and sentinels. A later mod may wrap ours: retai

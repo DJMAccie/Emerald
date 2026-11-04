@@ -11,10 +11,6 @@ local RenderContract = {
 -- Later model primitives include coplanar texture decals such as eyes,
 -- pupils, shell markings and wing details. They rely on display-list order:
 -- equal depth must pass so the later authored layer remains visible.
-function RenderContract.supportsCoplanarDecals()
-  return RenderContract.MODEL_DEPTH_COMPARE == "less"
-    and RenderContract.DECAL_DEPTH_COMPARE == "lequal"
-end
 
 function RenderContract.depthState(prim, writeEnabled)
   -- Translucent arena art (including authored shadow cards) is composited

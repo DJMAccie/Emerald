@@ -24,12 +24,6 @@ local function archive(tag, relative, size, reserved1, reserved2)
 end
 
 ok(Layout.ASSET_START == 0x437610, "current decomp opaque tail boundary")
-ok(Layout.FRAGMENT26_ROM_START == 0x15E8B0, "fragment26 ROM start")
-ok(Layout.FRAGMENT26_ROM_END == 0x165C50, "fragment26 ROM end")
-ok(Layout.FRAGMENT26_VRAM == 0x81000000, "fragment26 VRAM base")
-ok(Layout.FRAGMENT26_TABLE_START == 0x81000020, "fragment26 table start")
-ok(Layout.FRAGMENT26_TABLE_END == 0x81000180, "fragment26 table end")
-ok(Layout.FRAGMENT26_CODE_START == 0x81000180, "fragment26 code start")
 ok(Layout.STADIUM_MODEL_TABLE_START == 0x1638000, "Stadium field model region start")
 ok(Layout.STADIUM_MODEL_TABLE_END == 0x1708000, "Stadium field model region end")
 ok(Layout.STADIUM_MODEL_TABLE_RECORDS == 30, "Stadium field model record count")

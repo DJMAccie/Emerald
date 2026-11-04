@@ -190,22 +190,6 @@ function Rom.archiveAt(data, offset)
   return { offset = offset, tag = tag, total = total, count = count, records = records }
 end
 
-function Rom.scanArchives(data, first, last, limit)
-  if type(data) ~= "string" then return {} end
-  first = math.max(0, tonumber(first) or 0)
-  last = math.min(#data - 0x10, tonumber(last) or (#data - 0x10))
-  limit = math.max(1, tonumber(limit) or 4096)
-  local out = {}
-  local offset = first - first % 0x10
-  if offset < first then offset = offset + 0x10 end
-  while offset <= last and #out < limit do
-    local archive = Rom.archiveAt(data, offset)
-    if archive then out[#out + 1] = archive end
-    offset = offset + 0x10
-  end
-  return out
-end
-
 function Rom.recordBytes(data, record)
   if not record then return nil end
   local first = record.start + 1

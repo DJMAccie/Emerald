@@ -119,14 +119,6 @@ function Dispatch.forSpecies(rom, species)
   return Dispatch.decodeRecord(payload)
 end
 
-function Dispatch.moveRows(rows)
-  local moves = {}
-  for moveId = 1, Dispatch.MOVE_COUNT do
-    moves[moveId] = rows and rows[moveId - 1] or nil
-  end
-  return moves
-end
-
 function Dispatch.moveNames(rom)
   if type(rom) ~= "string" then return nil, "Stadium 2 ROM bytes are required" end
   local names, cursor = {}, Dispatch.MOVE_NAMES_START + 1

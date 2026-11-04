@@ -86,17 +86,6 @@ local function rareVariation(data, species)
   local offset = Layout.SPECIES_META_START + (species - 1) * 0x10 + 4
   return Palette.decodeRare(data, offset)
 end
-local function md5(data)
-  local ok, value = pcall(function()
-    local digest = love.data.hash("md5", data)
-    if type(digest) == "userdata" and digest.getString then
-      digest = digest:getString()
-    end
-    return love.data.encode("string", "hex", digest)
-  end)
-  return ok and value or nil
-end
-
 
 local archiveAt = Rom.archiveAt
 
@@ -146,7 +135,6 @@ local function fragmentSpecies(data)
   if not info then return nil end
   return u16be(data, info.rootOffset), info
 end
-
 
 local function fallbackTexture(species)
   local palettes = palettePairForDex(species)
@@ -323,7 +311,6 @@ local function nextArchive(data, cursor)
   end
   return nil, #data + 1, true
 end
-
 
 local function recordBytes(container, record)
   if type(container) ~= "string" or not record or (record.size or 0) <= 0 then
@@ -1095,7 +1082,6 @@ local function newBuildJob(data, dependencies, writePack, writeSpecial, options)
   return job
 end
 
-
 function Extract.configure(options)
   options = type(options) == "table" and options or {}
   local requested = math.floor(tonumber(options.count) or Extract.COUNT)
@@ -1134,25 +1120,9 @@ end
 -- Read the authored pose bundle without running the cache-writing build job.
 -- Audits and inspection tools need the same nested-archive traversal as the
 -- importer so model completeness includes skeletal/auxiliary animation data.
-function Extract.animationBankForSpecies(data, species, bones)
-  species = math.floor(tonumber(species) or 0)
-  local archive = archiveAt(data, POSE_TABLE_START)
-  local record = archive and archive.records and archive.records[species + 1]
-  if not record then return nil, nil, { "missing pose-table record" } end
-  local label = ("pose-table=0x%X species=%d file=%d")
-    :format(POSE_TABLE_START, species, species)
-  local dependencies = { StadiumRom = Rom }
-  local sources, errors, stats = poseSourcesForRecord(data, record, dependencies, label)
-  local anims, aux, decodeErrors = decodeAnimationSources(data, sources, bones or {}, dependencies)
-  for _, value in ipairs(decodeErrors or {}) do errors[#errors + 1] = value end
-  return anims, aux, errors, stats
-end
 
 -- Audit/inspection entry point for recreating the same contiguous model+pose
 -- memory image used by the importer and by the original game.
-function Extract.runtimeFragmentForSpecies(data, species, decoded)
-  return runtimeModelFragment(decoded), {}, nil
-end
 
 Extract.runtimeModelFragment = runtimeModelFragment
 

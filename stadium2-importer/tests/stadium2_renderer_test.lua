@@ -12,8 +12,6 @@ local function ok(value, message)
   if not value then error("FAIL " .. message, 0) end
 end
 
-ok(RenderContract.supportsCoplanarDecals(),
-  "model depth contract preserves later coplanar eye and face layers")
 ok(math.abs(Renderer.PINECO_DECAL_DEPTH_BIAS - 4/65535) < 0.000000001,
   "Pineco uses a minimal decal bias that cannot pull eyes through its shell")
 ok(Renderer.ARENA_COPLANAR_DEPTH_BIAS == 32/65535,
@@ -700,14 +698,6 @@ ok(billboardUniforms.billboardCenter[1] == 0
     and billboardUniforms.billboardUp[2] == 1,
   "shared flame object derives camera-facing axes from the view transform")
 
-local gastlyModel=Renderer.modelMatrix(math.pi/2,0,2,0,0,0,false)
-local gastlyAxes=Renderer.cameraFacingAxes(Renderer.identity(),gastlyModel)
-local gastlyGeometry=Renderer.koffingGasGeometryState(
-  {absolute=true,x=0,y=0,z=0,sx=20,sy=20,sz=20}, {0,0,0}, nil,32,32,
-  gastlyAxes)
-local left,right=gastlyGeometry.vertices[1],gastlyGeometry.vertices[2]
-ok(math.abs(left[3]-right[3])>199.999 and math.abs(left[1]-right[1])<0.000001,
-  "Gastly gas rotates into model-local camera axes instead of turning edge-on")
 local normalRuntime=Renderer.dynamicObjectRuntime({species=92,variant="normal"},{})
 local shinyRuntime=Renderer.dynamicObjectRuntime({species=92,variant="shiny"},{})
 ok(normalRuntime.dynamicObjectGastlyAlternate==false

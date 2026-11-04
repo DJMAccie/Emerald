@@ -163,18 +163,6 @@ function Instance:play(value, loop, auxIndex)
   return self._renderer:setAnimation(value, loop, auxIndex)
 end
 
-function Instance:playContext(name, loop)
-  local ok, err = live(self)
-  if not ok then return false, err end
-  return self._renderer:setContext(name, loop)
-end
-
-function Instance:playAnimation(value, loop, auxIndex)
-  local ok, err = live(self)
-  if not ok then return false, err end
-  return self._renderer:setAnimation(value, loop, auxIndex)
-end
-
 function Instance:playMove(move, loop)
   local ok, err = live(self)
   if not ok then return false, err end
@@ -207,19 +195,6 @@ function Instance:update(dt, runtime)
     self._renderer:setHandlerRuntime(runtime, true)
   end
   return self._renderer:step(dt)
-end
-
-function Instance:animationState()
-  local ok, err = live(self)
-  if not ok then return nil, err end
-  local renderer = self._renderer
-  return {
-    index = renderer.animIndex,
-    frame = renderer.frame,
-    time = renderer.time,
-    loop = renderer.loop,
-    finished = renderer.finished == true,
-  }
 end
 
 function Instance:isFinished()
@@ -383,19 +358,6 @@ function ModelApi.new(importer)
     local instance, rendererErr = instanceFromModel(importer, model, options, true)
     if not instance then importer.releaseModel(model) end
     return instance, rendererErr
-  end
-
-  function api.newSpecialInstance(name, options)
-    local model, err = importer.createSpecialModel(name)
-    if not model then return nil, err end
-    local instance, rendererErr = instanceFromModel(importer, model, options, true)
-    if not instance then importer.releaseModel(model) end
-    return instance, rendererErr
-  end
-
-  function api.newInstanceFromModel(model, options)
-    return instanceFromModel(importer, model, options,
-      type(options) == "table" and options.takeOwnership == true)
   end
 
   return api

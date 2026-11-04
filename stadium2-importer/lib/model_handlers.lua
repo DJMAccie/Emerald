@@ -392,16 +392,6 @@ function Handlers.evaluate(record, phase, runtime)
   return result
 end
 
-function Handlers.resolvePointer(extension, pointer, length)
-  if type(extension) ~= "table" or type(extension.fragment) ~= "string" then return nil end
-  pointer = tonumber(pointer)
-  length = math.max(0, math.floor(tonumber(length) or 1))
-  if not pointer then return nil end
-  local offset = pointer - (tonumber(extension.sourceBase) or 0x8FF00000)
-  if offset < 0 or offset + length > #extension.fragment then return nil end
-  return extension.fragment:sub(offset + 1, offset + length), offset
-end
-
 local function pointerWords(extension, offset, bytes)
   local out, seen = {}, {}
   local data = extension and extension.fragment
@@ -417,7 +407,6 @@ local function pointerWords(extension, offset, bytes)
   end
   return out
 end
-
 
 local function dynamicObjectGeometry(extension, record)
   local data = extension and extension.fragment
@@ -503,14 +492,6 @@ function Handlers.runExtension(extension, phase, runtime, state)
   for key, value in pairs(type(runtime) == "table" and runtime or {}) do values[key] = value end
   values.extension = extension
   return Handlers.run(extension.records, phase, values, state)
-end
-
-function Handlers.koffingGasRenderState(age)
-  return DynamicObject.koffingRenderState(age)
-end
-
-function Handlers.koffingGasInitialize(origin, reference, speed)
-  return DynamicObject.koffingInitialize(origin, reference, speed)
 end
 
 function Handlers.run(records, phase, runtime, state)

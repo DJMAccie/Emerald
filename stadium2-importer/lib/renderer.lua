@@ -1127,12 +1127,6 @@ end
 -- CPU reference for the shader's sample3 (RDP 3-point filter) at texel
 -- fraction (fx, fy): t00 at the base texel, t10 one right, t01 one down,
 -- t11 diagonal.
-function Renderer.threePoint(t00, t10, t01, t11, fx, fy)
-  if fx + fy < 1 then
-    return t00 * (1 - fx - fy) + t10 * fx + t01 * fy
-  end
-  return t11 * (fx + fy - 1) + t01 * (1 - fx) + t10 * (1 - fy)
-end
 
 function Renderer.smoothSampled(model)
   return type(model) == "table" and model.staticPose == true
@@ -2234,16 +2228,6 @@ end
 
 -- Draw into the caller's currently-bound color/depth target. The battle scene
 -- uses this path so every actor shares the same camera and depth buffer.
-function Renderer.koffingGasGeometryState(particle, anchor, sourceGeometry, textureWidth, textureHeight, axes)
-  return EffectRenderer.billboardGeometry(particle, anchor, sourceGeometry,
-    textureWidth, textureHeight, axes)
-end
-
-function Renderer.koffingGasMaterialState(age)
-  local state = assert(EffectRenderer.materialState(109, age))
-  state.gasMode = state.effectIntensityMode
-  return state
-end
 
 local function dynamicObjectRecord(model, site)
   local records = model and model.handlers and model.handlers.records

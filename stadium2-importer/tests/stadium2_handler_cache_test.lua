@@ -80,10 +80,6 @@ ok(decoded.records[3].sourcePointers[1] == 0x8FF00100, "roundtrip wrapper pointe
 ok(decoded.records[4].noRender == true, "roundtrip no-render flag")
 ok(decoded.records[1].boneId == 12 and decoded.records[1].commandOffset == 0x88,
   "v4 preserves physical callback identity")
-local resolvedBytes, resolvedOffset = Handlers.resolvePointer(decoded, 0x8FF00040, 6)
-ok(resolvedBytes == fragment:sub(0x41, 0x46), "cached fragment pointer resolution")
-ok(resolvedOffset == 0x40, "cached fragment pointer offset")
-ok(Handlers.resolvePointer(decoded, 0x8FEFFFFF, 1) == nil, "cached fragment rejects low pointer")
 ok(Handlers.readExtension("DSM3old-pack") == nil, "old pack has no handler extension")
 
 local moveRows = {}

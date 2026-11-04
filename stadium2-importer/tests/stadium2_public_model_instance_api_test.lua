@@ -103,10 +103,8 @@ local renderer=assert(actor:renderer())
 ok(model.species==25 and model.variant=="shiny","instance owns requested model")
 ok(renderer.options.textureFilter=="nearest","renderer options forwarded")
 ok(actor:play("idle",true) and renderer.context=="idle","context animation helper")
-ok(actor:playContext("idle",true),"explicit context animation helper")
 ok(actor:play(4,false,7) and renderer.animation==4 and renderer.aux==7,
   "indexed animation helper")
-ok(actor:playAnimation("named",true),"explicit raw animation helper")
 ok(actor:playMove(85,true) and renderer.move==85,"move animation helper")
 ok(actor:playMove(251,true) and renderer.move==251,
   "move animation helper covers the complete Stadium 2 move table")
@@ -118,9 +116,6 @@ ok(actor:seekFrame(12) and renderer.frame==12,"frame seek helper")
 ok(actor:update(0.25,{weather="rain"}) and renderer.runtime.weather=="rain"
   and renderer.defer,"animation update and handler runtime")
 
-local state=assert(actor:animationState())
-ok(state.index==2 and state.frame==12 and state.finished==false,
-  "stable animation state")
 ok(actor:isFinished()==false,"animation completion helper")
 local metrics=assert(actor:metrics())
 metrics.bounds.minX=99
@@ -155,16 +150,5 @@ ok(pushes==2 and pops==2,"shadow draw restores graphics state")
 ok(actor:release() and model.released,"owned instance releases model")
 ok(rendererReleases==1 and modelReleases==1,"owned lifecycle releases both resources")
 ok(not actor:release() and actor:model()==nil,"released instance rejects reuse")
-
-local external={id="external"}
-local borrowed=assert(Models.newInstanceFromModel(external,{takeOwnership=false}))
-ok(borrowed:release() and not external.released,"external model remains caller-owned")
-local transferred={id="transferred"}
-local owned=assert(Models.newInstanceFromModel(transferred,{takeOwnership=true}))
-ok(owned:release() and transferred.released,"model ownership may be transferred")
-
-local special=assert(Models.newSpecialInstance("substitute"))
-ok(special:model().special=="substitute" and special:release(),
-  "special models use the same owned lifecycle")
 
 print(("%d checks passed (Stadium 2 public model instance API)"):format(checks))

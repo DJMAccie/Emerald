@@ -37,18 +37,6 @@ end
 
 -- CPU oracle for the shader's N64 coordinate folding. This is also useful to
 -- callers that need to preview the exact tile addressing without a GPU.
-function Sampler.foldCoordinate(value, mode)
-  value = tonumber(value) or 0
-  if mode == "repeat" then return value - floor(value) end
-  if mode == "mirroredrepeat" then
-    local mirrored = value - floor(value / 2) * 2
-    return mirrored <= 1 and mirrored or 2 - mirrored
-  end
-  if mode == "mirrorclamp" then
-    return math.max(0, math.min(1, 1 - math.abs(value - 1)))
-  end
-  return math.max(0, math.min(1, value))
-end
 
 -- Scrolling callback materials can accumulate tile origins over time. The
 -- visible result is periodic for repeat/mirrored-repeat, so reduce the offset
