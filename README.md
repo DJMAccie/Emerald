@@ -3,7 +3,7 @@
 Pokémon Emerald, rebuilt as a 3D voxel world. A mod for gen1recomp (the Gen 1-3 native recompilation engine).
 You walk the same Hoenn, but the maps stand up in three dimensions, with a camera you can turn.
 
-**Status: alpha 0.1.0.** The overworld is the finished part. Battles with 3D Stadium 2 models are still being built.
+**Status: alpha 0.1.0.** Nearly the whole of Hoenn is voxelized, 3D battles work, and a few small things are left.
 Project page: <https://petyabouianov.com/emerald-voxel>
 
 ## What it does
@@ -15,7 +15,7 @@ Project page: <https://petyabouianov.com/emerald-voxel>
 - **Day and night.** The sky follows your computer's clock: sun, moon, and street lamps that come on after dark.
 - **Cinematic Fly.** HM Fly lifts into an aerial camera over the whole region.
 - **No border flash.** Neighbouring maps are built before you reach the edge.
-- **3D battles (unfinished).** Stadium 2 models for #1-251 are imported from your own ROM; the Colosseum set (#252-386) is in progress.
+- **3D battles.** Stadium 2 models (#1-251) and Colosseum models (#252-386) are imported from your own ROM and disc and used in battle.
 
 ## What is in the download
 
@@ -42,7 +42,7 @@ This is an independent fan project, not affiliated with Nintendo, Game Freak or 
 ## Known rough edges (alpha)
 
 - Not every map has been looked at from every angle; expect odd edges on some cliffs, coasts and caves.
-- 3D battles are unfinished, so the 2D Emerald battle still runs for anything without a model.
+- A few Pokémon models have small faults (for example Charmander's flame, Pineco's eye, Ponyta's colours).
 - The first visit to a new region can stutter for a moment while layouts load.
 - Tested on macOS only so far.
 
