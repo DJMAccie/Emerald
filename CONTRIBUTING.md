@@ -32,4 +32,4 @@ Never commit ROMs, ROM-derived files (atlases, `.rgba`, caches) or screenshots o
 
 ## Licence
 
-No licence has been chosen yet. Until one is added, please open an issue before sending a large change.
+By sending a change you agree that it is released under the project's [MIT licence](LICENSE).

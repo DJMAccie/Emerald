@@ -46,10 +46,13 @@ This is an independent fan project, not affiliated with Nintendo, Game Freak or 
 - The first visit to a new region can stutter for a moment while layouts load.
 - Tested on macOS only so far.
 
-## Credits
+## Credits and licence
 
-Built on the Pokémon Gen 1 Recompilation Project by BOIS CLUB GAMES, LLC. See `mod/THIRD_PARTY_NOTICES.md` and
-`overworld-wild-spawns/THIRD_PARTY_ASSETS.md` for everything else. Licence: not chosen yet.
+Based on the Pokemon Gen 1 Recompilation Project by BOIS CLUB GAMES, LLC (https://github.com/bryanthaboi/gen1recomp).
+
+The code in this repository is released under the [MIT licence](LICENSE). The sprites that `overworld-wild-spawns` takes from
+PMDCollab SpriteCollab stay under their own CC BY-NC 4.0 terms (non-commercial, attribution required). Other third-party notes are in
+`mod/THIRD_PARTY_NOTICES.md` and `overworld-wild-spawns/THIRD_PARTY_ASSETS.md`.
 
 ## Repository layout
 
