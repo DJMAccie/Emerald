@@ -116,3 +116,7 @@ Rules: R-48
 Cause: Petya plays with tour=true and camera 7; QA ran without tour at level 4, so 2D flashes and missing neighbour maps did not show.
 Fix: reproduce with EM_TOUR=1 and level 7 (em_views_driver, em_cross_driver); read modOptions in his options.lua.
 Rules: R-23
+
+### L-66 A mod folder must not use assets/generated
+Cause: assets/generated is where the engine keeps the player's ROM-derived cache; modkit lint MK301 (and the community mod index CI) fail any mod shipping files there, and any lib file naming that path.
+Fix: Ship art under another folder such as assets/water_runtime and run: python3 gen1recomp/tools/modkit.py lint <mod folder> and validate <mod folder> --strict for all three mods.
