@@ -26,7 +26,7 @@ return function(game)
  U.wait(90)
  local exports=game.mods and game.mods.exports or {}
  local export=exports.emerald_3d_voxel_mod
- print('[EM QA] battle art export:',export and 'yes' or 'NO')
+ print('[EM QA] battle exports:',export and 'yes' or 'NO')
  local ns=export and (export.gen3 or export.firered)
  local C=ns and ns.camera
  print('[EM QA] gen3 camera:',C and 'yes' or 'NO')

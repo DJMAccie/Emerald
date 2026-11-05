@@ -1,5 +1,5 @@
 -- All generations publish the same keys. Only the Gen3 overworld art default
--- changes; battle art is never selected or modified here.
+-- changes; the battle scene is never selected or modified here.
 return function(mod)
  local schema=assert((loadstring or load)(assert(mod:read("wilds/options.lua")),'@wilds/options'))()
  for _,row in ipairs(schema)do

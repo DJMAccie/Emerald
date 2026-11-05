@@ -31,8 +31,8 @@ ok(Extract.UNOWN_EXTRA_FORMS==25 and Extract.UNOWN_FORM_FIRST==254
   and Extract.UNOWN_FORM_LAST==278,"extractor includes Unown B through Z records")
 ok(Extract.unownLetter(254)=="B" and Extract.unownLetter(278)=="Z",
   "Stadium 2 extra records map to the complete Unown alphabet")
-ok(Cache.unownPath("B","normal")=="stadium2_importer/battle/unown_b.dsm"
-  and Cache.unownPath("Z","shiny")=="stadium2_importer/battle/unown_z_shiny.dsm",
+ok(Cache.unownPath("B","normal")=="models/battle/unown_b.dsm"
+  and Cache.unownPath("Z","shiny")=="models/battle/unown_z_shiny.dsm",
   "normal and shiny Unown form packs have stable cache paths")
 ok(Cache.FORMAT=="S2IMP63",
   "ROM clip mapping, callback ownership and generated alpha invalidate older caches")

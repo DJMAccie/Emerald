@@ -8,8 +8,15 @@ E="$(cd "$(dirname "$0")/.." && pwd)"
 AS="$HOME/Library/Application Support"
 TARGETS=("$AS/pokemon-love2d" "$AS/pokemon-love2d-rseqa")
 ID="emerald_3d_voxel_mod"
-# De oude losse mappen zijn opgegaan in de ene mod; hun ROM's en Colosseum-modellen verhuizen mee.
-LEGACY=("BATTLE_ART_VOXEL_FORK" "STADIUM2_IMPORTER" "overworld_wild_spawns")
+# Deze mod heette eerder anders en zat in losse mappen; alles wat nog naar deze repo wijst
+# (manifest github) verhuist mee, een map van een andere mod blijft staan.
+LEGACY_RE='"github"[[:space:]]*:[[:space:]]*"DJMAccie/(Emerald|pokemon-emerald-3d-voxel-mod)"'
+legacy(){ for d in "$1"/mods/*/; do
+  [ -d "$d" ] || continue
+  if [ "$(basename "$d")" = "$ID" ]; then continue; fi
+  grep -Eq "$LEGACY_RE" "$d/manifest.json" 2>/dev/null || continue
+  printf "%s\n" "$d"
+done; }
 # baseroms/ en colosseum/ zijn lokale ROM-gegevens in de spelmap: nooit kopieren of wissen.
 OPTS=(-a --delete --exclude .gitignore --exclude .modkitignore --exclude /docs --exclude /tests --exclude /tools
       --exclude /baseroms --exclude /colosseum --exclude __pycache__ --exclude .DS_Store
@@ -26,13 +33,12 @@ fi
 if pgrep -f "MacOS/love" >/dev/null; then echo "Het spel (of een testrun) draait: sluit het eerst."; exit 1; fi
 for t in "${TARGETS[@]}"; do
   mkdir -p "$t/mods/$ID"
-  for old in "${LEGACY[@]}"; do
-    [ -d "$t/mods/$old" ] || continue
+  legacy "$t" | while IFS= read -r old; do
     for keep in baseroms colosseum; do
-      [ -d "$t/mods/$old/$keep" ] && [ ! -d "$t/mods/$ID/$keep" ] && mv "$t/mods/$old/$keep" "$t/mods/$ID/$keep"
+      if [ -d "$old/$keep" ] && [ ! -d "$t/mods/$ID/$keep" ]; then mv "$old/$keep" "$t/mods/$ID/$keep"; fi
     done
-    rm -rf "$t/mods/$old"
-    echo "weg: $(basename "$t")/mods/$old (zit nu in $ID)"
+    rm -rf "$old"
+    echo "weg: $(basename "$t")/mods/$(basename "$old") (zit nu in $ID)"
   done
   rsync "${OPTS[@]}" "$E/mod/" "$t/mods/$ID/"
 done

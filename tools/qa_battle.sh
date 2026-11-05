@@ -44,7 +44,7 @@ EM_BATTLE_FRAMES=$FRAMES EM_PLAYER_SPECIES=$PLAYER EM_FOE_SPECIES=$FOE \
   POKEPORT_IDENTITY=pokemon-love2d-rseqa POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   /Applications/gen1recomp.app/Contents/MacOS/love . > "$OUT/run.log" 2>&1 &
 G=$!
-for _ in $(seq 1 90); do grep -q "loaded mod BATTLE_ART\|\[BT\] startWild\|\[CAM\] startWild" "$OUT/run.log" 2>/dev/null && break; kill -0 $G 2>/dev/null || break; sleep 1; done
+for _ in $(seq 1 90); do grep -q "loaded mod emerald_3d_voxel_mod\|\[BT\] startWild\|\[CAM\] startWild" "$OUT/run.log" 2>/dev/null && break; kill -0 $G 2>/dev/null || break; sleep 1; done
 rmdir /tmp/emerald-qa.setup
 for _ in $(seq 1 $LIMIT); do kill -0 $G 2>/dev/null || break; sleep 1; done
 if kill -0 $G 2>/dev/null; then kill $G; sleep 2; kill -9 $G 2>/dev/null; echo "WATCHDOG: stopped after ${LIMIT}s" >> "$OUT/run.log"; fi

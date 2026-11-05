@@ -11,7 +11,7 @@ local Cache = {}
 -- S2IMP62: null callback nodes preserve local atlases; slime uses generated alpha.
 -- S2IMP63: raw pose headers read with file offsets first (static clips valid).
 Cache.FORMAT = "S2IMP63"
-Cache.ROOT = "stadium2_importer"
+Cache.ROOT = "models"
 Cache.NORMAL = Cache.ROOT .. "/normal"
 Cache.SHINY = Cache.ROOT .. "/shiny"
 Cache.BATTLE = Cache.ROOT .. "/battle"
