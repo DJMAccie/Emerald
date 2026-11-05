@@ -13,7 +13,7 @@ OUT="$(cd "$(dirname "$OUT")" && pwd)/$(basename "$OUT")"
 W="$(mktemp -d)"; trap 'rm -r "$W"' EXIT
 mkdir -p "$W/$ID"
 git -C "$E" archive HEAD mod | tar -x -C "$W/$ID" --strip-components=1 \
-  --exclude='tests' --exclude='tools' --exclude='.gitignore' --exclude='.modkitignore' --exclude='docs/[!l]*'
+  --exclude='tests' --exclude='tools' --exclude='.gitignore' --exclude='.modkitignore'
 find "$W/$ID" -name '*.md' ! -name 'THIRD_PARTY_NOTICES.md' ! -name 'NOTICE.md' ! -name 'README.md' -delete
 # mod/.gitignore keeps these two out of git; without them Fly has no sheets and no world fill.
 rsync -a --exclude __pycache__ --exclude .DS_Store "$E/mod/assets/" "$W/$ID/assets/"
