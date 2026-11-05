@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Convert Pokemon Colosseum PKX models (via the addon's Blender-free IR) into
-Stadium 2 importer DSM5 packs, so the importer's own renderer/animation player
-draws Hoenn Pokemon in gen1recomp battles. Used by make_hoenn_models.py.
+DSM5 packs for the Stadium 2 model format, so this mod's own renderer and
+animation player draw Hoenn Pokemon in gen1recomp battles. Used by make_hoenn_models.py.
 
 Conventions (verified against lib/pack.lua, build.lua, renderer.lua):
   * bone/vertex units: GameCube units x100 as int16, rootScale = S/100 where S

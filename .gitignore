@@ -15,7 +15,7 @@ __pycache__/
 *.iso
 *.rvz
 *.love
-# vrije Kenney-textures die de Stadium 2-importer nodig heeft (CC0, geen spelbeelden)
+# vrije Kenney-textures die de 3D-battlemodellen nodig hebben (CC0, geen spelbeelden)
 !/mod/models/assets/kenney_*/*.png
 
 # screenshots die Petya stuurt (spelbeelden)

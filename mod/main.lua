@@ -1,4 +1,4 @@
--- EMERALD 3D VOXEL MOD
+-- Emerald 3D Voxel Mod
 local mod = ...
 
 local V = { mod = mod, path = mod.path }

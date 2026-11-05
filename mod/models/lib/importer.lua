@@ -34,7 +34,7 @@ local function fail(stage, reason)
   status.error = tostring(reason or "unknown error")
   Cache.writeError(("Stage: %s\nReason: %s"):format(stage, status.error))
   if modRef and modRef.log then
-    pcall(function() modRef.log:error("stadium2 importer: %s: %s", stage, status.error) end)
+    pcall(function() modRef.log:error("battle models: %s: %s", stage, status.error) end)
   end
   job = nil
   return false, status.error
@@ -433,7 +433,7 @@ function Importer.step()
     setReady()
     if modRef and modRef.log then
       pcall(function()
-        modRef.log:info("stadium2 importer: built %d/%d species, %d Unown forms, Substitute; animation species=%d",
+        modRef.log:info("battle models: built %d/%d species, %d Unown forms, Substitute; animation species=%d",
           active.builtCount or 0,configuredCount,(active.unownBuilt or 0)+1,
           active.animatedBuilt or 0)
       end)
@@ -446,16 +446,16 @@ end
 function Importer.row()
   return {
     id = "emerald_3d_voxel_mod:rom",
-    stadium2Importer = true,
-    label = "STADIUM 2 ROM",
+    battleModelsRow = true,
+    label = "Stadium 2 ROM",
     value = function()
       if status.state == "building" then
         return ("%d/%d"):format(status.done or 0, status.total or configuredCount)
       end
-      if status.state == "picking" then return "PICKING" end
-      if Importer.available() then return "READY" end
-      if status.state == "failed" then return "FAILED" end
-      return "IMPORT"
+      if status.state == "picking" then return "Picking" end
+      if Importer.available() then return "Ready" end
+      if status.state == "failed" then return "Failed" end
+      return "Import"
     end,
     -- This row opens a screen/activity; it is an action, not a value that
     -- should cycle on Left/Right. Both Gen 1 and Gen 2 option menus give
@@ -463,7 +463,7 @@ function Importer.row()
     activate = function()
       if status.state == "building" or status.state == "picking" then return true end
       -- This is the one intentional destructive path: the player explicitly
-      -- selected STADIUM 2 ROM from Options while a valid cache may exist.
+      -- selected Stadium 2 ROM from Options while a valid cache may exist.
       Importer.reimport()
       return true
     end,
@@ -473,7 +473,7 @@ end
 function Importer.appendRow(rows)
   if type(rows) ~= "table" then return rows end
   for _, row in ipairs(rows) do
-    if type(row) == "table" and row.stadium2Importer then return rows end
+    if type(row) == "table" and row.battleModelsRow then return rows end
   end
   rows[#rows + 1] = Importer.row()
   return rows

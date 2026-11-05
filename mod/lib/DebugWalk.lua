@@ -1,4 +1,4 @@
--- DEBUG WALK
+-- Debug walk
 local V=...
 local M={}
 

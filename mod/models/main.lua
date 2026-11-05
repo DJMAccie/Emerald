@@ -27,12 +27,12 @@ return function(mod)
   local Models = ModelApi.new(Importer)
 
   mod.options:define({
-    { key="stadium2_models", label="3D POKEMON MODELS", type="toggle", default=true },
-    { key="stadium2_battle", label="3D BATTLE SCENE", type="toggle", default=true },
-    { key="stadium2_shader", label="SHADER STYLE", type="choice", default="stadium",
-      choices={{"STADIUM","stadium"},{"WATERCOLOR MANGA","cel"}},
+    { key="stadium2_models", label="3D Pokemon Models", type="toggle", default=true },
+    { key="stadium2_battle", label="3D Battle Scene", type="toggle", default=true },
+    { key="stadium2_shader", label="Shader Style", type="choice", default="stadium",
+      choices={{"Stadium","stadium"},{"Watercolor Manga","cel"}},
       help="Stadium shading or watercolor manga for the 3D Pokemon." },
-    { key="stadium2_rapidash_cut_fx", label="RAPIDASH CUT PARTICLES", type="toggle", default=true,
+    { key="stadium2_rapidash_cut_fx", label="Rapidash Cut Particles", type="toggle", default=true,
       help="Restore Rapidash's disconnected prototype particle callback." },
   })
 
@@ -67,7 +67,7 @@ return function(mod)
             tostring(ctx.gameVersion or "?"), tostring(ctx.playthroughId or "?"))
         end)
       end
-      -- Missing/stale/incomplete rebuilds; a storage error becomes FAILED and never rebuilds.
+      -- Missing/stale/incomplete rebuilds; a storage error becomes Failed and never rebuilds.
       if cache.state ~= "valid" then Importer.autoImport() end
     end
     Importer.step()

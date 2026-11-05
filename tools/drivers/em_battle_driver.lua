@@ -1,5 +1,5 @@
 -- Boot Emerald in the QA identity, give the player a Gen 1 starter, wait for
--- the Stadium 2 importer, start a wild battle against a Gen 1 species and
+-- the battle models, start a wild battle against a Gen 1 species and
 -- capture frames through the intro and the fight menu.
 return function(game)
  local U=dofile('tests/drivers/util.lua')
