@@ -1,4 +1,4 @@
--- Pixel-voxel furniture recipes, second author: add() argument lists (see lib/Gen3PixelFurnitureB.lua)
+-- Pixel-voxel furniture recipes, second author: add() argument lists (see lib/Gen3PixelFurniture.lua)
 return {
 {"em_school_desk_20C","pokemon_school",{{524},{532}},{{0,16,9,7,true},{3,13,19,4,false,13}},{513},{{0,17},{2,18}},7},
 {"em_school_desk_20D","pokemon_school",{{525},{533}},{{0,16,9,7,true},{3,13,19,4,false,13}},{513},{{0,17},{2,18}},7},

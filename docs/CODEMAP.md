@@ -60,8 +60,7 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `Gen3Market` 56: Slateport's merchandise: round baskets, with the original rim and contents on top.
 - `Gen3ObliqueWall` 386: Interior walls drawn obliquely as blocks
 - `Gen3Partition` 72: Interior partition walls drawn from above
-- `Gen3PixelFurniture` 408: Pixel-voxel furniture
-- `Gen3PixelFurnitureB` 53: Pixel-voxel furniture recipes, second author
+- `Gen3PixelFurniture` 454: Pixel-voxel furniture
 - `Gen3Planter` 295: Battle Frontier flower planters
 - `Gen3RoofDetails` 114: Building-specific roof treatment
 - `Gen3VoxelBuildings` 227: Emerald buildings as pixel voxels
