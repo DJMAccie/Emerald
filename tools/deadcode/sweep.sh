@@ -1,6 +1,6 @@
 #!/bin/bash
 # coverage sweep: all runs in parallel; qa_tryp.sh limits itself to 4 games
-cd ~/Documents/Emerald
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 P=${PROBE:-/tmp/deadscan/probe}; O=${OUTROOT:-/tmp/deadscan/cov}
 FILES=$(cat /tmp/deadscan/files.txt)
 mkdir -p $O; rm -f $O/DONE

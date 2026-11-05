@@ -4,9 +4,10 @@
 import sys,os,glob,re,collections,json
 sys.path.insert(0,os.path.dirname(__file__))
 import lualex
+TOOLS=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..'))
 ROOT=sys.argv[1]
 files=sorted(f for f in glob.glob(ROOT+'/lib/*.lua') if 'ReliefData' not in f)+[ROOT+'/main.lua']
-users=[p for r in ('/Users/user/Documents/Emerald/tools/drivers','/Users/user/Documents/Emerald/tools/deadcode','/Users/user/Documents/Emerald/tools/qa_cases','/Users/user/Documents/Emerald/tools')
+users=[p for r in (TOOLS+'/drivers',TOOLS+'/deadcode',TOOLS+'/qa_cases',TOOLS)
        for p in glob.glob(r+'/*.lua')]
 OPEN={'function','do','if','repeat'};CLOSE={'end','until'}
 class F: pass
@@ -115,7 +116,7 @@ for p in files:
             v=lualex.strval(t)
             if re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*',v): IDX[v].append((p,k))
 uname=set()
-for p in glob.glob('/Users/user/Documents/Emerald/gen1recomp/**/*.lua',recursive=True):   # engine calls table fields by name (menu rows: activate)
+for p in glob.glob(os.path.join(TOOLS,'..','gen1recomp','**','*.lua'),recursive=True):   # engine calls table fields by name (menu rows: activate)
     if '/mods/' not in p:
         for m in re.finditer(r'[A-Za-z_][A-Za-z0-9_]*',open(p,encoding='utf-8',errors='replace').read()): uname.add(m.group(0))
 for p in users:

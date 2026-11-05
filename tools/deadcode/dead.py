@@ -1,6 +1,7 @@
 import sys,os,glob,re,collections,json
 sys.path.insert(0,os.path.dirname(__file__))
 import lualex
+TOOLS=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..'))
 ROOT=sys.argv[1]; ENGINE=sys.argv[2] if len(sys.argv)>2 else None
 files=sorted(f for f in glob.glob(ROOT+'/lib/*.lua') if 'ReliefData' not in f)+[ROOT+'/main.lua']
 OPEN={'function','do','if','repeat'};CLOSE={'end','until'}
@@ -38,7 +39,7 @@ def parse(path):
     return s,toks,funcs
 data={p:parse(p) for p in files}
 eng=set()
-EXTRA=['/Users/user/Documents/Emerald/tools']
+EXTRA=[TOOLS]
 for root in EXTRA:
     for p in glob.glob(root+'/**/*',recursive=True):
         if p.endswith(('.lua','.sh','.py')):

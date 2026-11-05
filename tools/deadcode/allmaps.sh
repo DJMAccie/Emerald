@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/Documents/Emerald
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 P=${PROBE:-/tmp/deadscan/probe}; O=${OUTROOT:-/tmp/deadscan/covmaps}
 FILES=$(cat /tmp/deadscan/files.txt); mkdir -p $O; rm -f $O/DONE
 export QA_SRC=$P QA_LIMIT=400

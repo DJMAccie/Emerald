@@ -1,6 +1,6 @@
 #!/bin/bash
 # jobs.sh: every coverage/QA job, at most 3 at a time (more waiting qa_tryp runs drop out)
-cd ~/Documents/Emerald
+cd "$(cd "$(dirname "$0")/../.." && pwd)"
 export FILES=$(cat ${FILESF:-/tmp/deadscan/files.txt}) QA_SRC=${PROBE:-/tmp/deadscan/probe} QA_LIMIT=400 R=${R:-/tmp/deadscan/run}
 mkdir -p $R
 one(){ n=$1; o=$R/$n; F=$PWD/tools/drivers/em_battle_driver.lua; Y=$PWD/tools/drivers/em_fly_driver.lua
