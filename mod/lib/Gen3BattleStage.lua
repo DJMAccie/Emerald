@@ -134,13 +134,13 @@ function M.choose(spec)
   local ok,info=test(cx,cz,h)
   if ok then
    if spec.log then
-    print(string.format('[Battle Art] stage candidate %d of %d: rot %d deg, shift %d,%d cells, centre %.0f,%.0f, dist %.0f',
+    print(string.format('[emerald 3d] stage candidate %d of %d: rot %d deg, shift %d,%d cells, centre %.0f,%.0f, dist %.0f',
      i,#cands,math.floor(math.deg(c.rot or 0)+.5),c.dx or 0,c.dy or 0,cx,cz,info))
    end
    return {center={cx,cz},yaw=h,dist=info,rot=c.rot or 0,dx=c.dx or 0,dy=c.dy or 0,index=i}
   end
   if spec.log then
-   print(string.format('[Battle Art] stage candidate %d rejected: rot %d deg, shift %d,%d: %s',
+   print(string.format('[emerald 3d] stage candidate %d rejected: rot %d deg, shift %d,%d: %s',
     i,math.floor(math.deg(c.rot or 0)+.5),c.dx or 0,c.dy or 0,tostring(info)))
   end
  end

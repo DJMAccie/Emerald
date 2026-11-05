@@ -278,7 +278,7 @@ function M.install()
    local pick=V.require('Gen3BattleStage').choose({center=center,yaw=yaw,
     anchor={px*16+8,py*16+8},height=M.CAM.height,view=stageView,actors=actorsOf,fit=M.fit,
     log=M.log})
-   if pick.none then print('[Battle Art] no clear battle stage at '..mapId..' '..px..','..py) end
+   if pick.none then print('[emerald 3d] no clear battle stage at '..mapId..' '..px..','..py) end
    camera.center=pick.center
    camera.yaw=pick.yaw
    camera.arenaYaw=camera.yaw-(M.restYaw
@@ -309,7 +309,7 @@ function M.install()
   if not ok or not ready then
    Renderer.worldActive=false;Renderer:setWorldOverride(nil)
    if not ok then
-    recovery:failed(ready);Scene.invalidate();print('[Battle Art FireRed] battle stage fallback: '..tostring(ready))
+    recovery:failed(ready);Scene.invalidate();print('[emerald 3d] battle stage fallback: '..tostring(ready))
    end
    return original(game,w,h)
   end

@@ -1,4 +1,4 @@
--- A generation-neutral water pass using Battle Art's shared reflection shader
+-- A generation-neutral water pass using the shared reflection shader
 local V=...
 local R=V.require('Voxel3D')
 local Water=V.require('Water')

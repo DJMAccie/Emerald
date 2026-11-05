@@ -38,7 +38,7 @@ return function(game)
  end
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map=from[1],x=from[2],y=from[3],facing='down'}})
  U.wait(90)
- local export=game.mods.exports.BATTLE_ART_VOXEL_FORK
+ local export=game.mods.exports.emerald_3d_voxel_mod
  local ns=export and (export.gen3 or export.firered)
  local C=ns and ns.camera
  local lib=export and export.lib
@@ -52,7 +52,7 @@ return function(game)
  print('[fly dbg] flight',name,'from',from[1],from[2],from[3],'to',destSec,'level',level,'mon',code,mon and mon.species)
  U.wait(120)   -- the start town builds
  local scene=lib.require('Gen3Scene')
- local ex=game.mods.exports.overworld_wild_spawns
+ local ex=game.mods.exports.emerald_3d_voxel_mod
  print('[fly dbg] follower mod export',ex and 'yes' or 'NO','resolveGen3Sprite',ex and type(ex.resolveGen3Sprite) or '-')
  if ex and ex.resolveGen3Sprite then
   local okR,gid=pcall(ex.resolveGen3Sprite,mon and mon.species,nil,false)

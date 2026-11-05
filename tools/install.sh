@@ -1,5 +1,5 @@
 #!/bin/bash
-# Zet de mod (~/Documents/Emerald/mod) en de importer (stadium2-importer) in het echte spel en in de testkopie.
+# Zet de mod (~/Documents/Emerald/mod) in het echte spel en in de testkopie.
 #   tools/install.sh          installeren
 #   tools/install.sh --check  alleen controleren of spel en testkopie gelijk zijn aan de bron
 # Weigert zolang het spel (of een testrun) draait: het spel schrijft bij afsluiten zijn bestanden terug.
@@ -7,27 +7,33 @@ set -eu
 E="$(cd "$(dirname "$0")/.." && pwd)"
 AS="$HOME/Library/Application Support"
 TARGETS=("$AS/pokemon-love2d" "$AS/pokemon-love2d-rseqa")
-PAIRS=("mod:BATTLE_ART_VOXEL_FORK" "stadium2-importer:STADIUM2_IMPORTER" "overworld-wild-spawns:overworld_wild_spawns")
+ID="emerald_3d_voxel_mod"
+# De oude losse mappen zijn opgegaan in de ene mod; hun ROM's en Colosseum-modellen verhuizen mee.
+LEGACY=("BATTLE_ART_VOXEL_FORK" "STADIUM2_IMPORTER" "overworld_wild_spawns")
 # baseroms/ en colosseum/ zijn lokale ROM-gegevens in de spelmap: nooit kopieren of wissen.
 OPTS=(-a --delete --exclude .gitignore --exclude .modkitignore --exclude /docs --exclude /tests --exclude /tools
-      --exclude /baseroms --exclude /colosseum --exclude __pycache__
-      --include /THIRD_PARTY_NOTICES.md --exclude '*.md' --exclude .DS_Store)
+      --exclude /baseroms --exclude /colosseum --exclude __pycache__ --exclude .DS_Store
+      --include '*/THIRD_PARTY_NOTICES.md' --include '*/NOTICE.md' --exclude '*.md')
 if [ "${1:-}" = "--check" ]; then
   bad=0
   for t in "${TARGETS[@]}"; do
-    for p in "${PAIRS[@]}"; do
-      changes=$(rsync -n -c "${OPTS[@]}" --itemize-changes "$E/${p%%:*}/" "$t/mods/${p#*:}/") || { bad=1; continue; }
-      n=$(printf '%s\n' "$changes" | awk 'NF && !/^\.d/ {n++} END {print n+0}')
-      echo "$(basename "$t") ${p#*:}: $n verschillen"; [ "$n" = 0 ] || bad=1
-    done
+    changes=$(rsync -n -c "${OPTS[@]}" --itemize-changes "$E/mod/" "$t/mods/$ID/") || { bad=1; continue; }
+    n=$(printf '%s\n' "$changes" | awk 'NF && !/^\.d/ {n++} END {print n+0}')
+    echo "$(basename "$t") $ID: $n verschillen"; [ "$n" = 0 ] || bad=1
   done
   exit $bad
 fi
 if pgrep -f "MacOS/love" >/dev/null; then echo "Het spel (of een testrun) draait: sluit het eerst."; exit 1; fi
 for t in "${TARGETS[@]}"; do
-  for p in "${PAIRS[@]}"; do
-    mkdir -p "$t/mods/${p#*:}"
-    rsync "${OPTS[@]}" "$E/${p%%:*}/" "$t/mods/${p#*:}/"
+  mkdir -p "$t/mods/$ID"
+  for old in "${LEGACY[@]}"; do
+    [ -d "$t/mods/$old" ] || continue
+    for keep in baseroms colosseum; do
+      [ -d "$t/mods/$old/$keep" ] && [ ! -d "$t/mods/$ID/$keep" ] && mv "$t/mods/$old/$keep" "$t/mods/$ID/$keep"
+    done
+    rm -rf "$t/mods/$old"
+    echo "weg: $(basename "$t")/mods/$old (zit nu in $ID)"
   done
+  rsync "${OPTS[@]}" "$E/mod/" "$t/mods/$ID/"
 done
 "$0" --check && echo "Geinstalleerd: $(git -C "$E" log -1 --format='%h %s')"

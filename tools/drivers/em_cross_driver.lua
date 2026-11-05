@@ -7,7 +7,7 @@ return function(game)
  love.window.setMode(1280,720,{resizable=true})
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
- local export=game.mods.exports.BATTLE_ART_VOXEL_FORK
+ local export=game.mods.exports.emerald_3d_voxel_mod
  local C=(export.gen3 or export.firered).camera
  local Scene=export.lib.require('Gen3Scene')
  local Map=require('src.core.game3.map');local Player=require('src.core.game3.player');local Collision=require('src.core.game3.collision')

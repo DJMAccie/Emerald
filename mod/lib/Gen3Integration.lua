@@ -62,7 +62,7 @@ function M.install()
   local ok,result=pcall(Scene.draw,game,w,h,M)
   if not ok then
    recovery:failed(result);Scene.restore();Scene.invalidate()
-   print('[Battle Art FireRed] scene fallback: '..tostring(result))
+   print('[emerald 3d] scene fallback: '..tostring(result))
    if Fly.active() then Fly.abort('scene error: '..tostring(result)) end
   end
   if ok and result then Fly.frame(true);recovery:succeeded();M.active=true;M.rendered=M.rendered+1;return end
@@ -221,6 +221,6 @@ function M.install()
  local gen3Namespace=mod.exports.firered
  for _,cart in ipairs{'emerald'}do mod.exports[cart]=gen3Namespace end
  mod.exports.gen3=gen3Namespace
- print('[Battle Art FireRed] native field and battle background adapters installed')
+ print('[emerald 3d] native field and battle background adapters installed')
 end
 return M

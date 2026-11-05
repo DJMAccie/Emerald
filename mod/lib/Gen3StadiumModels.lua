@@ -106,7 +106,7 @@ local function performPendingMove(b)
  local ok,err=pcall(StadiumModels.update,b,0)
  b.animName,b.animPlaying,b.animAttackerIsPlayer=hadName,hadPlaying,hadAttacker
  if not ok then
-  print('[Battle Art Gen 3] move animation: '..tostring(err))
+  print('[emerald 3d] move animation: '..tostring(err))
   return false
  end
  M.lastMove={move=pending.move,stadiumMove=stadiumMove,player=pending.player~=false}
@@ -124,7 +124,7 @@ function M.update(dt)
  M.active=true
  performPendingMove(b)
  local ok,err=pcall(StadiumModels.update,b,dt)
- if not ok then print('[Battle Art Gen 3] stadium update: '..tostring(err)) end
+ if not ok then print('[emerald 3d] stadium update: '..tostring(err)) end
  return true
 end
 
@@ -168,7 +168,7 @@ function M.draw(game,cam,cx,cz,groundAt)
  local arena={player={cx-dx*18,cz-dz*18},enemy={cx+dx*26,cz+dz*26}}
  local groundY=groundAt(cx,cz)
  local ok,placements=pcall(StadiumModels.placements,arena,groundY,{player={},enemy={}},b)
- if not ok then print('[Battle Art Gen 3] stadium placements: '..tostring(placements));M.owned={} return end
+ if not ok then print('[emerald 3d] stadium placements: '..tostring(placements));M.owned={} return end
  local context={
   viewProjection=R.vp,
   view=Mat4.lookAt(R.eye,R.focus,{0,1,0}),

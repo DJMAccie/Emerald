@@ -1,4 +1,4 @@
--- QA driver: walk back and forth in Route 102's grass and report overworld wild spawns (overworld_wild_spawns).
+-- QA driver: walk back and forth in Route 102's grass and report overworld wild spawns (emerald_3d_voxel_mod).
 --   EM_DRIVER=<this file> tools/qa_tryp.sh "Gen3Scene.lua" <abs out> "-" 4 0 200
 -- Prints [wild] lines: the spawn snapshot after every 8 steps, then one shot.
 return function(game)
@@ -8,7 +8,7 @@ return function(game)
  love.window.setMode(1280,720,{resizable=true})
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
- local C=(function()local e=game.mods.exports.BATTLE_ART_VOXEL_FORK;local n=e and (e.gen3 or e.firered);return n and n.camera end)()
+ local C=(function()local e=game.mods.exports.emerald_3d_voxel_mod;local n=e and (e.gen3 or e.firered);return n and n.camera end)()
  local Map=require('src.core.game3.map');local Player=require('src.core.game3.player')
  do local Party=require('src.core.game3.party');local Pk=require('src.core.game3.pokemon');local c=Party.giveMonToPlayer(game.session,Pk.speciesFromNational(276) or 276,30);print('[wild] gave party mon',c) end
  assert(Map.load(nil,game,'EM_ROUTE102',{x=20,y=10,facing='down'}))
@@ -16,7 +16,7 @@ return function(game)
  if C then C.setLevel(4,game) end
  U.wait(150)
  local names={} for k in pairs(game.mods.exports) do names[#names+1]=k end table.sort(names) print('[wild] mods',table.concat(names,','))
- local ex=game.mods.exports.overworld_wild_spawns
+ local ex=game.mods.exports.emerald_3d_voxel_mod
  print('[wild] export',ex and 'yes' or 'NO')
  local function snap(tag)
   local ok,s=pcall(ex.spawnSystemState)
@@ -28,7 +28,7 @@ return function(game)
   else print('[wild]',tag,'snapshot failed',tostring(s)) end
  end
  if not ex then print('[EM QA] done') love.event.quit() return end
- local S=ex.gen3
+ local S=ex.wilds
  local function count()local n=0 for _ in pairs(S and S.spawns or {}) do n=n+1 end return n end
  print('[wild] spawns',count(),'phase',game.phase)
  local dirs={'up','down'};local lost=0

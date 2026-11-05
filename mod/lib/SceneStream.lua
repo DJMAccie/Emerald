@@ -44,7 +44,7 @@ function M.new(release,capacity)
   if coroutine.status(w.co)~='dead' then return end
   self.warming=nil
   if not ok then
-   release(w.value);print('[Battle Art FireRed] warm scene failed: '..tostring(result))
+   release(w.value);print('[emerald 3d] warm scene failed: '..tostring(result))
    self.failed=self.failed or {};self.failed[context]=true;return
   end
   result=result or w.value

@@ -3,7 +3,7 @@
 Read a module by line range (`offset`/`limit`) using the function index, not whole. Big files are marked with their top-level
 functions (`name@line`). Data tables are in `mod/data/` (generated; never read them whole).
 
-## mod/lib (BATTLE_ART_VOXEL_FORK)
+## mod/lib (emerald_3d_voxel_mod)
 ### Scene building (Gen 3 overworld)
 - `BoundaryScenery` 46: Pure boundary selection
 - `Gen3Boundary` 127: Render the native Emerald perimeter in map-local coordinates.
@@ -17,8 +17,8 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
   - registerPlant@10 sub@18 pixel@22 colorKey@29 mask@30 solidPlant@51 plant@109 groupAwnings@209 groundProps@232 isGreen@273 profile@277 sideProfile@314 sideLedge@338 ownsFaces@397 ledgeFloor@405 ledge@424 hsh@504 tuftInfo@505 blades@553 tufts@568 append@599 image@718 release@738
 - `Gen3PinData` 45: 
 - `Gen3Recap` 63: Render recorded Quest Log scenery through the selected camera without moving the live player,
-- `Gen3Scene` 2824: Native FireRed art in Battle Art's existing depth/shadow renderer
-  - isDeck@49 context@56 quad@60 uvFor@87 plane@101 flightAxis@106 flightTreads@125 swatch@177 wallColumn@183 nativeEffects@211 nativeRequired@215 releaseGeometry@230 tileIdentity@253 tilesetsReady@271 walkGate@295 directNeighbours@298 debugRegions@304 tourBounds@310 request@318 shiftedLathe@365 firstArea@639 build@640 [inside build, first calls: Budget.tick@656 Pairs.resolve@676 Tiles.get@714 SceneCache.key@718 Reef.join@721 BuildingModels.prepare@759 Elevation.daisPrepare@762 Decks.prepare@763 Furniture.extract@766 Shapes.layout@774 Outdoor.groundProps@775 Elevation.bind@781 Elevation.daisSettle@878 Decks.settle@879 Mass.append@1017 Stairs.append@1066 Lamp.is@1073 Stairs.appendWall@1078 Fence.append@1306 Gate.append@1340 Reef.append@1354 Mass.ground@1363 Terrain.append@1465 VoxelBuildings.append@1684 Roof.sideVisible@1782 Elevation.lift@1894 Furniture.append@2036 BuildingModels.mesh@2055 Budget.check@2059 CamClear.addQuads@2072] aheadRequest@2129 aheadHooks@2170 warmAhead@2181 prepare@2218 panesOf@2273 ink@2278 eyeUnderCrown@2291 terrain@2302 waterMeshes@2341 rideDust@2351 fastMesh@2378 cardMesh@2386 actor@2426 debugRaw@2484 builtBounds@2485 readyFor@2486 groundAt@2487 deckCut@2500 actors@2523 fieldEffects@2581 restore@2642 presentField@2653 draw@2660 invalidate@2807 release@2808
+- `Gen3Scene` 2778: Native FireRed art in the depth/shadow renderer
+  - isDeck@49 context@56 quad@60 uvFor@87 plane@101 flightAxis@106 flightTreads@125 swatch@177 wallColumn@183 nativeEffects@211 nativeRequired@215 releaseGeometry@230 tileIdentity@253 tilesetsReady@271 walkGate@296 directNeighbours@299 debugRegions@305 tourBounds@311 request@319 shiftedLathe@364 firstArea@626 build@627 [inside build, first calls: Budget.tick@643 Pairs.resolve@663 Tiles.get@694 SceneCache.key@698 BuildingModels.prepare@738 Elevation.daisPrepare@741 Decks.prepare@742 Furniture.extract@745 Shapes.layout@753 Outdoor.groundProps@754 Elevation.bind@760 Elevation.daisSettle@857 Decks.settle@858 Mass.append@994 Stairs.append@1043 Lamp.is@1050 Stairs.appendWall@1055 Fence.append@1276 Gate.append@1310 Mass.ground@1330 Terrain.append@1430 VoxelBuildings.append@1648 Roof.sideVisible@1746 Elevation.lift@1857 Furniture.append@1999 BuildingModels.mesh@2018 Budget.check@2022 CamClear.addQuads@2035] aheadRequest@2092 aheadHooks@2133 warmAhead@2144 prepare@2181 panesOf@2227 ink@2232 eyeUnderCrown@2245 terrain@2256 waterMeshes@2295 rideDust@2305 fastMesh@2332 cardMesh@2340 actor@2380 debugRaw@2438 builtBounds@2439 readyFor@2440 groundAt@2441 deckCut@2454 actors@2477 fieldEffects@2535 restore@2596 presentField@2607 draw@2614 invalidate@2761 release@2762
 - `Gen3SceneCache` 24: Native layouts are immutable base cells plus sparse public overrides
 - `Gen3SceneOptions` 81: Shared presentation consumers for Game3
 - `Gen3TileShape` 200: Emerald's native metatiles, scoped to their PRIMARY/SECONDARY tileset pair
@@ -29,32 +29,32 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `TerrainLevels` 399: Presentation-only floor topology
 ### Terrain, rock, water edges
 - `Gen3AshPine` 127: Mt
-- `Gen3Blocks` 846: Gen3Blocks
-  - key@14 pinned@19 rockPatch@27 prepare@35 set@77 isStone@82 looseStones@86 roundEnd@125 arrowRamps@141 restoreHeights@200 buildRamps@204 liftSpots@323 lowerArches@346 buildSlopes@355 floorOf@404 besideHeight@405 lumOf@415 massStats@426 faceLike@443 faceMid@452 ledgeFaceUV@486 topLike@516 lidUV@522 insetAt@551 face@558 rampWall@592 stairFlight@617 stairSide@637 appendRamp@660 waterCols@704 cropWater@726 append@734
+- `Gen3Blocks` 856: Gen3Blocks
+  - key@14 pinned@19 rockPatch@27 prepare@35 set@78 isStone@83 looseStones@87 roundEnd@126 arrowRamps@142 restoreHeights@201 buildRamps@205 liftSpots@324 lowerArches@347 buildSlopes@356 floorOf@405 besideHeight@406 lumOf@416 massStats@427 faceLike@444 faceMid@453 ledgeFaceUV@488 topLike@518 lidUV@524 insetAt@553 face@560 rampWall@594 stairFlight@619 stairSide@639 appendRamp@662 waterCols@709 cropWater@733 append@741
 - `Gen3Cave` 292: Cave masses and boulders use their native palette and silhouette
 - `Gen3Decks` 379: Stepped decks the cartridge rates flat
 - `Gen3Hills` 559: Sand hills
   - ckey@41 pk@42 walk@43 floorOf@47 bankOk@49 claims@53 tileInfo@74 tiers@103 prepare@189 sub@388 clip@395 clipY@407 sidePoint@441 append@446
-- `Gen3Masonry` 163: Masonry
 - `Gen3Mass` 1004: Rock masses rebuilt from their own drawing, one art pixel = one voxel
   - key@38 isFoam@39 lum@43 pixel@45 origin@52 newBuild@57 colours@59 solidKind@76 mine@83 markRim@91 sameMass@104 seaObject@109 inBox@115 flood@118 prepare@146 seaGround@208 picture@220 foot@298 sub@309 components@315 roundish@347 extractDomes@364 solidSet@440 emitDome@492 build@614 ground@711 usable@773 emitMass@779 door@946 append@952 appendObject@969
+- `Gen3Parapet` 200: Sootopolis' stone railings (bars along the ledges, posts beside the stairs) stand up as low walls
 - `Gen3Reef` 84: Brown coastal ridges in the General tileset. Work in map pixels so a ridge crossing a metatile edge has the sa
 - `Gen3Rock` 934: Terrain rock as real rock
   - key@50 walk@51 lum@55 cave@78 bluff@86 handles@94 tile@161 isFace@194 floorOf@196 sideFloor@200 prepare@211 sub@446 groundSet@453 groundCount@481 occupancy@496 cleanPatch@518 segment@551 smoothPrep@588 flat@680 append@692 checkFloat@898
 - `Gen3RockSprites` 375: Overworld rocks that are actors
 - `Gen3Stairs` 185: Interior stairs: source-textured flights, back-wall doorways, steps and ladders
 - `Gen3Terrain` 158: Native General cliff masses
-- `VoxelHull` 478: Closed, greedy-meshed voxel volumes
+- `VoxelHull` 477: Closed, greedy-meshed voxel volumes
 - `Water` 969: Voxel world mode
   - level@18 enabled@25 lean@37 waveRate@60 craterSource@724 trainSource@735 source@759 shader@777 waveTime@796 begin@807 sendSky@886 draw@941 finish@954 invalidate@958
-- `WaterSurfacePass` 39: A generation-neutral water pass using Battle Art's shared reflection shader
+- `WaterSurfacePass` 39: A generation-neutral water pass using the shared reflection shader
 - `WorldUnderlay` 92: One cheap, curved floor beneath the loaded voxel neighborhood
 ### Buildings and interiors
 - `BuildingDome` 69: Round roofs for the flat-topped battle tent models: the 1px column model gets a domed top (quarter-circle rise
 - `BuildingModels` 831: BuildingModels
   - claim@566 prepare@584 compose@703 mesh@755
 - `BuildingRoof` 50: 
-- `BuildingVoxels` 262: BuildingVoxels
+- `BuildingVoxels` 284: BuildingVoxels
 - `Gen3Furniture` 203: Whole-object recipes for Emerald's Building primary art
 - `Gen3LeagueGate` 70: Ever Grande's two gates on the way up to the Pokemon League, built as real gates you walk through
 - `Gen3Market` 56: Slateport's merchandise: round baskets, with the original rim and contents on top.
@@ -70,18 +70,18 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `RoofEaves` 29: Closed, thin roof projections
 ### Objects, trees, props
 - `CanopyBillboard` 44: Camera-facing foliage, anchored where it meets the independent trunk
-- `Gen3Boat` 173: Slateport's little sailboats moored in the harbour
+- `Gen3Boat` 186: Slateport's little sailboats moored in the harbour
 - `Gen3CableCar` 98: The Mt
 - `Gen3Canopy` 228: Walk-under canopies
 - `Gen3CyclingRoad` 178: Route 110's Seaside Cycling Road as a real raised road
 - `Gen3Fence` 379: Little white fences drawn on the ground stand up as fences
 - `Gen3Forest` 20: Viridian/Pattern Bush's overlapping crowns each denote a complete tree
-- `Gen3Fortree` 171: Fortree City's treetop walks, built as real wood
+- `Gen3Fortree` 266: Fortree City's treetop walks, built as real wood
 - `Gen3Lamp` 286: Rustboro's street lamps as slender standing lamps that light up at night
 - `Gen3Lathe` 152: Round things drawn from the front
-- `Gen3Objects` 876: Generic standing objects for Emerald's outdoor maps
+- `Gen3Objects` 872: Generic standing objects for Emerald's outdoor maps
   - blocked@10 unknown@11 rim@16 walkableGround@21 key@25 livePixel@27 pristine@51 stillOf@57 overData@68 pixel@72 underPixel@81 origin@86 same@90 shade@93 newBuild@103 cut@105 overInk@165 colourKey@177 paletteOf@178 share@186 joinRock@197 tone@231 flood@246 bank@257 vote@307 prepare@316 treeLike@605 memberOf@637 sampler@643 treePixels@656 hull@678 segmentTrees@691 append@783
-- `Gen3TreeStamps` 65: Which tiles draw a tree and how each is stood up
+- `Gen3TreeStamps` 72: Which tiles draw a tree and how each is stood up
 - `NativeTreeArt` 222: Original, palette-baked game art on grounded cards
 - `SpriteVoxel` 202: Sprite-to-voxel
 - `TowerGraveMist` 406: TEST135
@@ -108,8 +108,7 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `Gen3BattleStage` 151: Where the 3D battle stands
 - `Gen3StadiumModels` 247: Stadium 2 models inside native Gen 3 battles
 - `ModelInstances` 37: Reuse one immutable model on the GPU
-- `StadiumModels` 509: Optional Stadium 2 model adapter for Battle Art's staged voxel arena
-  - warnOnce@16 findMod@23 connect@32 installed@47 exportEnabled@51 active@60 releaseActor@68 failActor@75 release@82 maxDex@88 dexFor@99 safeCall@113 playIdle@121 playContext@128 playHit@139 isAsleep@146 playRest@152 syncSide@160 sync@201 drawableMetrics@211 updatePresentation@225 update@275 atan2@327 presenceBoost@340 modelMatrix@344 placements@413 draw@441 status@486
+- `StadiumModels` 499: 3D model adapter for the staged voxel arena: models/ serves the instances, this draws them
 ### Renderer, light, sky
 - `ActorContact` 26: A small ground-contact shadow survives wide shadow-map texels and grazing sun angles
 - `BuildBudget` 42: Voxel world mode
@@ -133,14 +132,15 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `VoxelState` 90: Voxel world mode
 ### Other
 - `CommunityVisuals` 21: Native-map checks and cache invalidation shared by the atmosphere modules
+- `Gen3DryDock` 146: Slateport's dry-dock boat: the 3x2 metatiles beside the shipyard stood up as a hull on two props
 - `Generation` 42: Which cart is running, asked once and answered the same way everywhere
 - `ModSetting` 91: One of this mod's own settings
 - `PixelCanvas` 12: 
 - `TileClock` 34: The engine's tile-animation clock
 - `UiBackplates` 25: ARENA FILL and SPRITE LIGHT
 
-## stadium2-importer/lib
-- `animation_dispatch` 148: 
+## mod/models/lib
+- `animation_dispatch` 140: 
 - `animation_routing` 67: Align external skeletal clips with model-local texture/facial streams. Both archives retain authored order, bu
 - `animation_semantics` 136: Stadium 2 pose records do not contain human-readable clip names.  Their per-species battle dispatch records do
 - `arena_lighting` 155: Stadium 2 field modules mostly store their lighting as vertex RGB. They do not contain a field-local Lights st
@@ -150,28 +150,27 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `discovery` 56: Stadium ROM discovery under the engine mod sandbox. Only files packaged inside this mod may be named; external
 - `effect_renderer` 71: 
 - `export_pool` 168: 
-- `extract` 1171: 
-  - u16be@24 s16be@30 u32be@37 clamp@41 fragmentParser@47 normalPaletteForDex@52 palettePairForDex@73 rareVariation@85 md5@89 findRootPair@103 fragmentInfo@122 fragmentSpecies@144 fallbackTexture@151 fxCallbacks@171 normaliseDrawableModel@185 genericAnimationTable@249 decompressedFragment@277 inspectModelFragment@287 nextArchive@300 recordBytes@328 decodedPayload@337 applyDedicatedRareTextures@346 archivesInPayload@420 inspectDecodedMotion@441 collectPosePayload@479 poseSourcesForRecord@534 runtimeModelFragment@547 appendSource@563 sourceLabel@569 decodeAnimationSources@575 unownLetter@627 packVariants@635 newBuildJob@647 configure@1099 newJob@1129 animationBankForSpecies@1137 runtimeFragmentForSpecies@1153
+- `extract` 1141: 
+  - u16be@24 s16be@30 u32be@37 clamp@41 fragmentParser@47 normalPaletteForDex@52 palettePairForDex@73 rareVariation@85 findRootPair@92 fragmentInfo@111 fragmentSpecies@133 fallbackTexture@139 fxCallbacks@159 normaliseDrawableModel@173 genericAnimationTable@237 decompressedFragment@265 inspectModelFragment@275 nextArchive@288 recordBytes@315 decodedPayload@324 applyDedicatedRareTextures@333 archivesInPayload@407 inspectDecodedMotion@428 collectPosePayload@466 poseSourcesForRecord@521 runtimeModelFragment@534 appendSource@550 sourceLabel@556 decodeAnimationSources@562 unownLetter@614 packVariants@622 newBuildJob@634 configure@1085 newJob@1115
 - `firefly_lighting` 20: Four tiny local sources, no shadow maps or additional render passes.
-- `fragment` 2312: 
-  - setBase@26 roundHalfEven@44 roundTo@53 signed@71 unique@79 Frag:u8@95 Frag:s8@99 Frag:u16@105 Frag:s16@110 Frag:u32@117 Frag:s32@122 Frag:off@128 Frag:ptr@133 Frag:root@137 Frag:ptrList@152 open@163 newModel@176 Model:readTextureTable@223 Model:readTlutTable@235 Model:curBone@259 Model:build@265 Model:prescanBones@290 Model:walk@318 Model:nodeCallbackState@511 modelCombiner@542 Model:setRdpState@555 Model:applyNodeMaterial@572 Model:resetNodeMaterial@590 Model:runNodeDL@597 Model:primFor@624 band@684 bor@693 emit@702 Model:runDL@725 Model:tilePalette@825 decodeTileSampler@842 Model:tileSampler@856 Model:bakePhase5Geometry@876 Model:mergePrimitivesByCallback@931 bitfield@969 newAnim@991 Anim:chan@1006 Anim:transPacked@1014 Anim:rotPacked@1026 Anim:scalePacked@1033 Anim:hermite@1040 Anim:transKey@1069 Anim:rotKey@1075 Anim:scaleKey@1087 Anim:sampleTrs@1102 newAux@1134 Aux:sample@1148 Aux:track@1163 rgba5551@1170 decodeTexture@1177 compress@1263 dedupeFx@1275 stitchPolitoedTorsoBoundary@1307 inspectFxLayout@1336 inspectFx@1421 rdpColor@1449 rdpMaterial@1458 extract@1475 stageRoot@1860 extractStage@1884 crystal251Inside@1897 crystal251LooksLikeAnim@1902 crystal251RawAnimationOffsets@1955 crystal251DecodeOne@1978 crystal251DecodeOffsets@2025 crystal251DecodeModelAnimations@2041 inspect@2067 inspectAny@2083 extractAnimations@2112 extractAnimationsAny@2126 RawFrag:off@2147 RawFrag:ptr@2155 crystal251HexPrefix@2159 crystal251RawModes@2167 crystal251RawU32@2209 crystal251RawCandidates@2215 inspectRawAnimations@2257 extractRawAnimations@2282
-- `fx` 197: 
+- `fragment` 2166: 
+  - setBase@26 roundHalfEven@44 roundTo@53 signed@71 unique@79 Frag:u8@95 Frag:s8@99 Frag:u16@105 Frag:s16@110 Frag:u32@117 Frag:s32@122 Frag:off@128 Frag:ptr@133 Frag:root@137 Frag:ptrList@152 open@163 newModel@176 Model:readTextureTable@223 Model:readTlutTable@235 Model:curBone@259 Model:build@265 Model:prescanBones@290 Model:walk@318 Model:nodeCallbackState@511 modelCombiner@542 Model:setRdpState@555 Model:applyNodeMaterial@572 Model:resetNodeMaterial@590 Model:runNodeDL@597 Model:primFor@624 band@684 bor@693 emit@702 Model:runDL@725 Model:tilePalette@825 decodeTileSampler@842 Model:tileSampler@856 Model:bakePhase5Geometry@876 Model:mergePrimitivesByCallback@931 bitfield@969 newAnim@991 Anim:chan@1006 Anim:transPacked@1014 Anim:rotPacked@1026 Anim:scalePacked@1033 Anim:hermite@1040 Anim:transKey@1069 Anim:rotKey@1075 Anim:scaleKey@1087 Anim:sampleTrs@1102 newAux@1134 Aux:sample@1148 Aux:track@1163 rgba5551@1170 decodeTexture@1177 compress@1263 dedupeFx@1275 stitchPolitoedTorsoBoundary@1307 rdpColor@1339 rdpMaterial@1348 extract@1365 crystal251Inside@1751 crystal251LooksLikeAnim@1756 crystal251RawAnimationOffsets@1809 crystal251DecodeOne@1832 crystal251DecodeOffsets@1879 crystal251DecodeModelAnimations@1895 inspect@1921 inspectAny@1937 extractAnimations@1966 extractAnimationsAny@1980 RawFrag:off@2001 RawFrag:ptr@2009 crystal251HexPrefix@2013 crystal251RawModes@2021 crystal251RawU32@2063 crystal251RawCandidates@2069 inspectRawAnimations@2111 extractRawAnimations@2136
+- `fx` 133: 
 - `handler_registry` 105: Fragment 26 callback catalogue.  Keep this file declarative: extraction, cache codecs, runtime simulation and 
 - `importer` 493: 
-- `layout` 44: 
+- `layout` 38: 
 - `materials` 270: 
 - `mod_lifecycle` 97: Older hosts do not expose a mod-unload callback. Observe their real teardown boundaries with reversible patche
-- `model_api` 405: 
-- `model_handlers` 704: 
-  - byte@16 u16be@20 i16be@26 u32be@32 u16le@38 i16le@44 u32le@50 p16@56 p32@61 pi16@67 phaseMask@71 phasesFromMask@79 hasPhase@87 flagsFor@94 semanticBytes@113 renderBytes@124 readRenderBytes@168 decodeSemantic@236 info@251 family@255 compile@259 evaluate@307 resolvePointer@395 pointerWords@405 dynamicObjectGeometry@422 prepare@461 runExtension@500 koffingGasRenderState@508 koffingGasInitialize@512 run@516 packExtension@603 readExtension@635
+- `model_api` 367: 
+- `model_handlers` 685: 
 - `pack` 490: 
 - `palette` 290: 
 - `patch_scope` 48: Own direct engine replacements, including raw/inherited fields and sentinels. A later mod may wrap ours: retai
-- `render_contract` 56: Renderer-facing state that is part of Stadium's model format contract. Keep it separate from the drawing imple
-- `renderer` 3077: 
-  - shaderSource@688 identity@699 matMul@708 perspective@720 lookAt@731 modelMatrix@750 normalMatrix@778 normalize3@791 sampleComponent@797 safeScale@812 safeTranslation@816 samplePose@820 nextFrame@843 lerp@850 angleDelta@862 samplePoseInterpolated@869 sourceFrame@920 meshRows@931 makeMesh@959 makeDynamicMesh@968 sendFlameBillboard@982 cameraFacingAxes@1016 dynamicObjectRuntime@1024 makeCanvas@1040 imageDimensions@1058 resolvedTextureWrap@1066 callbackPrimaryWrap@1079 callbackSecondaryWrap@1083 phase5IntensityAlpha@1096 sendTextureWrapMode@1109 surfaceLit@1119 threePoint@1130 smoothSampled@1137 combinerUsesShade@1142 sendN64Combiner@1158 physicalTextureWrap@1181 foldedTextureScroll@1187 shouldBoundTextureUV@1195 graphicsRendererLabel@1209 isAndroidGraphics@1217 isMobileGraphics@1225 shouldUseSimpleMobileShader@1232 activeShaderSource@1239 shouldReceiveModelSunShadows@1247 battleFxRenderMode@1258 isArenaModel@1269 arenaCombinerCoveragePassthrough@1274 textureAlphaMode@1283 prepareArenaRenderQueues@1298 partViewDepth@1342 arenaRenderOrder@1363 new@1399 coordinateKey@1516 triangleKey@1521 planarInfo@1535 pointInTriangleXZ@1552 planarPartsOverlap@1563 resolveArenaCoplanarLayers@1583 Renderer:currentShaderStyle@1745 Renderer:geometryAnchor@1753 Renderer:setAnimation@1766 Renderer:setMove@1786 Renderer:setContext@1796 Renderer:setHandlerRuntime@1806 Renderer:rapidashCutEffectEnabled@1811 Renderer:handlerValues@1821 Renderer:updateHandlers@1844 Renderer:updatePose@1866 Renderer:poseBounds@1990 Renderer:fitCamera@2026 Renderer:step@2047 Renderer:seekFrame@2060 callbackRecord@2071 Renderer:callbackOwnsTexture@2077 Renderer:callbackUsesMaterialFx@2093 Renderer:battleFxMaterialState@2114 Renderer:currentMaterial@2144 callbackTextureScroll@2181 Renderer:currentTexture@2187 callbackTextureCoordinateScale@2205 Renderer:worldMetrics@2223 koffingGasGeometryState@2237 koffingGasMaterialState@2242 dynamicObjectRecord@2248 dynamicObjectCarrier@2257 dynamicObjectEmitters@2267 primitiveRenderState@2318 meshCullMode@2350 Renderer:drawDynamicObjects@2359 Renderer:drawScene@2450 Renderer:drawShadowMap@2735 Renderer:drawShadow@2757 Renderer:renderToCanvas@2765 Renderer:draw@3020 Renderer:release@3036 ortho@3071
-- `rom` 220: 
-- `sampler` 99: Shared translation of Stadium/N64 texture sampler state into the normalized UV and wrap controls used by the s
+- `render_contract` 52: Renderer-facing state that is part of Stadium's model format contract. Keep it separate from the drawing imple
+- `renderer` 3061: 
+  - shaderSource@688 identity@699 matMul@708 perspective@720 lookAt@731 modelMatrix@750 normalMatrix@778 normalize3@791 sampleComponent@797 safeScale@812 safeTranslation@816 samplePose@820 nextFrame@843 lerp@850 angleDelta@862 samplePoseInterpolated@869 sourceFrame@920 meshRows@931 makeMesh@959 makeDynamicMesh@968 sendFlameBillboard@982 cameraFacingAxes@1016 dynamicObjectRuntime@1024 makeCanvas@1040 imageDimensions@1058 resolvedTextureWrap@1066 callbackPrimaryWrap@1079 callbackSecondaryWrap@1083 phase5IntensityAlpha@1096 sendTextureWrapMode@1109 surfaceLit@1119 smoothSampled@1131 combinerUsesShade@1136 sendN64Combiner@1152 physicalTextureWrap@1175 foldedTextureScroll@1181 shouldBoundTextureUV@1189 graphicsRendererLabel@1203 isAndroidGraphics@1211 isMobileGraphics@1219 shouldUseSimpleMobileShader@1226 activeShaderSource@1233 shouldReceiveModelSunShadows@1241 battleFxRenderMode@1252 isArenaModel@1263 arenaCombinerCoveragePassthrough@1268 textureAlphaMode@1277 prepareArenaRenderQueues@1292 partViewDepth@1336 arenaRenderOrder@1357 new@1393 coordinateKey@1510 triangleKey@1515 planarInfo@1529 pointInTriangleXZ@1546 planarPartsOverlap@1557 resolveArenaCoplanarLayers@1577 Renderer:currentShaderStyle@1739 Renderer:geometryAnchor@1747 Renderer:setAnimation@1760 Renderer:setMove@1780 Renderer:setContext@1790 Renderer:setHandlerRuntime@1800 Renderer:rapidashCutEffectEnabled@1805 Renderer:handlerValues@1815 Renderer:updateHandlers@1838 Renderer:updatePose@1860 Renderer:poseBounds@1984 Renderer:fitCamera@2020 Renderer:step@2041 Renderer:seekFrame@2054 callbackRecord@2065 Renderer:callbackOwnsTexture@2071 Renderer:callbackUsesMaterialFx@2087 Renderer:battleFxMaterialState@2108 Renderer:currentMaterial@2138 callbackTextureScroll@2175 Renderer:currentTexture@2181 callbackTextureCoordinateScale@2199 Renderer:worldMetrics@2217 dynamicObjectRecord@2232 dynamicObjectCarrier@2241 dynamicObjectEmitters@2251 primitiveRenderState@2302 meshCullMode@2334 Renderer:drawDynamicObjects@2343 Renderer:drawScene@2434 Renderer:drawShadowMap@2719 Renderer:drawShadow@2741 Renderer:renderToCanvas@2749 Renderer:draw@3004 Renderer:release@3020 ortho@3055
+- `rom` 204: 
+- `sampler` 87: Shared translation of Stadium/N64 texture sampler state into the normalized UV and wrap controls used by the s
 - `stadium2_battle_fx_float` 21: Round each authored single-precision operation on both Lua and LuaJIT.
 - `stadium2_battle_fx_render_mode` 95: Per-draw-entry RDP render mode for direct battle-FX shapes.  841031F4 calls 84102E84 with shape entry +6 after
 - `texture_parity` 76: Texture completeness checks shared by source-model and packed-model audits. Source models use zero-based textu
@@ -179,7 +178,7 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `torch_projection` 53: Matching cube-face bases for CPU shadow cameras and GLES2 atlas sampling.
 - `vertex_semantics` 46: Stadium 2's model display lists do not use G_LIGHTING as a reliable Vtx layout discriminator.  In ordinary mod
 
-## overworld-wild-spawns/lib/gen3
+## mod/wilds/lib/gen3
 - `actors` 65: Per-mod native FireRed actors. Presentation reads a snapshot; it never ticks movement. Objects.forDraw is shar
 - `catching` 199: Native FireRed direct throws. Party construction, catch odds, inventory, storage and dex registration use the 
 - `followers` 125: Followers trace cells really traversed by the native player. Replacing the player's graphics leaves scripts, c

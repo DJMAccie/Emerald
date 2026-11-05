@@ -1,4 +1,4 @@
--- BATTLE ART VOXEL FORK: the Emerald 3D mod.
+-- EMERALD 3D VOXEL MOD: QA probe entry.
 --
 -- A voxel world drawn from Emerald's own tiles (walls, roofs, rock, water,
 -- trees) with a free camera, Pokemon in the overworld and 3D battles with
@@ -19,11 +19,11 @@ local V = { mod = mod, path = mod.path }
 local function chunkFor(rel)
   local source = mod:read(rel)
   if not source then
-    error(("BATTLE_ART_VOXEL_FORK: %s is missing -- reinstall the mod"):format(rel), 0)
+    error(("emerald_3d_voxel_mod: %s is missing -- reinstall the mod"):format(rel), 0)
   end
   local chunk, err = load(source, "@" .. mod.path .. "/" .. rel)
   if not chunk then
-    error(("BATTLE_ART_VOXEL_FORK: %s did not compile: %s"):format(rel, tostring(err)), 0)
+    error(("emerald_3d_voxel_mod: %s did not compile: %s"):format(rel, tostring(err)), 0)
   end
   return chunk
 end

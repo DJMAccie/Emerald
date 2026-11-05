@@ -1,9 +1,9 @@
-# Deze repo bewaart: mod/ (de mod), stadium2-importer/, tools/, docs/, .claude/, CLAUDE.md, README.md.
+# Deze repo bewaart: mod/ (de mod), mod/models/, tools/, docs/, .claude/, CLAUDE.md, README.md.
 
 # de engine: eigen checkout, alleen naslag
 /gen1recomp/
 
-# oude losse git-geschiedenis van mod/ en stadium2-importer, alleen lokaal
+# oude losse git-geschiedenis van mod/ en mod/models, alleen lokaal
 /archief/
 
 .DS_Store
@@ -16,7 +16,7 @@ __pycache__/
 *.rvz
 *.love
 # vrije Kenney-textures die de Stadium 2-importer nodig heeft (CC0, geen spelbeelden)
-!/stadium2-importer/assets/kenney_*/*.png
+!/mod/models/assets/kenney_*/*.png
 
 # screenshots die Petya stuurt (spelbeelden)
 /docs/aanwijzingen/
@@ -44,5 +44,5 @@ __pycache__/
 /docs/knowledge/journal.md
 /release/
 
-# local Colosseum disc files and old converter output (players use stadium2-importer/hoenn)
+# local Colosseum disc files and old converter output (players use mod/models/hoenn)
 /tools/colosseum/

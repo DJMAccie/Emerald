@@ -1,4 +1,4 @@
--- Optional Stadium 2 model adapter for Battle Art's staged voxel arena
+-- 3D model adapter for the staged voxel arena: models/ serves the instances, this draws them
 
 local V = ...
 
@@ -9,7 +9,7 @@ local StadiumModels = {}
 local FlyMotion = V.require("FlyMotion")
 StadiumModels.log = false
 
-local providerHandle, providerExports, models
+local providerExports, models
 local actors = { player = {}, enemy = {} }
 local warned = {}
 
@@ -20,27 +20,17 @@ local function warnOnce(key, message)
   if log and log.warn then pcall(log.warn, log, "%s", tostring(message)) end
 end
 
-local function findMod(id)
-  local finder = V.mod and V.mod.find
-  if type(finder) ~= "function" then return nil end
-  local ok, handle = pcall(finder, id)
-  if ok and handle then return handle end
-  ok, handle = pcall(finder, V.mod, id)
-  return ok and handle or nil
-end
-
 local function connect()
   if models and type(models.newInstance) == "function" then
     return models, providerExports
   end
-  local handle = findMod("STADIUM2_IMPORTER")
-  local exports = handle and handle.exports or nil
+  local exports = V.mod and V.mod.exports
   local candidate = type(exports) == "table" and exports.models or nil
   if type(candidate) ~= "table" or (tonumber(candidate.apiVersion) or 0) < 2
       or type(candidate.newInstance) ~= "function" then
     return nil
   end
-  providerHandle, providerExports, models = handle, exports, candidate
+  providerExports, models = exports, candidate
   return models, providerExports
 end
 
@@ -184,7 +174,7 @@ local function syncSide(battle, side)
     actor.failedBattler, actor.failedDex, actor.failedVariant =
       battler, dex, variant
     warnOnce(("load:%s:%d:%s"):format(side, dex, variant),
-      ("Stadium 2 %s model %03d (%s) unavailable: %s; using Battle Art")
+      ("Stadium 2 %s model %03d (%s) unavailable: %s; using 2D sprites")
         :format(side, dex, variant, tostring(err)))
     return actor
   end
@@ -239,10 +229,10 @@ local function updatePresentation(battle, side, actor)
     local lethal = battler and battler.mon and (tonumber(battler.mon.hp) or 1) <= 0
     if fainted or faintFx or lethal then
       if StadiumModels.log then
-        print(("[Battle Art] hit clip skipped %s (fainting)"):format(side))
+        print(("[emerald 3d] hit clip skipped %s (fainting)"):format(side))
       end
     elseif playHit(actor) and StadiumModels.log then
-      print(("[Battle Art] hit clip %s"):format(side))
+      print(("[emerald 3d] hit clip %s"):format(side))
     end
   end
 
@@ -252,7 +242,7 @@ local function updatePresentation(battle, side, actor)
     if actor.context == "idle" or actor.context == "sleep" then
       playRest(actor, asleep)
       if StadiumModels.log then
-        print(("[Battle Art] rest clip %s asleep=%s context=%s")
+        print(("[emerald 3d] rest clip %s asleep=%s context=%s")
           :format(side, tostring(asleep), tostring(actor.context)))
       end
     end
@@ -261,7 +251,7 @@ local function updatePresentation(battle, side, actor)
   if (faintFx or fainted) and not actor.lastFainted then
     playContext(actor, "faint", false)
     if StadiumModels.log then
-      print(("[Battle Art] faint clip %s context=%s"):format(side, tostring(actor.context)))
+      print(("[emerald 3d] faint clip %s context=%s"):format(side, tostring(actor.context)))
     end
   end
   actor.lastFainted = fainted or faintFx or false
@@ -311,7 +301,7 @@ function StadiumModels.update(battle, dt)
       })
       if updated == nil and err then
         warnOnce("update:" .. side,
-          ("Stadium 2 %s model update failed: %s; using Battle Art")
+          ("Stadium 2 %s model update failed: %s; using 2D sprites")
             :format(side, tostring(err)))
         failActor(actor)
       elseif safeCall(actor.instance, "isFinished")
@@ -476,7 +466,7 @@ function StadiumModels.draw(placement, context, pass)
   if not called then err, ok = ok, false end
   if not ok then
     warnOnce("draw:" .. placement.side,
-      ("Stadium 2 %s model draw failed: %s; using Battle Art")
+      ("Stadium 2 %s model draw failed: %s; using 2D sprites")
         :format(placement.side, tostring(err)))
     failActor(actor)
   end
@@ -496,7 +486,7 @@ function StadiumModels.status()
     apiVersion = 1,
     installed = StadiumModels.installed(),
     active = StadiumModels.active(),
-    providerId = providerHandle and "STADIUM2_IMPORTER" or nil,
+    providerId = models and "emerald_3d_voxel_mod" or nil,
     sides = {
       player = actors.player.instance and true or false,
       enemy = actors.enemy.instance and true or false,

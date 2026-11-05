@@ -90,8 +90,8 @@ Cause: Gen3Scene caveWall/rock draw branches skip Gen3Blocks.append, and Mass.pr
 Fix: branch (caveWall|rock + c.blocks -> Blocks.append) and mass.blocksOwned on pinned caves.
 
 ### L-60 Mod settings live only under MODS, not in the options menu
-Cause: engine 0.3.99: the Emerald options menu builds its rows locally, so a mod replacing Rows.build never shows; only the ui.options.rows hook works (the importer's STADIUM 2 ROM line).
-Fix: look at what Petya sees: MODS -> BATTLE ART VOXEL FORK -> options = the mod.options:define schema; read it with a driver (ModManager.show + openOptions, print m.optionRows).
+Cause: engine 0.3.99: the Emerald options menu builds its rows locally, so a mod replacing Rows.build never shows; only the ui.options.rows hook works (the Stadium 2 ROM line).
+Fix: look at what Petya sees: MODS -> Emerald 3D Voxel Mod -> options = the mod.options:define schema; read it with a driver (ModManager.show + openOptions, print m.optionRows).
 
 ### L-61 Odd-sized maps are padded by one row or column
 Cause: native_pack pads an odd side to even by repeating the last row/column, so l.width/l.height can be one more than the art (Granite Cave 1F 42x15 vs 42x16); an exact size check silently skipped 72 of 96 height maps.
@@ -119,11 +119,11 @@ Rules: R-23
 
 ### L-66 A mod folder must not use assets/generated
 Cause: assets/generated is where the engine keeps the player's ROM-derived cache; modkit lint MK301 (and the community mod index CI) fail any mod shipping files there, and any lib file naming that path.
-Fix: Ship art under another folder such as assets/water_runtime and run: python3 gen1recomp/tools/modkit.py lint <mod folder> and validate <mod folder> --strict for all three mods.
+Fix: Ship art under another folder such as assets/water_runtime and run: python3 gen1recomp/tools/modkit.py lint <mod folder> and validate <mod folder> --strict for the mod.
 
 ### L-67 A mod's version must equal the release tag's x.y.z
 Cause: The launcher updater and the mod index take a mod's latest version from the release tag (v0.1.0-alpha becomes 0.1.0) and compare it with the installed manifest version. 0.1.0-alpha sorts below 0.1.0, and 0.23.0 or 2.4.3 never trail a 0.1.x tag, so updates loop or never come.
-Fix: Keep the three manifests, MOD_BUILD in stadium2-importer/main.lua and exports.version in overworld-wild-spawns/main.lua at the release x.y.z; put alpha only in the tag and the GitHub prerelease flag; attach <id>-<x.y.z>.zip for every mod to each release (tools/build_release.sh).
+Fix: Keep manifest.json, MOD_BUILD in mod/models/main.lua and exports.version in mod/wilds/main.lua at the release x.y.z; put alpha only in the tag and the GitHub prerelease flag; attach the one emerald_3d_voxel_mod-<x.y.z>.zip to the release (tools/build_release.sh).
 
 ### L-68 Fortree treehouse 'pillars' were cliff cells, not model strips
 Cause: Tiles 0x22C/0x22E/0x234/0x236 beside each hut door classify as kind=cliff, so the scene drew rock-band pillars next to the model; deleting the model's own post strips did not remove them (found with scene.debugRaw via a probe driver)

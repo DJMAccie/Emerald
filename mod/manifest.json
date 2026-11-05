@@ -1,8 +1,8 @@
 {
-  "id": "BATTLE_ART_VOXEL_FORK",
-  "name": "Emerald 3D",
+  "id": "emerald_3d_voxel_mod",
+  "name": "Emerald 3D Voxel Mod",
   "version": "0.1.0",
-  "github": "DJMAccie/Emerald",
+  "github": "DJMAccie/pokemon-emerald-3d-voxel-mod",
   "api": 2,
   "entry": "main.lua",
   "profile": "content",
@@ -13,13 +13,27 @@
   "game_version": "0.0.0-dev || >=0.2.73 <3.0.0",
   "priority": 100,
   "dependencies": [],
-  "optional_dependencies": [
-    "STADIUM2_IMPORTER"
-  ],
+  "optional_dependencies": [],
   "conflicts": [],
   "permissions": [
-    "engine_internals"
+    "engine_internals",
+    "compute"
   ],
   "affects_link": false,
-  "description": "Pokemon Emerald as a 3D voxel world: free camera, Pokemon in the overworld, 3D battles with Stadium 2 models."
+  "options_schema": "wilds/options.lua",
+  "description": "Pokemon Emerald as a 3D voxel world: free camera, Pokemon in the overworld, 3D battles with Stadium 2 and Colosseum models.",
+  "optional_imports": [
+    {
+      "id": "stadium2_rom",
+      "name": "Pokemon Stadium 2 (USA or Europe) ROM",
+      "description": "Source ROM for the 3D Pokemon models (#1-251). .z64, .v64 and .n64 files are accepted and normalized by the engine.",
+      "file": "stadium2.z64",
+      "format": "n64",
+      "size": 67108864,
+      "md5": [
+        "1561c75d11cedf356a8ddb1a4a5f9d5d",
+        "b1271db50d6ef8f6b53cc640c3743e4f"
+      ]
+    }
+  ]
 }

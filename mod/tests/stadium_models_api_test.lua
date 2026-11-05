@@ -61,7 +61,7 @@ local provider = {exports={
 local logger = {warnings={}}
 function logger:warn(_, message) self.warnings[#self.warnings+1]=message end
 local V = {mod={
-  find=function(id) return id=="STADIUM2_IMPORTER" and provider or nil end,
+  exports=provider.exports,
   log=logger,
 }}
 function V.require(name)
@@ -71,7 +71,7 @@ end
 
 local StadiumModels = assert(loadfile("lib/StadiumModels.lua"))(V)
 ok(StadiumModels.installed(),"detects Stadium model API v2")
-ok(not StadiumModels.active(),"Battle Art sprites remain while Stadium battle is off")
+ok(not StadiumModels.active(),"2D sprites remain while Stadium battle is off")
 
 providerBattleEnabled=true
 local battle={
@@ -93,7 +93,7 @@ local arena={player={8,0,56},enemy={8,0,8}}
 local textures={player={canvas=true},enemy={canvas=true,trainer=true}}
 local placements=StadiumModels.placements(arena,3,textures,battle)
 ok(placements.player and not placements.enemy,
-  "trainer portraits stay on Battle Art's card path")
+  "trainer portraits stay on the 2D card path")
 local placed=placements.player.modelMatrix
 ok(math.abs(placed[6]*-2+placed[8]-3)<1e-9,
   "model floor is planted on voxel ground")
@@ -142,6 +142,6 @@ ok(not status.active and not status.sides.player and not status.sides.enemy,
 providerEnabled=true
 providerBattleEnabled=false
 ok(not StadiumModels.active(),
-  "turning Stadium battle off restores Battle Art sprites")
+  "turning Stadium battle off restores 2D sprites")
 
-print(("%d checks passed (Battle Art Stadium model bridge)"):format(checks))
+print(("%d checks passed (Stadium model bridge)"):format(checks))

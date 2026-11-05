@@ -25,7 +25,7 @@ return function(game)
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
  local exports=game.mods and game.mods.exports or {}
- local export=exports.BATTLE_ART_VOXEL_FORK
+ local export=exports.emerald_3d_voxel_mod
  print('[EM QA] battle art export:',export and 'yes' or 'NO')
  local ns=export and (export.gen3 or export.firered)
  local C=ns and ns.camera

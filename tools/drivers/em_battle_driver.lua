@@ -43,7 +43,7 @@ return function(game)
  print('[BT] species internal ids: player',playerSp,'foe',foeSp)
  local code,mon=Party.giveMonToPlayer(game.session,playerSp,12)
  print('[BT] give mon:',code,mon and mon.species)
- local ex=game.mods.exports.STADIUM2_IMPORTER
+ local ex=game.mods.exports.emerald_3d_voxel_mod
  for i=1,120 do
   U.wait(30)
   local st=ex and ex.status()
@@ -53,7 +53,7 @@ return function(game)
  local ok,err=pcall(Bridge.startWild,game.mods,game,{species=foeSp,level=8},{})
  print('[BT] startWild:',ok,err)
  local Battle=require('src.core.game3.battle')
- local Models=game.mods.exports.BATTLE_ART_VOXEL_FORK.lib.require('Gen3StadiumModels')
+ local Models=game.mods.exports.emerald_3d_voxel_mod.lib.require('Gen3StadiumModels')
  -- EM_DEEPTRACE=1: print the call chain the first time the Lua stack gets
  -- unusually deep, since a stack-overflow traceback hides the loop itself.
  if os.getenv('EM_DEEPTRACE') then
@@ -86,7 +86,7 @@ return function(game)
   if t%60==0 then
    local s=Models.status()
    if t==120 or t==300 then
-    local lib=game.mods.exports.BATTLE_ART_VOXEL_FORK.lib
+    local lib=game.mods.exports.emerald_3d_voxel_mod.lib
     local BA=lib.require('BattleSpecies'); local SM=lib.require('StadiumModels')
     local b=Models.battle()
     print('[BT dbg] battle?',b~=nil,'player',b and b.player and b.player.species,'enemy',b and b.enemy and b.enemy.species,
@@ -94,8 +94,8 @@ return function(game)
      'installed',tostring(SM.installed()),'active',tostring(SM.active()))
     local info=debug.getinfo(BA.speciesFor,'S'); print('[BT dbg] speciesFor from',info.short_src,info.linedefined,'probe280',tostring(BA.speciesFor({mon={species=280}})),'probe406',tostring(BA.speciesFor({mon={species=406}})))
     local Gen=lib.require('Generation'); local okN,natv=pcall(require('src.core.game3.pokemon').national,b and b.player and b.player.species)
-    print('[BT dbg] Generation.number',tostring(Gen.number()),'isGen3',tostring(Gen.isGen3()),'national(player)',tostring(okN),tostring(natv),'speciesMax',tostring(game.mods.exports.STADIUM2_IMPORTER.speciesMax and game.mods.exports.STADIUM2_IMPORTER.speciesMax()))
-    local ex=game.mods.exports.STADIUM2_IMPORTER
+    print('[BT dbg] Generation.number',tostring(Gen.number()),'isGen3',tostring(Gen.isGen3()),'national(player)',tostring(okN),tostring(natv),'speciesMax',tostring(game.mods.exports.emerald_3d_voxel_mod.speciesMax and game.mods.exports.emerald_3d_voxel_mod.speciesMax()))
+    local ex=game.mods.exports.emerald_3d_voxel_mod
     print('[BT dbg] importer modelsEnabled',tostring(ex.modelsEnabled()),'battleEnabled',tostring(ex.battleEnabled()),'available',tostring(ex.available()))
     local okI,inst=pcall(function() return ex.models.newInstance(b and b.enemy and b.enemy.species or 25,'normal',{}) end)
     print('[BT dbg] newInstance enemy species:',okI, okI and (inst and 'ok' or 'nil') or tostring(inst))
@@ -103,7 +103,7 @@ return function(game)
    print(string.format('[BT] t=%d active=%s owned=%s/%s provider=%s sides=%s/%s battle=%s',t,tostring(s.active),tostring(s.owned.player),tostring(s.owned.enemy),tostring(s.provider.active),tostring(s.provider.sides.player),tostring(s.provider.sides.enemy),tostring(Battle.isActive())))
   end
   if os.getenv('EM_ORBIT') and (t==400 or t==640) then
-   local cam=game.mods.exports.BATTLE_ART_VOXEL_FORK.lib.require('Gen3Battle').camera
+   local cam=game.mods.exports.emerald_3d_voxel_mod.lib.require('Gen3Battle').camera
    if cam then cam.yaw=(cam.yaw+tonumber(os.getenv('EM_ORBIT')))%(math.pi*2) print('[BT] orbit yaw',cam.yaw) end
   end
   if t==150 or t==190 or t==240 or t==480 or t==720 then U.shot(game,dir..'/battle_'..t..'.png') end

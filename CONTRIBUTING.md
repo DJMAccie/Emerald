@@ -1,4 +1,4 @@
-# Contributing to Emerald 3D
+# Contributing to Pokemon Emerald 3D Voxel Mod
 
 Thanks for wanting to add to this. The mod is Lua code for gen1recomp, so most changes are small and easy to check by eye.
 

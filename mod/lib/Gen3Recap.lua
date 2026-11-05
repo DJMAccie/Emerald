@@ -38,7 +38,7 @@ function M.install(camera)
   Renderer:endWorldPass()
   if not ok or not result then
    Renderer.uiOpaque=true;Renderer.worldOverride=nil
-   if not ok then print('[Battle Art recap] '..tostring(result))end
+   if not ok then print('[emerald 3d recap] '..tostring(result))end
    return draw(playback,session)
   end
   camera.active=true;M.lastMap=scene.map;M.frames=(M.frames or 0)+1

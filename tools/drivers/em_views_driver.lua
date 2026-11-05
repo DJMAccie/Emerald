@@ -1,5 +1,5 @@
 -- POKEPORT_DRIVER script: boot Emerald in a disposable QA identity, load a few
--- early maps with Battle Art's Gen 3 camera at several levels, and capture
+-- early maps with the mod.s Gen 3 camera at several levels, and capture
 -- frames to SHOT_DIR.  Run from the engine root (needs tests/drivers/util.lua).
 return function(game)
  local U=dofile('tests/drivers/util.lua')
@@ -9,7 +9,7 @@ return function(game)
  game:_handleBootAction({action='new_game',name='MAY',gender=1,start={map='EM_LITTLEROOT_TOWN',x=10,y=10,facing='down'}})
  U.wait(90)
  local exports=game.mods and game.mods.exports or {}
- local export=exports.BATTLE_ART_VOXEL_FORK
+ local export=exports.emerald_3d_voxel_mod
  print('[EM QA] battle art export:',export and 'yes' or 'NO')
  local ns=export and (export.gen3 or export.firered)
  local C=ns and ns.camera

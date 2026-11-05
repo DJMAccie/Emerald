@@ -7,7 +7,7 @@ ModSetting.__index = ModSetting
 
 local function modId()
   local mod = V.mod
-  return (mod and mod.id) or "BATTLE_ART_VOXEL_FORK"
+  return (mod and mod.id) or "emerald_3d_voxel_mod"
 end
 
 function ModSetting.new(key, label, values, labels, defaultIndex)

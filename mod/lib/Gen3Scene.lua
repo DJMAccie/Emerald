@@ -1,4 +1,4 @@
--- Native FireRed art in Battle Art's existing depth/shadow renderer
+-- Native FireRed art in the depth/shadow renderer
 local V=...
 local R=V.require('Voxel3D')
 local Shadow=V.require('ShadowMap')

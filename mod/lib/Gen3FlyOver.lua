@@ -164,7 +164,7 @@ local function mountSprite(game,mon)
   local m=bakedSprite(okN and tonumber(nat) or tonumber(mon.species),shinyMon)
   if m then return m end
  end
- local ex=game and game.mods and game.mods.exports and game.mods.exports.overworld_wild_spawns
+ local ex=V.mod and V.mod.exports
  if mon and mon.species and ex and type(ex.resolveGen3Sprite)=='function' then
   local shiny=false
   pcall(function()shiny=eng('src.core.game3.summary_data').isShiny(mon) and true or false end)

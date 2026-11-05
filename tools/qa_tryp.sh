@@ -28,7 +28,7 @@ LOCK=/tmp/emerald-qa.lock
 AS="$HOME/Library/Application Support"
 MAIN="$AS/pokemon-love2d-rseqa"
 # QA_SRC: take the named files from this tree instead of the mod source (a QA-only probe build)
-M=${QA_SRC:-$HOME/Documents/Emerald/mod}
+E="$(cd "$(dirname "$0")/.." && pwd)"; M=${QA_SRC:-$E/mod}
 LIMIT=${QA_LIMIT:-360}; [ "$LIMIT" -gt 400 ] && LIMIT=400
 COPIES=4; GAMES=4
 # a bare name is a lib file; a name with a slash is a path under the mod root
@@ -86,7 +86,7 @@ while :; do
     rm -rf "$QI" "$QI.tmp"; cp -Rc "$MAIN" "$QI.tmp" 2>/dev/null || cp -R "$MAIN" "$QI.tmp"; mv "$QI.tmp" "$QI"
     DIRTY="$DIRTY $HF"                              # cloned with them in: not clean yet
   else
-    EX=(); for f in $HF; do EX+=(--exclude "/BATTLE_ART_VOXEL_FORK/lib/$f"); done
+    EX=(); for f in $HF; do EX+=(--exclude "/emerald_3d_voxel_mod/lib/$f"); done
     rsync -a --delete ${EX[@]+"${EX[@]}"} "$MAIN/mods/" "$QI/mods/"
   fi
   H2=$(holder)
@@ -100,7 +100,7 @@ while :; do
 done
 # 3. the files under test
 echo "$FILES" > "$QI/.tryp_swapped"
-for f in $FILES; do mkdir -p "$(dirname "$QI/mods/BATTLE_ART_VOXEL_FORK/$(rel "$f")")"; cp "$M/$(rel "$f")" "$QI/mods/BATTLE_ART_VOXEL_FORK/$(rel "$f")"; done
+for f in $FILES; do mkdir -p "$(dirname "$QI/mods/emerald_3d_voxel_mod/$(rel "$f")")"; cp "$M/$(rel "$f")" "$QI/mods/emerald_3d_voxel_mod/$(rel "$f")"; done
 # 4. room for one more game, then boot under the setup lock
 while :; do
   until mkdir /tmp/emerald-qa.setup 2>/dev/null; do stale /tmp/emerald-qa.setup; sleep 1; done; SETUP=1
@@ -123,14 +123,14 @@ U="$AS/pokemon-love2d/updates"
 PAY=$(ls -t "$U"/gen1recomp-*.love 2>/dev/null | head -1)
 [ -n "$PAY" ] && { mkdir -p "$QI/updates"; cmp -s "$PAY" "$QI/updates/$(basename "$PAY")" || cp "$PAY" "$QI/updates/"; }
 caffeinate -u -t $((LIMIT+30)) >/dev/null 2>&1 &
-cd ~/Documents/Emerald/gen1recomp || exit 1
+cd "$E/gen1recomp" || exit 1
 echo "[qa_tryp] identity $ID files $FILES" > "$OUT/run.log"
 EM_YAW=$YAW EM_LEVELS="$OUT/levels.lua" \
-  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/Emerald/tools/drivers/em_views_driver.lua} \
+  POKEPORT_DRIVER=${EM_DRIVER:-$E/tools/drivers/em_views_driver.lua} \
   SDL_MAC_BACKGROUND_APP=${QA_SDL_BG:-1} POKEPORT_BACKGROUND=${QA_BACKGROUND:-1} POKEPORT_IDENTITY=$ID POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   EM_CASES="$OUT/cases.lua" EM_WAIT=$WAIT /Applications/gen1recomp.app/Contents/MacOS/love . >> "$OUT/run.log" 2>&1 &
 G=$!
-for _ in $(seq 1 60); do grep -q "loaded mod BATTLE_ART\|EM QA\]" "$OUT/run.log" 2>/dev/null && break; kill -0 $G 2>/dev/null || break; sleep 1; done
+for _ in $(seq 1 60); do grep -q "loaded mod emerald_3d_voxel_mod\|EM QA\]" "$OUT/run.log" 2>/dev/null && break; kill -0 $G 2>/dev/null || break; sleep 1; done
 rmdir /tmp/emerald-qa.setup; SETUP=
 for _ in $(seq 1 $LIMIT); do kill -0 $G 2>/dev/null || break; sleep 1; done
 if kill -0 $G 2>/dev/null; then kill $G; sleep 2; kill -9 $G 2>/dev/null; echo "WATCHDOG: stopped after ${LIMIT}s" >> "$OUT/run.log"; fi
