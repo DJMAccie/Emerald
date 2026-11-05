@@ -412,7 +412,7 @@ do
   {r=9,h=1,rows=function()return 11 end},{r=7,h=1,rows=function()return 10 end},{r=5,h=1,rows=function()return 9 end},
   {r=2,h=1,rows=function()return 8 end},{disc=2,row=8}}}}
  for _,m in ipairs({0x246,0x247,0x24E,0x24F,0x256,0x257,0x25E,0x25F})do SL[m]={kind='lathe',lathe=LH,ground=0x001,reviewedSurface=true} end
- for _,m in ipairs({0x220,0x221,0x222,0x228,0x229,0x22A})do SL[m]={kind='extrude',h=9,ground=0x001,sidePx={0x229,8,8},reviewedSurface=true} end
+ for _,m in ipairs({0x220,0x221,0x222,0x228,0x229,0x22A})do SL[m]={kind='extrude',h=9,ground=0x001,sidePx={0x229,8,8},reviewedSurface=true,dock=true} end
  SHAPE_BY_MAP.EM_SLATEPORT_CITY=SL
  local R117={}
  for _,m in ipairs({0x149,0x148,0x13A,0x138,0x14A,0x142,0x140})do R117[m]={kind='fence',ground=0x001,reviewedSurface=true} end
@@ -1178,6 +1178,7 @@ local function build(req,cache,previous)
    plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
    local Planter=V.require('Gen3Planter')
    if not c.stageHidden and Planter.owns(c) then Planter.append(c,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,function(p,t,sh)quad(b.cv,b.ci,p,t,sh)end,uvFor,cells)
+   elseif not c.stageHidden and shape.dock then V.require('Gen3DryDock').append(c,cells,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor)
    elseif not c.stageHidden then
     local sp=shape.sidePx and uvFor(ts,shape.sidePx[1])
     local st=sp and (function()local u,v=sp[1][1]+(sp[2][1]-sp[1][1])*(shape.sidePx[2]+.5)/16,sp[1][2]+(sp[3][2]-sp[1][2])*(shape.sidePx[3]+.5)/16;return {{u,v},{u,v},{u,v},{u,v}} end)()
