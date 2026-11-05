@@ -8,6 +8,7 @@
 # battle), so this wrapper only does what every run needs: the QA identity
 # guard, the windowed/zoom reset, the payload sync and the watchdog.
 set -u
+E="$(cd "$(dirname "$0")/.." && pwd)"
 OUT=$1; PLAYER=${2:-252}; FOE=${3:-270}; FRAMES=${4:-760}
 LOCK=/tmp/emerald-qa.lock
 LIMIT=${QA_LIMIT:-420}
@@ -38,9 +39,9 @@ caffeinate -u -t $((LIMIT+30)) >/dev/null 2>&1 &
 # is the same trick for OpenAL, which the log shows this build using.
 export SDL_AUDIODRIVER=${SDL_AUDIODRIVER:-dummy}
 export ALSOFT_DRIVERS=${ALSOFT_DRIVERS:-null}
-cd ~/Documents/Emerald/gen1recomp || exit 1
+cd "$E/gen1recomp" || exit 1
 EM_BATTLE_FRAMES=$FRAMES EM_PLAYER_SPECIES=$PLAYER EM_FOE_SPECIES=$FOE \
-  POKEPORT_DRIVER=${EM_DRIVER:-$HOME/Documents/Emerald/tools/drivers/em_battle_driver.lua} \
+  POKEPORT_DRIVER=${EM_DRIVER:-$E/tools/drivers/em_battle_driver.lua} \
   POKEPORT_IDENTITY=pokemon-love2d-rseqa POKEPORT_GAME=emerald SHOT_DIR="$OUT" \
   /Applications/gen1recomp.app/Contents/MacOS/love . > "$OUT/run.log" 2>&1 &
 G=$!
