@@ -185,3 +185,8 @@ Rules: R-22,R-23
 Cause: Putting three mods in one folder broke in four places: a part's main.lua returns a function, so chunkFor(rel)(mod) only CALLED the chunk and the entry never ran; mod.options:define REPLACES the schema, so the last part wiped the others' option defaults (every get() returned nil and wilds spawned nothing); two parts exported gen3 (world camera vs wilds state) and the second overwrote the first; install/require paths are the folder name, so every mods.<id>.lib require and mod:read path needs the subfolder.
 Fix: Call entry function's result; wrap options.define in main.lua to merge rows; give each part its own export key (wilds = S); keep required_imports optional so a missing ROM does not make the whole mod invalid; grep for mod:read/':list(' and 'mods/' paths after moving trees.
 Rules: R-38
+
+### L-81 A QA run that cannot write its copy still reports shots
+Cause: qa_tryp.sh copies the mod into ~/Library/Application Support/pokemon-love2d-rseqa-pN and swaps in the files under test. If the process cannot write that folder (a sandbox that only allows the repo), rsync/cp fail, the game boots the copy's INSTALLED mod instead, and the summary still prints the shot count and 'fallback 0' -- green numbers for code that was never loaded. The private copy also keeps no .tryp_swapped, so later runs sync a stale tree.
+Fix: Read run.log: it must start with '[qa_tryp] identity ... files <the files you named>'; a run whose stderr has 'Operation not permitted' on the QA folder proves nothing. Re-run with full file access (or from outside a sandbox) and confirm the shots changed when the code did.
+Rules: R-22

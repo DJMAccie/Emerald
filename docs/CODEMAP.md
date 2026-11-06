@@ -17,10 +17,11 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
   - registerPlant@10 sub@18 pixel@22 colorKey@29 mask@30 solidPlant@51 plant@109 groupAwnings@209 groundProps@232 isGreen@273 profile@277 sideProfile@314 sideLedge@338 ownsFaces@397 ledgeFloor@405 ledge@424 hsh@504 tuftInfo@505 blades@553 tufts@568 append@599 image@718 release@738
 - `Gen3PinData` 45: 
 - `Gen3Recap` 63: Render recorded Quest Log scenery through the selected camera without moving the live player,
-- `Gen3Scene` 2824: Native FireRed art in the depth/shadow renderer
-  - isDeck@49 context@56 quad@60 uvFor@87 plane@101 flightAxis@106 flightTreads@125 swatch@177 wallColumn@183 nativeEffects@211 nativeRequired@215 releaseGeometry@230 tileIdentity@253 tilesetsReady@271 walkGate@295 directNeighbours@298 debugRegions@304 tourBounds@310 request@318 shiftedLathe@365 firstArea@639 build@640 [inside build, first calls: Budget.tick@656 Pairs.resolve@676 Tiles.get@714 SceneCache.key@718 Reef.join@721 BuildingModels.prepare@759 Elevation.daisPrepare@762 Decks.prepare@763 Furniture.extract@766 Shapes.layout@774 Outdoor.groundProps@775 Elevation.bind@781 Elevation.daisSettle@878 Decks.settle@879 Mass.append@1015 Stairs.append@1064 Lamp.is@1071 Stairs.appendWall@1076 Fence.append@1305 Gate.append@1339 Reef.append@1353 Mass.ground@1362 Terrain.append@1462 VoxelBuildings.append@1681 Roof.sideVisible@1779 Elevation.lift@1894 Furniture.append@2036 BuildingModels.mesh@2055 Budget.check@2059 CamClear.addQuads@2072] aheadRequest@2129 aheadHooks@2170 warmAhead@2181 prepare@2218 panesOf@2273 ink@2278 eyeUnderCrown@2291 terrain@2302 waterMeshes@2341 rideDust@2351 fastMesh@2378 cardMesh@2386 actor@2426 debugRaw@2484 builtBounds@2485 readyFor@2486 groundAt@2487 deckCut@2500 actors@2523 fieldEffects@2581 restore@2642 presentField@2653 draw@2660 invalidate@2807 release@2808
+- `Gen3Scene` 2568: Native FireRed art in the depth/shadow renderer
+  - isDeck@49 context@56 quad@60 uvFor@87 plane@101 flightAxis@106 flightTreads@125 swatch@177 wallColumn@183 nativeEffects@211 nativeRequired@215 releaseGeometry@230 tileIdentity@253 tilesetsReady@271 walkGate@295 directNeighbours@298 debugRegions@304 tourBounds@310 request@318 shiftedLathe@365 firstArea@383 build@384 [inside build, first calls: Budget.tick@400 Pairs.resolve@420 Tiles.get@458 SceneCache.key@462 Reef.join@465 BuildingModels.prepare@503 Elevation.daisPrepare@506 Decks.prepare@507 Furniture.extract@510 Shapes.layout@518 Outdoor.groundProps@519 Elevation.bind@525 Elevation.daisSettle@622 Decks.settle@623 Mass.append@759 Stairs.append@808 Lamp.is@815 Stairs.appendWall@820 Fence.append@1049 Gate.append@1083 Reef.append@1097 Mass.ground@1106 Terrain.append@1206 VoxelBuildings.append@1425 Roof.sideVisible@1523 Elevation.lift@1638 Furniture.append@1780 BuildingModels.mesh@1799 Budget.check@1803 CamClear.addQuads@1816] aheadRequest@1873 aheadHooks@1914 warmAhead@1925 prepare@1962 panesOf@2017 ink@2022 eyeUnderCrown@2035 terrain@2046 waterMeshes@2085 rideDust@2095 fastMesh@2122 cardMesh@2130 actor@2170 debugRaw@2228 builtBounds@2229 readyFor@2230 groundAt@2231 deckCut@2244 actors@2267 fieldEffects@2325 restore@2386 presentField@2397 draw@2404 invalidate@2551 release@2552
 - `Gen3SceneCache` 24: Native layouts are immutable base cells plus sparse public overrides
 - `Gen3SceneOptions` 81: Shared presentation consumers for Game3
+- `Gen3ShapesByMap` 274: Every per-map metatile recipe: what a map's own tiles are built as. (Gen3Scene's SHAPE_BY_MAP block, moved out
 - `Gen3TileShape` 200: Emerald's native metatiles, scoped to their PRIMARY/SECONDARY tileset pair
 - `Gen3Tilesets` 27: The importer adds generated pairs to Versions only while importing a ROM
 - `RenderDistance` 39: A conservative world-space draw/build budget for the voxel neighborhood
@@ -60,11 +61,11 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `Gen3Market` 56: Slateport's merchandise: round baskets, with the original rim and contents on top.
 - `Gen3ObliqueWall` 386: Interior walls drawn obliquely as blocks
 - `Gen3Partition` 72: Interior partition walls drawn from above
-- `Gen3PixelFurniture` 454: Pixel-voxel furniture
+- `Gen3PixelFurniture` 455: Pixel-voxel furniture
 - `Gen3Planter` 295: Battle Frontier flower planters
 - `Gen3RoofDetails` 114: Building-specific roof treatment
 - `Gen3VoxelBuildings` 227: Emerald buildings as pixel voxels
-- `InteriorDiorama` 468: Shared presentation-only room framing
+- `InteriorDiorama` 474: Shared presentation-only room framing
 - `LandmarkModels` 201: Landmarks
 - `RoofEaves` 29: Closed, thin roof projections
 ### Objects, trees, props
@@ -83,20 +84,20 @@ functions (`name@line`). Data tables are in `mod/data/` (generated; never read t
 - `Gen3TreeStamps` 72: Which tiles draw a tree and how each is stood up
 - `NativeTreeArt` 222: Original, palette-baked game art on grounded cards
 - `SpriteVoxel` 202: Sprite-to-voxel
-- `TowerGraveMist` 406: TEST135
+- `TowerGraveMist` 406: Test 135
 - `TreePresentation` 14: Scenery options: rocks & plants, textures
 ### Fly, camera, tour
 - `AtmosphereCamera` 23: 
 - `BattleCam` 105: Overworld battles
 - `CameraEye` 10: Use the upper face for a comfortable first-person horizon
 - `CameraSettings` 5: The same look preference feeds the native and GB camera adapters
-- `DebugWalk` 14: DEBUG WALK
+- `DebugWalk` 14: Debug walk
 - `FlyMotion` 60: Gen 1 Fly choreography
 - `Gen3FlyGround` 487: Gen3FlyGround
 - `Gen3FlyOver` 979: Gen3FlyOver
   - eng@34 now@35 note@36 slow@38 active@43 frame@44 hidesPlayer@50 hidesFollowers@51 state@52 size@54 sectionTable@56 regionCentre@68 layout@77 place@84 worldFrom@100 groundMaps@109 supported@121 flyers@132 bakedSprite@140 mountSprite@158 segRectDist@183 fullMap@195 allocBands@204 carpetPlan@216 cutBand@242 applyCut@269 buildRows@272 cutRect@327 carpetStep@333 releaseCarpet@367 restorePlayer@378 computePose@382 swap@414 showPopup@426 finish@430 abort@447 start@464 whiteAt@501 slice@506 stepRider@511 groundStep@531 update@547 focus@591 upFor@595 camera@601 fog@629 sea@640 drawGround@655 facingFor@682 flap@687 shadow@695 drawRider@713 cloudImage@782 overlay@806 warm@845 prewarm@861 prewarmStep@872 install@884 plan@962 eligible@968
 - `Gen3FlyPath` 152: Gen3FlyPath
-- `TourMode` 296: TOUR
+- `TourMode` 296: Tour
 ### Battle
 - `BattleOcclusion` 33: A camera-relative opening to each complete battler group
 - `BattleShots` 231: The battle's own cutting
