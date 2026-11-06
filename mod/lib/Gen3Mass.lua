@@ -114,6 +114,7 @@ M.SPLIT_GENERAL={EM_ROUTE112=true}
 M.SPLIT_BOX={EM_SKY_PILLAR_OUTSIDE={14,9,21,13}}
 local function inBox(c,B)return c.cx>=B[1] and c.cx<=B[3] and c.cy>=B[2] and c.cy<=B[4] end
 M.STACK=40
+M.SEA_MASS_MAX=12 -- a sea boulder is small; a bigger merged mass (a coast ridge seen from the next map) splits again or it becomes one huge disc
 local function flood(cells,c,seen,merge)
  local visited,members,stack={[c]=true},{}, {c}
  local bank,sea,cross=false,false,false
@@ -128,7 +129,7 @@ local function flood(cells,c,seen,merge)
     local split=M.SPLIT_GENERAL[V.require('Gen3Rock').mapId or ''] and ((p.mid>=0x068 and p.mid<=0x0BF)~=(n.mid>=0x068 and n.mid<=0x0BF))
     local B=M.SPLIT_BOX[V.require('Gen3Rock').mapId or '']
     if B and inBox(p,B)~=inBox(n,B) then split=true end
-    if split then
+    if split or (p.looseStone or false)~=(n.looseStone or false) then
     elseif mine(n) then
      if merge then take=(not mine(p)) or sameMass(p,n)
       if take and M.LONE_SEA_ROCK[n.mid] and not M.LONE_SEA_ROCK[c.mid] and not (c.shape.sea or c.shape.bank) then take=false end
@@ -168,7 +169,7 @@ function M.prepare(cells,outdoor)
  for _,c in ipairs(order)do
   if not seen[c] then
    local members,bank,sea,cross=flood(cells,c,seen,true)
-   if cross and #members>M.STACK then members,bank,sea=flood(cells,c,seen,false) end
+   if cross and (#members>M.STACK or (sea and #members>M.SEA_MASS_MAX)) then members,bank,sea=flood(cells,c,seen,false) end
    for _,m in ipairs(members)do seen[m]=true end
    if sea and cross then
     local inside={}
@@ -192,7 +193,7 @@ function M.prepare(cells,outdoor)
    end
    local x0,y0,x1,y1=c.cx,c.cy,c.cx,c.cy
    for _,m in ipairs(members)do x0=math.min(x0,m.cx);y0=math.min(y0,m.cy);x1=math.max(x1,m.cx);y1=math.max(y1,m.cy) end
-   local mass={members=members,x0=x0,y0=y0,x1=x1,y1=y1,ts=c.ts,owner=c,bank=bank,seaBoulders=sea,mapId=V.require('Gen3Rock').mapId}
+   local mass={members=members,x0=x0,y0=y0,x1=x1,y1=y1,ts=c.ts,owner=c,boulder=c.looseStone,bank=bank,seaBoulders=sea,mapId=V.require('Gen3Rock').mapId}
    for _,m in ipairs(members)do
     m.mass=mass
     local o=m.object or m.objectTop
@@ -588,7 +589,7 @@ local function emitDome(mass,d,emit,uvOf,base)
      local cx,cy,cz=point(pe,y,-1);local dx,dy,dz=point(px,y,-1)
      emit({{ax,ay,az},{bx,by,bz},{cx,cy,cz},{dx,dy,dz}},uv,1)
     end
-    if round then
+    if d.solid then
      local function cap(x,sh)
       local ax,ay,az=point(x,y,1);local bx,by,bz=point(x,y+1,1)
       local cx2,cy2,cz2=point(x,y+1,-1);local dx,dy,dz=point(x,y,-1)
@@ -926,7 +927,13 @@ local function emitMass(mass,emit,uvOf,cell)
   end
  end
  for _,d in ipairs(mass.domes or {})do
-  if owns(math.floor((d.x0+d.x1)/2),d.y1) then
+  -- Anchor to an occupied pixel: the bottom centre can be outside an L-shaped mass.
+  if not d.anchorX then
+   local x=d.x0
+   while x<=d.x1 and not d.set[d.y1*W+x] do x=x+1 end
+   d.anchorX,d.anchorY=x,d.y1
+  end
+  if owns(d.anchorX,d.anchorY) then
   local base=mass.foot or 0
   if mass.floorAt then base=mass.floorAt(d) end
   emitDome(mass,d,emit,uvOf,base)

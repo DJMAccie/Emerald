@@ -175,3 +175,13 @@ Rules: R-29
 Cause: The boat is the 3x2 metatiles 0x220-0x222/0x228-0x22A at x21-23,y35-36; the whole upper row is TOP-layer art (bottom layer there is plain grass), but the old kind='extrude' h=9 (Gen3Fence.extrude) read imageData only, so it extruded just the lower row's hull colours into a brown trough whose tan side skirt looked like a mud patch (Petya 2026-11-05: 'oh fix that boat as well'). The art is a 48x32 view from the south: far rim rows 0-2, inner far wall 3-11, floor 12-15, near rim 16-18, near planks 19-28, two props (cols 7-9 rows 18-27, cols 35-37 rows 21-30), a D-shaped stern rail.
 Fix: Gen3DryDock (hooked as shape.dock in the extrude branch of Gen3Scene.build) composites bottom+top layer, floods the ground colours in from the border, and per column stacks the art's own rows with the 45 degree rule z=row+height: near planks as the south face (10 rows), 3-row rim ledges flat at the rim, the far wall's inner face (9 rows), the floor 1 px up, hidden floor strip, side quads from a per-column z/height profile, props as boxes; columns shorter than 8 rows (prow tip) are left out. The em_ortho_driver shot of the 3D matches the 2D art pixel for pixel. Dump a tile group as a char map with a QA_SRC probe that prints imageData and overImageData.
 Rules: R-08,R-29
+
+### L-79 Interior QA sweeps: ids, active flag, framing
+Cause: A map id typed as EM_..._1_F (digit-letter split) does not load, Map.load still logs 'load true' and the shot shows the PREVIOUS map (log line says active false); the day driver names shots by x_y so maps collide; door-spawn shots crop big rooms (Dept Store 2F-5F show a corner) and QA_ZOOM does nothing at level 7.
+Fix: Ids are EM_UPPER_SNAKE with the floor glued (..._1F); drop every shot whose [EM view] line says active false; use EM_INDEXED=1; for big rooms put the player at the room centre and shoot yaw 0 and 3.14159.
+Rules: R-22,R-23
+
+### L-80 Merging mods into one: four traps
+Cause: Putting three mods in one folder broke in four places: a part's main.lua returns a function, so chunkFor(rel)(mod) only CALLED the chunk and the entry never ran; mod.options:define REPLACES the schema, so the last part wiped the others' option defaults (every get() returned nil and wilds spawned nothing); two parts exported gen3 (world camera vs wilds state) and the second overwrote the first; install/require paths are the folder name, so every mods.<id>.lib require and mod:read path needs the subfolder.
+Fix: Call entry function's result; wrap options.define in main.lua to merge rows; give each part its own export key (wilds = S); keep required_imports optional so a missing ROM does not make the whole mod invalid; grep for mod:read/':list(' and 'mods/' paths after moving trees.
+Rules: R-38

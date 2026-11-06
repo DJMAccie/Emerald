@@ -77,7 +77,8 @@ end
 M.LOOSE=true
 local function set(t)local r={};for _,v in ipairs(t)do r[v]=true end;return r end
 M.STONES={
- fallarbor=set({0x219,0x21A,0x223,0x225}), -- ash stones (Route 113); general 0E0/0E2 and the cone rocks are already low and round as blocks
+ general=set({0x093,0x094,0x09B,0x09C,0x0DF,0x0E0,0x0E1,0x0E2}),
+ fallarbor=set({0x219,0x21A,0x223,0x225}), -- ash stones (Route 113)
 }
 function M.isStone(c)
  local t=M.STONES[c.mid<0x200 and (c.primary or 'general') or (c.secondary or '')]
@@ -340,7 +341,6 @@ function M.liftSpots(cells)
  end
 end
 
-M.SLOPES=true
 -- A cave door outdoors is two tiles (R-50): the threshold on the floor and the arch behind it, standing in the wall.
 -- The arch tile sits at the threshold's floor so doorAt draws it once, one course high, rock above and dark inside.
 M.DOOR_BEHAVIOR={[0x60]=true,[0x69]=true,[0x6E]=true,[0x6F]=true,[0x8D]=true}
@@ -351,6 +351,7 @@ function M.lowerArches(cells)
  end
 end
 
+M.SLOPES=true
 M.SLOPE_RUN=1e9 -- px a wedge may drop in its own cell: 1e9 = whole drop in one cell, 16 = true 45 degrees.
 function M.buildSlopes(cells)
  local n=0
@@ -745,9 +746,9 @@ function M.append(c,cells,emit,uvFor)
  local E=V.require('Gen3Elevation')
  local lid=(E.BAND_LEVEL=='lower' and c.floor and c.floor.cls=='FACE') and uvFor(c.ts,c.mid) or lidUV(c,cells,uvFor,c.mass and massStats(c.mass) or nil)
  local fuv=cropWater(c.ts,fm or c.mid,fm and uvFor(c.ts,fm) or uvFor(c.ts,c.mid))
- local drops={}
  local Parapet=V.require('Gen3Parapet');local par=Parapet.is(c)
  if par then lid,fuv=Parapet.lid(c,uvFor) or lid,Parapet.face(c,uvFor) or fuv end -- a stone railing: plain floor under it, rock walls, the rail stands on top
+ local drops={}
  local nb,top={},{}
  for i,d in ipairs(DIRS)do
   local n=cells[key(c.cx+d[1],c.cy+d[2])];nb[i]=n

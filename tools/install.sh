@@ -1,5 +1,5 @@
 #!/bin/bash
-# Zet de mod (~/Documents/Emerald/mod) in het echte spel en in de testkopie.
+# Zet de mod (de map mod/ van deze repo) in het echte spel en in de testkopie.
 #   tools/install.sh          installeren
 #   tools/install.sh --check  alleen controleren of spel en testkopie gelijk zijn aan de bron
 # Weigert zolang het spel (of een testrun) draait: het spel schrijft bij afsluiten zijn bestanden terug.

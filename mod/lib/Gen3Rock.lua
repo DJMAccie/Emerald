@@ -92,6 +92,7 @@ local function bluff(mass)
  return true
 end
 function M.handles(mass,cells)
+ if mass and mass.owner and mass.owner.looseStone then return false end
  if not (M.enabled and mass and not mass.object and not (mass.bank and not V.require('Gen3Hills').bankOk(mass))) then return false end
  if not (M.MAPS[mass.mapId or ''] or M.CAVES[mass.mapId or '']) then return false end
  if V.require('Gen3Hills').claims(mass,cells) then return true end

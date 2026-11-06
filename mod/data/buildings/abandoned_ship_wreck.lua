@@ -1,5 +1,5 @@
 -- Route 108 wreck: anchor tiles and the hand-built hull (10 numbers per quad)
-return {name='abandoned_ship_wreck',map='EM_ROUTE108',pair='general__slateport',x0=27,y0=3,x1=33,y1=5,
+local model={name='abandoned_ship_wreck',map='EM_ROUTE108',pair='general__slateport',x0=27,y0=3,x1=33,y1=5,
  anchor={{27,3,414},{28,3,849},{29,3,850},{30,3,851},{31,3,852},{32,3,404},{33,3,439},{27,4,856},{28,4,857},{29,4,858},{30,4,859},{31,4,860},{32,4,861},{33,4,439}},
  tiles={{0,0,414},{1,0,849},{2,0,850},{3,0,851},{4,0,852},{5,0,404},{6,0,439},{0,1,856},{1,1,857},{2,1,858},{3,1,859},{4,1,860},{5,1,861},{6,1,439},{0,2,864},{1,2,865},{2,2,866},{3,2,867},{4,2,868},{5,2,869},{6,2,439}},
  claimBlocked=true,
@@ -358,3 +358,15 @@ return {name='abandoned_ship_wreck',map='EM_ROUTE108',pair='general__slateport',
  5,85,85,10.5,14.5,-10,-9,85,24,0,4,87,87,10.5,14.5,-9,-7,86,33,0,4,87,87,10.5,14.5,-3,-2,86,33,0,5,86,86,10.5,14.5,-9,-8,86,25,0,5,86,86,10.5,14.5,-8,-7,86,26,0,5,86,86,10.5,14.5,-3,-2,86,31,0,
  4,88,88,10.5,14.5,-7,-3,87,33,0,5,87,87,10.5,14.5,-7,-6,87,27,0,5,87,87,10.5,14.5,-6,-5,87,28,0,5,87,87,10.5,14.5,-5,-4,87,29,0,5,87,87,10.5,14.5,-4,-3,87,30,0,
  }}
+
+-- Keep the submerged deck at its existing height; give the cabin and broken
+-- gunwales their own vertical silhouette instead of flattening them into it.
+local function height(h)
+ if h<=4.6 then return h end
+ return 4.6+(h-4.6)*1.65
+end
+for i=1,#model.quads,10 do
+ model.quads[i+3]=height(model.quads[i+3])
+ model.quads[i+4]=height(model.quads[i+4])
+end
+return model

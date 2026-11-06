@@ -37,6 +37,7 @@ function M.fill()
  if not ok then note('no world fill: %s',tostring(err));fill=false end
  return fill or nil
 end
+local dewfordTrees={0x1D4,0x1D5,0x1DC,0x1DD}
 local function fillAt(F,x,y)
  local fx,fy=x-F.ox,y-F.oy
  if fx<0 or fy<0 or fx>=F.W or fy>=F.H then return nil end
@@ -44,12 +45,28 @@ local function fillAt(F,x,y)
  local lo,hi=F.cells:byte(i,i+1)
  local c=lo+hi*256
  if c==0 then return nil end
- return F.pairs[floor(c/1024)],c%1024
+ local pair,mid=F.pairs[floor(c/1024)],c%1024
+ if pair=='general__dewford' and mid==0x243 then mid=dewfordTrees[(y%2)*2+x%2+1] end
+ return pair,mid
 end
 M.fillAt=fillAt
 function M.placement(id)
  local F=M.fill();local p=F and F.place[id]
  if p then return p.ox,p.oy,p.overlay end
+end
+
+-- The flight atlas and the walking scene share Littleroot's coordinate origin.
+local sourceMaps,origins
+function M.origins(maps)
+ if sourceMaps~=maps then
+  local hub='EM_LITTLEROOT_TOWN'
+  origins={[hub]={ox=0,oy=0}}
+  for _,e in ipairs(eng('src.core.game3.map').computeWorld(maps,hub,99))do origins[e.id]=e end
+  local F=M.fill()
+  for id,e in pairs(F and F.place or {})do origins[id]=e end
+  sourceMaps=maps
+ end
+ return origins
 end
 
 -- Shared index map, 0-based uint32 (1,2,3,1,3,4 per quad).

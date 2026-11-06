@@ -138,6 +138,8 @@ local function secondary(name,t)
  t.flowers=set(FLOWERS[name] or {})
  S[name]=t
 end
+-- Long grass shares its palette with the crowns. Mask trees against bare ground.
+secondary('fortree',{ground=G.grass})
 secondary('petalburg',{
  roof=set({0x208,0x20A,0x218,0x219,0x21A,0x282,0x283}), -- the rest comes from gen3_emerald_auto
  roofTypes=(function()

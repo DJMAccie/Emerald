@@ -258,7 +258,7 @@ function M.bank(cells,outdoor)
  if not outdoor then return 0 end
  local U,freq={}, {}
  for k,c in pairs(cells)do
-  if blocked(c) and unknown(c) and c.ts and c.ts.imageData then
+  if blocked(c) and unknown(c) and not c.shape.seaRock and c.ts and c.ts.imageData then
    U[k]=c;local f=freq[c.pair] or {};freq[c.pair]=f;f[c.mid]=(f[c.mid] or 0)+1
   end
  end

@@ -146,11 +146,14 @@ local function notFence(ts,s)
 end
 
 local function lumOf(r,g,b)return .299*r+.587*g+.114*b end
-function M.extrude(c,cells,quad,uvFor,h,light,cool)
+function M.extrude(c,cells,quad,uvFor,h,light,cool,maskGround)
  local ts=c.ts;local slot=ts.midToSlot[c.mid];local uv=uvFor(ts,c.mid)
  if not slot or not uv or not ts.imageData then return end
  local ground={}
- if not light then
+ if maskGround and ts.midToSlot[maskGround] then
+  local sl=ts.midToSlot[maskGround];local gx,gy=sl%ts.cols*16,math.floor(sl/ts.cols)*16
+  for y=0,15 do for x=0,15 do local r,g,b=ts.imageData:getPixel(gx+x,gy+y);ground[key(r,g,b)]=true end end
+ elseif not light then
   for dy=-1,1 do for dx=-1,1 do
    local n=cells[(c.cx+dx)..':'..(c.cy+dy)]
    if n and n~=c and (n.collision or 0)==0 and n.ts==ts and ts.midToSlot[n.mid] then

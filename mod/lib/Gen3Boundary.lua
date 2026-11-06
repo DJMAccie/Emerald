@@ -1,4 +1,4 @@
--- Extend each FireRed perimeter from its own native scenery
+-- Render the native Emerald perimeter in map-local coordinates.
 local V=...
 local Select=V.require('BoundaryScenery')
 local Shapes=V.require('Gen3TileShape')
@@ -36,9 +36,47 @@ local function sample(r,x,y)
  if Collision.isSurfable(Collision.behaviorOn(r.def,x,y))then biome='water'end
  return {mid=mid,pair=pair,biome=biome,primary=spec.primary,secondary=spec.secondary,shape=shape}
 end
+local ground,atlas,origins
+function M.setWorld(maps)
+ if maps and V.require('Generation').version()=='emerald' then
+  ground=V.require('Gen3FlyGround')
+  atlas=ground.fill()
+  origins=ground.origins(maps)
+ end
+end
+local dewfordTrees={0x1D4,0x1D5,0x1DC,0x1DD}
 M.SKY={EM_SKY_PILLAR_TOP=true}
 M.SEA={EM_SOOTOPOLIS_CITY=0x279}
 function M.resolve(rs,x,y)
+ local owner,_,_,inside=Select.owner(rs,x,y)
+ if not owner or inside then return end
+ local id=owner.def.id
+ if M.SKY[id] then return end
+ local L=owner.def.midLayout
+ local version=V.require('Generation').version()
+ if version=='emerald' and L.borderMids and (L.borderWidth or 0)>0 and (L.borderHeight or 0)>0 then
+  local lx,ly=x-owner.x,y-owner.y
+  local mid=L.borderMids[(ly%L.borderHeight)*L.borderWidth+lx%L.borderWidth+1]
+  if id=='EM_DEWFORD_TOWN' then
+   mid=dewfordTrees[(ly%2)*2+lx%2+1]
+  end
+  local pair=L.pair
+  local origin=origins and origins[id]
+  if atlas and origin and not origin.overlay then
+   local p,m=ground.fillAt(atlas,origin.ox+lx,origin.oy+ly)
+   pair,mid=p or pair,m or ground.SEA_MID
+  end
+  mid=M.SEA[id] or mid
+  if mid and mid~=0 then
+   local spec=Pairs.resolve(pair,Versions.TILESET_PAIRS)
+   local behavior=(require('src.core.game3.scripting.interaction_scripts').behaviors[pair] or {})[mid]
+   local shape=Shapes.of(spec.primary,spec.secondary,mid,behavior,7)
+   local biome=shape.kind=='tree' and 'forest' or shape.kind=='cliff' and 'mountain'
+    or shape.kind=='water' and 'water' or 'ground'
+   if M.SEA[id] then return mid,L.pair,{kind='water',reviewedSurface=true},'water' end
+   return mid,pair,shape,biome
+  end
+ end
  local donor,real=Select.resolve(rs,x,y,sample)
  if real or not donor or donor.primary~='general' then return end
  do local o=Select.owner(rs,x,y);if o and o.def and M.SKY[o.def.id or ''] then return end

@@ -9,12 +9,12 @@ M.LUMP=.8
 M.LATHE=true
 M.LATHE_SKEW=3 -- widest the row centres of a card may drift for it to be turned into a round tree
 M.FOOT_R=3 -- trunk radius, in card pixels
-M.BELLY=8 -- rows from the foot over which the underside of the crown rounds off
-M.TOP=6 -- rows from the top over which the crown rounds off into a dome
-M.BUMP=.1 -- how far the crown outline wobbles in and out (share of the radius), so it reads as leaf clumps
-M.JIT=2 -- rows the pattern may be taken from above or below, so the colour bands break up
-M.SEAM=4 -- columns at the card edge left out of the wrap, so no outline stripe where front and back meet
-M.CAP_FROM=.8 -- rows above this share of the height have a top that shows the pattern of one lower row (spokes, like the art)
+M.BELLY=4 -- rows from the foot over which the underside of the crown rounds off
+M.TOP=2 -- rows from the top over which the crown rounds off into a dome
+M.BUMP=.04 -- how far the crown outline wobbles in and out (share of the radius), so it reads as leaf clumps
+M.JIT=.75 -- rows the pattern may be taken from above or below, so the colour bands break up
+M.SEAM=1 -- columns at the card edge left out of the wrap, so no outline stripe where front and back meet
+M.CAP_FROM=.95 -- rows above this share of the height have a top that shows the pattern of one lower row (spokes, like the art)
 M.CAP_ROW=.85 -- that row, as a share of the height
 M.TRUNK_ROWS=.3 -- share of the card height, from the foot, where a non-green pixel is trunk
 local NEIGH={{-1,0},{1,0},{0,-1},{0,1}}
@@ -148,7 +148,8 @@ local function lathe(w,h,sample)
     end
     if y>=capFrom and not solid[key(x,y+1,z)] then src=capRow end
     local span=math.max(.5,src.rho-M.SEAM)
-    local u=src.cx+(phi<0 and -1 or 1)*span*a/hp
+    -- Project by horizontal position so the front preserves the source leaf clusters.
+    local u=src.cx+(phi<0 and -1 or 1)*span*math.sin(a)
     local sx=math.max(src.L,math.min(src.R,math.floor(u)))
     local c=src.row[sx]
     if not c then

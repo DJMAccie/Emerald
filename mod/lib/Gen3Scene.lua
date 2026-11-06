@@ -47,7 +47,7 @@ local DECK_THICKNESS=6
 local DECK_FAMILY={general__fortree={[0x210]=1,[0x211]=1,[0x212]=1,[0x213]=1,[0x214]=1,[0x215]=1,[0x216]=1,[0x217]=1,[0x218]=1,[0x219]=1,[0x21A]=1,[0x21B]=1,[0x21C]=1,[0x21D]=1,
  [0x256]=1}}
 local function isDeck(c)
- if c.shape and c.shape.underWater then return true end
+ if c.shape and (c.shape.underWater or c.shape.underGrass) then return true end
  if not c.floor then return false end
  if c.floor.layer==15 and (c.collision==0 or (c.collision or 0)>7) then return true end -- cave bridges carry a map-specific collision code (Victory Road: 43), never 1..7
  if c.collision~=0 then return false end
@@ -291,7 +291,6 @@ M.NEAR_STREAM=.005
 M.STREAM=.008
 M.DEBUG_REACH=32
 M.DEBUG_PAD=16
-M.DEBUG_CELLS=40000
 M.DEBUG_COLD=.120
 local function walkGate(cam)
  return DebugWalk.on() and not (cam and (cam.battle or cam.replay))
@@ -310,8 +309,8 @@ local function debugRegions(def)
 end
 local function tourBounds(regions,bx,bz)
  local x0,z0,x1,z1=BoundarySelect.bounds(regions,M.DEBUG_PAD)
- if (x1-x0)*(z1-z0)>M.DEBUG_CELLS then
-  local reach=M.DEBUG_REACH
+ local reach=M.DEBUG_REACH
+ if x1-x0>reach*2+6 or z1-z0>reach*2+6 then
   return math.max(x0,bx-reach),math.max(z0,bz-reach),math.min(x1,bx+reach+6),math.min(z1,bz+reach+6)
  end
  return x0,z0,x1,z1
@@ -340,6 +339,7 @@ local function request(game,cam,near)
  else
   regions=Boundary.regions(def,Map.world)
  end
+ if not replay then Boundary.setWorld(game.data.maps) end
  local x0,z0,x1,z1=bx-radius,bz-radius,bx+radius+6,bz+radius+6
  if debugWalk then x0,z0,x1,z1=tourBounds(regions,bx,bz)
  elseif not budget then x0,z0,x1,z1=BoundarySelect.bounds(regions,16)end
@@ -359,6 +359,7 @@ local VOID_BY_MAP=V.require('InteriorDiorama').VOID_BY_MAP
 local CABINS=V.require('InteriorDiorama').CABINS
 local RISER_PX={[0]={1,8},[0x263]={2,8},[0x264]={2,8},[0x26F]={2,8},[0x277]={2,8}}
 local WALL_TRIM={EM_NEW_MAUVILLE_INSIDE={[0x26E]=8}}
+local Reef=V.require('Gen3Reef')
 local SHAPE_BY_MAP={}
 local shiftedLathes=setmetatable({},{__mode='k'})
 local function shiftedLathe(o,dx,dy)
@@ -413,6 +414,7 @@ do
   {r=2,h=1,rows=function()return 8 end},{disc=2,row=8}}}}
  for _,m in ipairs({0x246,0x247,0x24E,0x24F,0x256,0x257,0x25E,0x25F})do SL[m]={kind='lathe',lathe=LH,ground=0x001,reviewedSurface=true} end
  for _,m in ipairs({0x220,0x221,0x222,0x228,0x229,0x22A})do SL[m]={kind='extrude',h=9,ground=0x001,sidePx={0x229,8,8},reviewedSurface=true,dock=true} end
+ SL.at=V.require('Gen3Market').shape
  SHAPE_BY_MAP.EM_SLATEPORT_CITY=SL
  local R117={}
  for _,m in ipairs({0x149,0x148,0x13A,0x138,0x14A,0x142,0x140})do R117[m]={kind='fence',ground=0x001,reviewedSurface=true} end
@@ -429,6 +431,17 @@ do
  for _,m in ipairs({0x17A,0x17C,0x17D,0x17E,0x182,0x184,0x0F5,0x0F8,0x0F9,0x0FA,0x0FC,0x2C3})do R[m]={kind='flat',reviewedSurface=true,river=true} end
  for _,m in ipairs({0x210,0x218,0x213,0x21B})do R[m]={kind='flat',reviewedSurface=true,underWater=0x206} end
  for _,m in ipairs({0x0ED,0x0F0,0x0F1,0x0F2,0x0FB,0x0E8,0x0EC,0x0F3,0x0F4,0x0F7,0x0FD})do R[m]={kind='flat',reviewedSurface=true,underWater=0x206,planks=.7} end
+ -- The bridge spans both banks as well as the river. These tile variants cover land.
+ for _,mid in ipairs({0x211,0x214,0x215,0x219,0x21C,0x21D})do
+  R[mid]={kind='flat',reviewedSurface=true,underGrass=true}
+ end
+ R[0x015]={kind='grass',ground=0x001,height=8}
+ -- The two boulders just upstream of the waterfall sit on the four-course riverbed.
+ R.at=function(x,y)
+  if (x>=22 and x<=23 and y>=74 and y<=75) or (x>=21 and x<=22 and y>=76 and y<=77) then
+   return {kind='water',reef=true,level=64}
+  end
+ end
  SHAPE_BY_MAP.EM_ROUTE119=R
 end
 do
@@ -661,10 +674,10 @@ local function build(req,cache,previous)
    end
    if ts and ts.midToSlot[mid] then
     local spec=Pairs.resolve(pair,Versions.TILESET_PAIRS)
-    local collision
+    local collision,regionId
     for _,region in ipairs(regions)do
      local lx,ly=cx-region.x,cy-region.y
-     if lx>=0 and ly>=0 and lx<region.w and ly<region.h then collision=region.def.midLayout:collAt(lx,ly);break end
+     if lx>=0 and ly>=0 and lx<region.w and ly<region.h then collision=region.def.midLayout:collAt(lx,ly);regionId=region.def.id;break end
     end
     local c={mid=mid,behavior=(require('src.core.game3.scripting.interaction_scripts').behaviors[pair] or {})[mid],collision=collision,pair=pair,nativePair=pair,cx=cx,cy=cy,ts=ts,primary=spec.primary,secondary=spec.secondary,
      shape=fillShape or Shapes.of(spec.primary,spec.secondary,mid,
@@ -674,16 +687,23 @@ local function build(req,cache,previous)
     do local ov=def.id and not isVoid and cx>=0 and cy>=0 and cx<def.midLayout.width and cy<def.midLayout.height and SHAPE_BY_MAP[def.id];local o=ov and ov[mid]
      if type(o)=='function' then o=o(cx,cy,collision) end
      if not o and ov and ov.at then o=ov.at(cx,cy,mid,collision) end
-     if o and not (o.kind=='extrude' and (collision or 0)==0) and not (o.kind=='obwall' and (collision or 0)==0 and not o.walkOk) then c.shape=o end end
+     if o and not (o.kind=='extrude' and (collision or 0)==0) and not (o.kind=='obwall' and (collision or 0)==0 and not o.walkOk) then c.shape=o;c.noFurniture=o.noFurniture end end
     if not (def.id and not isVoid and cx>=0 and cy>=0 and cx<def.midLayout.width and cy<def.midLayout.height) then
      for _,region in ipairs(regions)do
       local lx,ly=cx-region.x,cy-region.y
       if region.def~=def and region.def.id and lx>=0 and ly>=0 and lx<region.w and ly<region.h then
        local rs=SHAPE_BY_MAP[region.def.id];local o=rs and rs[mid]
+       if region.def.id=='EM_SLATEPORT_CITY' then
+        local market=V.require('Gen3Market').shape(lx,ly,mid)
+        if market then c.shape=market;c.noFurniture=true end
+       end
        if type(o)=='table' and o.kind=='lathe' and o.lathe and (region.x~=0 or region.y~=0) then c.shape=shiftedLathe(o,region.x,region.y) end
        break
       end
      end
+    end
+    if Reef.maps[regionId] and c.primary=='general' and Reef.tiles[mid] then
+     c.shape={kind='water',reef=true,level=0}
     end
     if c.shape and (c.shape.kind=='obwall' or c.shape.kind=='partition' or c.shape.noFurniture) then c.noFurniture=true end
     cells[cx..':'..cy]=c
@@ -698,6 +718,7 @@ local function build(req,cache,previous)
  local sig=SceneCache.key(regions,x0,z0,x1,z1,Tiles._pairs,cam) or table.concat(signature,';')
  if firstArea then sig=sig..';first' end
  if previous and previous.signature==sig then return previous end
+ Reef.join(cells)
  cache.signature=sig;cache.parts={};cache.cells=cells
  local treeGroups={}
  mark('cells')
@@ -897,7 +918,7 @@ local function build(req,cache,previous)
  M.massCount=#Mass.prepare(cells,Pairs.outdoor(def))
  V.require('Gen3Planter').restore(bedPlanter)
  if Decks.MAPS[def.id or ''] then for _,c in pairs(cells)do c.mass=nil end end
- if def and (tonumber(def.mapType)==4 or tonumber(def.mapType)==9) and V.require('Gen3Blocks').pinned(def) then for _,c in pairs(cells)do if c.mass and not c.blocks then c.mass.blocksOwned=true end end end
+ if def and (tonumber(def.mapType)==4 or tonumber(def.mapType)==9) and V.require('Gen3Blocks').pinned(def) then for _,c in pairs(cells)do if c.mass and not c.blocks and not c.looseStone then c.mass.blocksOwned=true end end end
  cache.floorRegions=regions
  do
   local SLOPE_KIND={flat=true,grass=true,flowers=true,sand=true}
@@ -1166,6 +1187,14 @@ local function build(req,cache,previous)
    local cb=0
    plane(b.wv,b.wi,x,z,uvFor(ts,Boat.SEA) or uv,.05-cb)
    if not c.stageHidden then Boat.append(c,cells,function(p,t,sh)for _,q in ipairs(p)do q[2]=q[2]-cb end;quad(b.v,b.i,p,t,sh)end,uvFor) end
+  elseif shape.kind=='marketSign' then
+   plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
+   if not c.stageHidden then V.require('Gen3Market').sign(c,cells,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor) end
+  elseif shape.kind=='marketPot' then
+   local q=#b.v
+   plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
+   b.skipOver[#b.skipOver+1]=q
+   if not c.stageHidden then V.require('Gen3Market').append(c,function(p,t,sh)quad(b.v,b.i,p,t,sh)end,uvFor) end
   elseif shape.kind=='lathe' then
    local q=#b.v
    plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
@@ -1184,7 +1213,7 @@ local function build(req,cache,previous)
     local st=sp and (function()local u,v=sp[1][1]+(sp[2][1]-sp[1][1])*(shape.sidePx[2]+.5)/16,sp[1][2]+(sp[3][2]-sp[1][2])*(shape.sidePx[3]+.5)/16;return {{u,v},{u,v},{u,v},{u,v}} end)()
     V.require('Gen3Fence').extrude(c,cells,function(p,t,sh)
      if st and not (p[1][2]==p[2][2] and p[2][2]==p[3][2]) then t=st end
-     quad(b.v,b.i,p,t,sh)end,uvFor,shape.h or 6,shape.light,shape.cool)
+     quad(b.v,b.i,p,t,sh)end,uvFor,shape.h or 6,shape.light,shape.cool,shape.maskGround)
    end
   elseif shape.kind=='posts' then
    plane(b.v,b.i,x,z,uvFor(ts,shape.ground) or uv)
@@ -1319,6 +1348,9 @@ local function build(req,cache,previous)
    if shape.cyclingRoad=='deck' then b.deckV[#b.deckV+1]={c.cx,c.cy,deckFirst,(groundFirst or #b.v+1)-1} end
   elseif c.civic or c.bldModel then
    plane(b.v,b.i,x,z,(c.bldModel and c.bldModel.groundMid and uvFor(ts,c.bldModel.groundMid)) or uvFor(ts,shape.ground) or uvFor(ts,c.civic and c.civic.variant=='saffron' and 0x2E5 or 1) or uv)
+  elseif shape.reef then
+   plane(b.wv,b.wi,x,z,shape.nativeReefFloor and uv or uvFor(ts,0x170) or uv,.05)
+   Reef.append(c,cells,uv,function(v,t,sh)quad(b.v,b.i,v,t,sh)end)
   elseif shape.kind=='water' then
    plane(b.wv,b.wi,x,z,uv,.05)
   elseif shape.kind=='interiorFloor' then
@@ -1489,7 +1521,8 @@ local function build(req,cache,previous)
      end
     end end
     for _,a in ipairs(group)do
-     if fortreeWood(a) then a.canopyBottom=lowIn or low else a.canopyBottom=near[a] or low end
+     if def.id=='EM_ROUTE119' then a.canopyBottom=a.base or 0
+     elseif fortreeWood(a) then a.canopyBottom=lowIn or low else a.canopyBottom=near[a] or low end
     end
    end
    local fv2=FORTREE_V2 and def and def.id=='EM_FORTREE_CITY'
@@ -1502,7 +1535,7 @@ local function build(req,cache,previous)
    local card
    local outside=fv2 and (not (c.cx>=0 and c.cy>=0 and c.cx<def.midLayout.width and c.cy<def.midLayout.height)
     or shape.palmCrown or ((c.mid==0x241 or c.mid==0x25C) and (cells[c.cx..':'..(c.cy-1)] or {}).shape and cells[c.cx..':'..(c.cy-1)].shape.palmCrown))
-   if CANOPY_TREES and (fv2 or (not shape.fortree and (def and def.id)~='EM_FORTREE_CITY' and not shape.palmCrown)) and not outside and not c.stageHidden then
+   if CANOPY_TREES and (def.id=='EM_ROUTE119' or fv2 or (not shape.fortree and (def and def.id)~='EM_FORTREE_CITY' and not shape.palmCrown)) and not outside and not c.stageHidden then
     local top=(c.cx+c.cy)%2==0 and 0x00E or 0x00F
     local big=not fv2 and ts.midToSlot[0x1CE] and ts.midToSlot[0x1CF] and ts.midToSlot[0x1D4] and ts.midToSlot[0x1D5] and ts.midToSlot[0x1DC] and ts.midToSlot[0x1DD]
     local bigX
@@ -1823,6 +1856,10 @@ local function build(req,cache,previous)
     if drop then b.skipOver[#b.skipOver+1]=#b.v end
     plane(b.v,b.i,x,z,(shape.groundMid and uvFor(ts,shape.groundMid)) or uv,drop or nil) end
    if shape.underWater then plane(b.wv,b.wi,x,z,uvFor(ts,shape.underWater) or uv,.05+(c.riverLevel or 0)-(c.base or 0)) end
+  end
+  if shape.underGrass then
+   local bank=cells[c.cx..':'..(c.cy+(c.mid>=0x218 and 1 or -1))]
+   if bank then plane(b.v,b.i,x,z,uvFor(ts,0x001),(bank.base or 0)-(c.base or 0)) end
   end
   local base=c.base or 0
   if shape.kind=='cliff' or shape.kind=='caveWall' then base=0 end
@@ -2188,8 +2225,7 @@ local function prepare(game,vw,vh,cam)
  if near then for _,e in ipairs(stream.kept)do if e.key==req.key and e.context==req.context then near=nil;break end end end
  if near then req=request(game,cam,M.NEAR) or req end
  if same and not near and not debugWalk and stream.active.firstAreaBuilt and not cam.battle then
-  local r=request(game,cam,M.NEAR)
-  if r then req=r;req.upgrade=true;req.key=req.key..'|whole' end
+  req.upgrade=true
  end
  frames=frames+1
  local ready=true
@@ -2201,13 +2237,23 @@ local function prepare(game,vw,vh,cam)
   if ready then tileWait=0 end
   local Fade=require('src.ui.game3.fade')
   local cold=M.flySlice or debugWalk and M.DEBUG_COLD or near and .120 or (Fade.active and (Fade.t or 0)>=8) and .060 or .040
+  if not same and not M.flySlice and M.lastFieldCanvas and directNeighbours()[M.lastFieldMap] then cold=M.STREAM end
   if M.flySlice and same and stream.active then
    scene=stream.active
   else
-   scene=stream:update(req.key,req.context,function(candidate,previous)return build(req,candidate,previous)end,(stream.active and stream.active.nearOnly) and M.NEAR_STREAM or M.STREAM,cold,
+   local slice=(stream.active and stream.active.nearOnly) and M.NEAR_STREAM or M.STREAM
+   local bounds=same and stream.active.distance and stream.active.distance.bounds
+   if bounds then
+    local margin=math.min(req.px/16-bounds[1],bounds[3]-req.px/16,req.pz/16-bounds[2],bounds[4]-req.pz/16)
+    if margin<10 and req.key~=stream.key then
+     stream:cancelWarm()
+     slice=.040
+    end
+   end
+   scene=stream:update(req.key,req.context,function(candidate,previous)return build(req,candidate,previous)end,slice,cold,
     function()
      local tiles=tileIdentity(req.regions)
-     return SceneCache.key(req.regions,0,0,0,0,tiles,req.cam),SceneCache.key(req.regions,req.x0,req.z0,req.x1,req.z1,tiles,req.cam)..(req.upgrade and '|whole' or '')
+     return SceneCache.key(req.regions,0,0,0,0,tiles,req.cam),SceneCache.key(req.regions,req.x0,req.z0,req.x1,req.z1,tiles,req.cam)
     end)
   end
  end
@@ -2218,7 +2264,7 @@ local function prepare(game,vw,vh,cam)
   for _,name in ipairs(SCENE_FIELDS)do M[name]=nil end
   return false
  end
- if (near or req.upgrade) and stream.pending==nil and scene.nearOnly==nil then scene.nearOnly=true end
+ if near and stream.pending==nil and scene.nearOnly==nil then scene.nearOnly=true end
  if stream.pending==nil and not (near or req.upgrade) then pcall(warmAhead,game,cam)end
  cache=scene
  for _,name in ipairs(SCENE_FIELDS)do M[name]=cache[name]end

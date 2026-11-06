@@ -37,6 +37,13 @@ local function road(n)return n and n.shape and n.shape.cyclingRoad end
 local function isDeck(n)return n and (n.stairs or (n.shape and n.shape.cyclingRoad=='deck'))end
 
 local function groundOf(c,cells)
+ -- The abutments on either side encode the surface hidden by the three deck tiles.
+ if isDeck(c) then
+  for dx=-3,3 do
+   local edge=cells[(c.cx+dx)..':'..c.cy]
+   if edge and road(edge)=='land' then return 'grass' end
+  end
+ end
  local sea,grass=0,0
  for dy=-2,2 do for dx=-2,2 do local n=cells[(c.cx+dx)..':'..(c.cy+dy)]
   if n and n.shape and (not road(n) or n.mid==0x3AA or n.mid==0x3AB) then
